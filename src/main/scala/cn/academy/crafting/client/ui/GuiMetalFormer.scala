@@ -15,7 +15,7 @@ import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib2.util.{Color, Colors}
+import cn.lambdalib2.util.Colors
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.relauncher.Side
 

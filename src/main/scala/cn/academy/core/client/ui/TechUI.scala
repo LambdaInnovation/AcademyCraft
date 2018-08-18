@@ -2,6 +2,7 @@ package cn.academy.core.client.ui
 
 import cn.academy.Resources
 import cn.lambdalib2.registry.StateEventCallback
+import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.util.Color
 //import cn.academy.core.Resources
@@ -240,14 +241,14 @@ object TechUI {
       this.listens[FrameEvent](() => {
         val dt = math.min(GameTimer.getTime - lastFrameTime, 500) / 1000.0
         def move(fr: Float, to: Float): Float = {
-          val max = dt * 500
+          val max: Float = dt.toFloat * 500
           val delta = to - fr
           fr + math.min(max, math.abs(delta)) * math.signum(delta)
         }
         transform.width = move(transform.width, expectWidth)
         transform.height = move(transform.height, expectHeight)
 
-        val balpha = MathUtils.clampd(0, 1, (GameTimer.getTime - blendStartTime - 300) / 300.0)
+        val balpha: Float = MathUtils.clampd(0, 1, (GameTimer.getTime - blendStartTime - 300) / 300.0).toFloat
         uas foreach (ua => ua(balpha))
 
         lastFrameTime = GameTimer.getTime
@@ -498,7 +499,7 @@ private class MatrixData {
   var ssid: String = null
   var encrypted: Boolean = false
 
-  def tile(world: World) = world.getTileEntity(x, y, z) match {
+  def tile(world: World) = world.getTileEntity(new BlockPos(x, y, z)) match {
     case tile: IWirelessMatrix => Some(tile)
     case _ => None
   }
@@ -512,7 +513,7 @@ private class NodeData {
   var z: Int = 0
   var encrypted: Boolean = false
 
-  def tile(world: World) = world.getTileEntity(x, y, z) match {
+  def tile(world: World) = world.getTileEntity(new BlockPos(x, y, z)) match {
     case tile: IWirelessNode => Some(tile)
     case _ => None
   }

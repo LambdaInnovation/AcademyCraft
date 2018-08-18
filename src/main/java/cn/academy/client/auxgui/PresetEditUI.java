@@ -22,6 +22,7 @@ import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.*;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,7 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+//import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
@@ -109,9 +110,10 @@ public class PresetEditUI extends GuiScreen {
     
     @Override
     public void onGuiClosed() { }
-    
+
+    @SideOnly(Side.CLIENT)
     private String local(String key) {
-        return StatCollector.translateToLocal("ac.gui.preset_edit." + key);
+        return I18n.format("ac.gui.preset_edit." + key);
     }
     
     private void init() {

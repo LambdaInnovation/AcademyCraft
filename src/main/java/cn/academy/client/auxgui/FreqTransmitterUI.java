@@ -27,6 +27,7 @@ import cn.lambdalib2.input.KeyManager;
 //import cn.lambdalib2.util.mc.ControlOverrider;
 //import cn.lambdalib2.util.mc.EntitySelectors;
 //import cn.lambdalib2.util.mc.Raytrace;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,9 +41,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatAllowedCharacters;
 //import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+//import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -198,9 +200,10 @@ public class FreqTransmitterUI extends AuxGui {
         }
         current = next;
     }
-    
+
+    @SideOnly(Side.CLIENT)
     private String local(String key) {
-        return StatCollector.translateToLocal("ac.app.freq_transmitter." + key);
+        return I18n.format("ac.app.freq_transmitter." + key);
     }
     
     @Override
@@ -586,7 +589,7 @@ public class FreqTransmitterUI extends AuxGui {
         @Override
         void handleClicking(RayTraceResult r) {
             TileEntity tile;
-            if(r == null || (tile = world.getTileEntity(r.blockX, r.blockY, r.blockZ)) == null) {
+            if(r == null || (tile = world.getTileEntity(r.getBlockPos())) == null) {
                 setState(new StateNotifyAndQuit("e4"));
                 return;
             }

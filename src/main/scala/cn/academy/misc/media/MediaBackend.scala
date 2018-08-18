@@ -34,7 +34,7 @@ object MediaBackend {
 
   def apply(player: EntityPlayer): MediaBackend = EntityData.get(player).getPart(classOf[MediaBackend])
 
-  def apply(): MediaBackend = apply(Minecraft.getMinecraft.thePlayer)
+  def apply(): MediaBackend = apply(Minecraft.getMinecraft.player)
 
 }
 

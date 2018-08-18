@@ -2,9 +2,8 @@ package cn.academy.ability.client.ui
 
 import java.util
 
-import cn.academy.{AcademyCraft, Resources}
+import cn.academy.{ACItems, AcademyCraft, Resources}
 import cn.academy.ability.{AbilityLocalization, Skill}
-import cn.academy.item.ACItemsLegacy
 import cn.lambdalib2.registry.StateEventCallback
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 //import cn.academy.ability.api.data.CPData
@@ -230,7 +229,7 @@ private object Common {
 
     if (!aData.hasCategory) {
       initConsole(area)
-    } else if (Option(player.getHeldItem(EnumHand.MAIN_HAND)).exists(_.getItem == ACItemsLegacy.magneticCoil)) {
+    } else if (Option(player.getHeldItem(EnumHand.MAIN_HAND)).exists(_.getItem == ACItems.magnetic_coil)) {
       initReset(area)
     } else { // Initialize skill area
       val back_scale = 1.01

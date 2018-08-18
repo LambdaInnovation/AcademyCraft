@@ -2,18 +2,19 @@ package cn.academy.misc.media
 
 import cn.academy.Resources
 import cn.academy.client.auxgui.ACHud
-import cn.academy.core.client.ui.ACHud.Condition
+import cn.academy.client.auxgui.ACHud.Condition
 import cn.academy.misc.media.MediaBackend.PlayInfo
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib2.cgui.component.VerticalDragBar.DraggedEvent
+import cn.lambdalib2.cgui.component.DragBar.DraggedEvent
 import cn.lambdalib2.cgui.component._
 import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
 import cn.lambdalib2.cgui.{CGuiScreen, Widget, WidgetContainer}
 import cn.lambdalib2.cgui.loader.CGUIDocument
-import cn.lambdalib2.util.auxgui.AuxGui
-import cn.lambdalib2.util.{Color, GameTimer}
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.util.{Colors, GameTimer}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 private object MediaGuiInit {
 
@@ -80,7 +81,7 @@ class MediaGui extends CGuiScreen {
 
   // Scroll bar
   pageMain.child("scroll_bar").listens((w, evt: DraggedEvent) => {
-    val vdb = w.component[VerticalDragBar]
+    val vdb = w.component[DragBar]
     val list = pageMain.child("area").component[ElementList]
     list.setProgress((vdb.getProgress * list.getMaxProgress).toInt)
   })
@@ -127,7 +128,7 @@ class MediaGui extends CGuiScreen {
   def wrapEdit(button: Widget, box: Widget, callback: String => Any) = {
     button.transform.doesDraw = true
 
-    val dt = new DrawTexture(null).setColor(Color.monoBlend(.4, 0))
+    val dt = new DrawTexture(null).setColor(Colors.monoBlend(.4f, 0))
     box :+ dt
 
     val textBox = box.component[TextBox]
@@ -136,7 +137,7 @@ class MediaGui extends CGuiScreen {
     button.listens[LeftClickEvent](() => {
       if (!canEdit) {
         canEdit = true
-        dt.color.a =   .2
+        dt.color.setAlpha(Colors.f2i(.2f))
         textBox.allowEdit = true
         box.gainFocus()
         box.transform.doesListenKey = true
@@ -148,7 +149,7 @@ class MediaGui extends CGuiScreen {
         canEdit = false
         textBox.allowEdit = false
         box.transform.doesListenKey = false
-        dt.color.a = 0
+        dt.color.setAlpha(0)
         callback(textBox.content)
       }
     }
@@ -182,7 +183,7 @@ class MediaGui extends CGuiScreen {
 
   def currentPlaying = backend.currentPlaying
 
-  def thePlayer = Minecraft.getMinecraft.thePlayer
+  def thePlayer = Minecraft.getMinecraft.player
 
   override def doesGuiPauseGame(): Boolean = false
 }
@@ -191,8 +192,8 @@ class MediaGui extends CGuiScreen {
 private object MediaAuxGui {
   import cn.lambdalib2.cgui.ScalaCGUI._
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(ev: FMLInitializationEvent) = {
     val base = CGUIDocument.read(Resources.getGui("media_player_aux")).getWidget("base")
 
     ACHud.instance.addElement(base, new Condition {
