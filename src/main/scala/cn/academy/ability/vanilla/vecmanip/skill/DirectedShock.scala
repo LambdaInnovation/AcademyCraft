@@ -137,7 +137,7 @@ class ShockContextC(par: ShockContext) extends ClientContext(par) {
     val init = GameTimer.getTime
     timeProvider = () => {
       val dt = GameTimer.getTime - init
-      dt / 300.0
+      dt / 0.3
     }
 
     anim = createPunchAnim()
@@ -156,7 +156,7 @@ class ShockContextC(par: ShockContext) extends ClientContext(par) {
     val init = GameTimer.getTime
     timeProvider = () => {
       val dt = GameTimer.getTime - init
-      math.min(2.0, dt / 150.0)
+      math.min(2.0, dt / 0.15)
     }
 
     handEffect = new HandRenderer {

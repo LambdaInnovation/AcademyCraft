@@ -39,9 +39,9 @@ import java.util.stream.Stream;
 public enum ContextManager {
     instance;
 
-    private static final long
-            T_KA_TOL = 1500L, // Tile tolerance of receiving keepAlive packets
-            T_KA = 500L; // Time interval between sending KeepAlive packets
+    private static final double
+            T_KA_TOL = 1.5, // Tile tolerance of receiving keepAlive packets
+            T_KA = 0.5; // Time interval between sending KeepAlive packets
 
     private static final String
         M_BEGIN_LINK="l",
@@ -291,8 +291,8 @@ public enum ContextManager {
             Context ctx;
             int serverID;
 
-            long lastKeepAlive = time();
-            long lastSentKeepAlive = time() - 500;
+            double lastKeepAlive = time();
+            double lastSentKeepAlive = time() - 0.5;
             boolean disposed;
 
             List<Call> calls = new ArrayList<>();
@@ -303,14 +303,14 @@ public enum ContextManager {
             Object[] args;
         }
 
-        private long time() {
-            return (long)(GameTimer.getTime()*1000);
+        private double time() {
+            return GameTimer.getTime();
         }
 
         @SubscribeEvent
         public void __onClientTick(ClientTickEvent evt) {
             if (evt.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
-                long time = time();
+                double time = time();
 
                 for (ContextData data : alive) {
                     if (time - data.lastKeepAlive > T_KA_TOL) {
@@ -456,7 +456,7 @@ public enum ContextManager {
         @SubscribeEvent
         public void __onServerTick(ServerTickEvent evt) {
             if (evt.phase == Phase.END) {
-                long time = time();
+                double time = time();
 
                 for (ContextData data : alive) {
                     if (data.disposed || time - data.lastKeepAlive > T_KA_TOL) {
@@ -517,12 +517,12 @@ public enum ContextManager {
             int serverID;
             boolean disposed = false;
 
-            long lastKeepAlive = time();
-            long lastSentKeepAlive = time() - 500;
+            double lastKeepAlive = time();
+            double lastSentKeepAlive = time() - 0.5;
         }
 
-        private long time() {
-            return (long)(GameTimer.getTime()*1000);
+        private double time() {
+            return GameTimer.getTime();
         }
     }
 

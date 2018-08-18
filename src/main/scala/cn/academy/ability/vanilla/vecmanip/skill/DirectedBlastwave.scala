@@ -240,7 +240,7 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
     val init = GameTimer.getTime
     timeProvider = () => {
       val dt = GameTimer.getTime - init
-      math.min(2.0, dt / 150.0)
+      math.min(2.0, dt / 0.150)
     }
 
     handEffect = new HandRenderer {
@@ -265,7 +265,7 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
     val init = GameTimer.getTime
     timeProvider = () => {
       val dt = GameTimer.getTime - init
-      dt / 300.0
+      dt / 0.3
     }
 
     anim = createPunchAnim()

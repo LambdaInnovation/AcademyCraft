@@ -82,12 +82,12 @@ public final class ClientHandler {
     @RegACKeyHandler(name = KEY_ACTIVATE_ABILITY, keyID = Keyboard.KEY_V)
     public static KeyHandler keyActivate = new KeyHandler() {
 
-        long lastKeyDown;
+        double lastKeyDown;
 
         @Override
         public void onKeyUp() {
-            long delta = (long)(GameTimer.getTime()*1000) - lastKeyDown;
-            if (delta < 300L) {
+            double delta = GameTimer.getTime() - lastKeyDown;
+            if (delta < 0.300) {
                 EntityPlayer player = getPlayer();
                 AbilityData aData = AbilityData.get(player);
 
@@ -101,7 +101,7 @@ public final class ClientHandler {
 
         @Override
         public void onKeyDown() {
-            lastKeyDown = (long)(GameTimer.getTime()*1000);
+            lastKeyDown = GameTimer.getTime();
             CPBar.instance.startDisplayNumbers();
         }
         

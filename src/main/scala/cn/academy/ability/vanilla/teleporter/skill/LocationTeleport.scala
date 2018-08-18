@@ -180,7 +180,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       private val initTime = GameTimer.getTime
 
       def alpha: Double = {
-        val dt = (GameTimer.getTime - initTime) / 1.0e3 - timeOffset
+        val dt = (GameTimer.getTime - initTime) / 1.0 - timeOffset
         MathUtils.clampd(0, 1, dt / length)
       }
 
