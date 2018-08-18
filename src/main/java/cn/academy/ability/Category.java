@@ -2,12 +2,11 @@ package cn.academy.ability;
 
 import cn.academy.Resources;
 import cn.academy.ACConfig;
-//import cn.lambdalib2.util.Color;
 import cn.lambdalib2.util.Colors;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.util.Color;
 
 import java.util.ArrayList;
@@ -146,7 +145,7 @@ public class Category {
     }
     
     public String getDisplayName() {
-        return StatCollector.translateToLocal("ac.ability." + name + ".name");
+        return I18n.format("ac.ability." + name + ".name");
     }
     
     // Path init

@@ -15,11 +15,11 @@ import cn.academy.achievement.ACAchievements;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.typesafe.config.Config;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import scala.Function1;
 
 import java.util.ArrayList;
@@ -227,7 +227,7 @@ public abstract class Skill extends Controllable {
     }
     
     protected String getLocalized(String key) {
-        return StatCollector.translateToLocal("ac.ability." + getFullName() + "." + key);
+        return I18n.format("ac.ability." + getFullName() + "." + key);
     }
     
     //--- Path init

@@ -27,7 +27,7 @@ import java.util.function.Function;
  *  Context handles player connections and remote-side creation for you.
  * </p>
  *
- * @see cn.lambdalib.s11n.network.NetworkMessage
+ * @see cn.lambdalib2.s11n.network.NetworkMessage
  * @see ContextManager
  * @author WeAthFolD
  */
@@ -80,7 +80,7 @@ public class Context implements IMessageDelegate {
 
     @SideOnly(Side.CLIENT)
     public Context(Skill _skill) {
-        this(Minecraft.getMinecraft().thePlayer, _skill);
+        this(Minecraft.getMinecraft().player, _skill);
     }
 
     EntityPlayer getPlayer() {
@@ -160,7 +160,7 @@ public class Context implements IMessageDelegate {
     // Ugly hacks
     @SideOnly(Side.CLIENT)
     private boolean isLocalClient_() {
-        return Minecraft.getMinecraft().thePlayer.equals(player);
+        return Minecraft.getMinecraft().player.equals(player);
     }
 
     @Override

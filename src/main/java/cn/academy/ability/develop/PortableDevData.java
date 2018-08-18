@@ -1,6 +1,6 @@
 package cn.academy.ability.develop;
 
-import cn.academy.ability.ModuleAbility;
+import cn.academy.ACItems;
 import cn.academy.energy.api.IFItemManager;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
@@ -21,8 +21,8 @@ public class PortableDevData extends DataPart<EntityPlayer> implements IDevelope
     }
 
     private ItemStack stack() {
-        ItemStack stack = getEntity().getCurrentEquippedItem();
-        return stack != null && stack.getItem() == ModuleAbility.developerPortable ? stack : null;
+        ItemStack stack = getEntity().getHeldItemMainhand();
+        return stack != null && stack.getItem() == ACItems.developer_portable ? stack : null;
     }
 
     @Override

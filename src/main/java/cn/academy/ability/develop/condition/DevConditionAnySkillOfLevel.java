@@ -4,8 +4,8 @@ import cn.academy.ability.Skill;
 import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.Resources;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -40,7 +40,7 @@ public class DevConditionAnySkillOfLevel implements IDevCondition {
 
     @Override
     public String getHintText() {
-        return StatCollector.translateToLocalFormatted("ac.skill_tree.anyskill", level);
+        return I18n.format("ac.skill_tree.anyskill", level);
     }
 
 }

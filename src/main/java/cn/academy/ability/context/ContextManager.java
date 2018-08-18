@@ -11,9 +11,9 @@ import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.util.ClientUtils;
 import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.util.mc.EntitySelectors;
-import cn.lambdalib2.util.mc.SideUtils;
-import cn.lambdalib2.util.mc.WorldUtils;
+import cn.lambdalib2.util.EntitySelectors;
+import cn.lambdalib2.util.SideUtils;
+import cn.lambdalib2.util.WorldUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -165,7 +165,6 @@ public enum ContextManager {
         }
     }
 
-    @Registrant
     @NetworkS11nType
     public enum LocalManager {
         instance;
@@ -241,7 +240,7 @@ public enum ContextManager {
 
         @SideOnly(Side.CLIENT)
         private EntityPlayer player() {
-            return Minecraft.getMinecraft().thePlayer;
+            return Minecraft.getMinecraft().player;
         }
 
         @Listener(channel=M_ESTABLISH_LINK, side=Side.CLIENT)
@@ -305,7 +304,7 @@ public enum ContextManager {
         }
 
         private long time() {
-            return GameTimer.getTime();
+            return (long)(GameTimer.getTime()*1000);
         }
 
         @SubscribeEvent
@@ -353,7 +352,6 @@ public enum ContextManager {
         }
     }
 
-    @Registrant
     @NetworkS11nType
     public enum ServerManager {
         instance;
@@ -524,11 +522,10 @@ public enum ContextManager {
         }
 
         private long time() {
-            return GameTimer.getTime();
+            return (long)(GameTimer.getTime()*1000);
         }
     }
 
-    @Registrant
     @NetworkS11nType
     public enum ClientManager {
         instance;
@@ -623,7 +620,7 @@ public enum ContextManager {
         }
 
         private long time() {
-            return GameTimer.getTime();
+            return (long)(GameTimer.getTime()*1000);
         }
     }
 

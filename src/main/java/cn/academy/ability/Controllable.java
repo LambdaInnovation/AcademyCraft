@@ -50,7 +50,7 @@ public abstract class Controllable {
 
             @Override
             public Controllable read(NBTBase tag, Class<? extends Controllable> type) {
-                byte[] bytes = ((NBTTagByteArray) tag).func_150292_c();
+                byte[] bytes = ((NBTTagByteArray) tag).getByteArray();
                 Category cat = CategoryManager.INSTANCE.getCategory(bytes[0]);
                 return cat.getControllable(bytes[1]);
             }

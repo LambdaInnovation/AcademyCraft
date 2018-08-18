@@ -86,7 +86,7 @@ public final class ClientHandler {
 
         @Override
         public void onKeyUp() {
-            long delta = GameTimer.getTime() - lastKeyDown;
+            long delta = (long)(GameTimer.getTime()*1000) - lastKeyDown;
             if (delta < 300L) {
                 EntityPlayer player = getPlayer();
                 AbilityData aData = AbilityData.get(player);
@@ -101,7 +101,7 @@ public final class ClientHandler {
 
         @Override
         public void onKeyDown() {
-            lastKeyDown = GameTimer.getTime();
+            lastKeyDown = (long)(GameTimer.getTime()*1000);
             CPBar.instance.startDisplayNumbers();
         }
         

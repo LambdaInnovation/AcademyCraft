@@ -7,7 +7,7 @@ import cn.academy.event.ability.CalcEvent;
 import cn.academy.event.ability.ReflectEvent;
 import cn.academy.ACConfig;
 import cn.lambdalib2.util.MathUtils;
-import cn.lambdalib2.util.mc.WorldUtils;
+import cn.lambdalib2.util.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;

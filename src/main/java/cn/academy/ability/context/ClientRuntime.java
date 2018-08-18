@@ -14,16 +14,16 @@ import cn.academy.event.ability.*;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.util.ClientUtils;
+import cn.lambdalib2.util.ControlOverrider;
 import cn.lambdalib2.util.SideUtils;
-import cn.lambdalib2.util.auxgui.AuxGuiHandler;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.util.mc.ControlOverrider;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -31,7 +31,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -172,7 +171,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     public IActivateHandler getActivateHandler() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         for(IActivateHandler h : activateHandlers) {
             if(h.handles(player))
                 return h;
@@ -404,7 +403,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         default Optional<String> getHintTranslated() {
             String kname = KeyManager.getKeyName(ACKeyManager.instance.getKeyID(ClientHandler.keyActivate));
             String hint = ClientRuntime.instance().getActivateHandler().getHint();
-            return hint == null ? Optional.empty() : Optional.of("[" + kname + "]: " + StatCollector.translateToLocal(
+            return hint == null ? Optional.empty() : Optional.of("[" + kname + "]: " + I18n.format(
                     "ac.activate_key." + hint + ".desc"));
         }
 

@@ -1,13 +1,16 @@
 package cn.academy.ability;
 
 import cn.academy.ability.develop.DeveloperType;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 
+/**
+ * This class should be used only in client part.
+ */
 public enum AbilityLocalization {
     instance;
     
     public String levelDesc(int level) {
-        return StatCollector.translateToLocal("ac.ability.level" + level);
+        return I18n.format("ac.ability.level" + level);
     }
     
     public String machineType(DeveloperType type) {
@@ -15,11 +18,11 @@ public enum AbilityLocalization {
     }
     
     public String local(String key) {
-        return StatCollector.translateToLocal("ac.skill_tree." + key);
+        return I18n.format("ac.skill_tree." + key);
     }
     
     public String local(String key, Object ...args) {
-        return StatCollector.translateToLocalFormatted("ac.skill_tree." + key, args);
+        return I18n.format("ac.skill_tree." + key, args);
     }
     
 }
