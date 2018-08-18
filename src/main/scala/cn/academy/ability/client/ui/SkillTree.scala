@@ -6,13 +6,11 @@ import cn.academy.{ACItems, AcademyCraft, Resources}
 import cn.academy.ability.{AbilityLocalization, Skill}
 import cn.lambdalib2.registry.StateEventCallback
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-//import cn.academy.ability.api.data.CPData
 import cn.academy.ability.client.ui.Common.{Cover, RebuildEvent, TreeScreen}
 import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
-//import cn.academy.core.{LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.block.tileentity.TileDeveloper
@@ -30,7 +28,6 @@ import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
 import net.minecraft.util.EnumHand
-//import cn.lambdalib2.util.shader.{ShaderMono, ShaderProgram}
 import cn.lambdalib2.util.{HudUtils, RenderUtils}
 import cn.lambdalib2.input.{KeyHandler, KeyManager}
 import org.lwjgl.input.Keyboard
@@ -145,8 +142,8 @@ object SkillPosEditorUI {
           ret
         }
 
-        val box1 = box(skill.guiX, newX => skill.guiX = newX).pos(70, y)
-        val box2 = box(skill.guiY, newY => skill.guiY = newY).pos(93, y)
+        val box1 = box(skill.guiX, newX => skill.guiX = newX.toFloat).pos(70, y)
+        val box2 = box(skill.guiY, newY => skill.guiY = newY.toFloat).pos(93, y)
 
         gui.addWidget(box0)
         gui.addWidget(box1)
@@ -278,7 +275,7 @@ private object Common {
           val widget = new Widget
           val (sx, sy) = (skill.guiX, skill.guiY)
 
-          var lastTransit = GameTimer.getTime - 2000
+          var lastTransit = GameTimer.getTime - 2
           var state = StateIdle
           val creationTime = GameTimer.getTime
           val blendOffset = idx * 80 + 100
@@ -326,7 +323,7 @@ private object Common {
               }
             }
 
-            val dt = math.max(0, (time - creationTime - blendOffset) / 1000.0)
+            val dt = math.max(0, time - creationTime - blendOffset)
             val backAlpha = mAlpha * clampd(0, 1, dt * 10.0)
             val iconAlpha = mAlpha * clampd(0, 1, (dt - 0.08) * 10.0)
             val progressBlend = clampd(0, 1, (dt - 0.12) * 2.0).toFloat
