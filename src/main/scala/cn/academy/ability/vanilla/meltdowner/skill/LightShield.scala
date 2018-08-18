@@ -9,15 +9,15 @@ import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.EntityMdShield
 import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{MathUtils, RandUtils, VecUtils}
-import cn.lambdalib2.util.Motion3D
+import cn.lambdalib2.util._
 import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.potion.{Potion, PotionEffect}
-import net.minecraft.util.DamageSource
+import net.minecraft.util.math.Vec3d
+import net.minecraft.util.{DamageSource, SoundCategory}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 
@@ -36,12 +36,12 @@ object LightShield extends Skill("light_shield", 2) {
 
   @SubscribeEvent
   def onPlayerAttacked(event: LivingHurtEvent) {
-    event.entityLiving match {
+    event.getEntityLiving match {
       case player: EntityPlayer =>
         val context = ContextManager.instance.find(classOf[LSContext])
         if (context.isPresent) {
-          event.ammount = context.get().handleAttacked(event.source, event.ammount)
-          if (event.ammount == 0) event.setCanceled(true)
+          event.setAmount(context.get().handleAttacked(event.getSource, event.getAmount))
+            if (event.getAmount == 0) event.setCanceled(true)
         }
       case _ =>
     }
@@ -117,7 +117,7 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
   def handleAttacked(src: DamageSource, damage: Float): Float = {
     var result = damage
     if (damage == 0 || lastAbsorb != -1 && ticks - lastAbsorb <= ACTION_INTERVAL) return damage
-    val entity: Entity = src.getSourceOfDamage
+    val entity: Entity = src.getImmediateSource
     var perform: Boolean = false
     if (entity != null) if (isEntityReachable(entity)) perform = true
     else perform = true
@@ -162,23 +162,23 @@ class LSContextC(par: LSContext) extends ClientContext(par) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_spawn() = {
     shield = new EntityMdShield(player)
-    world.spawnEntityInWorld(shield)
-    ACSounds.playClient(player, "md.shield_startup", 0.5f)
-    loopSound = new FollowEntitySound(player, "md.shield_loop").setLoop()
+    world.spawnEntity(shield)
+    ACSounds.playClient(player, "md.shield_startup", SoundCategory.AMBIENT, 0.5f)
+    loopSound = new FollowEntitySound(player, "md.shield_loop", SoundCategory.AMBIENT).setLoop()
     ACSounds.playClient(loopSound)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   private def c_update() = {
     if (RandUtils.nextFloat < 0.3f) {
-      val mo: Motion3D = new Motion3D(player, true).move(1)
+      val mo = VecUtils.lookingPos(player, 1)
       val s: Double = 0.5
-      mo.px += ranged(-s, s)
-      mo.py += ranged(-s, s)
-      mo.pz += ranged(-s, s)
-      val p: Particle = MdParticleFactory.INSTANCE.next(world, new Vec3d(mo.px, mo.py, mo.pz),
+      mo.x += ranged(-s, s)
+      mo.y += ranged(-s, s)
+      mo.z += ranged(-s, s)
+      val p: Particle = MdParticleFactory.INSTANCE.next(world, new Vec3d(mo.x, mo.y, mo.z),
         new Vec3d(ranged(-.02, .02), ranged(-.01, .05), ranged(-.02, .02)))
-      world.spawnEntityInWorld(p)
+      world.spawnEntity(p)
     }
   }
 

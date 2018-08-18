@@ -5,11 +5,10 @@ import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegCli
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.entity.{EntityMdBall, EntityMdRaySmall}
-import cn.academy.ability.vanilla.meltdowner.entity.EntityMdRaySmall
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{MathUtils, VecUtils}
 import cn.lambdalib2.util.MathUtils._
-import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
+import cn.lambdalib2.util.{EntitySelectors, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -79,7 +78,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
       if (ticks <= timeLimit) {
         if (ticks % 10 == 0) if (active.size < MAX_HOLD) {
           val ball: EntityMdBall = new EntityMdBall(player)
-          player.world.spawnEntityInWorld(ball)
+          player.world.spawnEntity(ball)
           active.add(ball)
         }
         if (ticks != 0 && ticks % 8 == 0) {
@@ -91,7 +90,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
             var result: Entity = null
             import scala.collection.JavaConversions._
             for (e <- list) {
-              val dist: Double = e.getDistanceToEntity(player)
+              val dist: Double = e.getDistanceSq(player)
               if (dist < min) {
                 min = dist
                 result = e
@@ -153,7 +152,7 @@ class EMContextC(par: EMContext) extends ClientContext(par) {
       val pos: Vec3d = VecUtils.add(new Vec3d(player.posX, player.posY + ACRenderingHelper.getHeightFix(player),
         player.posZ), new Vec3d(r * Math.sin(theta), h, r * Math.cos(theta)))
       val vel: Vec3d = new Vec3d(ranged(-.02, .02), ranged(.01, .05), ranged(-.02, .02))
-      player.world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(player.world, pos, vel))
+      player.world.spawnEntity(MdParticleFactory.INSTANCE.next(player.world, pos, vel))
     }
   }
 
@@ -161,7 +160,7 @@ class EMContextC(par: EMContext) extends ClientContext(par) {
   private def c_spawnRay(from: Vec3d, to: Vec3d) = {
     val ray: EntityMdRaySmall = new EntityMdRaySmall(world)
     ray.setFromTo(from, to)
-    world.spawnEntityInWorld(ray)
+    world.spawnEntity(ray)
   }
 
 }

@@ -4,14 +4,12 @@ import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.entity.{EntityMdBall, EntityMdRaySmall}
-import cn.academy.ability.vanilla.meltdowner.entity.EntityMdRaySmall
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.EntityCallback
-import cn.lambdalib2.util.VecUtils
-import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib2.util.{EntitySelectors, Raytrace, VecUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{MovingObjectPosition, Vec3d}
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -55,14 +53,14 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
       val ball: EntityMdBall = new EntityMdBall(player, if (ctx.getSkillExp >= 0.8f) LIFE_IMPROVED else LIFE,
         new EntityCallback[EntityMdBall]() {
           def execute(ball: EntityMdBall) {
-            val trace: MovingObjectPosition = Raytrace.perform(player.world, new Vec3d(ball.posX, ball.posY, ball.posZ),
+            val trace: RayTraceResult = Raytrace.perform(player.world, new Vec3d(ball.posX, ball.posY, ball.posZ),
               getDest(player), EntitySelectors.exclude(player).and(EntitySelectors.of(classOf[EntityMdBall]).negate))
             if (trace != null && trace.entityHit != null) MDDamageHelper.attack(ctx, trace.entityHit, getDamage(exp))
             sendToClient(MSG_EFFECT, ball)
             terminate()
           }
         })
-      player.world.spawnEntityInWorld(ball)
+      player.world.spawnEntity(ball)
 
       ctx.addSkillExp(.005f)
       ctx.setCooldown(lerpf(20, 10, exp).toInt)
@@ -88,7 +86,7 @@ class EBContextC(par: EBContext) extends ClientContext(par) {
     raySmall.setFromTo(ball.posX, ball.posY + (if(ACRenderingHelper.isThePlayer(player)) 0
     else 1.6), ball.posZ, dest.x, dest.y, dest.z)
     raySmall.viewOptimize = false
-    player.world.spawnEntityInWorld(raySmall)
+    player.world.spawnEntity(raySmall)
   }
 
   private def getDest(player: EntityPlayer): Vec3d = Raytrace.getLookingPos(player, DISTANCE).getLeft

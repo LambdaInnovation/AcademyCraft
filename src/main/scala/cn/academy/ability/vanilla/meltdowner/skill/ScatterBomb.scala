@@ -10,12 +10,12 @@ import cn.academy.entity.EntityMdBall
 import cn.academy.network.NetworkManager
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{RandUtils, VecUtils}
-import cn.lambdalib2.util.Motion3D
-import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
+import cn.lambdalib2.util.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{DamageSource, MovingObjectPosition, Vec3d}
+import net.minecraft.util.DamageSource
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun, Paindar
@@ -76,7 +76,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
     if (ticks <= 80) {
       if (ticks >= 20 && ticks % MOD == 0) {
         val ball: EntityMdBall = new EntityMdBall(player)
-        world.spawnEntityInWorld(ball)
+        world.spawnEntity(ball)
         balls.add(ball)
         sendToClient(MSG_SYNC_BALLS, ball)
       }
@@ -111,7 +111,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
         autoCount -= 1
       }
 
-      val traceResult: MovingObjectPosition = Raytrace.perform(world, new Vec3d(ball.posX, ball.posY, ball.posZ),
+      val traceResult: RayTraceResult = Raytrace.perform(world, new Vec3d(ball.posX, ball.posY, ball.posZ),
         dest, basicSelector.and(EntitySelectors.exclude(player)))
       if (traceResult != null && traceResult.entityHit != null) {
         traceResult.entityHit.hurtResistantTime = -1
@@ -124,7 +124,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
     ctx.addSkillExp(0.001f * balls.size)
   }
 
-  private def newDest: Vec3d = new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec
+  private def newDest: Vec3d = VecUtils.lookingPos(player, RAY_RANGE).rotatePitch((RandUtils.nextFloat - 0.5F) * 5).rotateYaw((2.0F * (RandUtils.nextFloat - 0.5F)) * 5)
 
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))

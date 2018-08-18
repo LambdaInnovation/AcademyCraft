@@ -7,6 +7,7 @@ import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -29,10 +30,10 @@ class BasicMRContext(p: EntityPlayer) extends MRContext(p, MineRayBasic) {
   setCooldown(40f, 20f)
   setExpIncr(0.0005f)
 
-  override protected def onBlockBreak(world: World, x: Int, y: Int, z: Int, block: Block) = {
-    world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
-    block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0)
-    world.setBlock(x, y, z, Blocks.air)
+  override protected def onBlockBreak(world: World,  pos:BlockPos, block: Block) = {
+    world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+    block.dropBlockAsItemWithChance(world, pos, world.getBlockState(pos), 1.0f, 0)
+    world.setBlockState(pos, Blocks.AIR.getDefaultState)
   }
 
 }

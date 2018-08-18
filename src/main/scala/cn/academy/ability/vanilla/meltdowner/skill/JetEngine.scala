@@ -4,13 +4,12 @@ import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.entity.{EntityDiamondShield, EntityRippleMark}
-import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{RandUtils, VecUtils}
-import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib2.util.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{MovingObjectPosition, Vec3d}
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -99,10 +98,10 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_triggerTick() = {
     if(isTriggering) {
-      val pos: MovingObjectPosition = Raytrace.perform(world,
+      val pos: RayTraceResult = Raytrace.perform(world,
         new Vec3d(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
         new Vec3d(player.posX, player.posY, player.posZ), EntitySelectors.exclude(player).and(EntitySelectors.living))
-      if(player.ridingEntity!=null)player.mountEntity(null);
+      if(player.getRidingEntity!=null)player.dismountRidingEntity()
       if (pos != null && pos.entityHit != null) MDDamageHelper.attack(ctx, pos.entityHit, lerpf(7, 20, exp))
     }
   }
@@ -143,8 +142,8 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
     if(isLocal) {
       isMarking = true
       mark = new EntityRippleMark(world)
-      world.spawnEntityInWorld(mark)
-      mark.color.setColor4d(0.2, 1.0, 0.2, 0.7)
+      world.spawnEntity(mark)
+      mark.color.set(0.2, 1.0, 0.2, 0.7)
     }
   }
   
@@ -175,7 +174,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
     target = _target
     isTriggering = true
     entity = new EntityDiamondShield(player)
-    world.spawnEntityInWorld(entity)
+    world.spawnEntity(entity)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
@@ -188,7 +187,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
         val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.add(new Vec3d(player.posX, player.posY, player.posZ),
           new Vec3d(RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3))),
           new Vec3d(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02)))
-        world.spawnEntityInWorld(p)
+        world.spawnEntity(p)
       }
     }
   }

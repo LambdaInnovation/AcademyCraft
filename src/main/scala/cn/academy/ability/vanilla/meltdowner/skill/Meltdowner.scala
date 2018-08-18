@@ -11,20 +11,16 @@ import cn.academy.client.sound.FollowEntitySound
 import cn.academy.entity.EntityMDRay
 import cn.academy.util.RangedRayDamage
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.MathUtils
-import cn.lambdalib2.util.VecUtils
-import cn.lambdalib2.util.Motion3D
-import cn.lambdalib2.util.mc.Raytrace
+import cn.lambdalib2.util.{MathUtils, Raytrace, VecUtils}
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.MovingObjectPosition
-import net.minecraft.util.MovingObjectPosition.MovingObjectType
-import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 import cn.lambdalib2.util.MathUtils.lerpf
 import cn.lambdalib2.util.RandUtils.ranged
 import cn.lambdalib2.util.RandUtils.rangei
+import net.minecraft.util.SoundCategory
 
 /**
   * @author WeAthFolD
@@ -92,7 +88,7 @@ class MDContext(player: EntityPlayer) extends Context(player, Meltdowner) {
     val length: Array[Double] = Array[Double](30) // for lambda mod
     val rrd: RangedRayDamage = new RangedRayDamage.Reflectible(ctx, lerpf(2, 3, exp), getEnergy(ct), new Consumer[Entity] {
       override def accept(reflector: Entity): Unit = {
-        length.update(0, Math.min(length.apply(0), reflector.getDistanceToEntity(ctx.player)))
+        length.update(0, Math.min(length.apply(0), reflector.getDistanceSq(ctx.player)))
 
         s_reflected(reflector)
         sendToClient(MSG_REFLECTED, reflector)
@@ -107,8 +103,8 @@ class MDContext(player: EntityPlayer) extends Context(player, Meltdowner) {
   }
 
   private def s_reflected(reflector: Entity) {
-    val result: MovingObjectPosition = Raytrace.traceLiving(reflector, 10)
-    if(result != null && (result.typeOfHit eq MovingObjectType.ENTITY)) ctx.attack(result.entityHit, 0.5f * lerpf(20, 50, exp))
+    val result: RayTraceResult = Raytrace.traceLiving(reflector, 10)
+    if(result != null && (result.typeOfHit eq RayTraceResult.Type.ENTITY)) ctx.attack(result.entityHit, 0.5f * lerpf(20, 50, exp))
   }
 
   private def timeRate(ct: Int): Float = MathUtils.lerpf(0.8f, 1.2f, (ct - 20.0f) / 20.0f)
@@ -136,8 +132,8 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   private def c_perform(ct: Int, length: Double) {
     val ray: EntityMDRay = new EntityMDRay(ctx.player, length)
-    ACSounds.playClient(ctx.player, "md.meltdowner", 0.5f)
-    world.spawnEntityInWorld(ray)
+    ACSounds.playClient(ctx.player, "md.meltdowner", SoundCategory.AMBIENT, 0.5f)
+    world.spawnEntity(ray)
   }
 
   @Listener(channel=MSG_REFLECTED, side=Array(Side.CLIENT))
@@ -145,10 +141,9 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
     val playerLook: Vec3d = ctx.player.getLookVec.normalize
     val distance: Double = VecUtils.entityHeadPos(ctx.player).distanceTo(VecUtils.entityHeadPos(reflector))
     val spawnPos: Vec3d = VecUtils.add(VecUtils.entityHeadPos(ctx.player), VecUtils.multiply(playerLook, distance))
-    val mo: Motion3D = new Motion3D(reflector, true)
-    mo.setPosition(spawnPos.x, spawnPos.y, spawnPos.z)
-    val ray: EntityMDRay = new EntityMDRay(ctx.player, mo, 10)
-    world.spawnEntityInWorld(ray)
+    val ray: EntityMDRay = new EntityMDRay(ctx.player, 10)
+    ray.setPosition(spawnPos.x, spawnPos.y, spawnPos.z)
+    world.spawnEntity(ray)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
@@ -159,7 +154,7 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_start() {
-    sound = new FollowEntitySound(ctx.player, "md.md_charge").setVolume(1.0f)
+    sound = new FollowEntitySound(ctx.player, "md.md_charge", SoundCategory.AMBIENT).setVolume(1.0f)
     ACSounds.playClient(sound)
   }
 
@@ -175,7 +170,7 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
       val pos: Vec3d = VecUtils.add(new Vec3d(ctx.player.posX, ctx.player.posY + (if(ACRenderingHelper.isThePlayer(ctx.player)) 0
       else 1.6), ctx.player.posZ), new Vec3d(r * Math.sin(theta), h, r * Math.cos(theta)))
       val vel: Vec3d = new Vec3d(ranged(-.03, .03), ranged(.01, .05), ranged(-.03, .03))
-      world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel))
+      world.spawnEntity(MdParticleFactory.INSTANCE.next(world, pos, vel))
     }
   }
 

@@ -5,17 +5,17 @@ import cn.academy.ability.context.{ClientContext, Context}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.event.BlockDestroyEvent
-import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.handlers.Rigidbody
 import cn.lambdalib2.util.{RandUtils, VecUtils}
 import cn.lambdalib2.util.RandUtils._
-import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib2.util.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{MovingObjectPosition, ResourceLocation}
+import net.minecraft.util.{ResourceLocation, SoundCategory}
+import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 
@@ -70,18 +70,18 @@ abstract class MRContext(p: EntityPlayer, _skill: MineRaysBase) extends Context(
     if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     if (!ctx.consume(0, lerpf(cp_l, cp_r, exp)) && !isRemote) terminate()
 
-    val result: MovingObjectPosition = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
+    val result: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     if (result != null) {
-      val tx: Int = result.blockX
-      val ty: Int = result.blockY
-      val tz: Int = result.blockZ
-      if (tx != x || ty != y || tz != z) {
-        val block: Block = world.getBlock(tx, ty, tz)
-        if (!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player, tx, ty, tz)) && block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= harvestLevel) {
-          x = tx
-          y = ty
-          z = tz
-          hardnessLeft = block.getBlockHardness(world, tx, ty, tz)
+      val pos = result.getBlockPos
+      if (pos.getX != x || pos.getY != y || pos.getZ != z) {
+        val is = world.getBlockState(pos)
+        val block: Block = is.getBlock
+        if (!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player, pos)) &&
+          block.getHarvestLevel(is) <= harvestLevel) {
+          x = pos.getX
+          y = pos.getY
+          z = pos.getZ
+          hardnessLeft = block.getBlockHardness(is, world, pos)
           if (hardnessLeft < 0) hardnessLeft = Float.MaxValue
         } else {
           x = -1
@@ -91,7 +91,9 @@ abstract class MRContext(p: EntityPlayer, _skill: MineRaysBase) extends Context(
       } else {
         hardnessLeft -= lerpf(speed_l, speed_r, exp)
         if (hardnessLeft <= 0) {
-          onBlockBreak(world, x, y, z, world.getBlock(x, y, z))
+          val is = world.getBlockState(pos)
+          val block: Block = is.getBlock
+          onBlockBreak(world, x, y, z, block)
           ctx.addSkillExp(expincr)
           x = -1
           y = -1
@@ -155,7 +157,7 @@ abstract class MRContext(p: EntityPlayer, _skill: MineRaysBase) extends Context(
     expincr = amt
   }
 
-  protected def onBlockBreak(world: World, x: Int, y: Int, z: Int, block: Block)
+  protected def onBlockBreak(world: World, pos:BlockPos, block: Block)
 
 }
 
@@ -170,10 +172,10 @@ abstract class MRContextC(par: MRContext) extends ClientContext(par) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_start() = {
     ray = createRay
-    world.spawnEntityInWorld(ray)
-    loopSound = new FollowEntitySound(player, "md.mine_loop").setLoop().setVolume(0.3f)
+    world.spawnEntity(ray)
+    loopSound = new FollowEntitySound(player, "md.mine_loop", SoundCategory).setLoop().setVolume(0.3f)
     ACSounds.playClient(loopSound)
-    ACSounds.playClient(player, "md.mine_" + skill.asInstanceOf[MineRaysBase].postfix + "_startup", 0.4f)
+    ACSounds.playClient(player, "md.mine_" + skill.asInstanceOf[MineRaysBase].postfix + "_startup", SoundCategory.AMBIENT, 0.4f)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
@@ -201,7 +203,7 @@ abstract class MRContextC(par: MRContext) extends ClientContext(par) {
       rb.entitySel = null
       rb.blockFil = null
       p.addMotionHandler(rb)
-      world.spawnEntityInWorld(p)
+      world.spawnEntity(p)
     }
   }
   
