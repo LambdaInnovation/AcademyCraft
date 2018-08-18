@@ -9,8 +9,8 @@ import cn.academy.entity.EntityMarker
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
 import cn.academy.datapart.AbilityData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.VecUtils.lookingPos
 import cn.lambdalib2.util.{EntitySelectors => _, _}
+import cn.lambdalib2.util.VecUtils.lookingPos
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity

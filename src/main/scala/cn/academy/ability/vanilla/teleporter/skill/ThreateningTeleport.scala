@@ -1,5 +1,6 @@
 package cn.academy.ability.vanilla.teleporter.skill
 
+import cn.academy.ACItems
 import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.misc.TPParticleFactory
@@ -101,7 +102,7 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
 
   private def getDamage(stack: ItemStack): Float = {
     var dmg: Float = lerpf(3, 6, ctx.getSkillExp)
-    if(stack.getItem eq VanillaCategories.needle) dmg *= 1.5f
+    if(stack.getItem eq ACItems.needle) dmg *= 1.5f
     dmg
   }
 
@@ -113,7 +114,7 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
     if(pos == null) pos = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     val ret: TraceResult = new TraceResult
     if(pos == null) {
-      val mo = VecUtils.add(player.getPositionVector, multiply(player.getLookVec, range))
+      val mo = VecUtils.add(player.getPositionVector, VecUtils.multiply(player.getLookVec, range))
       ret.setPos(mo.x, mo.y, mo.z)
     }
     else if(pos.typeOfHit eq RayTraceResult.Type.BLOCK) ret.setPos(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)

@@ -1,5 +1,6 @@
 package cn.academy.ability.vanilla;
 
+import cn.academy.ACItems;
 import cn.academy.ability.Category;
 import cn.academy.ability.Skill;
 import cn.academy.ability.RegCategory;
@@ -38,13 +39,13 @@ public class VanillaCategories {
 
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate), new ItemStack(needle, 6),
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate), new ItemStack(ACItems.needle, 6),
                 Mode.INCISE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(Block.getBlockFromName("rail")), new ItemStack(needle, 2),
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(Block.getBlockFromName("rail")), new ItemStack(ACItems.needle, 2),
                 Mode.INCISE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate, 2), new ItemStack(coin, 3),
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate, 2), new ItemStack(ACItems.coin, 3),
                 Mode.PLATE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.wafer), new ItemStack(silbarn), Mode.ETCH);
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.wafer), new ItemStack(ACItems.silbarn), Mode.ETCH);
     }
 
     public static void addGenericSkills(Category category) {

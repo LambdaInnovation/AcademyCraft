@@ -1,12 +1,12 @@
 package cn.academy.ability.vanilla.teleporter.util;
 
 import cn.academy.ability.AbilityContext;
+import cn.academy.ability.vanilla.teleporter.passiveskill.DimFoldingTheorem;
+import cn.academy.ability.vanilla.teleporter.passiveskill.SpaceFluctuation;
 import cn.academy.datapart.AbilityData;
 import cn.academy.event.ability.AbilityEvent;
 import cn.academy.achievement.ACAchievements;
 import cn.academy.ability.vanilla.teleporter.CatTeleporter;
-import cn.academy.ability.vanilla.teleporter.passiveskill.DimFoldingTheorem$;
-import cn.academy.ability.vanilla.teleporter.passiveskill.SpaceFluctuation$;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
@@ -87,8 +87,8 @@ public class TPSkillHelper {
 
 
     private static float prob(AbilityData data, int level) {
-        float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem$.MODULE$) ? data.getSkillExp(DimFoldingTheorem$.MODULE$) : -1;
-        float spaceFluctExp = data.isSkillLearned(SpaceFluctuation$.MODULE$) ? data.getSkillExp(SpaceFluctuation$.MODULE$) : -1;
+        float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem.instance) ? data.getSkillExp(DimFoldingTheorem.instance) : -1;
+        float spaceFluctExp = data.isSkillLearned(SpaceFluctuation.instance) ? data.getSkillExp(SpaceFluctuation.instance) : -1;
 
         switch (level) {
         case 0:

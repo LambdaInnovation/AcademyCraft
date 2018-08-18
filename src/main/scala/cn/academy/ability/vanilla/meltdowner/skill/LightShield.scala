@@ -110,7 +110,8 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
-    player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1))
+
+    player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 100, 1))
     ctx.setCooldown(getCooldown(ticks))
   }
 

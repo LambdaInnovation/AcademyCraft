@@ -44,7 +44,7 @@ public class CatElectromaster extends Category {
 
         arcGen.setPosition(24, 46);
         currentCharging.setPosition(55, 18);
-        bodyIntensify.setPosition(97.1, 15);
+        bodyIntensify.setPosition(97, 15);
         mineDetect.setPosition(225, 12);
         magMovement.setPosition(137, 35);
         thunderBolt.setPosition(86, 67);

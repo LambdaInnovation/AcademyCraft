@@ -5,16 +5,16 @@ import cn.academy.client.CameraPosition
 import cn.academy.client.render.util.Tessellator
 import cn.academy.entity.LocalEntity
 import cn.lambdalib2.util.RenderUtils
+import cn.lambdalib2.util.VecUtils._
 import cn.lambdalib2.util.GameTimer
-import cn.lambdalib2.util.mc.Vec3d
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
-import cn.lambdalib2.util.mc.MCExtender._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import cn.lambdalib2.registry.StateEventCallback
+import net.minecraft.util.math.Vec3d
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.opengl.GL11._
 
@@ -28,8 +28,8 @@ object SmokeEffect_ {
 
       override def doRender(ent : Entity, x : Double, y : Double, z : Double, pt : Float, wtf : Float): Unit = ent match {
         case eff: SmokeEffect =>
-          val campos = CameraPosition.getVec3
-          val delta = Vec3d(x, y, z) - campos
+          val campos = CameraPosition.getVec3d
+          val delta = subtract(new Vec3d(x, y, z), campos)
           val look = delta.toLook
 
           glEnable(GL_BLEND)
@@ -39,7 +39,7 @@ object SmokeEffect_ {
           glPushMatrix()
           glTranslated(x, y, z)
 
-          glRotated(-look.yaw + 180, 0, 1, 0)
+          glRotated(-look.yaw + 180, 0, 1, 0)//TODO
           glRotated(-look.pitch, 1, 0, 0)
           glScaled(eff.size, eff.size, 1)
 

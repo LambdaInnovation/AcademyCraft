@@ -2,6 +2,8 @@ package cn.academy.ability;
 
 import cn.academy.AcademyCraft;
 import cn.academy.event.BlockDestroyEvent;
+import cn.lambdalib2.registry.StateEventCallback;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -22,9 +24,9 @@ public class AbilityPipeline {
      */
     static boolean canBreakBlock(World world) {
         return propDestroyBlocks.getBoolean() ||
-                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), String.valueOf(world.provider.dimensionId)) ||
-                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.getSaveFolder()) ||
-                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.getDimensionName());
+                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), String.valueOf(world.provider.getDimension())) ||
+                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.getSaveFolder());
+                //||ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.g);
     }
 
     static boolean isAllWorldDisableBreakBlock() {
@@ -79,8 +81,8 @@ public class AbilityPipeline {
     private static Property propWorldsDestroyingBlocks;
     private static Property propUseMouseWheel;
 
-    @RegInitCallback
-    private static void _init() {
+    @StateEventCallback
+    private static void _init(FMLInitializationEvent event) {
         Configuration conf = AcademyCraft.config;
 
         propAttackPlayer = conf.get("generic", "attackPlayer", true, "Whether the skills are effective on players.");

@@ -122,7 +122,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
 
           entity = new MagManipEntityBlock(player, 10)
           entity.setBlock(block)
-          entity.setPosition(x + .5, y + .5, z + .5)
+          entity.setPosition((x + .5).toInt, (y + .5).toInt, (z + .5).toInt)
 
           world.spawnEntity(entity)
 

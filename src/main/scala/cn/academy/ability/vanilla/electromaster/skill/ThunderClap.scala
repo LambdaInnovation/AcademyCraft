@@ -90,7 +90,7 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
       return
     }
 
-    val lightning = new EntityLightningBolt(player.world, hitX, hitY, hitZ)
+    val lightning = new EntityLightningBolt(player.world, hitX, hitY, hitZ, true)
     player.getEntityWorld.addWeatherEffect(lightning)
     ctx.attackRange(hitX, hitY, hitZ, ThunderClap.getRange(exp), getDamage(exp, ticks), EntitySelectors.exclude(player))
 
