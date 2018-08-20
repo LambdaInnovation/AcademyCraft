@@ -3,10 +3,10 @@ package cn.academy.support.ic2;
 import cn.academy.block.tileentity.TileReceiverBase;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergySource;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import static cn.academy.support.ic2.IC2Support.eu2if;
 import static cn.academy.support.ic2.IC2Support.if2eu;
@@ -24,7 +24,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
+    public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing direction) {
         return true;
     }
 

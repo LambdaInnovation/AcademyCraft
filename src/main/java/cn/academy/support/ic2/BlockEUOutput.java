@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class BlockEUOutput extends BlockConverterBase {
 
     public BlockEUOutput() {
-        super("eu_output", "IF", "EU", TileEUOutput.class);
+        super( "IF", "EU", TileEUOutput.class);
     }
     
     @Override

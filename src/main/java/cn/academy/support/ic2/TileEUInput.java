@@ -3,10 +3,10 @@ package cn.academy.support.ic2;
 import cn.academy.block.tileentity.TileGeneratorBase;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import static cn.academy.support.ic2.IC2Support.eu2if;
 import static cn.academy.support.ic2.IC2Support.if2eu;
@@ -29,11 +29,6 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     }
 
     @Override
-    public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-        return true;
-    }
-
-    @Override
     public double getDemandedEnergy() {
         return bufferSize - getEnergy();
     }
@@ -44,7 +39,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     }
 
     @Override
-    public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
+    public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
         return if2eu(addEnergy(eu2if(amount)));
     }
     
@@ -72,4 +67,9 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
         super.invalidate();
     }
 
+    @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing enumFacing)
+    {
+        return true;
+    }
 }

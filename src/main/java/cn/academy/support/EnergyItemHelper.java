@@ -1,8 +1,10 @@
 package cn.academy.support;
 
 import cn.academy.energy.api.IFItemManager;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +18,8 @@ public class EnergyItemHelper {
 
     private static List<EnergyItemManager> supported = new ArrayList<>();
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
         register(IFItemManager.instance);
     }
 

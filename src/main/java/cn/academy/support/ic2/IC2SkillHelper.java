@@ -2,13 +2,15 @@ package cn.academy.support.ic2;
 
 import cn.academy.event.ability.AbilityActivateEvent;
 import cn.academy.entity.EntitySurroundArc;
-import cn.lambdalib2.util.BlockPos;
-import cn.lambdalib2.util.mc.IBlockSelector;
-import cn.lambdalib2.util.mc.WorldUtils;
+import cn.lambdalib2.util.IBlockSelector;
+import cn.lambdalib2.util.WorldUtils;
+import ic2.core.block.BlockTileEntity;
+import ic2.core.block.wiring.TileEntityCable;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ic2.core.block.wiring.BlockCable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -21,15 +23,17 @@ import java.util.List;
  */
 public class IC2SkillHelper {
 
-    private static final IBlockSelector blockSelector = new IBlockSelector() {
-        @Override
-        public boolean accepts(World world, int x, int y, int z, Block block) {
-            if(block instanceof BlockCable) {
+    private static Block IC2CABLE = null;
+    private static final IBlockSelector blockSelector = (world, x, y, z, block) -> {
+        if(block instanceof BlockTileEntity)
+        {
+            TileEntity te = world.getTileEntity(new BlockPos(x,y,z));
+            if(te instanceof TileEntityCable)
+            {
                 return true;
-            } else {
-                return false;
             }
         }
+        return false;
     };
 
     public void init() {
@@ -47,7 +51,7 @@ public class IC2SkillHelper {
         List<BlockPos> blockList = WorldUtils.getBlocksWithin(player, 5, 100, blockSelector);
         World world = player.world;
         for(BlockPos bp : blockList) {
-            world.spawnEntityInWorld(new EntitySurroundArc(world, bp.x, bp.y, bp.z, 1, 1));
+            world.spawnEntity(new EntitySurroundArc(world, bp.getX(), bp.getY(), bp.getZ(), 1, 1));
         }
     }
 

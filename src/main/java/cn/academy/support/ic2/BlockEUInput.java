@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class BlockEUInput extends BlockConverterBase {
 
     public BlockEUInput() {
-        super("eu_input", "EU", "IF", TileEUInput.class);
+        super( "EU", "IF", TileEUInput.class);
     }
 
     @Override
