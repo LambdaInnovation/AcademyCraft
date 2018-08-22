@@ -4,6 +4,9 @@ import cn.academy.Resources;
 import cn.academy.event.MatterUnitHarvestEvent;
 import cn.academy.client.render.item.RendererMatterUnit;
 import cn.lambdalib2.util.mc.PlayerUtils;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -14,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -50,9 +52,9 @@ public class ItemMatterUnit extends Item {
         
     }
     
-    private static List<MatterMaterial> materials = new ArrayList();
+    private static List<MatterMaterial> materials = new ArrayList<>();
     
-    public static final MatterMaterial NONE = new MatterMaterial("none", Blocks.air);
+    public static final MatterMaterial NONE = new MatterMaterial("none", Blocks.AIR);
     static {
         addMatterMaterial(NONE);
     }
@@ -78,7 +80,6 @@ public class ItemMatterUnit extends Item {
     
     
     public ItemMatterUnit() {
-        super("matter_unit");
         setMaxStackSize(16);
         hasSubtypes = true;
     }
@@ -113,30 +114,27 @@ public class ItemMatterUnit extends Item {
     }
     
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         boolean isNone = getMaterial(stack) == NONE;
-        MovingObjectPosition mop = 
-            this.getMovingObjectPositionFromPlayer(world, player, true);
+        RayTraceResult rayRes = rayTrace(world, player, isNone);
 
-        if (mop == null) {
-            return stack;
+        if (rayRes == null) {
+            return new ActionResult<>(EnumActionResult.PASS, stack);
         } else {
+            if (rayRes.typeOfHit == RayTraceResult.Type.BLOCK) {
+                BlockPos pos = rayRes.getBlockPos();
 
-            if (mop.typeOfHit == MovingObjectType.BLOCK) {
-                int i = mop.blockX;
-                int j = mop.blockY;
-                int k = mop.blockZ;
-
-                if (!world.canMineBlock(player, i, j, k)) {
-                    return stack;
+                if (!world.canMineBlockBody(player, pos)) {
+                    return new ActionResult<>(EnumActionResult.PASS, stack);
                 }
 
                 if (isNone) {
-                    if (!player.canPlayerEdit(i, j, k, mop.sideHit, stack)) {
-                        return stack;
+                    if (!player.canPlayerEdit(pos, rayRes.sideHit, stack)) {
+                        return new ActionResult<>(EnumActionResult.PASS, stack);
                     }
                     
-                    Block b = world.getBlock(i, j, k);
+                    Block b = world.getBlockState(pos).getBlock();
                     for(MatterMaterial m : materials) {
                         if(m.block == b) {
                             // Match, merge the stack.
@@ -144,64 +142,45 @@ public class ItemMatterUnit extends Item {
                             this.setMaterial(newStack, m);
                             int left = PlayerUtils.mergeStackable(player.inventory, newStack);
                             if(left > 0 && !world.isRemote) {
-                                newStack.stackSize = left;
-                                player.dropPlayerItemWithRandomChoice(newStack, false);
+                                newStack.setCount(left);
+                                player.dropItem(newStack, false);
                             }
                             // --stackSize
                             if(!player.capabilities.isCreativeMode) {
-                                stack.stackSize--;
+                                stack.shrink(1);
                             }
                             // Clear block
-                            world.setBlockToAir(i, j, k);
+                            world.setBlockToAir(pos);
                             MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, m));
                             break;
                         }
                     }
                 } else {
-                    if (!player.canPlayerEdit(i, j, k, mop.sideHit, stack)) {
-                        return stack;
+                    if (!player.canPlayerEdit(pos, rayRes.sideHit, stack)) {
+                        return new ActionResult<>(EnumActionResult.PASS, stack);
                     }
-                    Block b = world.getBlock(i, j, k);
-                    if(b.isReplaceable(world, i, j, k)) {
-                        world.setBlock(i, j, k, getMaterial(stack).block);
+                    Block b = world.getBlockState(pos).getBlock();
+                    if(b.isReplaceable(world, pos)) {
+                        world.setBlockState(pos, getMaterial(stack).block.getBlockState().getBaseState());
                     } else {
-                        switch(mop.sideHit) {
-                            case 0:
-                                j--;
-                                break;
-                            case 1:
-                                j++;
-                                break;
-                            case 2:
-                                k--;
-                                break;
-                            case 3:
-                                k++;
-                                break;
-                            case 4:
-                                i--;
-                                break;
-                            case 5:
-                                i++;
-                                break;
-                        }
-                        world.setBlock(i, j, k, this.getMaterial(stack).block);
+                        BlockPos npos = pos.offset(rayRes.sideHit);
+                        world.setBlockState(npos, getMaterial(stack).block.getBlockState().getBaseState());
                     }
                     ItemStack newStack = new ItemStack(this);
                     this.setMaterial(newStack, NONE);
                     int left = PlayerUtils.mergeStackable(player.inventory, newStack);
                     if(left > 0 && !world.isRemote) {
-                        newStack.stackSize = left;
-                        player.dropPlayerItemWithRandomChoice(newStack, false);
+                        newStack.setCount(left);
+                        player.dropItem(newStack, true);
                     }
                     if(!player.capabilities.isCreativeMode) {
-                        stack.stackSize--;
+                        stack.shrink(1);
                     }
                     MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, NONE));
                 }
             }
 
-            return stack;
+            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
     }
     
@@ -212,11 +191,13 @@ public class ItemMatterUnit extends Item {
     
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubItems(Item instance, CreativeTabs cct, List list) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (!isInCreativeTab(tab))
+            return;
         for(MatterMaterial mat : materials) {
             ItemStack stack = new ItemStack(this);
             setMaterial(stack, mat);
-            list.add(stack);
+            items.add(stack);
         }
     }
     

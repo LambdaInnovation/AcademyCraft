@@ -1,5 +1,6 @@
 package cn.academy.item;
 
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -17,7 +18,7 @@ public class ItemMatrixCore extends Item {
     
     int LEVELS = 3;
     
-    IIcon icons[] = new IIcon[LEVELS];
+//    IIcon icons[] = new IIcon[LEVELS];
 
     public ItemMatrixCore() {
         this.setHasSubtypes(true);
@@ -28,25 +29,24 @@ public class ItemMatrixCore extends Item {
         return super.getUnlocalizedName(stack) + "_" + stack.getItemDamage();
     }
     
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerIcons(IIconRegister ir) {
-        for(int i = 0; i < LEVELS; ++i) {
-            icons[i] = ir.registerIcon("academy:matrix_core_" + i);
+//    @SideOnly(Side.CLIENT)
+//    @Override
+//    public void registerIcons(IIconRegister ir) {
+//        for(int i = 0; i < LEVELS; ++i) {
+//            icons[i] = ir.registerIcon("academy:matrix_core_" + i);
+//        }
+//    }
+//
+//    @SideOnly(Side.CLIENT)
+//    @Override
+//    public IIcon getIconFromDamage(int meta) {
+//        return icons[meta];
+//    }
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (isInCreativeTab(tab)) {
+            for(int i = 0; i < LEVELS; ++i)
+                items.add(new ItemStack(this, 1, i));
         }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIconFromDamage(int meta) {
-        return icons[meta];
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs cct, List list) {
-        for(int i = 0; i < LEVELS; ++i)
-            list.add(new ItemStack(this, 1, i));
     }
 
 }

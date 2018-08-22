@@ -17,10 +17,6 @@ import net.minecraft.world.World;
  */
 public class ItemTutorial extends Item {
 
-    public ItemTutorial() {
-        super("tutorial");
-    }
-    
     @SideOnly(Side.CLIENT)
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {

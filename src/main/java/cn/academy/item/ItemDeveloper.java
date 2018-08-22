@@ -4,6 +4,9 @@ import cn.academy.client.render.item.RenderDeveloperPortable;
 import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.PortableDevData;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -23,17 +26,17 @@ public class ItemDeveloper extends ItemEnergyBase {
     public static final DeveloperType type = DeveloperType.PORTABLE;
 
     public ItemDeveloper() {
-        super("developer_portable", type.getEnergy(), type.getBandwidth());
+        super(type.getEnergy(), type.getBandwidth());
         this.bFull3D = true;
     }
     
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if(player.world.isRemote) {
             displayGui(player);
         }
         
-        return stack;
+        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
     
     @SideOnly(Side.CLIENT)
