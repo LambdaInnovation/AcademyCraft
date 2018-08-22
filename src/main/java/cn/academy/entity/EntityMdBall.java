@@ -6,6 +6,7 @@ import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.EntityCallback;
 import net.minecraft.client.Minecraft;

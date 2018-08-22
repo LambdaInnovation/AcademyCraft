@@ -1,5 +1,6 @@
 package cn.academy.entity;
 
+import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.util.math.Vec3d;
 
 /**
@@ -7,11 +8,11 @@ import net.minecraft.util.math.Vec3d;
  * The view direction of the ray is determined by the rotationYaw and rotationPitch.
  * @author WeAthFolD
  */
-public interface IRay extends IAssociatePlayer {
+public interface IRay extends ViewOptimize.IAssociatePlayer {
     
     void onRenderTick();
     
-    Vec3d getPosition();
+    Vec3d getPositionVector();
     
     /**
      * @return If this ray is spawned at player's hand and need to be treated differently for 1st and 3rd person

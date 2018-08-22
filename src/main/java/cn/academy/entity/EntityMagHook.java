@@ -12,6 +12,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +30,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @RegEntity
 public class EntityMagHook extends EntityAdvanced
 {
-    
+
+    private static final DataParameter<Boolean> IS_HIT = EntityDataManager.<Boolean>createKey(EntityMagHook.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<EnumFacing> HIT_SIDE = EntityDataManager.<EnumFacing>createKey(EntityMagHook.class, DataSerializers.FACING);
+    private static final DataParameter<Integer> HOOK_X = EntityDataManager.<Integer>createKey(EntityMagHook.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> HOOK_Y = EntityDataManager.<Integer>createKey(EntityMagHook.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> HOOK_Z = EntityDataManager.<Integer>createKey(EntityMagHook.class, DataSerializers.VARINT);
     {
         Rigidbody rb = new Rigidbody();
         rb.gravity = 0.05;
@@ -91,10 +99,11 @@ public class EntityMagHook extends EntityAdvanced
     @Override
     public void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(10, Byte.valueOf((byte) 0));
-        dataWatcher.addObject(11, Integer.valueOf(0));
-        dataWatcher.addObject(12, Integer.valueOf(0));
-        dataWatcher.addObject(13, Integer.valueOf(0));
+        dataManager.register(HIT_SIDE, EnumFacing.DOWN);
+        dataManager.register(IS_HIT, false);
+        dataManager.register(HOOK_X, 0);
+        dataManager.register(HOOK_Y, 0);
+        dataManager.register(HOOK_Z, 0);
     }
     
     @Override
@@ -117,27 +126,29 @@ public class EntityMagHook extends EntityAdvanced
         //System.out.println("sync " + posX + " " + posY + " " + posZ + " " + world.isRemote + " " + isHit + " " + this);
         if(getEntityWorld().isRemote) {
             boolean lastHit = isHit;
-            byte b1 = dataWatcher.getWatchableObjectByte(10);
-            isHit = (b1 & 1) != 0;
-            hitSide = b1 >> 1;
-            hookX = dataWatcher.getWatchableObjectInt(11);
-            hookY = dataWatcher.getWatchableObjectInt(12);
-            hookZ = dataWatcher.getWatchableObjectInt(13);
+
+            hitSide = dataManager.get(HIT_SIDE);
+            isHit = dataManager.get(IS_HIT);
+
+            hookX = dataManager.get(HOOK_X);
+            hookY = dataManager.get(HOOK_Y);
+            hookZ = dataManager.get(HOOK_Z);
             if(!lastHit && isHit) {
                 setStill();
             }
         } else {
-            byte b1 = (byte) ((isHit ? 1 : 0) | (hitSide << 1));
-            dataWatcher.updateObject(10, Byte.valueOf(b1));
-            dataWatcher.updateObject(11, Integer.valueOf(hookX));
-            dataWatcher.updateObject(12, Integer.valueOf(hookY));
-            dataWatcher.updateObject(13, Integer.valueOf(hookZ));
+            dataManager.set(HIT_SIDE, hitSide);
+            dataManager.set(IS_HIT, isHit);
+
+            dataManager.set(HOOK_X, hookX);
+            dataManager.set(HOOK_Y, hookY);
+            dataManager.set(HOOK_Z, hookZ);
         }
     }
     
     @Override
     public boolean attackEntityFrom(DamageSource ds, float dmg) {
-        if(isHit && !getEntityWorld().isRemote && ds.getEntity() instanceof EntityPlayer) {
+        if(isHit && !getEntityWorld().isRemote && ds.getTrueSource() instanceof EntityPlayer) {
             dropAsItem();
         }
         return true;
@@ -214,7 +225,7 @@ public class EntityMagHook extends EntityAdvanced
     
     public void preRender() {
         if(this.isHit) {
-            switch(hitSide) {
+            switch(hitSide.getIndex()) {
             case 0:
                 rotationPitch = -90; break;
             case 1:
@@ -228,10 +239,10 @@ public class EntityMagHook extends EntityAdvanced
             case 5:
                 rotationYaw = 90; rotationPitch = 0; break;
             }
-            EnumFacing fd = EnumFacing.getFront(hitSide);
-            setPosition(hookX + 0.5 + fd.offsetX * 0.51, 
-                    hookY + 0.5 + fd.offsetY * 0.51, 
-                    hookZ + 0.5 + fd.offsetZ * 0.51);
+//            EnumFacing fd = EnumFacing.getFront(hitSide);
+            setPosition(hookX + 0.5 + hitSide.getDirectionVec().getX() * 0.51,
+                    hookY + 0.5 + hitSide.getDirectionVec().getY() * 0.51,
+                    hookZ + 0.5 + hitSide.getDirectionVec().getZ() * 0.51);
         }
     }
 

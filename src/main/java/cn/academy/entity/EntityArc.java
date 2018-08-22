@@ -12,6 +12,7 @@ import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -118,11 +119,13 @@ public class EntityArc extends EntityAdvanced implements ViewOptimize.IAssociate
         return pass == 1;
     }
     
-    public static class Renderer extends Render {
-        
+    public static class Renderer extends Render<EntityArc> {
+
+        public Renderer(RenderManager renderManager) {
+            super(renderManager);
+        }
         @Override
-        public void doRender(Entity e, double x, double y, double z, float f, float g) {
-            EntityArc arc = (EntityArc) e;
+        public void doRender(EntityArc arc, double x, double y, double z, float f, float g) {
             if(!arc.show)
                 return;
             
@@ -149,7 +152,7 @@ public class EntityArc extends EntityAdvanced implements ViewOptimize.IAssociate
         }
 
         @Override
-        protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+        protected ResourceLocation getEntityTexture(EntityArc entity) {
             return null;
         }
         
