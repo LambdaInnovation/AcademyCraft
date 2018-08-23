@@ -4,6 +4,10 @@ import cn.academy.AcademyCraft;
 import cn.academy.client.render.entity.RenderEntityBlock;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.TargetPoints;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
+import cn.lambdalib2.util.entityx.event.CollideEvent;
+import cn.lambdalib2.util.entityx.handlers.Rigidbody;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +15,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,13 +44,16 @@ public class EntityBlock extends EntityAdvanced {
      */
     public static EntityBlock convert(World world, int x, int y, int z) {
         EntityBlock ret = new EntityBlock(world);
-        if(!ret.setBlock(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z)))
+        if(!ret.setBlock(world.getBlockState(new BlockPos(x, y, z)).getBlock(), world.getBlockMetadata(x, y, z)))
             return null;
-        ret.setTileEntity(world.getTileEntity(x, y, z));
+        ret.setTileEntity(world.getTileEntity(new BlockPos(x, y, z)));
         return ret;
     }
     
-    private static final int BLOCKID = 4, META = 5;
+//    private static final int BLOCKID = 4, META = 5;
+
+    private static final DataParameter<Integer> BLOCKID = EntityDataManager.<Integer>createKey(EntityMagHook.class, DataSerializers.VARINT);
+    private static final DataParameter<Byte> META = EntityDataManager.<Byte>createKey(EntityMagHook.class, DataSerializers.BYTE);
     
     public Block block;
     public int metadata = 0;
@@ -85,15 +97,15 @@ public class EntityBlock extends EntityAdvanced {
         );
     }
 
-    @Listener(channel="spfs", side={Side.CLIENT})
+    @NetworkMessage.Listener(channel="spfs", side={Side.CLIENT})
     private void hSpfs(boolean value) {
         placeWhenCollide = value;
     }
 
     @Override
     public void entityInit() {
-        dataWatcher.addObject(BLOCKID, (short) 0);
-        dataWatcher.addObject(META, (byte) 0);
+        dataManager.register(BLOCKID, 0);
+        dataManager.register(META, (byte) 0);
         
         setSize(1, 1);
     }
@@ -106,12 +118,12 @@ public class EntityBlock extends EntityAdvanced {
         lastPitch = pitch;
 
         if(world.isRemote) {
-            block = Block.getBlockById(dataWatcher.getWatchableObjectShort(BLOCKID));
-            metadata = dataWatcher.getWatchableObjectByte(META);
+            block = Block.getBlockById(dataManager.get(BLOCKID));
+            metadata = dataManager.get(META);
         } else {
             if(block != null) {
-                dataWatcher.updateObject(BLOCKID, (short) Block.getIdFromBlock(block));
-                dataWatcher.updateObject(META, (byte) metadata);
+                dataManager.set(BLOCKID, Block.getIdFromBlock(block));
+                dataManager.set(META, (byte) metadata);
                 
                 if(tileEntity != null)
                     tileEntity.blockMetadata = metadata;
@@ -121,26 +133,26 @@ public class EntityBlock extends EntityAdvanced {
     
     @Override
     public void onFirstUpdate() {
-        this.regEventHandler(new CollideHandler() {
+        this.regEventHandler(new CollideEvent.CollideHandler() {
 
             @Override
             public void onEvent(CollideEvent event) {
-                if(placeWhenCollide && !world.isRemote && event.result.typeOfHit == MovingObjectType.BLOCK) {
-                    int tx = event.result.blockX,
-                            ty = event.result.blockY,
-                            tz = event.result.blockZ;
+                if(placeWhenCollide && !world.isRemote && event.result.typeOfHit == RayTraceResult.Type.BLOCK) {
+                    int tx = event.result.getBlockPos().getX(),
+                            ty = event.result.getBlockPos().getY(),
+                            tz = event.result.getBlockPos().getZ();
 
                     int iter = 10;
                     while (iter --> 0) {
-                        Block hitblock = world.getBlock(tx, ty, tz);
-                        if(!hitblock.isReplaceable(world, tx, ty, tz)) {
-                            ForgeDirection dir = ForgeDirection.values()[event.result.sideHit];
-                            tx += dir.offsetX;
-                            ty += dir.offsetY;
-                            tz += dir.offsetZ;
+                        Block hitblock = world.getBlockState(new BlockPos(tx, ty, tz)).getBlock();
+                        if(!hitblock.isReplaceable(world, new BlockPos(tx, ty, tz))) {
+//                            ForgeDirection dir = ForgeDirection.values()[event.result.sideHit];
+                            tx += event.result.sideHit.getDirectionVec().getX();
+                            ty += event.result.sideHit.getDirectionVec().getY();
+                            tz += event.result.sideHit.getDirectionVec().getZ();
                         } else {
                             ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
-                                    new ItemStack(block, 0, metadata), player, world, tx, ty, tz, event.result.sideHit,
+                                    new ItemStack(block, 0, metadata), player, world, new BlockPos(tx, ty, tz), event.result.sideHit,
                                     tx, ty, tz, metadata);
                             break;
                         }
@@ -157,7 +169,7 @@ public class EntityBlock extends EntityAdvanced {
                 NBTTagCompound tag = new NBTTagCompound();
                 tileEntity.writeToNBT(tag);
 
-                NetworkMessage.sendToDimension(world.provider.dimensionId, this, "sync_te",
+                NetworkMessage.sendToDimension(world.provider.getDimension(), this, "sync_te",
                         tileEntity.getClass().getName(), tag);
             } catch(Exception e) {
                 AcademyCraft.log.error("Error syncing te", e);
@@ -216,12 +228,12 @@ public class EntityBlock extends EntityAdvanced {
         
     }
 
-    @Listener(channel="sync_te", side=Side.CLIENT)
+    @NetworkMessage.Listener(channel="sync_te", side=Side.CLIENT)
     private void hSyncTE(String className, NBTTagCompound initTag) {
         try {
             TileEntity te = (TileEntity) Class.forName(className).newInstance();
             te.readFromNBT(initTag);
-            te.setWorldObj(world);
+            te.setWorld(world);
             tileEntity = te;
         } catch(Exception e) {
             AcademyCraft.log.error("Unable to sync tileEntity " + className, e);

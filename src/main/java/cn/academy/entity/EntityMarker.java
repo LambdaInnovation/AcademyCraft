@@ -2,12 +2,14 @@ package cn.academy.entity;
 
 import cn.academy.client.render.entity.RenderMarker;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
@@ -20,7 +22,7 @@ public class EntityMarker extends EntityAdvanced
     public static RenderMarker renderer;
 
     public Entity target = null;
-    public Color color = Color.white();
+    public Color color = Colors.white();
     public boolean ignoreDepth = false;
 
     public EntityMarker(Entity entity) {

@@ -1,6 +1,9 @@
 package cn.academy.entity;
 
 import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
+import cn.lambdalib2.util.entityx.EntityCallback;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,8 +39,8 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
     
     public boolean viewOptimize = true;
     
-    long lastFrame = 0;
-    long creationTime;
+    double lastFrame = 0;
+    double creationTime;
     
     /**
      * This just link the ray to a player. You still have to setup the view direction based on the ray type.
@@ -79,17 +82,17 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
     }
     
     protected long getDeltaTime() {
-        return GameTimer.getTime() - creationTime;
+        return (long) ((GameTimer.getTime() - creationTime) * 1000);
     }
     
-    @Override
-    public Vec3d getPosition() {
-        return new Vec3d(posX, posY, posZ);
-    }
+//    @Override
+//    public Vec3d getPosition() {
+//        return new Vec3d(posX, posY, posZ);
+//    }
 
     @Override
     public double getLength() {
-        long dt = GameTimer.getTime() - creationTime;
+        long dt = getDeltaTime();
         return (dt < blendInTime ? (double)dt / blendInTime : 1) * length;
     }
     
@@ -144,10 +147,10 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 
     @Override
     public void onRenderTick() {
-        long time = GameTimer.getTime();
+        double time = GameTimer.getTime();
         if(lastFrame != 0) {
-            long dt = time - lastFrame;
-            widthWiggle += dt * RandUtils.ranged(-maxWiggleSpeed, maxWiggleSpeed) / 1000.0;    
+            long dt = (long) ((time - lastFrame) * 1000);
+            widthWiggle += dt * RandUtils.ranged(-maxWiggleSpeed, maxWiggleSpeed) / 1000.0;
             if(widthWiggle > widthWiggleRadius)
                 widthWiggle = widthWiggleRadius;
             if(widthWiggle < 0)
@@ -165,7 +168,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 
     @Override
     public double getGlowAlpha() {
-        long dt = GameTimer.getTime() - creationTime;
+        long dt = getDeltaTime();
         long lifeMS = getLifeMS();
         return (1 - glowWiggleRadius + glowWiggle) * getAlpha();
     }

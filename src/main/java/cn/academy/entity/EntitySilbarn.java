@@ -7,6 +7,7 @@ import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.EntityCallback;
 import cn.lambdalib2.util.entityx.event.CollideEvent;
@@ -89,7 +90,7 @@ public class EntitySilbarn extends EntityAdvanced
     
     boolean hit;
     
-    long createTime;
+    double createTime;
     
     Vec3d axis = new Vec3d(rand.nextInt(), rand.nextInt(), rand.nextInt());
     
@@ -231,7 +232,7 @@ public class EntitySilbarn extends EntityAdvanced
             RenderUtils.loadTexture(tex);
             double scale = .05;
             GL11.glScaled(scale, scale, scale);
-            GL11.glRotated(0.03 * (GameTimer.getTime() - sibarn.createTime), 
+            GL11.glRotated(0.03 * (long)((GameTimer.getTime() - sibarn.createTime) * 1000),
                     sibarn.axis.x, sibarn.axis.y, sibarn.axis.z);
             GL11.glRotated(-var1.rotationYaw, 0, 1, 0);
             GL11.glRotated(90, 1, 0, 0);

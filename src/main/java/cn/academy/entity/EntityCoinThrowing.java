@@ -8,6 +8,7 @@ import cn.academy.item.ItemCoin;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.s11n.network.NetworkS11n;
+import cn.lambdalib2.util.PlayerUtils;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.MotionHandler;
