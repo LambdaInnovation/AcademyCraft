@@ -1,6 +1,5 @@
 package cn.academy.block.tileentity;
 
-import cn.academy.block.tileentity.TileGeneratorBase;
 import cn.academy.client.render.block.RenderCatEngine;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;

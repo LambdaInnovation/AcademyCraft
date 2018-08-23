@@ -1,6 +1,6 @@
 package cn.academy.block.container;
 
-import cn.academy.energy.ModuleEnergy;
+import cn.academy.ACItems;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ public class SlotFan extends Slot {
     
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return (stack != null && stack.getItem() == ModuleEnergy.windgenFan);
+        return (stack != null && stack.getItem() == ACItems.windgen_fan);
     }
 
 }

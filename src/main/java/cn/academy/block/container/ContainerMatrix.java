@@ -1,7 +1,7 @@
 package cn.academy.block.container;
 
+import cn.academy.ACItems;
 import cn.academy.worldgen.WorldGenInit;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.block.tileentity.TileMatrix;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -30,8 +30,8 @@ public class ContainerMatrix extends TechUIContainer<TileMatrix> {
 
         SlotGroup invGroup = gRange(4, 4 + 36);
 
-        addTransferRule(invGroup, stack -> stack.getItem() == WorldGenInit.constPlate, gSlots(0, 1, 2));
-        addTransferRule(invGroup, stack -> stack.getItem() == ModuleEnergy.matrixCore, gSlots(3));
+        addTransferRule(invGroup, stack -> stack.getItem() == ACItems.constraint_plate, gSlots(0, 1, 2));
+        addTransferRule(invGroup, stack -> stack.getItem() == ACItems.mat_core, gSlots(3));
         addTransferRule(gRange(0, 4), invGroup);
     }
     
@@ -43,7 +43,7 @@ public class ContainerMatrix extends TechUIContainer<TileMatrix> {
         
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return stack != null && stack.getItem() == ModuleEnergy.matrixCore;
+            return stack != null && stack.getItem() == ACItems.mat_core;
         }
         
     }
@@ -56,7 +56,7 @@ public class ContainerMatrix extends TechUIContainer<TileMatrix> {
         
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return stack != null && stack.getItem() == WorldGenInit.constPlate;
+            return stack != null && stack.getItem() == ACItems.mat_core;
         }
         
     }

@@ -1,5 +1,6 @@
 package cn.academy.block.container;
 
+import cn.academy.ACItems;
 import cn.academy.worldgen.WorldGenInit;
 import cn.academy.item.ItemMatterUnit.MatterMaterial;
 import net.minecraft.inventory.IInventory;
@@ -25,8 +26,8 @@ public class SlotMatterUnit extends Slot {
     @Override
     public boolean isItemValid(ItemStack stack) {
         return (stack != null && 
-                stack.getItem() == WorldGenInit.matterUnit &&
-                (material == null || WorldGenInit.matterUnit.getMaterial(stack) == material));
+                stack.getItem() == ACItems.matter_unit &&
+                (material == null || ACItems.matter_unit.getMaterial(stack) == material));
     }
 
 }

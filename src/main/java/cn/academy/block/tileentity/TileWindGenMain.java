@@ -1,7 +1,8 @@
 package cn.academy.block.tileentity;
 
+import cn.academy.ACBlocks;
+import cn.academy.ACItems;
 import cn.academy.block.WindGeneratorConsts;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.client.render.block.RenderWindGenMain;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.BlockMulti.SubBlockPos;
@@ -11,15 +12,17 @@ import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkMessage.NullablePar;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,7 @@ import java.util.List;
  */
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileWindGenMain extends TileInventory implements IMultiTile {
+public class TileWindGenMain extends TileInventory implements IMultiTile, ITickable  {
     
     static List<SubBlockPos>[] checkAreas = new ArrayList[6];
     static {
@@ -44,7 +47,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
         for(int i = 2; i < 6; ++i) {
             List list = (checkAreas[i] = new ArrayList());
             for(SubBlockPos pos : checkArea) {
-                list.add(BlockMulti.rotate(pos, ForgeDirection.values()[i]));
+                list.add(BlockMulti.rotate(pos, EnumFacing.values()[i]));
             }
         }
     }
@@ -69,7 +72,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
     // Spin logic
     public boolean isFanInstalled() {
         ItemStack stack = this.getStackInSlot(0);
-        return stack != null && stack.getItem() == ModuleEnergy.windgenFan;
+        return stack != null && stack.getItem() == ACItems.windgen_fan;
     }
     
     /**
@@ -84,8 +87,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
     InfoBlockMulti info = new InfoBlockMulti(this);
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
         info.update();
         
         if(info.getSubID() == 0) {
@@ -142,22 +144,22 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
     }
     
     public boolean isCompleteStructure() {
-        int[] origin = ModuleEnergy.windgenMain.getOrigin(this);
+        BlockPos origin = ACBlocks.windgen_main.getOrigin(this);
         if(origin == null)
             return false;
         
-        int x = origin[0], y = origin[1] - 1, z = origin[2];
+        int x = origin.getX(), y = origin.getY() - 1, z = origin.getZ();
         int state = 1;
         int pillars = 0;
         
         for(; state < 2; --y) {
-            Block block = world.getBlock(x, y, z);
+            Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
             if(state == 1) {
-                if(block == ModuleEnergy.windgenPillar) {
+                if(block == ACBlocks.windgen_pillar) {
                     ++pillars;
                     if(pillars > WindGeneratorConsts.MAX_PILLARS)
                         break;
-                } else if(block == ModuleEnergy.windgenBase){
+                } else if(block == ACBlocks.windgen_base){
                     state = 2;
                 } else {
                     state = 3;
@@ -168,12 +170,12 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
     }
     
     public boolean isNoObstacle() {
-        int x = x, y = y, z = z;
         InfoBlockMulti info = getBlockInfo();
         World world = getWorld();
         List<SubBlockPos> arr = checkAreas[info.getDir().ordinal()];
         for(SubBlockPos sbp : arr) {
-            if(world.getBlock(x + sbp.dx, y + sbp.dy, z + sbp.dz).getMaterial() != Material.air)
+            Material material = world.getBlockState(getPos().add(sbp.dx, sbp.dy, sbp.dz)).getMaterial();
+            if(material != Material.AIR)
                 return false;
         }
         return true;

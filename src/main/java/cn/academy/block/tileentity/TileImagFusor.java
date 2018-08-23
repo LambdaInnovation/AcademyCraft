@@ -1,5 +1,7 @@
 package cn.academy.block.tileentity;
 
+import cn.academy.ACItems;
+import cn.academy.block.block.ACFluids;
 import cn.academy.client.render.block.RenderDynamicBlock;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.client.sound.PositionedSound;
@@ -14,14 +16,16 @@ import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
-import cn.lambdalib2.util.mc.StackUtils;
+import cn.lambdalib2.util.StackUtils;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
 /**
@@ -66,8 +70,8 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        if(resource.getFluid() != WorldGenInit.fluidImagProj) {
+    public int fill(FluidStack resource, boolean doFill) {
+        if(resource.getFluid() != ACFluids.fluidImagProj) {
             return 0;
         }
         return tank.fill(resource, doFill);
@@ -90,26 +94,17 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource,
-            boolean doDrain) {
+    public FluidStack drain(FluidStack resource, boolean doDrain) {
+        if (resource.getFluid() != ACFluids.fluidImagProj)
+            return null;
         return tank.drain(resource.amount, doDrain);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(int maxDrain, boolean doDrain) {
         return tank.drain(maxDrain, doDrain);
     }
 
-    @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return fluid == WorldGenInit.fluidImagProj;
-    }
-
-    @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return fluid == WorldGenInit.fluidImagProj;
-    }
-    
     @Override
     public void update() {
         super.update();
@@ -138,19 +133,19 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
         {
             ItemStack imagOutStack = inventory[SLOT_IMAG_OUTPUT];
             if(inventory[SLOT_IMAG_INPUT] != null &&
-               (imagOutStack == null || imagOutStack.stackSize < imagOutStack.getMaxStackSize()) &&
+               (imagOutStack == null || imagOutStack.getCount() < imagOutStack.getMaxStackSize()) &&
                 getLiquidAmount() + PER_UNIT <= TANK_SIZE) {
 
-                this.tank.fill(new FluidStack(WorldGenInit.fluidImagProj, PER_UNIT), true);
+                this.tank.fill(new FluidStack(ACFluids.fluidImagProj, PER_UNIT), true);
 
-                inventory[SLOT_IMAG_INPUT].stackSize--;
-                if(inventory[SLOT_IMAG_INPUT].stackSize == 0)
+                inventory[SLOT_IMAG_INPUT].shrink(1);
+                if(inventory[SLOT_IMAG_INPUT].getCount() == 0)
                     inventory[SLOT_IMAG_INPUT] = null;
 
                 if (imagOutStack == null) {
-                    inventory[SLOT_IMAG_OUTPUT] = WorldGenInit.matterUnit.create(ItemMatterUnit.NONE);
+                    inventory[SLOT_IMAG_OUTPUT] = ACItems.matter_unit.create(ItemMatterUnit.NONE);
                 } else {
-                    ++imagOutStack.stackSize;
+                    imagOutStack.grow(1);
                 }
 
             }
@@ -214,12 +209,12 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
         if(isWorking()) {
             int drained = tank.drain(currentRecipe.consumeLiquid, true).amount;
             if(!world.isRemote) {
-                inventory[0].stackSize -= currentRecipe.consumeType.stackSize;
-                if(inventory[0].stackSize <= 0)
+                inventory[0].shrink(currentRecipe.consumeType.getCount());
+                if(inventory[0].getCount() <= 0)
                     inventory[0] = null;
                 
                 if(inventory[1] != null) {
-                    inventory[1].stackSize += currentRecipe.output.stackSize;
+                    inventory[1].grow(currentRecipe.output.getCount());
                 } else {
                     inventory[1] = currentRecipe.output.copy();
                 }
@@ -242,9 +237,9 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     
     public boolean isActionBlocked() {
         return !isWorking() || 
-            (inventory[0].stackSize < currentRecipe.consumeType.stackSize) ||
-            (inventory[1] != null && (!StackUtils.isStackDataEqual(inventory[1], currentRecipe.output) || 
-            inventory[1].stackSize + currentRecipe.output.stackSize > inventory[1].getMaxStackSize())) ||
+            (inventory[0].getCount() < currentRecipe.consumeType.getCount()) ||
+            (inventory[1] != null && (!StackUtils.isStackDataEqual(inventory[1], currentRecipe.output) ||
+            inventory[1].getCount() + currentRecipe.output.getCount() > inventory[1].getMaxStackSize())) ||
             currentRecipe.consumeLiquid > this.getLiquidAmount();
     }
     
@@ -255,10 +250,13 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     //---
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return new FluidTankInfo[] { tank.getInfo() };
+    public IFluidTankProperties[] getTankProperties() {
+        FluidTankInfo info = tank.getInfo();
+        return new IFluidTankProperties[] {
+            new FluidTankProperties(info.fluid, info.capacity)
+        };
     }
-    
+
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
@@ -292,11 +290,11 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         switch(side) {
-            case 0:
+            case DOWN:
                 return slotsBottom;
-            case 1:
+            case UP:
                 return slotsTop;
             default:
                 return slotsOther;
@@ -304,12 +302,12 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack item, int side) {
+    public boolean canInsertItem(int slot, ItemStack item, EnumFacing facing) {
         return this.isItemValidForSlot(slot, item);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack item, int side) {
-        return side == 0;
+    public boolean canExtractItem(int slot, ItemStack item, EnumFacing facing) {
+        return facing == EnumFacing.DOWN;
     }
 }

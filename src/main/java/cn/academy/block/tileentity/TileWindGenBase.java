@@ -1,8 +1,8 @@
 package cn.academy.block.tileentity;
 
+import cn.academy.ACBlocks;
 import cn.academy.block.WindGeneratorConsts;
 import cn.academy.energy.IFConstants;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.client.render.block.RenderWindGenBase;
 import cn.lambdalib2.multiblock.BlockMulti;
@@ -10,13 +10,14 @@ import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.TickScheduler;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 
 /**
  * @author WeAthFolD
@@ -64,7 +65,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     // TODO: Improve the fomula?
     public double getSimulatedGeneration() {
         if(shouldGenerate()) {
-            int y = mainTile.y;
+            int y = mainTile.getPos().getY();
             double heightFactor = MathUtils.lerp(0.5, 1, 
                 MathUtils.clampd(0, 1, (y - 70.0) / 90.0));
             return heightFactor * MAX_GENERATION_SPEED;
@@ -135,7 +136,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
+            return ((BlockMulti) block).getRenderBB(getPos(), info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }
@@ -146,12 +147,14 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 
         TileWindGenMain mainTile;
         Completeness comp;
-        
-        for(int y = y + 2; ; ++y) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            Block block = world.getBlock(x, y, z);
 
-            if(block == ModuleEnergy.windgenPillar) {
+        BlockPos p = getPos();
+        for(int y = getPos().getY() + 2; ; ++y) {
+            BlockPos pos = new BlockPos(p.getX(), y, p.getZ());
+            TileEntity te = world.getTileEntity(pos);
+            Block block = world.getBlockState(pos).getBlock();
+
+            if(block == ACBlocks.windgen_pillar) {
                 ++pillars;
                 if(pillars > WindGeneratorConsts.MAX_PILLARS) {
                     comp = Completeness.NO_TOP;

@@ -9,6 +9,7 @@ import cn.academy.energy.impl.WirelessNet;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileNode extends TileInventory implements IWirelessNode, IInventory {
+public class TileNode extends TileInventory implements IWirelessNode, IInventory, ITickable  {
     
     static IFItemManager itemManager = IFItemManager.instance;
 
@@ -55,7 +56,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     }
 
     public void setPlacer(EntityPlayer player) {
-        placerName = player.getCommandSenderName();
+        placerName = player.getName();
     }
 
     public String getPlacerName() {
@@ -63,7 +64,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     }
     
     @Override
-    public void updateEntity() {
+    public void update() {
         if(!getWorld().isRemote) {
             ++updateTicker;
             if(updateTicker == 10) {

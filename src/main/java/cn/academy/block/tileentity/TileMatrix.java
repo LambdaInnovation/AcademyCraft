@@ -1,8 +1,8 @@
 package cn.academy.block.tileentity;
 
+import cn.academy.ACItems;
 import cn.academy.block.tileentity.TileInventory;
 import cn.academy.worldgen.WorldGenInit;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.client.render.block.RenderMatrix;
 import cn.lambdalib2.multiblock.BlockMulti;
@@ -10,20 +10,21 @@ import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 
 /**
  * @author WeAthFolD
  */
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile {
+public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile, ITickable {
     
     @RegTileEntity.Render
     @SideOnly(Side.CLIENT)
@@ -45,9 +46,9 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         if(stack == null)
             return false;
         if (0 <= slot && slot <= 2) {
-            return stack.getItem() == WorldGenInit.constPlate;
+            return stack.getItem() == ACItems.constraint_plate;
         } else if (slot == 3) {
-            return stack.getItem() == ModuleEnergy.matrixCore;
+            return stack.getItem() == ACItems.mat_core;
         } else {
             return false;
         }
@@ -57,7 +58,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     InfoBlockMulti info = new InfoBlockMulti(this);
 
     public void setPlacer(EntityPlayer player) {
-        placerName = player.getCommandSenderName();
+        placerName = player.getName();
     }
 
     public String getPlacerName() {
@@ -65,7 +66,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     }
     
     @Override
-    public void updateEntity() {
+    public void update() {
         info.update();
 
         if(info.getSubID() == 0) {
@@ -113,7 +114,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
+            return ((BlockMulti) block).getRenderBB(getPos(), info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }

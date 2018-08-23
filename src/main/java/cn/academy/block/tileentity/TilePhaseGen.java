@@ -1,5 +1,8 @@
 package cn.academy.block.tileentity;
 
+import cn.academy.ACBlocks;
+import cn.academy.ACItems;
+import cn.academy.block.block.ACFluids;
 import cn.academy.block.container.ContainerPhaseGen;
 import cn.academy.block.tileentity.TileGeneratorBase;
 import cn.academy.network.MessageMachineInfoSync;
@@ -9,12 +12,13 @@ import cn.academy.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.academy.client.render.block.RenderPhaseGen;
 import cn.lambdalib2.s11n.network.TargetPoints;
+import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
 /**
@@ -67,19 +71,19 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
                 if(stack != null && isPhaseLiquid(stack) && isOutputSlotAvailable() && 
                         (getTankSize() - getLiquidAmount() > PER_UNIT)) {
                     
-                    if(stack.stackSize > 0) {
-                        tank.fill(new FluidStack(WorldGenInit.fluidImagProj, PER_UNIT), true);
-                        --stack.stackSize;
+                    if(stack.getCount() > 0) {
+                        tank.fill(new FluidStack(ACFluids.fluidImagProj, PER_UNIT), true);
+                        stack.shrink(1);
                     }
-                    if(stack.stackSize <= 0)
+                    if(stack.getCount() <= 0)
                         setInventorySlotContents(0, null);
                     
                     ItemStack output = getStackInSlot(SLOT_LIQUID_OUT);
                     if(output != null) {
-                        ++output.stackSize;
+                        output.grow(1);
                     } else {
-                        this.setInventorySlotContents(SLOT_LIQUID_OUT, 
-                            WorldGenInit.matterUnit.create(ItemMatterUnit.NONE));
+                        this.setInventorySlotContents(SLOT_LIQUID_OUT,
+                            ACItems.matter_unit.create(ItemMatterUnit.NONE));
                     }
                 }
             }
@@ -105,41 +109,36 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     public int getTankSize() {
         return tank.getCapacity();
     }
-    
+
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        if(resource.getFluid() != WorldGenInit.fluidImagProj) {
+    public IFluidTankProperties[] getTankProperties() {
+        FluidTankInfo info = tank.getInfo();
+        return new IFluidTankProperties[] {
+            new FluidTankProperties(info.fluid, info.capacity)
+        };
+    }
+
+    @Override
+    public int fill(FluidStack resource, boolean doFill) {
+        if(resource.getFluid() != ACFluids.fluidImagProj) {
             return 0;
         }
         return tank.fill(resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource,
+    public FluidStack drain(FluidStack resource,
             boolean doDrain) {
+        if (resource.getFluid() != ACFluids.fluidImagProj)
+            return null;
         return tank.drain(resource.amount, doDrain);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(int maxDrain, boolean doDrain) {
         return tank.drain(maxDrain, doDrain);
     }
 
-    @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return fluid == WorldGenInit.fluidImagProj;
-    }
-
-    @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return fluid == WorldGenInit.fluidImagProj;
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return new FluidTankInfo[] { tank.getInfo() };
-    }
-    
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
@@ -159,14 +158,14 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     }
 
     private boolean isPhaseLiquid(ItemStack stack) {
-        return stack.getItem() == WorldGenInit.matterUnit &&
-                WorldGenInit.matterUnit.getMaterial(stack) == WorldGenInit.imagPhase.mat;
+        return stack.getItem() == ACItems.matter_unit &&
+                ACItems.matter_unit.getMaterial(stack) == ACBlocks.imag_phase.mat;
     }
     
     private boolean isOutputSlotAvailable() {
         ItemStack stack = getStackInSlot(SLOT_LIQUID_OUT);
-        return stack == null || (stack.getItem() == WorldGenInit.matterUnit &&
-                WorldGenInit.matterUnit.getMaterial(stack) == ItemMatterUnit.NONE && stack.stackSize < stack.getMaxStackSize());
+        return stack == null || (stack.getItem() == ACItems.matter_unit &&
+                ACItems.matter_unit.getMaterial(stack) == ItemMatterUnit.NONE && stack.getCount() < stack.getMaxStackSize());
     }
 
 }

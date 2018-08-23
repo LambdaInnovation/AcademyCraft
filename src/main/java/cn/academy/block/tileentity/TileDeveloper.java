@@ -13,6 +13,7 @@ import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import com.google.common.base.Preconditions;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -20,7 +21,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 
 /**
  * @author WeAthFolD
@@ -179,7 +179,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
         // Sync the player right away to prevent bad lookup
         this.user = player;
 
-        if (Minecraft.getMinecraft().thePlayer.equals(player)) {
+        if (Minecraft.getMinecraft().player.equals(player)) {
             Minecraft.getMinecraft().displayGuiScreen(DeveloperUI.apply(this));
         }
     }
@@ -224,7 +224,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
+            return ((BlockMulti) block).getRenderBB(getPos(), info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }

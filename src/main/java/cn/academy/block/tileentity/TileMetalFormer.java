@@ -12,6 +12,7 @@ import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkMessage.NullablePar;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,11 +28,11 @@ import net.minecraft.world.World;
 public class TileMetalFormer extends TileReceiverBase implements ISidedInventory {
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         switch(side) {
-            case 0:
+            case DOWN:
                 return new int[]{SLOT_OUT, SLOT_BATTERY};
-            case 1:
+            case UP:
                 return new int[]{SLOT_IN};
             default:
                 return new int[]{SLOT_BATTERY};
@@ -96,12 +97,12 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
                     if(workCounter == WORK_TICKS) { // Finish the job.
                         ItemStack inputSlot = this.getStackInSlot(SLOT_IN);
                         ItemStack outputSlot = this.getStackInSlot(SLOT_OUT);
-                        inputSlot.stackSize -= current.input.stackSize;
-                        if(inputSlot.stackSize == 0)
+                        inputSlot.shrink(current.input.getCount());
+                        if(inputSlot.getCount() == 0)
                             this.setInventorySlotContents(SLOT_IN, null);
                         
                         if(outputSlot != null)
-                            outputSlot.stackSize += current.output.stackSize;
+                            outputSlot.grow(current.output.getCount());
                         else
                             this.setInventorySlotContents(SLOT_OUT, current.output.copy());
                         
@@ -166,7 +167,7 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
             (outputSlot == null || 
             (outputSlot.getItem() == current.output.getItem() && 
             outputSlot.getItemDamage() == current.output.getItemDamage() &&
-            outputSlot.stackSize + current.output.stackSize <= outputSlot.getMaxStackSize())));
+            outputSlot.getCount() + current.output.getCount() <= outputSlot.getMaxStackSize())));
     }
     
     public boolean isWorkInProgress() {
@@ -191,9 +192,9 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setInteger("mode", mode.ordinal());
-        super.writeToNBT(nbt);
+        return super.writeToNBT(nbt);
     }
     
     // --- CLIENT EFFECTS

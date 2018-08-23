@@ -6,12 +6,13 @@ import cn.academy.client.render.block.RenderSolarGen;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 /**
@@ -57,7 +58,7 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
         World world = getWorld();
         long time = world.getWorldTime() % 24000;
         boolean isDay = time >= 0 && time <= 12500;
-        return isDay && world.canBlockSeeTheSky(x, y + 1, z);
+        return isDay && world.canSeeSky(getPos().add(0, 1, 0));
     }
     
     // InfoBlockMulti delegates
@@ -102,7 +103,7 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
+            return ((BlockMulti) block).getRenderBB(getPos(), info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }

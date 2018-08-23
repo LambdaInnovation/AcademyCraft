@@ -1,6 +1,6 @@
 package cn.academy.block.container;
 
-import cn.academy.energy.ModuleEnergy;
+import cn.academy.ACItems;
 import cn.academy.block.tileentity.TileWindGenMain;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -19,7 +19,7 @@ public class ContainerWindGenMain extends TechUIContainer<TileWindGenMain> {
         SlotGroup gInv = gRange(1, 1+36), gFan = gSlots(0);
 
         addTransferRule(gFan, gInv);
-        addTransferRule(gInv, stack -> stack.getItem() == ModuleEnergy.windgenFan, gFan);
+        addTransferRule(gInv, stack -> stack.getItem() == ACItems.windgen_fan, gFan);
     }
 
 }

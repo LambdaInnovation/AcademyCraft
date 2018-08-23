@@ -1,8 +1,8 @@
 package cn.academy.block.container;
 
+import cn.academy.ACItems;
 import cn.academy.block.AbilityInterf;
 import cn.academy.block.TileAbilityInterferer;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.EnergyItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -28,7 +28,7 @@ public class ContainAbilityInterferer extends TechUIContainer<TileAbilityInterfe
         @Override
         public boolean isItemValid(ItemStack stack)
         {
-            return slot == 0 && stack.getItem() == ModuleEnergy.energyUnit;
+            return slot == 0 && stack.getItem() == ACItems.energy_unit;
         }
 
     }
