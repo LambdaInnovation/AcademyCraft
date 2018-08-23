@@ -3,8 +3,10 @@ package cn.academy.client.render.entity;
 import cn.academy.client.render.util.SimpleModelBiped;
 import cn.academy.Resources;
 import cn.academy.entity.EntityTPMarking;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -12,8 +14,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import javax.annotation.Nullable;
+
 @SideOnly(Side.CLIENT)
-public class MarkRender extends Render {
+@RegEntityRender(EntityTPMarking.class)
+public class MarkRender extends Render<EntityTPMarking> {
 
     {
         shadowOpaque = 0;
@@ -22,12 +27,14 @@ public class MarkRender extends Render {
     protected ResourceLocation[] tex = Resources.getEffectSeq("tp_mark", 7);
     protected SimpleModelBiped model = new SimpleModelBiped();
 
+    protected MarkRender(RenderManager renderManager) {
+        super(renderManager);
+    }
+
     @Override
-    public void doRender(Entity ent, double x, double y, double z, float var8, float var9) {
+    public void doRender(EntityTPMarking mark, double x, double y, double z, float var8, float var9) {
         if (RenderUtils.isInShadowPass())
             return;
-
-        EntityTPMarking mark = (EntityTPMarking) ent;
         if (!mark.firstUpdated())
             return;
 
@@ -62,8 +69,9 @@ public class MarkRender extends Render {
         GL11.glEnable(GL11.GL_CULL_FACE);
     }
 
+    @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(Entity var1) {
+    protected ResourceLocation getEntityTexture(EntityTPMarking entity) {
         return null;
     }
 

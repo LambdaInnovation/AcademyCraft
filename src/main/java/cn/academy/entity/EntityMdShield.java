@@ -1,6 +1,5 @@
 package cn.academy.entity;
 
-import cn.academy.client.render.entity.RenderMdShield;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
@@ -18,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityMdShield extends EntityAdvanced
 {
 
-    public static RenderMdShield renderer;
-    
     public static final float SIZE = 1.8f;
     
     // Intrusive render states

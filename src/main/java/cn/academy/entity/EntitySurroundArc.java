@@ -6,9 +6,11 @@ import cn.academy.client.render.util.ArcFactory;
 import cn.academy.client.render.util.ArcFactory.Arc;
 import cn.academy.client.render.util.SubArcHandler;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +20,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
 
 /**
  * Spawn a surround arc effect around the specific entity or block.
@@ -59,10 +63,7 @@ public class EntitySurroundArc extends EntityAdvanced {
             count = _count;
         }
     }
-    
-    @RegEntity.Render
-    public static Renderer renderer;
-    
+
     private ArcType arcType = ArcType.BOLD;
     private final PosObject pos;
     
@@ -177,15 +178,18 @@ public class EntitySurroundArc extends EntityAdvanced {
         
         void tick() {}
     }
-    
-    public static class Renderer extends Render {
+
+    @RegEntityRender(EntitySurroundArc.class)
+    public static class Renderer extends Render<EntitySurroundArc> {
+
+        protected Renderer(RenderManager renderManager) {
+            super(renderManager);
+        }
 
         @Override
-        public void doRender(Entity entity, double x,
+        public void doRender(EntitySurroundArc esa, double x,
                 double y, double z, float a,
                 float b) {
-            EntitySurroundArc esa = (EntitySurroundArc) entity;
-            
             if(esa.draw && esa.arcHandler != null) {
                 GL11.glPushMatrix();
                 
@@ -198,11 +202,12 @@ public class EntitySurroundArc extends EntityAdvanced {
             }
         }
 
+        @Nullable
         @Override
-        protected ResourceLocation getEntityTexture(Entity entity) {
+        protected ResourceLocation getEntityTexture(EntitySurroundArc entity) {
             return null;
         }
-        
+
     }
     
     private class EntityPos extends PosObject {

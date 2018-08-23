@@ -2,6 +2,7 @@ package cn.academy.client.render.entity;
 
 import cn.academy.Resources;
 import cn.academy.entity.EntityMdShield;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RenderUtils;
@@ -14,6 +15,7 @@ import org.lwjgl.opengl.GL20;
 /**
  * @author WeAthFolD
  */
+@RegEntityRender(EntityMdShield.class)
 public class RenderMdShield extends Render {
 
     GLSLMesh mesh;

@@ -3,8 +3,10 @@ package cn.academy.entity;
 import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.render.particle.MdParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,9 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @RegEntity
 public class EntityMDRay extends EntityRayBase {
-
-    public static MDRayRender renderer;
-
 
     public EntityMDRay(EntityPlayer spawner, double length) {
         super(spawner);
@@ -42,11 +41,12 @@ public class EntityMDRay extends EntityRayBase {
             world.spawnEntity(p);
         }
     }
-    
+
+    @RegEntityRender(EntityMDRay.class)
     public static class MDRayRender extends RendererRayComposite {
 
-        public MDRayRender() {
-        super("mdray");
+        public MDRayRender(RenderManager manager) {
+            super(manager, "mdray");
             this.cylinderIn.width = 0.17;
             this.cylinderIn.color.setColor4i(216, 248, 216, 230);
             

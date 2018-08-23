@@ -8,6 +8,7 @@ import cn.lambdalib2.util.deprecated.ViewOptimize;
 import cn.lambdalib2.util.deprecated.ViewOptimize.IAssociatePlayer;
 import cn.lambdalib2.util.Motion3D;
 import cn.lambdalib2.util.entityx.EntityAdvanced;*/
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
@@ -40,10 +41,7 @@ public class EntityArc extends EntityAdvanced implements ViewOptimize.IAssociate
             defaultPatterns[i] = fac.generate(20);
         }
     }
-    
-    @SideOnly(Side.CLIENT)
-    public static Renderer render;
-    
+
     final Arc[] patterns;
     
     int [] iid;
@@ -118,12 +116,15 @@ public class EntityArc extends EntityAdvanced implements ViewOptimize.IAssociate
     public boolean shouldRenderInPass(int pass) {
         return pass == 1;
     }
-    
+
+    @SideOnly(Side.CLIENT)
+    @RegEntityRender(EntityArc.class)
     public static class Renderer extends Render<EntityArc> {
 
         public Renderer(RenderManager renderManager) {
             super(renderManager);
         }
+
         @Override
         public void doRender(EntityArc arc, double x, double y, double z, float f, float g) {
             if(!arc.show)

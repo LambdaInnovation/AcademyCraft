@@ -3,6 +3,8 @@ package cn.academy.entity;
 import cn.academy.client.render.util.ACRenderingHelper;
 import cn.academy.Resources;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.template.client.render.RenderIcon;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
@@ -10,6 +12,7 @@ import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.EntityCallback;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,9 +39,6 @@ public class EntityMdBall extends EntityAdvanced
     private static final DataParameter<Float> SUB_Z = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> LIFE = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.VARINT);
 
-    @SideOnly(Side.CLIENT)
-    public static R renderer;
-    
     static final int MAX_TETXURES = 5;
     
     static final float RANGE_FROM = 0.8f, RANGE_TO = 1.3f;
@@ -241,15 +241,16 @@ public class EntityMdBall extends EntityAdvanced
         posY = spawner.posY + subY + (world.isRemote ? 0 : 1.6); //Fix for different sides
         posZ = spawner.posZ + subZ;
     }
-    
+
+    @RegEntityRender(EntityMdBall.class)
     @SideOnly(Side.CLIENT)
-    public static class R extends RenderIcon {
+    public static class R extends RenderIcon<EntityMdBall> {
         
         ResourceLocation[] textures;
         ResourceLocation glowTexture;
 
-        public R() {
-            super(null);
+        public R(RenderManager manager) {
+            super(manager, null);
             textures = Resources.getEffectSeq("mdball", MAX_TETXURES);
             glowTexture = Resources.getTexture("effects/mdball/glow");
             //this.minTolerateAlpha = 0.05f;
@@ -257,13 +258,12 @@ public class EntityMdBall extends EntityAdvanced
         }
         
         @Override
-        public void doRender(Entity par1Entity, double x, double y,
+        public void doRender(EntityMdBall ent, double x, double y,
                 double z, float par8, float par9) {
             if(RenderUtils.isInShadowPass()) {
                 return;
             }
             
-            EntityMdBall ent = (EntityMdBall) par1Entity;
             if(!ent.updateRenderTick())
                 return;
             

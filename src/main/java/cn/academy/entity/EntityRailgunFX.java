@@ -6,10 +6,12 @@ import cn.academy.client.render.util.ArcFactory;
 import cn.academy.client.render.util.ArcFactory.Arc;
 import cn.academy.client.render.util.SubArcHandler;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.ViewOptimize;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
@@ -29,8 +31,6 @@ public class EntityRailgunFX extends EntityRayBase {
     
     static final int ARC_SIZE = 15;
 
-    public static RailgunRender renderer;
-    
     static Arc[] templates;
     static {
         ArcFactory factory = new ArcFactory();
@@ -97,13 +97,14 @@ public class EntityRailgunFX extends EntityRayBase {
         
         arcHandler.tick();
     }
-    
+
+    @RegEntityRender(EntityRailgunFX.class)
     public static class RailgunRender extends RendererRayComposite {
         
         Arc[] arcs;
 
-        public RailgunRender() {
-            super("railgun");
+        public RailgunRender(RenderManager manager) {
+            super(manager, "railgun");
             glow.startFix = -0.3;
             glow.endFix = 0.3;
             glow.width = 1.1;

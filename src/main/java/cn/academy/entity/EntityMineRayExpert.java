@@ -4,7 +4,9 @@ import cn.academy.client.render.util.ACRenderingHelper;
 import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.render.particle.MdParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RandUtils;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
@@ -42,11 +44,12 @@ public class EntityMineRayExpert extends EntityRayBase {
             world.spawnEntityInWorld(p);
         }
     }
-    
+
+    @RegEntityRender(EntityMineRayExpert.class)
     public static class ExpertRayRenderer extends RendererRayComposite {
 
-        public ExpertRayRenderer() {
-            super("mdray_expert");
+        public ExpertRayRenderer(RenderManager manager) {
+            super(manager, "mdray_expert");
             this.cylinderIn.width = 0.045;
             this.cylinderIn.color.setColor4i(216, 248, 216, 230);
             

@@ -2,8 +2,10 @@ package cn.academy.client.render.entity;
 
 import cn.academy.Resources;
 import cn.academy.entity.EntityDiamondShield;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -12,12 +14,14 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @author WeAthFolD
  */
-public class RenderDiamondShield extends Render {
+@RegEntityRender(EntityDiamondShield.class)
+public class RenderDiamondShield extends Render<EntityDiamondShield> {
     
     Mesh mesh;
     SimpleMaterial material;
     
-    public RenderDiamondShield() {
+    public RenderDiamondShield(RenderManager manager) {
+        super(manager);
         mesh = new Mesh();
         mesh.setVertices(new double[][] {
                 { -1, 0, 0 },
@@ -45,12 +49,11 @@ public class RenderDiamondShield extends Render {
     }
 
     @Override
-    public void doRender(Entity _entity, double x,
+    public void doRender(EntityDiamondShield entity, double x,
             double y, double z, float a, float b) {
         if(RenderUtils.isInShadowPass())
             return;
         
-        EntityDiamondShield entity = (EntityDiamondShield) _entity;
         if(!entity.firstUpdated())
             return;
         
@@ -75,7 +78,7 @@ public class RenderDiamondShield extends Render {
     }
     
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(EntityDiamondShield entity) {
         return null;
     }
 

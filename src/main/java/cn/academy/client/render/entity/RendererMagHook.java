@@ -2,6 +2,7 @@ package cn.academy.client.render.entity;
 
 import cn.academy.Resources;
 import cn.academy.entity.EntityMagHook;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,12 +14,17 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
+@RegEntityRender(EntityMagHook.class)
 public class RendererMagHook extends Render {
 
     final IModelCustom model = Resources.getModel("maghook"),
             model_open = Resources.getModel("maghook_open");
     
     final ResourceLocation texture = Resources.getTexture("models/maghook");
+
+    protected RendererMagHook(RenderManager renderManager) {
+        super(renderManager);
+    }
 
     @Override
     public void doRender(Entity ent, double x, double y, double z, float a,

@@ -5,7 +5,9 @@ import cn.academy.Resources;
 import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.render.particle.MdParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RandUtils;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -18,9 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @RegEntity
 public class EntityMineRayLuck extends EntityRayBase {
-    
-    @RegEntity.Render
-    public static LuckRayRender renderer;
     
     static final ResourceLocation texture = Resources.getTexture("effects/md_particle_luck");
     
@@ -48,11 +47,12 @@ public class EntityMineRayLuck extends EntityRayBase {
             world.spawnEntityInWorld(p);
         }
     }
-    
+
+    @RegEntityRender(EntityMineRayLuck.class)
     public static class LuckRayRender extends RendererRayComposite {
 
-        public LuckRayRender() {
-        super("mdray_luck");
+        public LuckRayRender(RenderManager manager) {
+            super(manager, "mdray_luck");
             this.cylinderIn.width = 0.04;
             this.cylinderIn.color.setColor4i(241, 229, 247, 230);
             

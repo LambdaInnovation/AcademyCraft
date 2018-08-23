@@ -42,10 +42,7 @@ public class EntityMagHook extends EntityAdvanced
         addMotionHandler(rb);
         setSize(.5f, .5f);
     }
-    
-    @SideOnly(Side.CLIENT)
-    public static RendererMagHook renderer;
-    
+
     public boolean isHit;
     public EnumFacing hitSide;
     public int hookX, hookY, hookZ;

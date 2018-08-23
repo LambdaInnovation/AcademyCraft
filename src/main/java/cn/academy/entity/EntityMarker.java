@@ -19,8 +19,6 @@ import org.lwjgl.util.Color;
 public class EntityMarker extends EntityAdvanced
 {
 
-    public static RenderMarker renderer;
-
     public Entity target = null;
     public Color color = Colors.white();
     public boolean ignoreDepth = false;

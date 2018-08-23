@@ -30,12 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @RegEntity
-@RegEntity.HasRender
 public class EntityBlock extends EntityAdvanced {
-    
-    @SideOnly(Side.CLIENT)
-    @RegEntity.Render
-    public static RenderEntityBlock renderer;
     
     /**
      * Create an EntityBlock from the block given in the coordinate.

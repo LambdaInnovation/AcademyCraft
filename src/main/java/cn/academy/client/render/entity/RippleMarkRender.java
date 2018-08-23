@@ -2,9 +2,11 @@ package cn.academy.client.render.entity;
 
 import cn.academy.Resources;
 import cn.academy.entity.EntityRippleMark;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -12,14 +14,16 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author WeAthFolD
  */
-public class RippleMarkRender extends Render {
+@RegEntityRender(EntityRippleMark.class)
+public class RippleMarkRender extends Render<EntityRippleMark> {
     
     final long CYCLE = 3600;
     final long timeOffsets[] = { 0, -1200, -2400 };
     Mesh mesh;
     SimpleMaterial material;
     
-    public RippleMarkRender() {
+    public RippleMarkRender(RenderManager manager) {
+        super(manager);
         mesh = new Mesh();
         mesh.setVertices(new double[][] {
                 { -.5, 0, -.5 },
@@ -39,7 +43,7 @@ public class RippleMarkRender extends Render {
     }
 
     @Override
-    public void doRender(Entity entity, double x, double y, double z, float a, float b) {
+    public void doRender(EntityRippleMark entity, double x, double y, double z, float a, float b) {
         EntityRippleMark mark = (EntityRippleMark) entity;
         double dt = GameTimer.getTime() - mark.creationTime;
         
@@ -92,7 +96,7 @@ public class RippleMarkRender extends Render {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(EntityRippleMark entity) {
         return null;
     }
 

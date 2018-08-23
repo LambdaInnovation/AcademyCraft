@@ -1,10 +1,12 @@
 package cn.academy.client.render.entity;
 
+import cn.academy.client.render.util.Tessellator;
 import cn.academy.entity.EntityMarker;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.renderer.BufferBuilder;
-import cn.academy.client.render.util.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +17,7 @@ import org.lwjgl.opengl.GL20;
  * @author WeathFolD
  *
  */
+@RegEntityRender(EntityMarker.class)
 public class RenderMarker extends Render {
 
     static final Tessellator t = Tessellator.getInstance();
@@ -22,7 +25,8 @@ public class RenderMarker extends Render {
             { 1, 1, 1 }, { 0, 1, 1 }, };
     final double[] rotArray = { 0, -90, -180, -270, 0, -90, -180, -270 };
 
-    public RenderMarker() {
+    protected RenderMarker(RenderManager renderManager) {
+        super(renderManager);
     }
 
     @Override

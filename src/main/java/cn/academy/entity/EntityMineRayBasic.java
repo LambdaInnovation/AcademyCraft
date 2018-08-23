@@ -4,8 +4,10 @@ import cn.academy.client.render.util.ACRenderingHelper;
 import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.render.particle.MdParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,8 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @RegEntity
 public class EntityMineRayBasic extends EntityRayBase {
 
-    public static BasicMineRayRender renderer;
-    
     public EntityMineRayBasic(EntityPlayer _player) {
         super(_player);
         
@@ -42,11 +42,12 @@ public class EntityMineRayBasic extends EntityRayBase {
             world.spawnEntity(p);
         }
     }
-    
+
+    @RegEntityRender(EntityMineRayBasic.class)
     public static class BasicMineRayRender extends RendererRayComposite {
 
-        public BasicMineRayRender() {
-            super("mdray_small");
+        public BasicMineRayRender(RenderManager manager) {
+            super(manager, "mdray_small");
             this.cylinderIn.width = 0.03;
             this.cylinderIn.color.setColor4i(216, 248, 216, 230);
             

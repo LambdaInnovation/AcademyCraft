@@ -18,10 +18,7 @@ import org.lwjgl.util.Color;
 @RegEntity
 public class EntityRippleMark extends EntityAdvanced
 {
-    
-    @RegEntity.Render
-    public static RippleMarkRender renderer;
-    
+
     public final Color color = Colors.white();
     public final double creationTime = GameTimer.getTime();
 

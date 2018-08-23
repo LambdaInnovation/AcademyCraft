@@ -3,7 +3,9 @@ package cn.academy.entity;
 import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.sound.ACSounds;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.MathUtils;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,11 +47,12 @@ public class EntityBarrageRayPre extends EntityRayBase {
         
         return 1.0;
     }
-    
+
+    @RegEntityRender(EntityBarrageRayPre.class)
     public static class BRPRender extends RendererRayComposite {
 
-        public BRPRender() {
-            super("mdray_small");
+        public BRPRender(RenderManager manager) {
+            super(manager, "mdray_small");
             this.cylinderIn.width = 0.045;
             this.cylinderIn.color.setColor4i(216, 248, 216, 230);
             

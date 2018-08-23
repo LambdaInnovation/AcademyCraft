@@ -4,6 +4,7 @@ import cn.academy.Resources;
 import cn.academy.client.sound.ACSounds;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RandUtils;
@@ -13,6 +14,7 @@ import cn.lambdalib2.util.entityx.EntityCallback;
 import cn.lambdalib2.util.entityx.event.CollideEvent;
 import cn.lambdalib2.util.entityx.handlers.Rigidbody;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +32,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
+
 /**
  * @author WeathFolD
  */
@@ -38,9 +42,6 @@ public class EntitySilbarn extends EntityAdvanced
 {
     private static final DataParameter<Byte> HIT_SYNC = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.BYTE);
 
-
-    @SideOnly(Side.CLIENT)
-    public static RenderSibarn render;
 
     @SideOnly(Side.CLIENT)
     static ParticleFactory particles;
@@ -216,13 +217,18 @@ public class EntitySilbarn extends EntityAdvanced
     }
     
     @SideOnly(Side.CLIENT)
-    public static class RenderSibarn extends Render {
+    @RegEntityRender(EntitySilbarn.class)
+    public static class RenderSibarn extends Render<EntitySilbarn> {
         
         private final IModelCustom model = Resources.getModel("silbarn");
         private final ResourceLocation tex = Resources.getTexture("models/silbarn");
 
+        protected RenderSibarn(RenderManager renderManager) {
+            super(renderManager);
+        }
+
         @Override
-        public void doRender(Entity var1, double x, double y,
+        public void doRender(EntitySilbarn var1, double x, double y,
                 double z, float var8, float var9) {
             EntitySilbarn sibarn = (EntitySilbarn) var1;
             if(sibarn.hit)
@@ -240,11 +246,11 @@ public class EntitySilbarn extends EntityAdvanced
             GL11.glPopMatrix();
         }
 
+        @Nullable
         @Override
-        protected ResourceLocation getEntityTexture(Entity var1) {
+        protected ResourceLocation getEntityTexture(EntitySilbarn entity) {
             return null;
         }
-        
     }
 
     @Override

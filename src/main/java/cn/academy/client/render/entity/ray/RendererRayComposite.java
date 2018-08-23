@@ -2,6 +2,7 @@ package cn.academy.client.render.entity.ray;
 
 import cn.academy.client.render.entity.RendererList;
 import cn.academy.entity.IRay;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,7 +15,8 @@ public class RendererRayComposite extends RendererList {
     public RendererRayGlow glow;
     public RendererRayCylinder cylinderIn, cylinderOut;
     
-    public RendererRayComposite(String name) {
+    public RendererRayComposite(RenderManager manager, String name) {
+        super(manager);
         append(glow = RendererRayGlow.createFromName(name));
         append(cylinderIn = new RendererRayCylinder(0.05f));
         append(cylinderOut = new RendererRayCylinder(0.08f));

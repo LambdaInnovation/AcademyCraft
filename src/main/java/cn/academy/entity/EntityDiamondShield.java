@@ -18,8 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityDiamondShield extends EntityAdvanced
 {
 
-    public static RenderDiamondShield renderer;
-    
     public static final float SIZE = 1.8f;
     
     final EntityPlayer player;

@@ -21,9 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityTPMarking extends EntityAdvanced {
 
-    @SideOnly(Side.CLIENT)
-    public static MarkRender render;
-
     static TPParticleFactory particleFac = TPParticleFactory.instance;
 
     final AbilityData data;

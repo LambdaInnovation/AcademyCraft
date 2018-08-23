@@ -2,7 +2,9 @@ package cn.academy.entity;
 
 import cn.academy.client.sound.ACSounds;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RandUtils;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -18,8 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @RegEntity
 public class EntityMdRayBarrage extends EntityRayBase {
 
-    public static BarrageRenderer renderer;
-    
     private SubRay[] subrays;
 
     public EntityMdRayBarrage(World world, double x, double y, double z, float yaw, float pitch) {
@@ -50,11 +50,14 @@ public class EntityMdRayBarrage extends EntityRayBase {
     public boolean needsViewOptimize() {
         return false;
     }
-    
+
+    @RegEntityRender(EntityMdRayBarrage.class)
     public static class BarrageRenderer extends EntityMdRaySmall.SmallMdRayRender {
 
-        public BarrageRenderer() {}
-        
+        public BarrageRenderer(RenderManager manager) {
+            super(manager);
+        }
+
         @Override
         public void doRender(Entity ent, double x,
                 double y, double z, float a, float b) {

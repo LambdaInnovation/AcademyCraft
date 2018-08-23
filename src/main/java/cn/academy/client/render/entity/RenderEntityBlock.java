@@ -2,6 +2,7 @@ package cn.academy.client.render.entity;
 
 import cn.academy.AcademyCraft;
 import cn.academy.entity.EntityBlock;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -15,15 +16,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
+
 /**
+ * TODO: Investigate new block render pipeline
  * @author WeAthFolD
  */
-public class RenderEntityBlock extends Render {
+@RegEntityRender(EntityBlock.class)
+public class RenderEntityBlock extends Render<EntityBlock> {
 
     public static RenderBlocks renderBlocks = RenderBlocks.getInstance();
     
     @Override
-    public void doRender(Entity e, double x, double y,
+    public void doRender(EntityBlock e, double x, double y,
             double z, float pt, float b) {
         EntityBlock entity = (EntityBlock) e;
         
@@ -80,9 +85,9 @@ public class RenderEntityBlock extends Render {
         }
     }
 
+    @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+    protected ResourceLocation getEntityTexture(EntityBlock entity) {
         return null;
     }
-
 }

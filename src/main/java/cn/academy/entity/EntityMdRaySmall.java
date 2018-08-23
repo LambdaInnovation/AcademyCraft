@@ -4,8 +4,10 @@ import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.client.render.particle.MdParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -18,8 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @RegEntity
 public class EntityMdRaySmall extends EntityRayBase {
-
-    public static SmallMdRayRender renderer;
 
     public EntityMdRaySmall(World world) {
         super(world);
@@ -56,11 +56,12 @@ public class EntityMdRaySmall extends EntityRayBase {
         
         return 1.0;
     }
-    
+
+    @RegEntityRender(EntityMdRaySmall.class)
     public static class SmallMdRayRender extends RendererRayComposite {
 
-        public SmallMdRayRender() {
-            super("mdray_small");
+        public SmallMdRayRender(RenderManager manager) {
+            super(manager, "mdray_small");
             this.cylinderIn.width = 0.03;
             this.cylinderIn.color.setColor4i(216, 248, 216, 230);
             
