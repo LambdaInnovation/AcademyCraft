@@ -1,7 +1,6 @@
 package cn.academy.ability;
 
 import cn.academy.ability.context.ClientRuntime;
-import cn.academy.ability.ctrl.SkillInstance;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.nbt.NBTS11n.BaseSerializer;
@@ -12,7 +11,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.util.ResourceLocation;
@@ -21,6 +19,8 @@ import net.minecraft.util.ResourceLocation;
  * This class has ability to create a SkillInstance to override
  * a specific ability key. Used in Skill for indexing.
  * @author WeAthFolD
+ *
+ * SkillInstance has been removed.  --Paindar
  */
 public abstract class Controllable {
 
@@ -73,12 +73,6 @@ public abstract class Controllable {
     
     public final int getControlID() {
         return id;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Deprecated
-    public SkillInstance createSkillInstance(EntityPlayer player) {
-        return null;
     }
 
     /**

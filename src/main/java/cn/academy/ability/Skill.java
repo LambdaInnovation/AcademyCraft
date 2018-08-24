@@ -2,7 +2,6 @@ package cn.academy.ability;
 
 import cn.academy.ability.context.*;
 import cn.academy.ability.context.Context.Status;
-import cn.academy.ability.ctrl.SkillInstance;
 import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.condition.DevConditionDep;
@@ -257,66 +256,6 @@ public abstract class Skill extends Controllable {
      */
     public float getSkillExp(AbilityData data) {
         return 0.0f;
-    }
-    
-    //--- Ctrl
-    @Override
-    @SideOnly(Side.CLIENT)
-    public SkillInstance createSkillInstance(EntityPlayer player) {
-        return null;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void activate(ClientRuntime rt, int keyID) {
-        // Obsolete SkillInstance support
-        rt.addKey(keyID, new KeyDelegate() {
-            SkillInstance inst;
-
-            @Override
-            public void onKeyDown() {
-                inst = createSkillInstance(rt.getEntity());
-                if (inst != null)
-                    inst.ctrlStarted();
-            }
-
-            @Override
-            public void onKeyTick() {
-                if (inst != null)
-                    inst.ctrlTick();
-            }
-
-            @Override
-            public void onKeyUp() {
-                if (inst != null) {
-                    inst.ctrlEnded();
-                    inst = null;
-                }
-            }
-
-            @Override
-            public void onKeyAbort() {
-                if (inst != null) {
-                    inst.ctrlAborted();
-                    inst = null;
-                }
-            }
-
-            @Override
-            public ResourceLocation getIcon() {
-                return getHintIcon();
-            }
-
-            @Override
-            public int createID() {
-                return 0;
-            }
-
-            @Override
-            public Skill getSkill() {
-                return Skill.this;
-            }
-        });
     }
 
     /**
