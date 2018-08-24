@@ -54,6 +54,10 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven {
+        name = "chickenbones"
+        url = "http://chickenbones.net/maven"
+    }
+    maven {
         name = "private"
         url = "http://139.199.206.70:8081/nexus/content/groups/public"
     }
@@ -61,26 +65,32 @@ repositories {
         name = "ic2"
         url = "http://maven.ic2.player.to"
     }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "http://dvs1.progwml6.com/files/maven"
     }
 }
 
-// configurations {
-//     provided
-// }
+configurations {
+    provided
+}
 
 // sourceSets.main.compileClasspath += [configurations.provided]
 
-// idea {
-//   module{
-//     scopes.PROVIDED.plus += [configurations.provided]
-//   }
-// }
+idea {
+    module{
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
 
 dependencies {
     compile "cn.lambdalib2:LambdaLib2:${config.lambdalib_ver}:dev"
 
     provided "net.industrial-craft:industrialcraft-2:2.8.90-ex112:dev"
 
+    compile "codechicken:CodeChickenLib:1.12.2-${config.ccl_ver}:deobf"
+    compile "codechicken:NotEnoughItems:1.12.2-${config.nei_ver}:deobf"
 }
 
 processResources {
