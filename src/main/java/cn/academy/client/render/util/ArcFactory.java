@@ -1,5 +1,6 @@
 package cn.academy.client.render.util;
 
+import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.VecUtils;

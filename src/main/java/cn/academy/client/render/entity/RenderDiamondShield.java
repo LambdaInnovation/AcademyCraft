@@ -3,10 +3,11 @@ package cn.academy.client.render.entity;
 import cn.academy.Resources;
 import cn.academy.entity.EntityDiamondShield;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.render.legacy.LegacyMesh;
+import cn.lambdalib2.render.legacy.SimpleMaterial;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -17,12 +18,12 @@ import static org.lwjgl.opengl.GL11.*;
 @RegEntityRender(EntityDiamondShield.class)
 public class RenderDiamondShield extends Render<EntityDiamondShield> {
     
-    Mesh mesh;
+    LegacyMesh mesh;
     SimpleMaterial material;
     
     public RenderDiamondShield(RenderManager manager) {
         super(manager);
-        mesh = new Mesh();
+        mesh = new LegacyMesh();
         mesh.setVertices(new double[][] {
                 { -1, 0, 0 },
                 { 0, -1, 0 },

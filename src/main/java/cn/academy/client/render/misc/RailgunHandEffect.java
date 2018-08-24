@@ -6,7 +6,7 @@ import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.renderhook.PlayerRenderHook;
 import cn.lambdalib2.util.shader.GLSLMesh;
 import cn.lambdalib2.util.shader.ShaderSimple;
-import cn.lambdalib2.util.deprecated.MeshUtils;*/
+import cn.lambdalib2.util.deprecated.LegacyMeshUtils;*/
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;

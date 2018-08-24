@@ -81,10 +81,7 @@ public class EntityCoinThrowing extends EntityAdvanced
         public void onStart() {}
         
     }
-    
-    @SideOnly(Side.CLIENT)
-    public static RendererCoinThrowing renderer;
-    
+
     private static final int MAXLIFE = 120;
     private static final double INITVEL = 0.92;
     

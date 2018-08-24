@@ -3,7 +3,7 @@ package cn.academy.client.render.block;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
-import cn.academy.client.render.util.Tessellator;
+import cn.lambdalib2.render.legacy.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;

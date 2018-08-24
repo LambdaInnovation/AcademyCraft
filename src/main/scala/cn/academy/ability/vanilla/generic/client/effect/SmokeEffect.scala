@@ -2,7 +2,7 @@ package cn.academy.ability.vanilla.generic.client.effect
 
 import cn.academy.Resources
 import cn.academy.client.CameraPosition
-import cn.academy.client.render.util.Tessellator
+import cn.lambdalib2.render.legacy.Tessellator
 import cn.academy.entity.LocalEntity
 import cn.lambdalib2.util.RenderUtils
 import cn.lambdalib2.util.VecUtils._

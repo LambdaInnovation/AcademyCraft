@@ -2,14 +2,16 @@ package cn.academy.client.render.entity.ray;
 
 import cn.academy.Resources;
 import cn.academy.entity.IRay;
+import cn.lambdalib2.render.legacy.ShaderSimple;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.RenderUtils;
-import cn.lambdalib2.util.shader.ShaderSimple;
 import cn.lambdalib2.util.VecUtils;
-import cn.lambdalib2.util.Color;
-import cn.academy.client.render.util.Tessellator;
+import cn.lambdalib2.render.legacy.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.Color;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -24,11 +26,12 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
     
     public double startFix = 0.0, endFix = 0.0; //How many units of offset does we go. Used to align with cylinder renderer.
     
-    public Color color = Color.white();
+    public Color color = Colors.white();
     
     ResourceLocation blendIn, tile, blendOut;
     
-    public RendererRayGlow(ResourceLocation _blendIn, ResourceLocation _tile, ResourceLocation _blendOut) {
+    public RendererRayGlow(RenderManager m, ResourceLocation _blendIn, ResourceLocation _tile, ResourceLocation _blendOut) {
+        super(m);
         blendIn = _blendIn;
         tile = _tile;
         blendOut = _blendOut;
@@ -62,10 +65,10 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
         Vec3d mid1 = VecUtils.add(start, VecUtils.multiply(look, width));
         Vec3d mid2 = VecUtils.add(end, VecUtils.multiply(look, -width));
         
-        double preA = color.a;
-        color.a = preA * ray.getAlpha() * ray.getGlowAlpha();
-        color.bind();
-        color.a = preA;
+        int preA = color.getAlpha();
+        color.setAlpha((int) (preA * ray.getAlpha() * ray.getGlowAlpha()));
+        Colors.bindToGL(color);
+        color.setAlpha(preA);
         
         double width = this.width * ray.getWidth();
         
@@ -83,10 +86,10 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
         glAlphaFunc(GL_GEQUAL, 0.1f);
     }
     
-    public static RendererRayGlow createFromName(String name) {
+    public static RendererRayGlow createFromName(RenderManager m, String name) {
         try {
             ResourceLocation[] mats = Resources.getRayTextures(name);
-            return new RendererRayGlow(mats[0], mats[1], mats[2]);
+            return new RendererRayGlow(m, mats[0], mats[1], mats[2]);
         } catch(Exception e) {
             e.printStackTrace();
             return null;

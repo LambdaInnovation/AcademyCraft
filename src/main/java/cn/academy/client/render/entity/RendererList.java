@@ -13,7 +13,7 @@ import java.util.List;
  * @author WeAthFolD
  *
  */
-public class RendererList extends Render {
+public class RendererList<T extends Entity> extends Render<T> {
     
     List<Render> renderers = new ArrayList<>();
     
@@ -28,14 +28,14 @@ public class RendererList extends Render {
     }
 
     @Override
-    public void doRender(Entity ent, double x,
+    public void doRender(T ent, double x,
             double y, double z, float a, float b) {
         for(Render r : renderers)
             r.doRender(ent, x, y, z, a, b);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(T entity) {
         return null;
     }
 

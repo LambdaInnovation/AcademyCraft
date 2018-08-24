@@ -2,10 +2,12 @@ package cn.academy.client.render.entity;
 
 import cn.academy.Resources;
 import cn.academy.entity.EntityCoinThrowing;
+import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,9 +20,12 @@ import org.lwjgl.opengl.GL11;
  * 
  * @author KSkun
  */
+@RegEntityRender(EntityCoinThrowing.class)
 public class RendererCoinThrowing extends Render {
 
-    public RendererCoinThrowing() {}
+    public RendererCoinThrowing(RenderManager manager) {
+        super(manager);
+    }
 
     @Override
     public void doRender(Entity var1, double x, double y, double z,

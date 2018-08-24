@@ -1,12 +1,14 @@
 package cn.academy.client.render.entity.ray;
 
 import cn.academy.entity.IRay;
+import cn.lambdalib2.render.legacy.GLSLMesh;
+import cn.lambdalib2.render.legacy.ShaderNotex;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.RenderUtils;
-import cn.lambdalib2.util.shader.GLSLMesh;
-import cn.lambdalib2.util.shader.ShaderNotex;
-import cn.lambdalib2.util.Color;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +47,8 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
             int D = 4;
             double dlen = 1.0 / D;
             
-            List<double[]> vertices = new ArrayList();
-            List<Integer> faces = new ArrayList();
+            List<double[]> vertices = new ArrayList<>();
+            List<Integer> faces = new ArrayList<>();
             
             int vertOffset = 0;
             
@@ -119,14 +121,15 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
             e.printStackTrace();
         }
     }
-    
-    public RendererRayCylinder(double width) {
-        this();
-        this.width = width;
+
+    public RendererRayCylinder(RenderManager rm) {
+        this(rm, 0.08);
     }
-    
-    public RendererRayCylinder() {
-        color.setColor4i(244, 234, 165, 170);
+
+    public RendererRayCylinder(RenderManager renderManager, double width) {
+        super(renderManager);
+        color.set(244, 234, 165, 170);
+        this.width = width;
     }
 
     @Override
@@ -140,12 +143,12 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
         IRay ray = (IRay) entity;
         
         //HACK: Store the previous alpha
-        double oldA = color.a;
-        color.a *= ray.getAlpha();
+        int oldA = color.getAlpha();
+        color.setAlpha((int) (color.getAlpha() * ray.getAlpha()) );
         
         double width = this.width * ray.getWidth();
-        
-        color.bind();
+
+        Colors.bindToGL(color);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glPushMatrix();
         double offset = width * (1 - headFix);
@@ -168,8 +171,8 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
         GL11.glPopMatrix();
         
         GL11.glPopMatrix();
-        
-        color.a = oldA;
+
+        color.setAlpha(oldA);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glColor4d(1, 1, 1, 1);

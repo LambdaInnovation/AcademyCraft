@@ -1,11 +1,12 @@
 package cn.academy.client.render.entity.ray;
 
 import cn.academy.entity.IRay;
+import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
-import cn.academy.client.render.util.Tessellator;
+import cn.lambdalib2.render.legacy.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -24,6 +25,10 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         this.shadowOpaque = 0;
     }
 
+    protected RendererRayBaseGlow(RenderManager renderManager) {
+        super(renderManager);
+    }
+
     @Override
     public void doRender(Entity entity, double x, double y, double z, 
             float a, float b) {
@@ -35,14 +40,14 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         
         doTransform(ray);
         
-        Vec3d position = ray.getPosition();
+        Vec3d position = ray.getPositionVector();
         Vec3d relativePosition = VecUtils.subtract(position,
-                new Vec3d(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ));
+                new Vec3d(x, y, y));
         glTranslated(x, y, z);
         
         //Calculate the most appropriate 'billboard-up' direction.
         //The ray viewing direction.
-        Vec3d dir = new Motion3D(entity, true).getMotionVec();
+        Vec3d dir = VecUtils.toDirVector(entity);
         //Pick two far enough start and end point.
         Vec3d start = VecUtils.multiply(dir, ray.getStartFix()),
             end = VecUtils.add(start, VecUtils.multiply(dir, ray.getLength() - ray.getStartFix()));
@@ -81,7 +86,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         
         if(ray.needsViewOptimize()) {
             Vec3d vec = ViewOptimize.getFixVector(ray);
-            vec.rotateAroundY((float) ((270 - entity.rotationYaw) / 180 * Math.PI));
+            vec.rotateYaw((float) ((270 - entity.rotationYaw) / 180 * Math.PI));
             start = VecUtils.add(start, vec);
             
             // Don't fix end to get accurate pointing direction

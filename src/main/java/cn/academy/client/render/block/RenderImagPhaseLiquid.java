@@ -6,7 +6,7 @@ import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import cn.academy.client.render.util.Tessellator;
+import cn.lambdalib2.render.legacy.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;

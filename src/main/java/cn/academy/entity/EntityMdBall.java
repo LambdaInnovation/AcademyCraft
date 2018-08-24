@@ -4,11 +4,9 @@ import cn.academy.client.render.util.ACRenderingHelper;
 import cn.academy.Resources;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.template.client.render.RenderIcon;
-import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.util.MathUtils;
-import cn.lambdalib2.util.RandUtils;
-import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.*;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.EntityCallback;
 import net.minecraft.client.Minecraft;
@@ -56,7 +54,7 @@ public class EntityMdBall extends EntityAdvanced
     double spawnTime;
     double lastTime;
     long burstTime = 400;
-    double alphaWiggle = 0.8;
+    float alphaWiggle = 0.8f;
     double accel;
     
     double offsetX, offsetY, offsetZ;
@@ -209,19 +207,19 @@ public class EntityMdBall extends EntityAdvanced
         return true;
     }
     
-    private double getAlpha() {
-        int lifeMS = life * 50;
+    private float getAlpha() {
+        float lifeS = life * 0.05f;
         double time = GameTimer.getTime();
         double dt = time - spawnTime;
         
-        final int blendTime = 150;
-        if(dt > lifeMS - blendTime)
-            return Math.max(0, MathUtils.lerpf(1, 0, (float) (dt - (lifeMS - blendTime)) / blendTime));
-        if(dt > lifeMS - burstTime)
-            return MathUtils.lerp(0.6, 1.0, (double) (dt - (lifeMS - burstTime)) / (burstTime - blendTime));
+        final float blendTime = 0.15f;
+        if(dt > lifeS - blendTime)
+            return Math.max(0, MathUtils.lerpf(1, 0, (float) (dt - (lifeS - blendTime)) / blendTime));
+        if(dt > lifeS - burstTime)
+            return MathUtils.lerpf(0.6f, 1.0f, (float) (dt - (lifeS - burstTime)) / (burstTime - blendTime));
         if(dt < 300)
-            return MathUtils.lerp(0, 0.6, (double) dt / 300);
-        return 0.6;
+            return MathUtils.lerpf(0, 0.6f, (float) dt / 300);
+        return 0.6f;
     }
     
     private float getSize() {
@@ -284,20 +282,20 @@ public class EntityMdBall extends EntityAdvanced
                 ShaderSimple.instance().useProgram();
                 GL11.glTranslated(ent.offsetX, ent.offsetY, ent.offsetZ);
                 
-                double alpha = ent.getAlpha();
+                float alpha = ent.getAlpha();
                 float size = ent.getSize();
                 
                 //Glow texture
-                this.color.a = alpha * (0.3 + ent.alphaWiggle * 0.7);
+                this.color.setAlpha(Colors.f2i(alpha * (0.3f + ent.alphaWiggle * 0.7f)));
                 this.icon = glowTexture;
                 this.setSize(0.7f * size);
-                super.doRender(par1Entity, x, y, z, par8, par9);
+                super.doRender(ent, x, y, z, par8, par9);
                 
                 //Core
-                this.color.a = alpha * (0.8 + 0.2 * ent.alphaWiggle);
+                this.color.setAlpha(Colors.f2i(alpha * (0.8f + 0.2f * ent.alphaWiggle)));
                 this.icon = textures[ent.texID];
                 this.setSize(0.5f * size);
-                super.doRender(par1Entity, x, y, z, par8, par9);
+                super.doRender(ent, x, y, z, par8, par9);
                 GL20.glUseProgram(0);
             }
             GL11.glPopMatrix();

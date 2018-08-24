@@ -3,11 +3,16 @@ package cn.academy.client.render.entity;
 import cn.academy.Resources;
 import cn.academy.entity.EntityMdShield;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.render.Mesh;
+import cn.lambdalib2.render.legacy.GLSLMesh;
+import cn.lambdalib2.render.legacy.LegacyMesh;
+import cn.lambdalib2.render.legacy.LegacyMeshUtils;
+import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -16,29 +21,29 @@ import org.lwjgl.opengl.GL20;
  * @author WeAthFolD
  */
 @RegEntityRender(EntityMdShield.class)
-public class RenderMdShield extends Render {
+public class RenderMdShield extends Render<EntityMdShield> {
 
     GLSLMesh mesh;
     ResourceLocation texture;
     
-    public RenderMdShield() {
+    public RenderMdShield(RenderManager manager) {
+        super(manager);
         texture = Resources.getTexture("effects/mdshield");
-        mesh = MeshUtils.createBillboard(new GLSLMesh(), -0.5, -0.5, 0.5, 0.5);
+        mesh = LegacyMeshUtils.createBillboard(new GLSLMesh(), -0.5f, -0.5f, 0.5f, 0.5f);
         this.shadowOpaque = 0;
     }
     
     @Override
-    public void doRender(Entity _entity, double x,
+    public void doRender(EntityMdShield entity, double x,
             double y, double z, float a, float b) {
         if(RenderUtils.isInShadowPass()) {
             return;
         }
         
-        long time = GameTimer.getTime();
-        EntityMdShield entity = (EntityMdShield) _entity;
-        
+        double time = GameTimer.getTime();
+
         // Calculate rotation
-        long dt;
+        double dt;
         if(entity.lastRender == 0) dt = 0;
         else dt = time - entity.lastRender;
         
@@ -75,7 +80,7 @@ public class RenderMdShield extends Render {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(EntityMdShield entity) {
         return null;
     }
 

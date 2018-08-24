@@ -3,6 +3,9 @@ package cn.academy.client.render.entity;
 import cn.academy.Resources;
 import cn.academy.entity.EntityRippleMark;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.render.legacy.LegacyMesh;
+import cn.lambdalib2.render.legacy.SimpleMaterial;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.renderer.entity.Render;
@@ -10,6 +13,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
@@ -19,12 +23,12 @@ public class RippleMarkRender extends Render<EntityRippleMark> {
     
     final long CYCLE = 3600;
     final long timeOffsets[] = { 0, -1200, -2400 };
-    Mesh mesh;
+    LegacyMesh mesh;
     SimpleMaterial material;
     
     public RippleMarkRender(RenderManager manager) {
         super(manager);
-        mesh = new Mesh();
+        mesh = new LegacyMesh();
         mesh.setVertices(new double[][] {
                 { -.5, 0, -.5 },
                 { .5,  0, -.5 },
@@ -63,8 +67,8 @@ public class RippleMarkRender extends Render<EntityRippleMark> {
             
             GL11.glTranslatef(0, getHeight(mod), 0);
             GL11.glScalef(size, 1, size);
-            material.color = mark.color.copy();
-            material.color.a *= getAlpha(mod);
+            material.color = new Color(mark.color);
+            material.color.setAlpha(Colors.f2i(getAlpha(mod)));
             mesh.draw(material);
             
             GL11.glPopMatrix();
@@ -78,16 +82,16 @@ public class RippleMarkRender extends Render<EntityRippleMark> {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
     
-    private float getHeight(long mod) {
-        return mod * 3e-4f;
+    private float getHeight(double mod) {
+        return (float) mod * 3e-1f;
     }
     
-    private float getAlpha(long mod) {
-        final float BIN = 1600, BOUT = 1600;
+    private float getAlpha(double mod) {
+        final float BIN = 1.6f, BOUT = 1.6f;
         if(mod < BIN)
-            return mod / BIN;
+            return (float) mod / BIN;
         if(mod > CYCLE - BOUT)
-            return 1 - (mod - (CYCLE - BOUT)) / BOUT;
+            return 1 - ((float) mod - (CYCLE - BOUT)) / BOUT;
         return 1.0f;
     }
     

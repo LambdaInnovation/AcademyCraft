@@ -4,6 +4,7 @@ import cn.academy.client.render.util.SimpleModelBiped;
 import cn.academy.Resources;
 import cn.academy.entity.EntityTPMarking;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;

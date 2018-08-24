@@ -21,7 +21,7 @@ public class EntityMdShield extends EntityAdvanced
     
     // Intrusive render states
     public float rotation;
-    public long lastRender;
+    public double lastRender;
     
     final EntityPlayer player;
 

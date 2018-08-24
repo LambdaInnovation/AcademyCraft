@@ -17,9 +17,9 @@ public class RendererRayComposite extends RendererList {
     
     public RendererRayComposite(RenderManager manager, String name) {
         super(manager);
-        append(glow = RendererRayGlow.createFromName(name));
-        append(cylinderIn = new RendererRayCylinder(0.05f));
-        append(cylinderOut = new RendererRayCylinder(0.08f));
+        append(glow = RendererRayGlow.createFromName(manager, name));
+        append(cylinderIn = new RendererRayCylinder(manager, 0.05f));
+        append(cylinderOut = new RendererRayCylinder(manager, 0.08f));
         cylinderIn.headFix = 0.98;
     }
     

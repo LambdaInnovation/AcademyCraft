@@ -1,8 +1,10 @@
 package cn.academy.client.render.entity;
 
-import cn.academy.client.render.util.Tessellator;
 import cn.academy.entity.EntityMarker;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.render.legacy.ShaderNotex;
+import cn.lambdalib2.render.legacy.Tessellator;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
@@ -20,7 +22,7 @@ import org.lwjgl.opengl.GL20;
 @RegEntityRender(EntityMarker.class)
 public class RenderMarker extends Render {
 
-    static final Tessellator t = Tessellator.getInstance();
+    static final Tessellator t = Tessellator.instance;
     final double[][] mulArray = { { 0, 0, 0 }, { 1, 0, 0 }, { 1, 0, 1 }, { 0, 0, 1 }, { 0, 1, 0 }, { 1, 1, 0 },
             { 1, 1, 1 }, { 0, 1, 1 }, };
     final double[] rotArray = { 0, -90, -180, -270, 0, -90, -180, -270 };
@@ -52,7 +54,7 @@ public class RenderMarker extends Render {
         GL11.glPushMatrix();
 
         GL11.glTranslated(x - width / 2, y + 0.05 * Math.sin(GameTimer.getAbsTime() / 400.0), z - width / 2);
-        marker.color.bind();
+        Colors.bindToGL(marker.color);
         renderMark(width, height);
 
         GL11.glPopMatrix();
@@ -71,7 +73,7 @@ public class RenderMarker extends Render {
             GL11.glTranslated(sx, sy, sz);
             GL11.glRotated(rotArray[i], 0, 1, 0);
             GL11.glLineWidth(3f);
-            BufferBuilder bb = t.getBuffer();
+            BufferBuilder bb = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
             bb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_TEX);
 
             //TODO bb.setBrightness(15728880);
