@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 public class BlockRFOutput extends BlockConverterBase {
 
     public BlockRFOutput() {
-        super("rf_output", "IF", "RF", TileRFOutput.class);
+        super( "IF", "RF", TileRFOutput.class);
     }
     
     @Override

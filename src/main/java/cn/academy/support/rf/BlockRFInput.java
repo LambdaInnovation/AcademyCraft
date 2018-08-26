@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 public class BlockRFInput extends BlockConverterBase {
     
     public BlockRFInput() {
-        super("rf_input", "RF", "IF", TileRFInput.class);
+        super( "RF", "IF", TileRFInput.class);
     }
 
     @Override

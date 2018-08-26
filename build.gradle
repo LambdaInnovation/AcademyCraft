@@ -70,6 +70,10 @@ repositories {
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
     }
+    maven {
+        name = "CoFH Maven"
+        url = "http://maven.covers1624.net"
+    }
 }
 
 configurations {
@@ -91,6 +95,7 @@ dependencies {
 
     compile "codechicken:CodeChickenLib:1.12.2-${config.ccl_ver}:deobf"
     compile "codechicken:NotEnoughItems:1.12.2-${config.nei_ver}:deobf"
+    deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
 }
 
 processResources {

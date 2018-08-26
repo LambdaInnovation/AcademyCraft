@@ -1,39 +1,40 @@
 package cn.academy.support.rf;
 
 import cn.academy.block.tileentity.TileGeneratorBase;
-import cofh.api.energy.IEnergyReceiver;
-import net.minecraftforge.common.util.ForgeDirection;
+import cn.lambdalib2.registry.mc.RegTileEntity;
+import cofh.redstoneflux.api.IEnergyReceiver;
+import net.minecraft.util.EnumFacing;
 
 import static cn.academy.support.rf.RFSupport.if2rf;
 import static cn.academy.support.rf.RFSupport.rf2if;
 
 @RegTileEntity
-@RegWithName("rf_input")
-public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
+public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver
+{
     
     public TileRFInput() {
         super("ac_rf_input", 0, 2000, 100);
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
+    public boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive,
+    public int receiveEnergy(EnumFacing from, int maxReceive,
             boolean simulate) {
         int amount = (int) rf2if(maxReceive);
         return (int) (maxReceive - if2rf(addEnergy(amount, simulate)));
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return if2rf(getEnergy());
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return (int) if2rf(2000);
     }
 
