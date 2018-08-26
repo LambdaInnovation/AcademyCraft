@@ -111,3 +111,13 @@ processResources {
         exclude 'mcmod.info'
     }
 }
+
+compileJava.options.encoding = "UTF-8"
+
+task getLibs << {
+    ant.mkdir(dir: 'libs')
+    ant.get(src: 'https://minecraft.curseforge.com/projects/crafttweaker/files/2452011/download',
+            dest: 'libs/CraftTweaker3-Dev-3.0.9C.jar', skipexisting: 'true')
+}
+
+sourceMainJava.dependsOn getLibs

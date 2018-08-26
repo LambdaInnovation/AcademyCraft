@@ -1,9 +1,9 @@
 package cn.academy.support.minetweaker;
 
 import cn.academy.block.tileentity.TileMetalFormer.Mode;
-import minetweaker.MineTweakerAPI;
-import minetweaker.OneWayAction;
-import minetweaker.api.item.IItemStack;
+import crafttweaker.CraftTweakerAPI;
+import crafttweaker.IAction;
+import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -19,20 +19,21 @@ public class MetalFormerSupport {
     
     @ZenMethod
     public static void addEtchRecipe(IItemStack output, IItemStack input) {
-        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.ETCH));
+        CraftTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.ETCH));
     }
     
     @ZenMethod
     public static void addInciseRecipe(IItemStack output, IItemStack input) {
-        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.INCISE));
+        CraftTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.INCISE));
     }
     
     @ZenMethod
     public static void addPlateRecipe(IItemStack output, IItemStack input) {
-        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.PLATE));
+        CraftTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.PLATE));
     }
     
-    private static class AddMetalFormerRecipe extends OneWayAction {
+    private static class AddMetalFormerRecipe implements IAction
+    {
 
         ItemStack input, output;
         Mode mode;
@@ -51,11 +52,6 @@ public class MetalFormerSupport {
         @Override
         public String describe() {
             return "Add extra metal former etching recipe for " + input.getUnlocalizedName();
-        }
-
-        @Override
-        public Object getOverrideKey() {
-            return null;
         }
         
     }
