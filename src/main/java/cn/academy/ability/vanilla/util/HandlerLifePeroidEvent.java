@@ -5,8 +5,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public abstract class HandlerLifePeroidEvent
 {
-    private int maxTick = 0;
-    private int tick = 0;
+    protected int maxTick = 0;
+    protected int tick = 0;
     public HandlerLifePeroidEvent(int maxTick)
     {
         this.maxTick = maxTick;

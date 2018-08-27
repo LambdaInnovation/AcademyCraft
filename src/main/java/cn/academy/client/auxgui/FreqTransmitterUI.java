@@ -12,7 +12,6 @@ import cn.academy.event.energy.LinkNodeEvent;
 import cn.academy.energy.impl.WirelessNet;
 import cn.academy.terminal.app.AppFreqTransmitter;
 import cn.lambdalib2.multiblock.BlockMulti;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
@@ -21,16 +20,11 @@ import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.Extent;
 import cn.lambdalib2.render.font.IFont.FontOption;
-import cn.lambdalib2.util.deprecated.LIFMLGameEventDispatcher;
-import cn.lambdalib2.util.deprecated.LIHandler;
 import cn.lambdalib2.input.KeyManager;
-//import cn.lambdalib2.util.mc.ControlOverrider;
-//import cn.lambdalib2.util.mc.EntitySelectors;
-//import cn.lambdalib2.util.mc.Raytrace;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
 import net.minecraft.block.Block;
@@ -39,9 +33,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatAllowedCharacters;
-//import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-//import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -175,8 +167,7 @@ public class FreqTransmitterUI extends AuxGui {
         world = player.world;
         consistent = false;
         
-        LIFMLGameEventDispatcher.INSTANCE.registerKeyInput(keyDispatcher = new KeyEventDispatcher());
-        LIFMLGameEventDispatcher.INSTANCE.registerMouseInput(keyDispatcher);
+        MinecraftForge.EVENT_BUS.register(keyDispatcher = new KeyEventDispatcher());
         
         setState(new StateStart());
 
@@ -266,9 +257,9 @@ public class FreqTransmitterUI extends AuxGui {
         font.drawSeperated(str, X0 + MARGIN, Y0 + MARGIN, trimLength, option);
     }
     
-    private class KeyEventDispatcher extends LIHandler<InputEvent> {
+    private class KeyEventDispatcher{//} extends LIHandler<InputEvent> {
 
-        @StateEventCallback
+        @SubscribeEvent
         protected boolean onEvent(InputEvent event) {
             if(current != null) {
                 if(event instanceof MouseInputEvent) {
@@ -284,9 +275,14 @@ public class FreqTransmitterUI extends AuxGui {
                 }
             } else {
                 AcademyCraft.log.error("Human is dead. Mismatch.");
-                this.setDead();
+                MinecraftForge.EVENT_BUS.unregister(this);
             }
             return true;
+        }
+
+        protected void setDead()
+        {
+            MinecraftForge.EVENT_BUS.unregister(this);
         }
         
     }
