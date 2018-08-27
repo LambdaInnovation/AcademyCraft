@@ -101,13 +101,13 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
   this.setLook(sideToOrientation(dir))
 
   override def onUpdate() = {
-    if (ticksExisted > 1200 || world.getBlock(x, y, z) == Blocks.air) {
+    if (ticksExisted > 1200 || world.getBlockState(new BlockPos(, y, z)).getBlock == Blocks.AIR) {
       setDead()
     }
   }
 
   override def shouldRenderInPass(pass: Int) = pass == 1
 
-  def isWall = dir == ForgeDirection.UP || dir == ForgeDirection.DOWN
+  def isWall = dir == EnumFacing.UP || dir == EnumFacing.DOWN
 
 }

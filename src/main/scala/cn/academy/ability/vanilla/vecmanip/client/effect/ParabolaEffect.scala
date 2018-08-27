@@ -5,6 +5,7 @@ import cn.academy.ability.context.Context.Status
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.VecAccelContext
 import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.render.legacy.ShaderSimple
 import cn.lambdalib2.util.{MathUtils, RenderUtils, VecUtils}
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
@@ -72,13 +73,12 @@ object ParabolaRenderer extends Render {
             MathUtils.lerpf(player.prevRotationPitch, player.rotationPitch, partialTicks))
 
           val lookFix = VecUtils.toDirVector(yawLerp, pitchLerp)
-          var lookRot = lookFix.copy()
-          lookRot.y = 0
-          lookRot.rotateAroundY(90)
-          lookRot = lookRot.normalize() * -0.08
-          lookRot.y = -0.04
+          var lookRot = new Vec3d(lookFix.x, 0, lookFix.z)
+          lookRot = lookRot.rotateYaw(90)
+          lookRot = VecUtils.multiply(lookRot.normalize(), -0.08)
+          lookRot = new Vec3d(lookRot.x, -0.04, lookRot.z)
 
-          val pos = lookRot.copy() - lookFix * 0.12
+          val pos = VecUtils.subtract(lookRot, VecUtils.multiply(lookFix, 0.12))
 
           vertices.clear()
 

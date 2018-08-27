@@ -1,12 +1,16 @@
 package cn.academy.client.render.particle;
 
 import cn.academy.Resources;
+import cn.lambdalib2.particle.Particle;
+import cn.lambdalib2.particle.ParticleFactory;
+import cn.lambdalib2.particle.decorators.ParticleDecorator;
 import cn.lambdalib2.util.RandUtils;
 
 /**
  * @author WeAthFolD
  */
-public class MdParticleFactory extends ParticleFactory {
+public class MdParticleFactory extends ParticleFactory
+{
     
     static Particle template;
     static {
@@ -24,7 +28,7 @@ public class MdParticleFactory extends ParticleFactory {
             public void decorate(Particle particle) {
                 int life = RandUtils.rangei(25, 55);
                 particle.fadeAfter(life, 20);
-                particle.color.a = RandUtils.ranged(0.3, 0.6);
+                particle.color.setAlpha(RandUtils.rangei(76, 152));
                 particle.size = RandUtils.rangef(0.05f, 0.07f);
             }
             

@@ -4,9 +4,7 @@ import cn.academy.achievement.aches.ACAchievement;
 import cn.academy.achievement.pages.*;
 import cn.academy.AcademyCraft;
 import cn.academy.item.ItemAchievement;
-import cn.academy.misc.achievement.pages.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.AchievementPage;
 
 /**
  * @author EAirPeter

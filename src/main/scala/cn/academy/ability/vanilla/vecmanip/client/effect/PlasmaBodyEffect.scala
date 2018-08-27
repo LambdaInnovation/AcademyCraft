@@ -5,6 +5,7 @@ import cn.academy.client.CameraPosition
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.PlasmaCannonContext
 import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.util.GameTimer
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
@@ -68,7 +69,7 @@ class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends Local
   var initTime = GameTimer.getTime
   var alpha = 0.0f
 
-  def deltaTime = (GameTimer.getTime - initTime) / 1000.0f
+  def deltaTime = GameTimer.getTime - initTime
 
   override def onUpdate() = {
     val terminated = ctx.getStatus == Status.TERMINATED

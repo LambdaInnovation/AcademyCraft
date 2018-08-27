@@ -5,6 +5,7 @@ import cn.academy.ability.context.{ClientContext, Context}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.event.BlockDestroyEvent
+import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.handlers.Rigidbody
 import cn.lambdalib2.util.{RandUtils, VecUtils}
@@ -93,7 +94,7 @@ abstract class MRContext(p: EntityPlayer, _skill: MineRaysBase) extends Context(
         if (hardnessLeft <= 0) {
           val is = world.getBlockState(pos)
           val block: Block = is.getBlock
-          onBlockBreak(world, x, y, z, block)
+          onBlockBreak(world, new BlockPos(x, y, z), block)
           ctx.addSkillExp(expincr)
           x = -1
           y = -1

@@ -148,7 +148,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
     val distsq = player.getDistanceSq(entity)
     if (distsq < 25 && ctx.consume(overload, consumption)) {
       val pos = Raytrace.getLookingPos(player, 20).getLeft
-      val delta = subtract(pos, entity.getPosition)
+      val delta = subtract(pos, entity.getPositionVector)
       setMotion(entity, multiply(delta.normalize(), speed))
 
       ctx.setCooldown(cooldown)

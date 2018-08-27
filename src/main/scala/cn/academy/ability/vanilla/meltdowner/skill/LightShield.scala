@@ -10,7 +10,6 @@ import cn.academy.entity.EntityMdShield
 import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
-import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity

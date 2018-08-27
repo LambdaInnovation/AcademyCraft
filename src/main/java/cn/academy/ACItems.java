@@ -62,7 +62,7 @@ public class ACItems {
 
     public static final net.minecraft.item.Item imag_silicon_piece = new net.minecraft.item.Item();
 
-    public static final cn.academy.item.ItemEnergyBase energy_unit = new cn.academy.item.ItemEnergyBase(10000 20);
+    public static final cn.academy.item.ItemEnergyBase energy_unit = new cn.academy.item.ItemEnergyBase(10000, 20);
 
     public static final net.minecraft.item.Item crystal_low = new net.minecraft.item.Item();
 

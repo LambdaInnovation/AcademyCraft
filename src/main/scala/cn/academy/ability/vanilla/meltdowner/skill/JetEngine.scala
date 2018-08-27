@@ -4,6 +4,7 @@ import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.entity.{EntityDiamondShield, EntityRippleMark}
+import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{RandUtils, VecUtils}
 import cn.lambdalib2.util.{EntitySelectors, Raytrace}
@@ -143,7 +144,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
       isMarking = true
       mark = new EntityRippleMark(world)
       world.spawnEntity(mark)
-      mark.color.set(0.2, 1.0, 0.2, 0.7)
+      mark.color.set(51, 255, 51, 179)
     }
   }
   

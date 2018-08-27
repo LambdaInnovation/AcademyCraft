@@ -132,7 +132,7 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
       mark = new EntityRippleMark(player.world)
 
       player.getEntityWorld.spawnEntity(mark)
-      mark.color.set(0.8, 0.8, 0.8, 0.7)
+      mark.color.set(204, 204, 204, 179)
       mark.setPosition(hitX, hitY, hitZ)
     }
   }

@@ -5,7 +5,6 @@ import java.util.function.Predicate
 import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.entity.{EntityBarrageRayPre, EntityMdRayBarrage, EntitySilbarn}
-import cn.academy.ability.vanilla.meltdowner.entity.{EntityMdRayBarrage, EntitySilbarn}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.event.CollideEvent
 import cn.lambdalib2.util._
