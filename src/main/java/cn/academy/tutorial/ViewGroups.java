@@ -5,9 +5,9 @@ import cn.academy.Resources;
 import cn.academy.tutorial.ACTutorial.Tag;
 import cn.academy.tutorial.client.RecipeHandler;
 import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.render.obj.ObjLegacyRender;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
-import cn.lambdalib2.util.Color;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.vis.model.CompTransform;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModelCustom;
 
 import java.util.Random;
 
@@ -141,7 +140,7 @@ public final class ViewGroups {
 
     @SideOnly(Side.CLIENT)
     private static ViewGroup displayModelImpl(String mdl, String texture, CompTransform transform) {
-        IModelCustom model = Resources.getModel(mdl);
+        ObjLegacyRender model = Resources.getModel(mdl);
         ResourceLocation res_tex = Resources.getTexture("models/" + texture);
         return new ViewGroup() {
             @Override
@@ -176,7 +175,7 @@ public final class ViewGroups {
 
                     renderer.blockAccess = Minecraft.getMinecraft().theWorld;
 
-                    mc.theWorld.setBlock(0, 0, 0, block, metadata, 0x00);
+                    mc.world.setBlock(0, 0, 0, block, metadata, 0x00);
                     RenderUtils.loadTexture(TextureMap.locationBlocksTexture);
                     glCullFace(GL_BACK);
                     glTranslated(0.15, 0.1, -1);

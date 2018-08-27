@@ -5,6 +5,7 @@ import cn.academy.client.sound.ACSounds;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.render.obj.ObjLegacyRender;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RandUtils;
@@ -220,7 +221,7 @@ public class EntitySilbarn extends EntityAdvanced
     @RegEntityRender(EntitySilbarn.class)
     public static class RenderSibarn extends Render<EntitySilbarn> {
         
-        private final IModelCustom model = Resources.getModel("silbarn");
+        private final ObjLegacyRender model = Resources.getModel("silbarn");
         private final ResourceLocation tex = Resources.getTexture("models/silbarn");
 
         protected RenderSibarn(RenderManager renderManager) {

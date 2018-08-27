@@ -2,20 +2,19 @@ package cn.academy.client.render.block;
 
 import cn.academy.Resources;
 import cn.academy.block.tileentity.TilePhaseGen;
+import cn.lambdalib2.render.obj.ObjLegacyRender;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
  */
-public class RenderPhaseGen extends TileEntitySpecialRenderer {
+public class RenderPhaseGen extends TileEntitySpecialRenderer<TilePhaseGen> {
     
-    IModelCustom model;
+    ObjLegacyRender model;
     ResourceLocation[] textures;
     
     public RenderPhaseGen() {
@@ -24,10 +23,8 @@ public class RenderPhaseGen extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, 
-        double x, double y, double z, float wtf) {
-        TilePhaseGen gen = (TilePhaseGen) te;
-        
+    public void render(TilePhaseGen gen,
+        double x, double y, double z, float partialTicks, int destroyStage, float wtf) {
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y, z + 0.5);
         int tid = MathUtils.clampi(0, 4, 

@@ -57,7 +57,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile, ITicka
     @RegTileEntity.Render
     public static RenderWindGenMain renderer;
     
-    public long lastFrame = -1;
+    public double lastFrame = -1;
     public float lastRotation;
     
     public boolean complete;

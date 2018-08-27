@@ -3,11 +3,11 @@ package cn.academy.client.render.block;
 import cn.academy.Resources;
 import cn.academy.block.tileentity.TileMatrix;
 import cn.lambdalib2.multiblock.RenderBlockMulti;
+import cn.lambdalib2.render.obj.ObjLegacyRender;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class RenderMatrix extends RenderBlockMulti {
 
-    IModelCustom model;
+    ObjLegacyRender model;
     ResourceLocation texture;
     
     public RenderMatrix() {
@@ -45,14 +45,14 @@ public class RenderMatrix extends RenderBlockMulti {
     private void drawShields(TileMatrix mat) {
         int plateCount = mat.plateCount == 3 ? 3 : 0;
 
-        long time = GameTimer.getTime();
-        double dtheta = 360.0 / plateCount, phase = (time / 20.0) % 360;
+        double time = GameTimer.getTime();
+        double dtheta = 360.0 / plateCount, phase = (time * 50.0) % 360;
         double htPhaseOff = 40.0;
         for(int i = 0; i < plateCount; ++i) {
             GL11.glPushMatrix();
             
             double floatHeight = 0.1;
-            GL11.glTranslated(0, floatHeight * Math.sin(time / 900.0 + htPhaseOff * i), 0);
+            GL11.glTranslated(0, floatHeight * Math.sin(time * 1.111 + htPhaseOff * i), 0);
             GL11.glRotated(phase + dtheta * i, 0, 1, 0);
             model.renderPart("Shield");
             

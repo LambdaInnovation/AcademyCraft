@@ -7,6 +7,8 @@ import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.render.font.Fonts;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.TrueTypeFont;
+import cn.lambdalib2.render.obj.ObjLegacyRender;
+import cn.lambdalib2.render.obj.ObjParser;
 import cn.lambdalib2.util.ResourceUtils;
 import com.google.common.base.Throwables;
 import net.minecraft.client.Minecraft;
@@ -28,6 +30,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.IntBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_BGRA;
@@ -42,6 +46,8 @@ public class ClientResources {
 
     private static boolean fontsInit = false;
     private static TrueTypeFont font, fontBold, fontItalic;
+
+    private static final Map<ResourceLocation, ObjLegacyRender> cachedModels = new HashMap<>();
 
     public static IFont font() {
         checkFontInit();
@@ -138,15 +144,9 @@ public class ClientResources {
         return ret;
     }
 
-    // TODO new obj model impl
-//    public static IModelCustom getModel(String mdlName) {
-//        IModelCustom ret = cachedModels.get(mdlName);
-//        if(ret != null)
-//            return ret;
-//        ret = AdvancedModelLoader.loadModel(Resources.res("models/" + mdlName + ".obj"));
-//        cachedModels.put(mdlName, ret);
-//        return ret;
-//    }
+    public static ObjLegacyRender getModel(String mdlName) {
+        return cachedModels.computeIfAbsent(new ResourceLocation("academy", "models/" + mdlName), (loc) -> new ObjLegacyRender(ObjParser.parse(loc)));
+    }
 
     private static void checkFontInit() {
         if (!fontsInit) {

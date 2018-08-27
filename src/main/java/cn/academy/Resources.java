@@ -4,6 +4,7 @@ import cn.academy.client.ClientResources;
 import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;
+import cn.lambdalib2.render.obj.ObjLegacyRender;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,14 +43,9 @@ public class Resources {
         return new SoundEvent(res(loc));
     }
     
-//    /**
-//     * Get the model instance of the given name. If the name is
-//     * first queried, will load that resource from the file system.
-//     * TODO need a new method for loading obj models
-//     */
-//    public static IModelCustom getModel(String mdlName) {
-//        return ClientResources.getModel(mdlName);
-//    }
+    public static ObjLegacyRender getModel(String mdlName) {
+        return ClientResources.getModel(mdlName);
+    }
     
     public static ResourceLocation getTexture(String loc) {
         return res("textures/" + loc + ".png");
