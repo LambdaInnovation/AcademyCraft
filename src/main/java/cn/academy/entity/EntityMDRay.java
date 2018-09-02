@@ -2,8 +2,10 @@ package cn.academy.entity;
 
 import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.render.particle.MdParticleFactory;
+import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -36,7 +38,8 @@ public class EntityMDRay extends EntityRayBase {
         super.onUpdate();
         if(RandUtils.nextDouble() < 0.8) {
             Particle p = MdParticleFactory.INSTANCE.next(world,
-                    new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
+//                    new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
+                    VecUtils.lookingPos(this, RandUtils.ranged(0, 10)),
                     new Vec3d(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
             world.spawnEntity(p);
         }
@@ -48,13 +51,13 @@ public class EntityMDRay extends EntityRayBase {
         public MDRayRender(RenderManager manager) {
             super(manager, "mdray");
             this.cylinderIn.width = 0.17;
-            this.cylinderIn.color.setColor4i(216, 248, 216, 230);
+            this.cylinderIn.color.set(216, 248, 216, 230);
             
             this.cylinderOut.width = 0.22;
-            this.cylinderOut.color.setColor4i(106, 242, 106, 50);
+            this.cylinderOut.color.set(106, 242, 106, 50);
             
             this.glow.width = 1.5;
-            this.glow.color.a = 0.8;
+            this.glow.color.setAlpha(Colors.f2i(0.8f));
         }
         
     }

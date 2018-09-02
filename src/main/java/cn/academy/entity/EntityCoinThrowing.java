@@ -1,5 +1,6 @@
 package cn.academy.entity;
 
+import cn.academy.ACItems;
 import cn.academy.AcademyCraft;
 import cn.academy.event.ConfigModifyEvent;
 import cn.academy.ability.vanilla.VanillaCategories;
@@ -140,17 +141,18 @@ public class EntityCoinThrowing extends EntityAdvanced
         if(!getEntityWorld().isRemote && !player.capabilities.isCreativeMode) {
             ItemStack equipped = player.getHeldItemMainhand();
             if(equipped == null) {
-                player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(VanillaCategories.coin));
-            } else if(equipped.getItem() == VanillaCategories.coin && equipped.getCount() < equipped.getMaxStackSize()) {
+                player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ACItems.coin));
+            } else if(equipped.getItem() == ACItems.coin && equipped.getCount() < equipped.getMaxStackSize()) {
                 equipped.setCount(equipped.getCount()+1);
-                player.inventory.inventoryChanged = true;
+//                player.inventory.inventoryChanged = true;
+                player.inventory.markDirty();
             } else if(PlayerUtils.mergeStackable(player.inventory, new ItemStack(
-                    VanillaCategories.coin)) == 0) {
+                    ACItems.coin)) == 0) {
                 ;
             } else {
                 //if fail...
                 world.spawnEntity(new EntityItem(world, player.posX, player.posY
-                    + yOffset, player.posZ, new ItemStack(VanillaCategories.coin)));
+                    + yOffset, player.posZ, new ItemStack(ACItems.coin)));
             }
         }
         if (getEntityWorld().isRemote && PLAY_HEADS_OR_TAILS) {
@@ -180,7 +182,7 @@ public class EntityCoinThrowing extends EntityAdvanced
         super.readFromNBT(tag);
         setDead();
         getEntityWorld().spawnEntity(new EntityItem(world, posX, posY, posZ, new ItemStack(
-                VanillaCategories.coin)));
+                ACItems.coin)));
     }
 
     @Override

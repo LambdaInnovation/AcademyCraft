@@ -3,10 +3,13 @@ package cn.academy.entity;
 import cn.academy.client.render.entity.ray.RendererRayComposite;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.client.render.particle.MdParticleFactory;
+import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.VecUtils;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
@@ -39,7 +42,8 @@ public class EntityMdRaySmall extends EntityRayBase {
     public void onUpdate() {
         super.onUpdate();
         Particle p = MdParticleFactory.INSTANCE.next(world,
-            new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
+//            new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
+                VecUtils.lookingPos(this, RandUtils.ranged(0, 10)),
             new Vec3d(RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015)));
         world.spawnEntity(p);
     }
@@ -63,13 +67,13 @@ public class EntityMdRaySmall extends EntityRayBase {
         public SmallMdRayRender(RenderManager manager) {
             super(manager, "mdray_small");
             this.cylinderIn.width = 0.03;
-            this.cylinderIn.color.setColor4i(216, 248, 216, 230);
+            this.cylinderIn.color.set(216, 248, 216, 230);
             
             this.cylinderOut.width = 0.045;
-            this.cylinderOut.color.setColor4i(106, 242, 106, 50);
+            this.cylinderOut.color.set(106, 242, 106, 50);
             
             this.glow.width = 0.3;
-            this.glow.color.a = 0.5;
+            this.glow.color.setAlpha(Colors.f2i(0.5f));
         }
         
     }

@@ -11,6 +11,7 @@ import cn.academy.entity.EntitySurroundArc.ArcType
 import cn.lambdalib2.multiblock.BlockMulti
 import cn.lambdalib2.registry.mc.RegEntity
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.EntitySyncer.Synchronized
 import cn.lambdalib2.util._
 import cn.lambdalib2.util.entityx.MotionHandler
 import cn.lambdalib2.util.entityx.event.CollideEvent
@@ -290,7 +291,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
       case ActMoveTo =>
         val dist = this.getDistanceSq(tx, ty, tz)
         val delta = new Vec3d(tx - posX, ty - posY, tz - posZ).normalize()
-        val mo = delta * 0.2 * (dist match {
+        val mo = delta.scale(0.2).scale(dist match {
           case d if d < 4 => d / 4
           case _ => 1.0
         })
