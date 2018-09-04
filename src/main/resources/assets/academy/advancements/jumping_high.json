@@ -1,0 +1,16 @@
+{
+  "display": {
+    "icon": {
+      "item": "academy:logo"
+    },
+    "title": {
+      "translate": "23333333"
+    },
+    "description": {
+      "translate": "rua"
+    },
+    "background": "academy:textures/guis/window_tutorialRight.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  }
+}
