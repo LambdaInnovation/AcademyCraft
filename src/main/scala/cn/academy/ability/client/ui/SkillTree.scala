@@ -30,6 +30,7 @@ import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
 import net.minecraft.util.EnumHand
 import cn.lambdalib2.util.{HudUtils, RenderUtils}
 import cn.lambdalib2.input.{KeyHandler, KeyManager}
+import cn.lambdalib2.render.legacy.{LegacyShaderProgram, ShaderMono}
 import org.lwjgl.input.Keyboard
 import cn.lambdalib2.util.MathUtils._
 import cn.lambdalib2.util.RandUtils
@@ -190,7 +191,7 @@ private object Common {
   private val Font = Resources.font()
   private val FontBold = Resources.fontBold()
 
-  private val shaderProg = new ShaderProgram
+  private val shaderProg = new LegacyShaderProgram
   shaderProg.linkShader(Resources.getShader("skill_progbar.frag"), GL_FRAGMENT_SHADER)
   shaderProg.linkShader(Resources.getShader("skill_progbar.vert"), GL_VERTEX_SHADER)
   shaderProg.compile()

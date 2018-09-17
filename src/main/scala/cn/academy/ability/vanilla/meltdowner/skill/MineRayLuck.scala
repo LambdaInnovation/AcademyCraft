@@ -7,6 +7,7 @@ import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
+import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -31,7 +32,9 @@ class LuckMRContext(p: EntityPlayer) extends MRContext(p, MineRayLuck) {
   setExpIncr(0.0003f)
 
   override protected def onBlockBreak(world: World, pos: BlockPos, block: Block) = {
-    world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+    val st = world.getBlockState(pos)
+    val snd = block.getSoundType(st, world, pos, p).getBreakSound
+    world.playSound(x + 0.5, y + 0.5, z + 0.5, snd, SoundCategory.BLOCKS, .5f, 1f, false)
     block.dropBlockAsItemWithChance(world, pos, world.getBlockState(pos), 1.0f, 0)
     world.setBlockState(pos, Blocks.AIR.getDefaultState)
   }

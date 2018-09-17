@@ -8,65 +8,57 @@ import cn.lambdalib2.util.RenderUtils
 import cn.lambdalib2.util.VecUtils._
 import cn.lambdalib2.util.GameTimer
 import net.minecraftforge.fml.client.registry.RenderingRegistry
-import net.minecraft.client.renderer.entity.Render
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.registry.mc.RegEntityRender
 import net.minecraft.util.math.Vec3d
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.opengl.GL11._
 
-@SideOnly(Side.CLIENT)
-object SmokeEffect_ {
+@RegEntityRender(classOf[SmokeEffect])
+class SmokeEffectRenderer(m: RenderManager) extends Render[SmokeEffect](m) {
+  val texture = Resources.preloadTexture("effects/smokes")
 
-  @StateEventCallback
-  def _init(fMLInitializationEvent: FMLInitializationEvent) = {
-    RenderingRegistry.registerEntityRenderingHandler(classOf[SmokeEffect], new Render {
-      val texture = Resources.preloadTexture("effects/smokes")
+  override def doRender(eff: SmokeEffect, x : Double, y : Double, z : Double, pt : Float, wtf : Float): Unit = {
+      val campos = CameraPosition.getVec3d
+      val delta = subtract(new Vec3d(x, y, z), campos)
+      val look = delta.toLook
 
-      override def doRender(ent : Entity, x : Double, y : Double, z : Double, pt : Float, wtf : Float): Unit = ent match {
-        case eff: SmokeEffect =>
-          val campos = CameraPosition.getVec3d
-          val delta = subtract(new Vec3d(x, y, z), campos)
-          val look = delta.toLook
+      glEnable(GL_BLEND)
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+      glDisable(GL_ALPHA_TEST)
+      glDisable(GL_CULL_FACE)
+      glPushMatrix()
+      glTranslated(x, y, z)
 
-          glEnable(GL_BLEND)
-          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-          glDisable(GL_ALPHA_TEST)
-          glDisable(GL_CULL_FACE)
-          glPushMatrix()
-          glTranslated(x, y, z)
+      glRotated(-look.yaw + 180, 0, 1, 0)//TODO
+      glRotated(-look.pitch, 1, 0, 0)
+      glScaled(eff.size, eff.size, 1)
 
-          glRotated(-look.yaw + 180, 0, 1, 0)//TODO
-          glRotated(-look.pitch, 1, 0, 0)
-          glScaled(eff.size, eff.size, 1)
+      val (u, v) = ((eff.frame % 2) / 2.0, (eff.frame / 2) / 2.0)
 
-          val (u, v) = ((eff.frame % 2) / 2.0, (eff.frame / 2) / 2.0)
+      val t = Tessellator.instance
+      glColor4f(1, 1, 1, eff.alpha)
+      RenderUtils.loadTexture(texture)
 
-          val t = Tessellator.instance
-          glColor4f(1, 1, 1, eff.alpha)
-          RenderUtils.loadTexture(texture)
+      t.startDrawingQuads()
+      t.addVertexWithUV(-1, -1, 0, u,     v    )
+      t.addVertexWithUV(-1,  1, 0, u,     v+0.5)
+      t.addVertexWithUV( 1,  1, 0, u+0.5, v+0.5)
+      t.addVertexWithUV( 1, -1, 0, u+0.5, v    )
+      t.draw()
 
-          t.startDrawingQuads()
-          t.addVertexWithUV(-1, -1, 0, u,     v    )
-          t.addVertexWithUV(-1,  1, 0, u,     v+0.5)
-          t.addVertexWithUV( 1,  1, 0, u+0.5, v+0.5)
-          t.addVertexWithUV( 1, -1, 0, u+0.5, v    )
-          t.draw()
-
-          glPopMatrix()
-          glEnable(GL_CULL_FACE)
-          glEnable(GL_ALPHA_TEST)
-      }
-
-      override def getEntityTexture(entity : Entity): ResourceLocation = null
-    })
+      glPopMatrix()
+      glEnable(GL_CULL_FACE)
+      glEnable(GL_ALPHA_TEST)
   }
 
+  override def getEntityTexture(entity: SmokeEffect): ResourceLocation = null
 }
-
 
 /**
   * @author WeAthFolD
@@ -97,7 +89,7 @@ class SmokeEffect(world: World) extends LocalEntity(world) {
     if (deltaTime >= 4f) { setDead() }
   }
 
-  private[effect] def alpha: Float = 1.0f * (deltaTime / lifeModifier match {
+  private[effect] def alpha: Float = 1.0f * ((deltaTime / lifeModifier).toFloat match {
     case dt if dt <= 0.3f => dt / 0.3f
     case dt if dt <= 1.5f => 1.0f
     case dt if dt <= 2 => 1 - (dt - 1.5f) / 0.5f

@@ -4,15 +4,16 @@ import cn.academy.Resources
 import cn.academy.entity.LocalEntity
 import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.render.Mesh
-import cn.lambdalib2.util.RandUtils
+import cn.lambdalib2.render.legacy.{LegacyMesh, LegacyMeshUtils, SimpleMaterial}
+import cn.lambdalib2.util.{RandUtils, RenderUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.entity.Render
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.fml.client.registry.RenderingRegistry
+import net.minecraftforge.fml.client.registry.{IRenderFactory, RenderingRegistry}
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 @SideOnly(Side.CLIENT)
@@ -20,45 +21,50 @@ object BloodSprayEffect_ {
 
   @StateEventCallback
   def init(fMLInitializationEvent: FMLInitializationEvent) = {
-    RenderingRegistry.registerEntityRenderingHandler(classOf[BloodSprayEffect], new Render {
-      import org.lwjgl.opengl.GL11._
-
-      val tex_grnd = seq("grnd", 3)
-      val tex_wall = seq("wall", 3)
-
-      val mesh = new Mesh
-      MeshUtils.createBillboard(mesh, -.5, -.5, .5, .5)
-      val material = new SimpleMaterial(null)
-
-      private def seq(name: String, cnt: Int) = (0 until cnt)
-        .map(x => Resources.getTexture("effects/blood_spray/" + name + "/" + x))
-        .toVector
-
-      override def doRender(entity: Entity, x: Double, y: Double, z: Double, f1: Float, f2: Float) = entity match {
-        case eff : BloodSprayEffect =>
-          val list = if (eff.isWall) tex_wall else tex_grnd
-          val texture = list(eff.textureID % list.size)
-
-          material.setTexture(texture)
-
-          RenderUtils.loadTexture(texture)
-          glDisable(GL_CULL_FACE)
-          glPushMatrix()
-
-          glTranslated(x, y, z)
-          glRotatef(-eff.rotationYaw,   0, 1, 0)
-          glRotatef(-eff.rotationPitch, 1, 0, 0)
-          glTranslated(eff.planeOffset._1, eff.planeOffset._2, 0)
-          glScaled(eff.size, eff.size, eff.size)
-          glRotated(eff.rotation,       0, 0, 1)
-
-          mesh.draw(material)
-
-          glPopMatrix()
-          glEnable(GL_CULL_FACE)
-      }
-      override def getEntityTexture(entity: Entity): ResourceLocation = null
+    RenderingRegistry.registerEntityRenderingHandler(classOf[BloodSprayEffect], new IRenderFactory[BloodSprayEffect] {
+      override def createRenderFor(manager: RenderManager) = new SprayRenderer(manager)
     })
+  }
+
+  class SprayRenderer(manager: RenderManager) extends Render[BloodSprayEffect](manager) {
+    import org.lwjgl.opengl.GL11._
+
+    val tex_grnd = seq("grnd", 3)
+    val tex_wall = seq("wall", 3)
+
+    val mesh = new LegacyMesh
+    LegacyMeshUtils.createBillboard(mesh, -.5, -.5, .5, .5)
+    val material = new SimpleMaterial(null)
+
+    private def seq(name: String, cnt: Int) = (0 until cnt)
+      .map(x => Resources.getTexture("effects/blood_spray/" + name + "/" + x))
+      .toVector
+
+    override def doRender(entity: BloodSprayEffect, x: Double, y: Double, z: Double, f1: Float, f2: Float) = entity match {
+      case eff : BloodSprayEffect =>
+        val list = if (eff.isWall) tex_wall else tex_grnd
+        val texture = list(eff.textureID % list.size)
+
+        material.setTexture(texture)
+
+        RenderUtils.loadTexture(texture)
+        glDisable(GL_CULL_FACE)
+        glPushMatrix()
+
+        glTranslated(x, y, z)
+        glRotatef(-eff.rotationYaw,   0, 1, 0)
+        glRotatef(-eff.rotationPitch, 1, 0, 0)
+        glTranslated(eff.planeOffset._1, eff.planeOffset._2, 0)
+        glScaled(eff.size, eff.size, eff.size)
+        glRotated(eff.rotation,       0, 0, 1)
+
+        mesh.draw(material)
+
+        glPopMatrix()
+        glEnable(GL_CULL_FACE)
+    }
+
+    override def getEntityTexture(entity: BloodSprayEffect): ResourceLocation = null
   }
 
 }
@@ -101,7 +107,7 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
   this.setLook(sideToOrientation(dir))
 
   override def onUpdate() = {
-    if (ticksExisted > 1200 || world.getBlockState(new BlockPos(, y, z)).getBlock == Blocks.AIR) {
+    if (ticksExisted > 1200 || world.getBlockState(new BlockPos(x, y, z)).getBlock == Blocks.AIR) {
       setDead()
     }
   }

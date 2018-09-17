@@ -171,11 +171,10 @@ class LSContextC(par: LSContext) extends ClientContext(par) {
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   private def c_update() = {
     if (RandUtils.nextFloat < 0.3f) {
-      val mo = VecUtils.lookingPos(player, 1)
       val s: Double = 0.5
-      mo.x += ranged(-s, s)
-      mo.y += ranged(-s, s)
-      mo.z += ranged(-s, s)
+      val mo = VecUtils.lookingPos(player, 1).addVector(
+        ranged(-s, s), ranged(-s, s), ranged(-s, s)
+      )
       val p: Particle = MdParticleFactory.INSTANCE.next(world, new Vec3d(mo.x, mo.y, mo.z),
         new Vec3d(ranged(-.02, .02), ranged(-.01, .05), ranged(-.02, .02)))
       world.spawnEntity(p)

@@ -39,6 +39,10 @@ public class Resources {
         return new ResourceLocation("academy:" + loc);
     }
 
+    public static SoundEvent soundExternal(String loc) {
+        return new SoundEvent(new ResourceLocation(loc));
+    }
+
     public static SoundEvent sound(String loc) {
         return new SoundEvent(res(loc));
     }

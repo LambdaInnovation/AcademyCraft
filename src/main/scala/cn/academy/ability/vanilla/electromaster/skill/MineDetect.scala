@@ -7,9 +7,10 @@ import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegCli
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.electromaster.CatElectromaster
 import cn.lambdalib2.registry.StateEventCallback
-import cn.lambdalib2.registry.mc.RegEntity
+import cn.lambdalib2.registry.mc.{RegEntity, RegEntityRender}
+import cn.lambdalib2.render.legacy.{LegacyMeshUtils, SimpleMaterial}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{IBlockSelector, MathUtils, WorldUtils}
+import cn.lambdalib2.util._
 import cn.lambdalib2.util.entityx.EntityAdvanced
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
@@ -24,6 +25,7 @@ import net.minecraft.world.World
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.opengl.GL11
+import org.lwjgl.util.Color
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
@@ -114,8 +116,6 @@ class MineElem(_x: Int, _y: Int, _z: Int, _lv: Int) {
 @RegEntity
 class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced: Boolean) extends EntityAdvanced(_target.world) {
 
-  val renderer: HandlerRender = new HandlerRender()
-
   final val blockFilter: IBlockSelector = new IBlockSelector {
     override def accepts(world: World, x: Int, y: Int, z: Int, block: Block): Boolean = {
       CatElectromaster.isOreBlock(block)
@@ -169,36 +169,36 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
   override def readEntityFromNBT(p_70037_1_ : NBTTagCompound) = {}
 }
 
-class HandlerRender extends Render {
+@RegEntityRender(classOf[HandlerEntity])
+class HandlerRender(m: RenderManager) extends Render[HandlerEntity](m) {
 
   final val texture = Resources.getTexture("effects/mineview")
-  final val mesh = MeshUtils.createBoxWithUV(null, 0, 0, 0, .9, .9, .9)
+  final val mesh = LegacyMeshUtils.createBoxWithUV(null, 0, 0, 0, .9, .9, .9)
   final val material = new SimpleMaterial(texture).setIgnoreLight()
 
   final val colors = Array( //alpha will be reset each time rendering
-    new Color().setColor4i(115, 200, 227, 0), //default color
-    new Color().setColor4i(161, 181, 188, 0), //harvest level 0-3
-    new Color().setColor4i(87, 231, 248, 0),
-    new Color().setColor4i(97, 204, 94, 0),
-    new Color().setColor4i(235, 109, 84, 0)
+    new Color(115, 200, 227, 0), //default color
+    new Color(161, 181, 188, 0), //harvest level 0-3
+    new Color(87, 231, 248, 0),
+    new Color(97, 204, 94, 0),
+    new Color(235, 109, 84, 0)
   )
 
-  override def doRender(var1 : Entity, var2 : Double, var3 : Double, var4 : Double, var5 : Float, var6 : Float) = {
-    val he = var1.asInstanceOf[HandlerEntity]
-    he.aliveSims.foreach(me =>
-      drawSingle(me, calcAlpha(he.posX - me.x, he.posY - me.y, he.posZ - me.z, he.range))
+  override def doRender(entity: HandlerEntity, var2 : Double, var3 : Double, var4 : Double, var5 : Float, var6 : Float) = {
+    entity.aliveSims.foreach(me =>
+      drawSingle(me, calcAlpha(entity.posX - me.x, entity.posY - me.y, entity.posZ - me.z, entity.range))
     )
   }
 
-  private def calcAlpha(x: Double, y: Double, z: Double, range: Double): Float = {
+  private def calcAlpha(x: Double, y: Double, z: Double, range: Double): Int = {
     val jdg = 1 - MathUtils.length(x, y, z) / range * 2.2
-    0.3f + (jdg * 0.7).asInstanceOf[Float]
+    Colors.f2i(0.3f + (jdg * 0.7).asInstanceOf[Float])
   }
 
-  private def drawSingle(me: MineElem, alpha: Float) = {
-    val x = me.x - RenderManager.renderPosX
-    val y = me.y - RenderManager.renderPosY
-    val z = me.z - RenderManager.renderPosZ
+  private def drawSingle(me: MineElem, alpha: Int) = {
+    val x = me.x - renderManager.viewerPosX
+    val y = me.y - renderManager.viewerPosY
+    val z = me.z - renderManager.viewerPosZ
     GL11.glDisable(GL11.GL_DEPTH_TEST)
     GL11.glDisable(GL11.GL_LIGHTING)
     GL11.glEnable(GL11.GL_BLEND)
@@ -209,9 +209,9 @@ class HandlerRender extends Render {
       RenderUtils.loadTexture(texture)
       GL11.glTranslated(x + .05, y + .05, z + .05)
       val color = colors.apply(Math.min(colors.length - 1, me.level))
-      color.a = alpha
+      color.setAlpha(alpha)
 
-      material.color.from(color)
+      material.color.setColor(color)
 
       mesh.draw(material)
     GL11.glPopMatrix()
@@ -221,13 +221,5 @@ class HandlerRender extends Render {
     GL11.glEnable(GL11.GL_LIGHTING)
   }
 
-  override def getEntityTexture(p_110775_1_ : Entity) = null
-}
-
-@SideOnly(Side.CLIENT)
-object MDInit {
-
-  @StateEventCallback
-  def init(fMLInitializationEvent: FMLInitializationEvent) = RenderingRegistry.registerEntityRenderingHandler(classOf[HandlerEntity], new HandlerRender)
-
+  override def getEntityTexture(ent: HandlerEntity) = null
 }

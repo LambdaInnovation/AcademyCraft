@@ -5,7 +5,7 @@ import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegCli
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityTPMarking
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
-import cn.academy.achievement.ACAchievements
+import cn.academy.advancements.ACAchievements
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent

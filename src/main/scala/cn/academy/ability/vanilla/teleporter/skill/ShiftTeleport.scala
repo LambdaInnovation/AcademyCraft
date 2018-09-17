@@ -86,8 +86,11 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
     if(item.getBlock.canPlaceBlockAt(player.world, position.getBlockPos) &&
       ctx.canBreakBlock(player.world, position.getBlockPos.getX,position.getBlockPos.getY,position.getBlockPos.getZ) &&
       ctx.consume(getOverload(exp), getConsumption(exp))) {
+
+      val state = block.getStateForPlacement(world(), position.getBlockPos, position.sideHit, position.hitVec.x.toFloat, position.hitVec.y.toFloat, position.hitVec.z.toFloat,
+        stack.getItemDamage, player, EnumHand.MAIN_HAND)
       item.placeBlockAt(stack, player, player.world, position.getBlockPos, position.sideHit,
-        position.hitVec.x.toFloat, position.hitVec.y.toFloat, position.hitVec.z.toFloat, stack.getItemDamage)
+        position.hitVec.x.toFloat, position.hitVec.y.toFloat, position.hitVec.z.toFloat, state)
       if(!player.capabilities.isCreativeMode) if( {
         stack.setCount(stack.getCount-1); stack.getCount
       } <= 0) player.setHeldItem(EnumHand.MAIN_HAND, null)
@@ -134,9 +137,7 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
     val result: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     if(result != null) {
       val dir: EnumFacing = result.sideHit
-      result.hitVec.x += dir.getFrontOffsetX
-      result.hitVec.y += dir.getFrontOffsetY
-      result.hitVec.z += dir.getFrontOffsetZ
+      result.hitVec = result.hitVec.addVector(dir.getFrontOffsetX, dir.getFrontOffsetY, dir.getFrontOffsetZ)
       return result
     }
     val mo = lookingPos(player, range)

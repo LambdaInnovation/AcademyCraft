@@ -8,7 +8,7 @@ import cn.academy.ability.{AbilityContext, Skill}
 import cn.academy.ability.context.{ClientRuntime, KeyDelegate}
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
-import cn.academy.achievement.ACAchievements
+import cn.academy.advancements.ACAchievements
 import cn.academy.datapart.AbilityData
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.{CGuiScreen, Widget}
@@ -27,7 +27,7 @@ import cn.lambdalib2.util._
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.{Entity, EntityLivingBase}
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraft.util.math.MathHelper
@@ -161,7 +161,11 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
-    ACAchievements.trigger(player, "teleporter.ignore_barrier")
+    player match {
+      case p : EntityPlayerMP =>
+        ACAchievements.trigger(player.asInstanceOf, "teleporter.ignore_barrier")
+      case _ => // DO NOTHING
+    }
     TPSkillHelper.incrTPCount(player)
   }
 
@@ -186,7 +190,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
 
     }
 
-    object Colors {
+    object DefColors {
 
       val AlphaNormal = 0.1
       val AlphaHighlight = 0.4
@@ -212,7 +216,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       val ymargin = 20
       val xmargin = 20
 
-      val fontOption = new FontOption(textSize, FontAlign.RIGHT, Colors.TextNormal)
+      val fontOption = new FontOption(textSize, FontAlign.RIGHT, DefColors.TextNormal)
       val font = Resources.font()
 
       var text: List[String] = Nil
@@ -315,8 +319,8 @@ object LocationTeleport extends Skill("location_teleport", 3) {
           }))
         }
 
-        val alpha0 = blend.alpha * (if (hovering) Colors.AlphaHighlight else Colors.AlphaNormal)
-        Color.whiteBlend(alpha0).bind()//TODO need support
+        val alpha0 = blend.alpha * (if (hovering) DefColors.AlphaHighlight else DefColors.AlphaNormal)
+        Colors.bindToGL(Colors.whiteBlend(alpha0.toFloat))//TODO need support
         HudUtils.colorRect(0, 0, ret.transform.width, ret.transform.height)
 
         lastHovering = hovering
@@ -324,7 +328,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     }
 
     def wrapButton(target: Widget, n: Int, offset: Double, clickCallback: () => Any) = {
-      val color = new Color(Colors.TextNormal)
+      val color = new Color(DefColors.TextNormal)
       color.setAlpha(0)
 
       target.component[DrawTexture].color = color

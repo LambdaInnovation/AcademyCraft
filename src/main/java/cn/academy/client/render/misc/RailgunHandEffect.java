@@ -1,6 +1,10 @@
 package cn.academy.client.render.misc;
 
 import cn.academy.Resources;
+import cn.lambdalib2.render.legacy.GLSLMesh;
+import cn.lambdalib2.render.legacy.LegacyMeshUtils;
+import cn.lambdalib2.render.legacy.ShaderSimple;
+import cn.lambdalib2.renderhook.PlayerRenderHook;
 import cn.lambdalib2.util.RenderUtils;
 /*
 import cn.lambdalib2.util.renderhook.PlayerRenderHook;
@@ -18,22 +22,24 @@ import static org.lwjgl.opengl.GL11.*;
  * @author WeAthFolD
  */
 public class RailgunHandEffect extends PlayerRenderHook {
-    
-    static final int PER_FRAME = 40, COUNT = 40;
+
+    static final double PER_FRAME = 40 / 1000.0;
+    static final int COUNT = 40;
+
     ResourceLocation[] textures;
     GLSLMesh mesh;
     
     public RailgunHandEffect() {
         textures = Resources.getEffectSeq("arc_burst", COUNT);
         mesh = new GLSLMesh();
-        mesh = MeshUtils.createBillboard(mesh, -1, -1, 1, 1);
+        mesh = LegacyMeshUtils.createBillboard(mesh, -1, -1, 1, 1);
     }
 
     @Override
     public void renderHand(boolean firstPerson) {
         if(RenderUtils.isInShadowPass()) return;
         
-        long dt = getDeltaTime();
+        double dt = getElapsedTime();
         if(dt >= PER_FRAME * COUNT) {
             dispose();
             return;

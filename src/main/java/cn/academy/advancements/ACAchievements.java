@@ -1,5 +1,6 @@
 package cn.academy.advancements;
 
+import cn.academy.Resources;
 import cn.academy.ability.vanilla.VanillaCategories;
 import cn.academy.ability.vanilla.electromaster.CatElectromaster;
 import cn.academy.ability.vanilla.meltdowner.CatMeltdowner;
@@ -11,6 +12,7 @@ import cn.academy.advancements.triggers.ACLevelChangeTrigger;
 import cn.academy.advancements.triggers.ACTrigger;
 import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.advancements.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -102,18 +104,20 @@ public class ACAchievements {
      * @return true if succeeded
      * This method is server-only. --Paindar
      */
-    public static boolean trigger(EntityPlayerMP player, ResourceLocation achid) {
+    public static boolean trigger(EntityPlayer player, ResourceLocation achid) {
+        if (!(player instanceof EntityPlayerMP))
+            return false;
         ICriterionTrigger ach = CriteriaTriggers.get(achid);
         if (ach == null || ach instanceof ACTrigger == false) {
             AcademyCraft.log.warn("AC Achievement '" + achid + "' does not exist");
             return false;
         }
-        ((ACTrigger)ach).trigger(player);
+        ((ACTrigger)ach).trigger((EntityPlayerMP) player);
         return true;
     }
 
-    public static boolean trigger(EntityPlayerMP player, String achid) {
-        return trigger(player, new ResourceLocation("academu", achid));
+    public static boolean trigger(EntityPlayer player, String achid) {
+        return trigger(player, Resources.res(achid));
     }
     
 }

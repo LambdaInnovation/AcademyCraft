@@ -5,9 +5,10 @@ import cn.academy.ability.context.Context.Status
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.VecAccelContext
 import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.render.legacy.ShaderSimple
 import cn.lambdalib2.util.{MathUtils, RenderUtils, VecUtils}
-import net.minecraft.client.renderer.entity.Render
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraft.client.Minecraft
@@ -19,19 +20,6 @@ import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL20._
 
 import scala.collection.mutable.ArrayBuffer
-
-@SideOnly(Side.CLIENT)
-object ParabolaEffect_ {
-
-  @StateEventCallback
-  def __init(event: FMLInitializationEvent) = {
-    RenderingRegistry.registerEntityRenderingHandler(
-      classOf[ParabolaEffect],
-      ParabolaRenderer
-    )
-  }
-
-}
 
 @SideOnly(Side.CLIENT)
 class ParabolaEffect(val ctx: VecAccelContext) extends LocalEntity(ctx.player.getEntityWorld) {
@@ -53,19 +41,20 @@ class ParabolaEffect(val ctx: VecAccelContext) extends LocalEntity(ctx.player.ge
 }
 
 @SideOnly(Side.CLIENT)
-object ParabolaRenderer extends Render {
+@RegEntityRender(classOf[ParabolaEffect])
+class ParabolaRenderer(m: RenderManager) extends Render[ParabolaEffect](m) {
 
   val texture = Resources.getTexture("effects/glow_line")
 
   val vertices = ArrayBuffer[Vec3d]()
 
-  override def doRender(entity : Entity, x : Double, y : Double, z : Double,
+  override def doRender(entity : ParabolaEffect, x : Double, y : Double, z : Double,
                         partialTicks : Float, wtf : Float): Unit = {
     if (Minecraft.getMinecraft.gameSettings.thirdPersonView == 0) {
       entity match {
         case eff: ParabolaEffect =>
           val ctx = eff.ctx
-          val speed = ctx.initSpeed(partialTicks)
+          var speed = ctx.initSpeed(partialTicks)
           val player = ctx.player
 
           val (yawLerp, pitchLerp) = (
@@ -78,17 +67,17 @@ object ParabolaRenderer extends Render {
           lookRot = VecUtils.multiply(lookRot.normalize(), -0.08)
           lookRot = new Vec3d(lookRot.x, -0.04, lookRot.z)
 
-          val pos = VecUtils.subtract(lookRot, VecUtils.multiply(lookFix, 0.12))
+          var pos = VecUtils.subtract(lookRot, VecUtils.multiply(lookFix, 0.12))
 
           vertices.clear()
 
           val dt = 0.02
 
           (0 until 100).foreach(_ => {
-            vertices += pos.copy()
-            speed *= 0.98
-            pos += speed * dt
-            speed.y -= 1.9 * dt
+            vertices += pos
+            speed = VecUtils.multiply(speed, 0.98)
+            pos = pos.add(VecUtils.multiply(speed, dt))
+            speed = new Vec3d(speed.x, speed.y - dt * 1.9, speed.z)
           })
 
           glEnable(GL_BLEND)
@@ -131,5 +120,5 @@ object ParabolaRenderer extends Render {
     }
   }
 
-  override def getEntityTexture(entity : Entity): ResourceLocation = null
+  override def getEntityTexture(entity : ParabolaEffect): ResourceLocation = null
 }

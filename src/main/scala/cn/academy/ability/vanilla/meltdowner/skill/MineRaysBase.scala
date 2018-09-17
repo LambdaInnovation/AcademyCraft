@@ -174,7 +174,7 @@ abstract class MRContextC(par: MRContext) extends ClientContext(par) {
   private def c_start() = {
     ray = createRay
     world.spawnEntity(ray)
-    loopSound = new FollowEntitySound(player, "md.mine_loop", SoundCategory).setLoop().setVolume(0.3f)
+    loopSound = new FollowEntitySound(player, "md.mine_loop", SoundCategory.PLAYERS).setLoop().setVolume(0.3f)
     ACSounds.playClient(loopSound)
     ACSounds.playClient(player, "md.mine_" + skill.asInstanceOf[MineRaysBase].postfix + "_startup", SoundCategory.AMBIENT, 0.4f)
   }

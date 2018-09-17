@@ -12,6 +12,7 @@ import cn.academy.entity.{EntityCoinThrowing, EntityRailgunFX}
 import cn.academy.event.CoinThrowEvent
 import cn.academy.util.RangedRayDamage
 import cn.academy.datapart.{CPData, PresetData}
+import cn.lambdalib2.renderhook.DummyRenderData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.{NetworkMessage, TargetPoints}
 import cn.lambdalib2.util.{Raytrace, SideUtils, VecUtils}

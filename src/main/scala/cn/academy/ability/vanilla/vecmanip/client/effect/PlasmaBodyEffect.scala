@@ -5,10 +5,13 @@ import cn.academy.client.CameraPosition
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.PlasmaCannonContext
 import cn.lambdalib2.registry.StateEventCallback
-import cn.lambdalib2.util.GameTimer
+import cn.lambdalib2.registry.mc.RegEntityRender
+import cn.lambdalib2.render.legacy.{GLSLMesh, LegacyMeshUtils, LegacyShaderProgram}
+import cn.lambdalib2.util.{GameTimer, MathUtils}
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.{MathHelper, Vec3d}
 import net.minecraft.world.World
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -18,16 +21,6 @@ import org.lwjgl.input.Keyboard
 import org.lwjgl.util.vector.{Matrix4f, Vector3f, Vector4f}
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL20._
-
-@SideOnly(Side.CLIENT)
-object PlasmaBodyEffect_ {
-
-  @StateEventCallback
-  def init(fMLInitializationEvent: FMLInitializationEvent) = {
-    RenderingRegistry.registerEntityRenderingHandler(classOf[PlasmaBodyEffect], new PlasmaBodyRenderer)
-  }
-
-}
 
 class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends LocalEntity(world) {
   import collection.mutable
@@ -83,12 +76,12 @@ class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends Local
     val terminated = ctx.getStatus == Status.TERMINATED
     val desiredAlpha = if (terminated) 0 else 1
 
-    alpha = move(alpha, desiredAlpha, dt * (if(terminated) 1f else 0.3f))
+    alpha = moveTowards(alpha, desiredAlpha, dt.toFloat * (if(terminated) 1f else 0.3f))
 
     initTime = GameTimer.getTime
   }
 
-  private def move(from: Float, to: Float, max: Float) = {
+  private def moveTowards(from: Float, to: Float, max: Float) = {
     val delta = to - from
     from + math.min(math.abs(delta), max) * math.signum(delta)
   }
@@ -96,10 +89,11 @@ class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends Local
   override def shouldRenderInPass(pass: Int) = pass == 1
 }
 
-class PlasmaBodyRenderer extends Render {
-  val mesh = MeshUtils.createBillboard(new GLSLMesh, -.5, -.5, .5, .5)
+@RegEntityRender(classOf[PlasmaBodyEffect])
+class PlasmaBodyRenderer extends Render[PlasmaBodyEffect] {
+  val mesh = LegacyMeshUtils.createBillboard(new GLSLMesh, -.5, -.5, .5, .5)
 
-  val shader = new ShaderProgram
+  val shader = new LegacyShaderProgram
 
   shader.linkShader(new ResourceLocation("academy:shaders/plasma_body.vert"), GL_VERTEX_SHADER)
   shader.linkShader(new ResourceLocation("academy:shaders/plasma_body.frag"), GL_FRAGMENT_SHADER)
@@ -109,14 +103,13 @@ class PlasmaBodyRenderer extends Render {
   val pos_balls     = shader.getUniformLocation("balls")
   val pos_alpha     = shader.getUniformLocation("alpha")
 
-  def doRender(entity: Entity, x: Double, y: Double, z: Double, partialTicks: Float, wtf: Float) = entity match {
-    case eff: PlasmaBodyEffect =>
+  override def doRender(eff: PlasmaBodyEffect, x: Double, y: Double, z: Double, partialTicks: Float, wtf: Float) = {
       val size = 22
 
       val playerPos = new Vector3f(
-        RenderManager.renderPosX.toFloat,
-        RenderManager.renderPosY.toFloat,
-        RenderManager.renderPosZ.toFloat)
+        renderManager.viewerPosX.toFloat,
+        renderManager.viewerPosY.toFloat,
+        renderManager.viewerPosZ.toFloat)
 
       val matrix = new Matrix4f()
       acquireMatrix(GL_MODELVIEW_MATRIX, matrix)
@@ -128,7 +121,7 @@ class PlasmaBodyRenderer extends Render {
       glUseProgram(shader.getProgramID)
 
       // update ball location
-      val deltaTime = eff.deltaTime
+      val deltaTime = eff.deltaTime.toFloat
 
       eff.updateAlpha()
 
@@ -158,9 +151,9 @@ class PlasmaBodyRenderer extends Render {
       glUniform1f(pos_alpha, alpha)
       //
 
-      val campos = CameraPosition.getVec3
+      val campos = CameraPosition.getVec3d
 
-      val delta = Vec3d(x, y, z) - campos
+      val delta = new Vec3d(x, y, z).subtract(campos)
       val yp = delta.toLook
 
       glPushMatrix()
@@ -179,7 +172,7 @@ class PlasmaBodyRenderer extends Render {
       glDepthMask(true)
   }
 
-  protected def getEntityTexture(entity: Entity) = null
+  protected override def getEntityTexture(entity: PlasmaBodyEffect) = null
 
   private def acquireMatrix(matrixType: Int, dst: Matrix4f) = {
     val buffer = BufferUtils.createFloatBuffer(16)
