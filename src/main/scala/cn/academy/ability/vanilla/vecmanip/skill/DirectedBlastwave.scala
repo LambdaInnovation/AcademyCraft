@@ -6,6 +6,7 @@ import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
+import cn.lambdalib2.vis.animation.presets.CompTransformAnim
 import jdk.nashorn.internal.ir.BlockStatement
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem

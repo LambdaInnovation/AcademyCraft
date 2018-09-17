@@ -27,7 +27,7 @@ import cn.lambdalib2.util._
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.{Entity, EntityLivingBase}
-import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraft.util.math.MathHelper
@@ -161,11 +161,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
-    player match {
-      case p : EntityPlayerMP =>
-        ACAchievements.trigger(player.asInstanceOf, "teleporter.ignore_barrier")
-      case _ => // DO NOTHING
-    }
+    ACAchievements.trigger(player.asInstanceOf, "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)
   }
 

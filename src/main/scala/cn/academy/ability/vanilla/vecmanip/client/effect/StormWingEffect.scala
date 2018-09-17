@@ -4,8 +4,10 @@ import cn.academy.ability.context.Context.Status
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.StormWingContext
 import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.registry.mc.RegEntityRender
+import cn.lambdalib2.vis.CompTransform
 import net.minecraft.client.entity.AbstractClientPlayer
-import net.minecraft.client.renderer.entity.Render
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.client.registry.RenderingRegistry
@@ -13,43 +15,34 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11._
 
-@SideOnly(Side.CLIENT)
-object StormWingEffect_ {
+@RegEntityRender(classOf[StormWingEffect])
+class StormWingEffectRender(m: RenderManager) extends Render[StormWingEffect](m) {
+  override def doRender(eff: StormWingEffect, x: Double, y: Double, z: Double, pt: Float, v4: Float) = {
+    glDisable(GL_ALPHA_TEST)
+    glPushMatrix()
 
-  @StateEventCallback
-  def init(fMLInitializationEvent: FMLInitializationEvent) = {
-    RenderingRegistry.registerEntityRenderingHandler(classOf[StormWingEffect], new Render {
+    glTranslated(x, y, z)
 
-      override def doRender(entity: Entity, x: Double, y: Double, z: Double, pt: Float, v4: Float) = entity match {
-        case eff: StormWingEffect =>
-          glDisable(GL_ALPHA_TEST)
-          glPushMatrix()
+    glRotated(-eff.rotationYaw, 0, 1, 0)
+    glRotated(eff.rotationPitch*0.2, 1, 0, 0)
+    glRotated(-70, 1, 0, 0)
 
-          glTranslated(x, y, z)
+    glTranslated(0, 0.2, -0.5)
 
-          glRotated(-eff.rotationYaw, 0, 1, 0)
-          glRotated(eff.rotationPitch*0.2, 1, 0, 0)
-          glRotated(-70, 1, 0, 0)
+    eff.tornadoList.foreach{ case eff.SubEffect(torn, trans) => {
+      glPushMatrix()
 
-          glTranslated(0, 0.2, -0.5)
+      trans.doTransform()
+      TornadoRenderer.doRender(torn)
 
-          eff.tornadoList.foreach{ case eff.SubEffect(torn, trans) => {
-            glPushMatrix()
+      glPopMatrix()
+    }}
 
-            trans.doTransform()
-            TornadoRenderer.doRender(torn)
-
-            glPopMatrix()
-          }}
-
-          glPopMatrix()
-          glEnable(GL_ALPHA_TEST)
-      }
-
-      override def getEntityTexture(entity: Entity): ResourceLocation = null
-    })
+    glPopMatrix()
+    glEnable(GL_ALPHA_TEST)
   }
 
+  override def getEntityTexture(entity: StormWingEffect): ResourceLocation = null
 }
 
 class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.world) {
@@ -102,8 +95,7 @@ class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.
   }
 
   private def updatePosition() = {
-    val pos = player.position
-    setPosition(pos.x, pos.y + 1.6, pos.z)
+    setPosition(player.posX, player.posY + 1.6, player.posZ)
   }
 
   override def shouldRenderInPass(pass: Int) = pass == 1

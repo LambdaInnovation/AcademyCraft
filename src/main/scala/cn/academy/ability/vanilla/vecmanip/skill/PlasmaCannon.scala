@@ -7,11 +7,12 @@ import cn.academy.ability.context._
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
+import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, Raytrace, SideUtils, WorldUtils}
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.entity.Render
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.RayTraceResult
@@ -19,15 +20,6 @@ import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraft.world.Explosion
 
 object PlasmaCannon extends Skill("plasma_cannon", 5) {
-
-  if (SideUtils.isClient) {
-    register()
-  }
-
-  @SideOnly(Side.CLIENT)
-  private def register() = {
-    RenderingRegistry.registerEntityRenderingHandler(classOf[Tornado], TornadoEntityRenderer)
-  }
 
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new PlasmaCannonContext(p))
@@ -288,19 +280,19 @@ class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self
 }
 
 @SideOnly(Side.CLIENT)
-private object TornadoEntityRenderer extends Render {
+@RegEntityRender(classOf[Tornado])
+private class TornadoEntityRenderer(m: RenderManager) extends Render[Tornado](m) {
   import org.lwjgl.opengl.GL11._
 
-  override def doRender(entity: Entity, x: Double, y: Double, z: Double, v3: Float, v4: Float) = entity match {
-    case eff: Tornado =>
-      glPushMatrix()
-      glTranslated(x, y, z)
+  override def doRender(eff: Tornado, x: Double, y: Double, z: Double, v3: Float, v4: Float): Unit = {
+    glPushMatrix()
+    glTranslated(x, y, z)
 
-      glDisable(GL_ALPHA_TEST)
-      TornadoRenderer.doRender(eff.theTornado)
+    glDisable(GL_ALPHA_TEST)
+    TornadoRenderer.doRender(eff.theTornado)
 
-      glPopMatrix()
+    glPopMatrix()
   }
 
-  override def getEntityTexture(entity: Entity): ResourceLocation = null
+  override def getEntityTexture(entity: Tornado): ResourceLocation = null
 }

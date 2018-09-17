@@ -3,23 +3,17 @@ package cn.academy.ability.vanilla.vecmanip.client.effect
 import cn.academy.Resources
 import cn.academy.entity.LocalEntity
 import cn.lambdalib2.registry.StateEventCallback
-import net.minecraft.client.renderer.entity.Render
+import cn.lambdalib2.registry.mc.RegEntityRender
+import cn.lambdalib2.render.legacy.{LegacyMesh, LegacyMeshUtils, SimpleMaterial}
+import cn.lambdalib2.util.{Colors, MathUtils, RandUtils}
+import cn.lambdalib2.vis.curve.CubicCurve
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.world.World
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable
-
-@SideOnly(Side.CLIENT)
-object WaveEffect {
-
-  @StateEventCallback
-  def init() = {
-    RenderingRegistry.registerEntityRenderingHandler(classOf[WaveEffect], new WaveEffectRenderer)
-  }
-
-}
 
 @SideOnly(Side.CLIENT)
 class WaveEffect(world: World, val rings: Int, val size: Double) extends LocalEntity(world) {
@@ -49,7 +43,8 @@ class WaveEffect(world: World, val rings: Int, val size: Double) extends LocalEn
 }
 
 @SideOnly(Side.CLIENT)
-class WaveEffectRenderer extends Render {
+@RegEntityRender(classOf[WaveEffect])
+class WaveEffectRenderer(m: RenderManager) extends Render[WaveEffect](m) {
   import org.lwjgl.opengl.GL11._
   import cn.lambdalib2.util.MathUtils._
 
@@ -62,9 +57,9 @@ class WaveEffectRenderer extends Render {
 
   val texture = Resources.getTexture("effects/glow_circle")
 
-  val mesh = new Mesh()
+  val mesh = new LegacyMesh()
   val material = new SimpleMaterial(texture).setIgnoreLight()
-  MeshUtils.createBillboard(mesh, -.5, -.5, 1, 1)
+  LegacyMeshUtils.createBillboard(mesh, -.5, -.5, 1, 1)
 
   val sizeCurve = new CubicCurve
   sizeCurve.addPoint(0, 0.4)
@@ -72,8 +67,7 @@ class WaveEffectRenderer extends Render {
   sizeCurve.addPoint(2.5, 1.5)
 
 
-  override def doRender(entity: Entity, x: Double, y: Double, z: Double, v3: Float, v4: Float) = entity match {
-    case effect: WaveEffect =>
+  override def doRender(effect: WaveEffect, x: Double, y: Double, z: Double, v3: Float, v4: Float) = {
       val maxAlpha = clampd(0, 1, alphaCurve.valueAt(effect.ticksExisted.toDouble / effect.life))
 
       glDisable(GL_CULL_FACE)
@@ -82,24 +76,24 @@ class WaveEffectRenderer extends Render {
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
       glPushMatrix()
       glTranslated(x, y, z)
-      glRotated(-entity.rotationYaw, 0, 1, 0)
-      glRotated(entity.rotationPitch, 1, 0, 0)
+      glRotated(-effect.rotationYaw, 0, 1, 0)
+      glRotated(effect.rotationPitch, 1, 0, 0)
 
-      val zOffset = entity.ticksExisted / 40.0
+      val zOffset = effect.ticksExisted / 40.0
 
       glTranslated(0, 0, zOffset)
 
       effect.ringList.foreach(ring => {
-        val alpha = clampd(0, 1, alphaCurve.valueAt((effect.ticksExisted - ring.timeOffset).toDouble / ring.life))
-        val realAlpha = Math.min(maxAlpha, alpha)
+        val alpha = clampd(0, 1, alphaCurve.valueAt((effect.ticksExisted - ring.timeOffset).toDouble / ring.life)).toFloat
+        val realAlpha = Math.min(maxAlpha, alpha).toFloat
 
         if (realAlpha > 0) {
           glPushMatrix()
           glTranslated(0, 0, ring.offset)
 
-          val sizeScale = sizeCurve.valueAt(MathUtils.clampd(0, 1.62, entity.ticksExisted / 20.0))
+          val sizeScale = sizeCurve.valueAt(MathUtils.clampd(0, 1.62, effect.ticksExisted / 20.0))
           glScaled(ring.size * sizeScale, ring.size * sizeScale, 1)
-          material.color.a =  realAlpha * 0.7
+          material.color.setAlpha(Colors.f2i(realAlpha * 0.7f))
           mesh.draw(material)
           glPopMatrix()
         }
@@ -110,5 +104,5 @@ class WaveEffectRenderer extends Render {
       glEnable(GL_DEPTH_TEST)
   }
 
-  override def getEntityTexture(entity: Entity) = null
+  override def getEntityTexture(entity: WaveEffect) = null
 }

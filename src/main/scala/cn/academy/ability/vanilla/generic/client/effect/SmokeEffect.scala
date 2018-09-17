@@ -4,9 +4,8 @@ import cn.academy.Resources
 import cn.academy.client.CameraPosition
 import cn.lambdalib2.render.legacy.Tessellator
 import cn.academy.entity.LocalEntity
-import cn.lambdalib2.util.RenderUtils
+import cn.lambdalib2.util.{EntityLook, GameTimer, RenderUtils}
 import cn.lambdalib2.util.VecUtils._
-import cn.lambdalib2.util.GameTimer
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
@@ -26,7 +25,7 @@ class SmokeEffectRenderer(m: RenderManager) extends Render[SmokeEffect](m) {
   override def doRender(eff: SmokeEffect, x : Double, y : Double, z : Double, pt : Float, wtf : Float): Unit = {
       val campos = CameraPosition.getVec3d
       val delta = subtract(new Vec3d(x, y, z), campos)
-      val look = delta.toLook
+      val look = new EntityLook(delta)
 
       glEnable(GL_BLEND)
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)

@@ -7,7 +7,7 @@ import cn.academy.ability.vanilla.vecmanip.skill.PlasmaCannonContext
 import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.render.legacy.{GLSLMesh, LegacyMeshUtils, LegacyShaderProgram}
-import cn.lambdalib2.util.{GameTimer, MathUtils}
+import cn.lambdalib2.util.{EntityLook, GameTimer, MathUtils}
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
@@ -90,7 +90,7 @@ class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends Local
 }
 
 @RegEntityRender(classOf[PlasmaBodyEffect])
-class PlasmaBodyRenderer extends Render[PlasmaBodyEffect] {
+class PlasmaBodyRenderer(m: RenderManager) extends Render[PlasmaBodyEffect](m) {
   val mesh = LegacyMeshUtils.createBillboard(new GLSLMesh, -.5, -.5, .5, .5)
 
   val shader = new LegacyShaderProgram
@@ -154,7 +154,7 @@ class PlasmaBodyRenderer extends Render[PlasmaBodyEffect] {
       val campos = CameraPosition.getVec3d
 
       val delta = new Vec3d(x, y, z).subtract(campos)
-      val yp = delta.toLook
+      val yp = new EntityLook(delta)
 
       glPushMatrix()
 

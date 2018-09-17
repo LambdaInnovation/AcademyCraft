@@ -183,7 +183,9 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
         val hardness = is.getBlockHardness(world, pos)
         if (block != Blocks.AIR && 0 <= hardness && hardness <= 0.3f && ctx.canBreakBlock(world, pos.getX, pos.getY, pos.getZ)) {
           world.setBlockState(pos, Blocks.AIR.getDefaultState)
-          world.playSound(pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+
+          val snd = block.getSoundType(is, world, pos, p).getBreakSound
+          world.playSound(pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, snd, SoundCategory.BLOCKS, .5f, 1f, false)
         }
       })
     }

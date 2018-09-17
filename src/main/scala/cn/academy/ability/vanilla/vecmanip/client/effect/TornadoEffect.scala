@@ -1,8 +1,11 @@
 package cn.academy.ability.vanilla.vecmanip.client.effect
 
+import java.util.Random
+
 import cn.academy.Resources
 import javax.vecmath.Vector2d
 import cn.academy.util.ImprovedNoise._
+import cn.lambdalib2.util.{GameTimer, RenderUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11._
 
@@ -18,6 +21,7 @@ object TornadoEffect_ {
 import TornadoEffect_._
 
 class TornadoEffect(val ht: Double, val sz: Double, val density: Double = 1.0, val dscale: Double = 1.0) {
+  import cn.lambdalib2.util.RandUtils._
 
   case class Ring(y: Double, width: Double, phase: Double = RNG.nextDouble() * 360, sizeScale: Double = 1.0)
 
@@ -42,7 +46,7 @@ class TornadoEffect(val ht: Double, val sz: Double, val density: Double = 1.0, v
     }
   }
 
-  def time(): Double = GameTimer.getTime / 250.0 - timeOffest
+  def time(): Double = GameTimer.getTime * 4.0 - timeOffest
   def getRings: Seq[Ring] = rings
 
 }
