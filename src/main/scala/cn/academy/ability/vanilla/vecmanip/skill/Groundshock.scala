@@ -258,14 +258,15 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
         val pos = new BlockPos(pt.x, pt.y, pt.z)
         val is = world.getBlockState(pos)
 
-        val entity = new EntityDiggingFX(
-          world,
-          pt.x + nextDouble(), pt.y + 1 + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
-          randvel(), 0.1 + nextDouble() * 0.2, randvel(),
-          is.getBlock,
-          EnumFacing.UP.ordinal())
-
-        Minecraft.getMinecraft.effectRenderer.addEffect(entity)
+        // TODO use new digging FX
+//        val entity = new EntityDiggingFX(
+//          world,
+//          pt.x + nextDouble(), pt.y + 1 + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
+//          randvel(), 0.1 + nextDouble() * 0.2, randvel(),
+//          is.getBlock,
+//          EnumFacing.UP.ordinal())
+//
+//        Minecraft.getMinecraft.effectRenderer.addEffect(entity)
       }
 
       if (nextFloat() < 0.5f) {

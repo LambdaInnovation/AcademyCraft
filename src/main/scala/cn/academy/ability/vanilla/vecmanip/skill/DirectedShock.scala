@@ -5,6 +5,7 @@ import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegCli
 import cn.academy.client.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, GameTimer, Raytrace}
+import cn.lambdalib2.vis.animation.presets.CompTransformAnim
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.SoundCategory
@@ -126,7 +127,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
 @RegClientContext(classOf[ShockContext])
 class ShockContextC(par: ShockContext) extends ClientContext(par) {
 
-  var handEffect: HandRenderer = _
+//  var handEffect: HandRenderer = _
 
   var anim: CompTransformAnim = _
 
@@ -159,19 +160,19 @@ class ShockContextC(par: ShockContext) extends ClientContext(par) {
       math.min(2.0, dt / 0.15)
     }
 
-    handEffect = new HandRenderer {
-      override def render(partialTicks: Float) = {
-        anim.perform(timeProvider())
-        HandRenderer.renderHand(partialTicks, anim.target)
-      }
-    }
+//    handEffect = new HandRenderer {
+//      override def render(partialTicks: Float) = {
+//        anim.perform(timeProvider())
+//        HandRenderer.renderHand(partialTicks, anim.target)
+//      }
+//    }
 
-    HandRenderInterrupter(player).addInterrupt(handEffect)
+//    HandRenderInterrupter(player).addInterrupt(handEffect)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
-    HandRenderInterrupter(player).stopInterrupt(handEffect)
+//    HandRenderInterrupter(player).stopInterrupt(handEffect)
   }
 
 }

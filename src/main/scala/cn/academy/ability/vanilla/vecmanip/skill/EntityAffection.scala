@@ -22,13 +22,13 @@ object EntityAffection {
     val entityData = {
       cfg.getConfigList("difficulties")
         .map(elem => (elem.getString("name"), elem.getDouble("difficulty").toFloat))
-        .flatMap { case (name, difficulty) => EntityList.getClassFromName(name).map((_, difficulty)) }
+        .map { case (name, difficulty) => (EntityList.getClassFromName(name), difficulty) }
         .toList
     }
 
     val excluded = cfg.getStringList("excluded")
 
-    (entityData, excluded.toSet.flatMap(EntityList.getClassFromName))
+    (entityData, excluded.toSet.map(EntityList.getClassFromName))
   }
 
   def getAffectInfo(entity: Entity): AffectInfo = {

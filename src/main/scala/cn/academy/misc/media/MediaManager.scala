@@ -6,7 +6,7 @@ import java.nio.file.{Files, StandardCopyOption}
 
 import cn.academy.{AcademyCraft, Resources}
 import javax.imageio.ImageIO
-import cn.academy.core.Resources
+import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.util.ResourceUtils
 import com.jcraft.jorbis.VorbisFile
 import com.typesafe.config.ConfigFactory
@@ -14,16 +14,18 @@ import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.{DynamicTexture, SimpleTexture}
-import net.minecraft.util.{ResourceLocation, StatCollector}
+import net.minecraft.client.resources.I18n
+import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.config.Property
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 private object MediaManagerInit {
   import scala.collection.JavaConversions._
 
   val missingCover = Resources.getTexture("guis/icons/icon_nomedia")
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(ev: FMLInitializationEvent) = {
     runSide match {
       case Side.CLIENT => loadClient()
       case Side.SERVER => loadServer()
@@ -133,8 +135,8 @@ private object MediaManagerInit {
   })
 
   def newInternal(id: String, url: URL): Media = new Media(false, id, url, calculateLength(url).get) {
-    override def name: String = StatCollector.translateToLocal("ac.media."+id+".name")
-    override def desc: String = StatCollector.translateToLocal("ac.media."+id+".desc")
+    override def name: String = I18n.format("ac.media."+id+".name")
+    override def desc: String = I18n.format("ac.media."+id+".desc")
   }
 
   def rootFolder: File = runSide match {

@@ -69,9 +69,9 @@ private object MediaBackendHelper {
   def sndSystem = { checkInit(); sndSystem_ }
 
   def stopVanillaSound() = {
-    val musicTicker: MusicTicker = ReflectionUtils.getFieldInstance(classOf[Minecraft],
-      Minecraft.getMinecraft, "mcMusicTicker", "field_147126_aw")
-    val playing: ISound = ReflectionUtils.getFieldInstance(classOf[MusicTicker], musicTicker, "field_147678_c")
+    val musicTicker: MusicTicker = Minecraft.getMinecraft.getMusicTicker
+    val field = ReflectionUtils.getObfField(classOf[MusicTicker], "currentMusic", "field_147678_c") // TODO check if this is the right field id
+    val playing: ISound = field.get(musicTicker).asInstanceOf[ISound]
     if (playing != null) {
       Minecraft.getMinecraft.getSoundHandler.stopSound(playing)
     }

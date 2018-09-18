@@ -1,13 +1,11 @@
 package cn.academy.tutorial.client
 
 import cn.academy.AcademyCraft
-import cn.academy.core.LocalHelper
-import cn.academy.misc.tutorial.TutorialData
 import cn.academy.tutorial.TutorialData
 import cn.academy.util.LocalHelper
 import cn.lambdalib2.input.KeyManager
+import cn.lambdalib2.util.SideUtils
 import cn.lambdalib2.util.markdown.{GLMarkdownRenderer, MarkdownParser}
-import cn.lambdalib2.util.mc.SideUtils
 
 import scala.collection.Map
 

@@ -51,10 +51,10 @@ class GLMarkdownRenderer extends MarkdownRenderer {
   protected class Context {
     var x = 0.0f
     var y = 0.0f
-    var lastSize = 0.0
+    var lastSize = 0.0f
     var lineBegin = true
 
-    def lineHead = x == 0.0
+    def lineHead = x == 0.0f
   }
 
   protected val rc: Context = new Context

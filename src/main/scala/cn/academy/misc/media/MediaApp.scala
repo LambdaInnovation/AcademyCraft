@@ -1,12 +1,14 @@
 package cn.academy.misc.media
 
 import cn.academy.terminal.{App, AppEnvironment, AppRegistry}
+import cn.lambdalib2.registry.StateEventCallback
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 
 private object MediaAppInit {
-  @RegPreInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(ev: FMLPreInitializationEvent) = {
     AppRegistry.register(MediaApp)
   }
 }

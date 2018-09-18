@@ -248,10 +248,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
         .foreach(ent => {
           def modifier = ranged(0.9, 1.2)
 
-          val delta = subtract(entityHeadPos(ent), player.getPositionVector)
-          delta.x *= modifier
-          delta.y *= modifier
-          delta.z *= modifier
+          val delta = subtract(entityHeadPos(ent), player.getPositionVector).scale(modifier)
 
           val move = multiply(delta.normalize(), ranged(0.5f, 1.0f))
           ent.motionX = move.x
@@ -331,11 +328,12 @@ class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
       val (cth, sth) = (math.cos(theta), math.sin(theta))
       val (dx, dy, dz) = (rzx * cth, r * math.cos(phi), rzx * sth)
 
-      val particle = new EntityBlockDustFX(world,
-        player.posX + dx, player.posY + dy, player.posZ + dz,
-        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.DIRT, 0) { particleGravity = 0.02f }
-      particle.multipleParticleScaleBy(0.5f)
-      Minecraft.getMinecraft.effectRenderer.addEffect(particle)
+      // TODO fix particle
+//      val particle = new EntityBlockDustFX(world,
+//        player.posX + dx, player.posY + dy, player.posZ + dz,
+//        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.DIRT, 0) { particleGravity = 0.02f }
+//      particle.multipleParticleScaleBy(0.5f)
+//      Minecraft.getMinecraft.effectRenderer.addEffect(particle)
     }
   }
 

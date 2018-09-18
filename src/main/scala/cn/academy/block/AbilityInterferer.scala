@@ -3,32 +3,30 @@ package cn.academy.block
 import java.lang
 import java.util.function.Supplier
 
-import cn.academy.Resources
-import cn.academy.ability.api.data.CPData.IInterfSource
 import cn.academy.client.render.block.RenderDynamicBlock
-import cn.academy.block.container.ContainAbilityInterferer
-import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
 import cn.academy.energy.IFConstants
 import cn.academy.support.EnergyItemHelper
 import cn.academy.block.tileentity.TileReceiverBase
 import cn.academy.datapart.CPData
-import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
-import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib2.cgui.Widget
-import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.academy.datapart.CPData.IInterfSource
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.registry.mc.RegTileEntity
 import cn.lambdalib2.s11n.nbt.NBTS11n
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, TargetPoints}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{MathUtils, VecUtils}
 import cn.lambdalib2.util.TickScheduler
-import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
+import cn.lambdalib2.util.{EntitySelectors, WorldUtils}
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.Vec3d
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 import scala.collection.JavaConversions._
 import scala.collection.SortedSet
@@ -44,8 +42,8 @@ object AbilityInterf {
   val SLOT_BATTERY = 0
 
   @SideOnly(Side.CLIENT)
-  @RegInitCallback
-  def regClient() = ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileAbilityInterferer], new RenderDynamicBlock)
+  @StateEventCallback
+  def regClient(ev: FMLInitializationEvent) = ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileAbilityInterferer], (new RenderDynamicBlock).asInstanceOf[TileEntitySpecialRenderer[TileAbilityInterferer]])
 }
 
 @RegTileEntity
@@ -54,10 +52,10 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
 
   val scheduler = new TickScheduler
 
-  lazy val sourceName = s"interferer@${getWorld.provider.dimensionId}($x,$y,$z)"
+  lazy val sourceName = s"interferer@${getWorld.provider.getDimension} $pos"
   def testBB = WorldUtils.minimumBounds(
-    new Vec3d(x + 0.5 - range_, y + 0.5 - range_, z + 0.5 - range_),
-    new Vec3d(x + 0.5 + range_, y + 0.5 + range_, z + 0.5 + range_))
+    new Vec3d(pos.getX + 0.5 - range_, pos.getY + 0.5 - range_, pos.getZ + 0.5 - range_),
+    new Vec3d(pos.getX + 0.5 + range_, pos.getY + 0.5 + range_, pos.getZ + 0.5 + range_))
 
   private var enabled_ = false
   private var placer_ : Option[String] = None
@@ -73,8 +71,8 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   def placer = placer_
 
   def setPlacer(p: EntityPlayer) = if (placer_.isEmpty) {
-    whitelist_ = whitelist + p.getCommandSenderName
-    placer_ = Some(p.getCommandSenderName)
+    whitelist_ = whitelist + p.getName
+    placer_ = Some(p.getName)
   }
 
   private def send(channel: String, args: Any*) = {
@@ -110,7 +108,7 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
         case player: EntityPlayer =>
           CPData.get(player).addInterf(sourceName, new IInterfSource {
             override def interfering(): Boolean =
-              boundingBox.isVecInside(new Vec3d(player.posX, player.posY, player.posZ)) &&
+              boundingBox.contains(new Vec3d(player.posX, player.posY, player.posZ)) &&
                 !TileAbilityInterferer.this.isInvalid &&
                 !player.capabilities.isCreativeMode &&
                 enabled
@@ -182,12 +180,12 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
     tag.setBoolean("enabled_", enabled_)
     tag.setTag("whitelist_", NBTS11n.writeBase(whitelist.toArray))
     tag.setFloat("range_", range_.toFloat)
+    tag
   }
 
-  def getAccessibleSlotsFromSide(side: Int): Array[Int] =
-      Array[Int](SLOT_BATTERY)
+  override def getSlotsForFace(side: EnumFacing): Array[Int] = Array[Int](SLOT_BATTERY)
 
-  def canInsertItem(slot: Int, item: ItemStack, side: Int): Boolean = this.isItemValidForSlot(slot, item)
+  override def canInsertItem(index: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = this.isItemValidForSlot(index, itemStackIn)
 
-  def canExtractItem(slot: Int, item: ItemStack, side: Int): Boolean = false
+  override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = false
 }

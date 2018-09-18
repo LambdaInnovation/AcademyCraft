@@ -415,7 +415,7 @@ object TechUI {
       }
 
       def blank(ht: Double) = {
-        elemY += ht
+        elemY += ht.toFloat
 
         this
       }

@@ -207,9 +207,10 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
 
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[BlastwaveContext])
+// TODO fix hand effect
 class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
 
-  var handEffect: HandRenderer = _
+//  var handEffect: HandRenderer = _
 
   var anim: CompTransformAnim = _
 
@@ -244,20 +245,20 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
       math.min(2.0, dt / 0.150)
     }
 
-    handEffect = new HandRenderer {
-      override def render(partialTicks: Float) = {
-        anim.perform(timeProvider())
-        HandRenderer.renderHand(partialTicks, anim.target)
-      }
-    }
+//    handEffect = new HandRenderer {
+//      override def render(partialTicks: Float) = {
+//        anim.perform(timeProvider())
+//        HandRenderer.renderHand(partialTicks, anim.target)
+//      }
+//    }
 
-    HandRenderInterrupter(player).addInterrupt(handEffect)
+//    HandRenderInterrupter(player).addInterrupt(handEffect)
   }
 
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
-    HandRenderInterrupter(player).stopInterrupt(handEffect)
+//    HandRenderInterrupter(player).stopInterrupt(handEffect)
   }
 
   @SideOnly(Side.CLIENT)
