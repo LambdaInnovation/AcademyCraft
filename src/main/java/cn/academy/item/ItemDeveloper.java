@@ -1,6 +1,5 @@
 package cn.academy.item;
 
-import cn.academy.client.render.item.RenderDeveloperPortable;
 import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.PortableDevData;
@@ -19,10 +18,10 @@ import net.minecraft.world.World;
  */
 public class ItemDeveloper extends ItemEnergyBase {
     
-    @SideOnly(Side.CLIENT)
-    @RegItem.Render
-    public static RenderDeveloperPortable renderer;
-    
+//    @SideOnly(Side.CLIENT)
+//    @RegItem.Render
+//    public static RenderDeveloperPortable renderer;
+//
     public static final DeveloperType type = DeveloperType.PORTABLE;
 
     public ItemDeveloper() {

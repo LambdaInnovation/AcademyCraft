@@ -3,13 +3,13 @@ package cn.academy.energy.impl;
 import cn.academy.AcademyCraft;
 import cn.academy.energy.api.block.*;
 import cn.academy.energy.impl.VBlocks.*;
-import cn.lambdalib2.util.BlockPos;
 import cn.lambdalib2.util.IBlockSelector;
 import cn.lambdalib2.util.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
@@ -98,7 +98,7 @@ public class WiWorldData extends WorldSavedData {
         
         Set<WirelessNet> set = new HashSet<>();
         for(BlockPos bp : bps) {
-            TileEntity te = bp.getTile();
+            TileEntity te = world.getTileEntity(bp);
             WirelessNet net;
             if(te instanceof IWirelessMatrix) {
                 net = getNetwork((IWirelessMatrix) te);

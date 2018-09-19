@@ -2,10 +2,19 @@ package cn.academy.util;
 
 import cn.academy.ability.AbilityContext;
 import cn.academy.event.BlockDestroyEvent;
+import cn.lambdalib2.util.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,6 +24,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static cn.lambdalib2.util.VecUtils.add;
+import static cn.lambdalib2.util.VecUtils.multiply;
+import static cn.lambdalib2.util.VecUtils.subtract;
 
 /**
  * A super boomy ranged ray damage. it starts out a ranged ray in the given position and direction,
@@ -27,7 +40,8 @@ public class RangedRayDamage {
 
     public final EntityPlayer player;
     public final World world;
-    public final Motion3D motion;
+    public EntityLook look;
+    public Vec3d pos, dir;
     public final AbilityContext ctx;
 
 
@@ -44,7 +58,10 @@ public class RangedRayDamage {
     public RangedRayDamage(AbilityContext ctx, double _range, float _energy) {
         this.ctx = ctx;
 
-        this.motion = new Motion3D(ctx.player, true).move(0.1);
+        pos = ctx.player.getPositionVector();
+        look = new EntityLook(ctx.player);
+        dir = look.toVec3();
+
         this.player = ctx.player;
         this.world = ctx.player.world;
         this.range = _range;
@@ -57,22 +74,21 @@ public class RangedRayDamage {
      * BOOM!
      */
     public void perform() {
-        motion.normalize();
         Set<int[]> processed = new HashSet<>();
         
-        float yaw = -MathUtils.PI_F * 0.5f - motion.getRotationYawRadians(), 
-                pitch = motion.getRotationPitchRadians();
+        float yaw = -MathUtils.PI_F * 0.5f - look.yaw,
+                pitch = look.pitch;
         
-        start = motion.getPosVec();
-        slope = motion.getMotionVec();
+        start = pos;
+        slope = dir;
         
         Vec3d vp0 = new Vec3d(0, 0, 1);
-        vp0.rotateAroundZ(pitch);
-        vp0.rotateAroundY(yaw);
+        vp0.rotatePitch(pitch);
+        vp0.rotateYaw(yaw);
         
         Vec3d vp1 = new Vec3d(0, 1, 0);
-        vp1.rotateAroundZ(pitch);
-        vp1.rotateAroundY(yaw);
+        vp1.rotatePitch(pitch);
+        vp1.rotateYaw(yaw);
 
         double maxDistance = Double.MAX_VALUE;
         
@@ -88,7 +104,7 @@ public class RangedRayDamage {
             AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4, v5, v6, v7);
 
             Predicate<Entity> areaSelector = target -> {
-                Vec3d dv = subtract(vec(target.posX, target.posY, target.posZ), start);
+                Vec3d dv = subtract(new Vec3d(target.posX, target.posY, target.posZ), start);
                 Vec3d proj = dv.crossProduct(slope);
                 return proj.lengthVector() < range * 1.2;
             };
@@ -101,7 +117,7 @@ public class RangedRayDamage {
 
             for(Entity e : targets) {
                 if (!attackEntity(e)) {
-                    maxDistance = e.getDistanceSqToEntity(ctx.player);
+                    maxDistance = e.getDistanceSq(ctx.player);
                     break;
                 }
             }
@@ -115,10 +131,10 @@ public class RangedRayDamage {
                     if(s * s + t * t > rr * rr)
                         continue;
                     
-                    Vec3d pos = VecUtils.add(start, 
-                        VecUtils.add(
-                            VecUtils.multiply(vp0, s),
-                            VecUtils.multiply(vp1, t)));
+                    Vec3d pos = add(start,
+                        add(
+                            multiply(vp0, s),
+                            multiply(vp1, t)));
                     
                     //int[] coords = { (int) pos.x, (int) pos.y, (int) pos.z };
                     int[] coords = { (int)Math.floor( pos.x), (int)Math.floor( pos.y), (int)Math.floor( pos.z)};
@@ -146,6 +162,7 @@ public class RangedRayDamage {
             ++incrs;
             int[] coords = plotter.next();
             int x = coords[0], y = coords[1], z = coords[2];
+            BlockPos pos = new BlockPos(x, y, z);
 
             int dx = x0 - x, dy = y0 - y, dz = z0 - z;
             int dsq = dx*dx + dy*dy + dz*dz;
@@ -153,41 +170,44 @@ public class RangedRayDamage {
 
             boolean snd = incrs < 20;
             
-            energy = destroyBlock(energy, x, y, z, snd);
+            energy = destroyBlock(energy, pos, snd);
             
             if(RandUtils.ranged(0, 1) < 0.05) {
-                ForgeDirection dir = ForgeDirection.values()[RandUtils.rangei(0, 6)];
-                energy = destroyBlock(energy, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, snd);
+                EnumFacing dir = EnumFacing.values()[RandUtils.rangei(0, 6)];
+                energy = destroyBlock(energy, pos.offset(dir), snd);
             }
         }
     }
     
-    private float destroyBlock(float energy, int x, int y, int z, boolean snd) {
-        Block block = world.getBlock(x, y, z);
-        float hardness = block.getBlockHardness(world, x, y, z);
+    private float destroyBlock(float energy, BlockPos pos, boolean snd) {
+        IBlockState blockState = world.getBlockState(pos);
+        Block block = blockState.getBlock();
+        float hardness = block.getBlockHardness(blockState, world, pos);
         if(hardness < 0)
             hardness = 233333;
-        if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player, x, y, z)) && energy >= hardness) {
-            if(block.getMaterial() != Material.air) {
-                block.dropBlockAsItemWithChance(world, x, y, z, 
-                    world.getBlockMetadata(x, y, z), dropProb, 0);
-                
+        if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player, pos)) && energy >= hardness) {
+            if(block.getMaterial(blockState) != Material.AIR) {
+                block.dropBlockAsItemWithChance(world, pos, blockState, dropProb, 0);
+
                 if(snd && RandUtils.ranged(0, 1) < 0.1) {
-                    world.playSoundEffect(x + 0.5F, y + 0.5F, 
-                            z + 0.5F, 
-                            block.stepSound.getBreakSound(), 
-                            (block.stepSound.getVolume() + 1.0F) / 2.0F, 
-                            block.stepSound.getPitch());
+                    SoundType st = block.getSoundType(blockState, world, pos, player);
+                    SoundEvent breakSnd = st.getBreakSound();
+                    world.playSound(
+                        pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
+                        breakSnd,
+                        SoundCategory.BLOCKS,
+                        (st.getVolume() + 1.0F) / 2.0F,
+                        st.getPitch(), false);
                 }
             }
-            world.setBlockToAir(x, y, z);
+            world.setBlockToAir(pos);
             return energy - hardness;
         }
         return 0;
     }
 
     protected boolean attackEntity(Entity target) {
-        Vec3d dv = subtract(vec(target.posX, target.posY, target.posZ), start);
+        Vec3d dv = subtract(new Vec3d(target.posX, target.posY, target.posZ), start);
         float dist = Math.min(maxIncrement, (float) dv.crossProduct(slope).lengthVector());
         
         float realDmg = this.startDamage * MathUtils.lerpf(1, 0.2f, dist / maxIncrement);

@@ -8,6 +8,7 @@ import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.BlockMulti.SubBlockPos;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -31,7 +32,6 @@ import java.util.List;
  * @author WeAthFolD
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileWindGenMain extends TileInventory implements IMultiTile, ITickable  {
     
     static List<SubBlockPos>[] checkAreas = new ArrayList[6];
@@ -51,12 +51,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile, ITicka
             }
         }
     }
-    
-    // State for render
-    @SideOnly(Side.CLIENT)
-    @RegTileEntity.Render
-    public static RenderWindGenMain renderer;
-    
+
     public double lastFrame = -1;
     public float lastRotation;
     
@@ -134,7 +129,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile, ITicka
     
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return slot != 0 || (stack != null && stack.getItem() == ModuleEnergy.windgenFan);
+        return slot != 0 || (stack != null && stack.getItem() == ACItems.windgen_fan);
     }
     
     @SideOnly(Side.CLIENT)

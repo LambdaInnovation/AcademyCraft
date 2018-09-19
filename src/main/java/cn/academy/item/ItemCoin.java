@@ -4,7 +4,6 @@ import cn.academy.Resources;
 import cn.academy.client.render.entity.RendererCoinThrowing;
 import cn.academy.entity.EntityCoinThrowing;
 import cn.academy.event.CoinThrowEvent;
-import cn.lambdalib2.util.mc.StackUtils;
 import net.minecraft.item.Item;
 import net.minecraft.util.*;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -26,9 +25,9 @@ import java.util.Map;
  */
 public class ItemCoin extends Item {
     
-    @RegItem.Render
-    @SideOnly(Side.CLIENT)
-    public static RendererCoinThrowing.ItemRender renderCoin;
+//    @RegItem.Render
+//    @SideOnly(Side.CLIENT)
+//    public static RendererCoinThrowing.ItemRender renderCoin;
     
     // Key: PlayerName
     private static Map<String, EntityCoinThrowing> client = new HashMap<>(), server = new HashMap<>();

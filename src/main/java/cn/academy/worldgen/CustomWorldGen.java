@@ -1,7 +1,6 @@
 package cn.academy.worldgen;
 
 import net.minecraft.world.World;
-import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;

@@ -1,8 +1,10 @@
 package cn.academy.terminal;
 
 import cn.academy.Resources;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  */
@@ -23,8 +25,9 @@ public abstract class App {
         return Resources.getTexture("guis/apps/" + name + "/" + texname);
     }
 
+    @SideOnly(Side.CLIENT)
     protected String local(String key) {
-        return StatCollector.translateToLocal("ac.app." + name + "." + key);
+        return I18n.format("ac.app." + name + "." + key);
     }
 
     public ResourceLocation getIcon() {

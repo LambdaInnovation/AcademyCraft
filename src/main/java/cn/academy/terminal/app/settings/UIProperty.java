@@ -1,6 +1,8 @@
 package cn.academy.terminal.app.settings;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class UIProperty {
 
@@ -35,9 +37,10 @@ public class UIProperty {
         id = _id;
         singlePlayer = _singlePlayer;
     }
-    
+
+    @SideOnly(Side.CLIENT)
     public String getDisplayID() {
-        return StatCollector.translateToLocal("ac.settings.prop." + id);
+        return I18n.format("ac.settings.prop." + id);
     }
     
 }

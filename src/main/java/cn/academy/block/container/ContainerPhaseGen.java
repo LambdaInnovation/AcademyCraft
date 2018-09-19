@@ -2,7 +2,6 @@ package cn.academy.block.container;
 
 import cn.academy.ACBlocks;
 import cn.academy.ACItems;
-import cn.academy.block.block.ACBlock;
 import cn.academy.worldgen.WorldGenInit;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.block.tileentity.TilePhaseGen;

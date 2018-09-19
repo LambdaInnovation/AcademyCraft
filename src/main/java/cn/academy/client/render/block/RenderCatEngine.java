@@ -1,6 +1,7 @@
 package cn.academy.client.render.block;
 
 import cn.academy.Resources;
+import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.legacy.Tessellator;
 import cn.academy.block.tileentity.TileCatEngine;
 import cn.lambdalib2.util.GameTimer;
@@ -14,6 +15,8 @@ import org.lwjgl.opengl.GL11;
  * @author WeAthFolD
  */
 public class RenderCatEngine extends TileEntitySpecialRenderer {
+    @RegTileEntityRender(TileCatEngine.class)
+    private static final RenderCatEngine instance = new RenderCatEngine();
 
     static final ResourceLocation TEXTURE = Resources.getTexture("blocks/cat_engine");
 

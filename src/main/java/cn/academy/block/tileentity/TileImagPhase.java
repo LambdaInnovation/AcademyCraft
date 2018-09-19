@@ -6,7 +6,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntity;
 
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileImagPhase extends TileEntity {
     @RegTileEntity.Render
     @SideOnly(Side.CLIENT)

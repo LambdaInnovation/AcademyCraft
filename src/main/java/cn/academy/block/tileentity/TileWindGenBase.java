@@ -4,10 +4,10 @@ import cn.academy.ACBlocks;
 import cn.academy.block.WindGeneratorConsts;
 import cn.academy.energy.IFConstants;
 import cn.academy.energy.api.IFItemManager;
-import cn.academy.client.render.block.RenderWindGenBase;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.TickScheduler;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -23,7 +23,6 @@ import net.minecraft.tileentity.TileEntity;
  * @author WeAthFolD
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     
     public static double MAX_GENERATION_SPEED = 15;
@@ -33,11 +32,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     }
 
     private static final IFItemManager itemManager = IFItemManager.instance;
-    
-    @SideOnly(Side.CLIENT)
-    @RegTileEntity.Render
-    public static RenderWindGenBase renderer;
-    
+
     // CLIENT STATES
     private TileWindGenMain mainTile;
     private boolean noObstacle;

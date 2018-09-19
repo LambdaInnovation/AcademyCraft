@@ -3,6 +3,8 @@ package cn.academy.datapart;
 import cn.academy.ability.Controllable;
 import cn.academy.event.ability.CategoryChangeEvent;
 import cn.academy.event.ability.PresetUpdateEvent;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.nbt.NBTS11n.BaseSerializer;
@@ -13,10 +15,11 @@ import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
-import cn.lambdalib2.util.mc.SideUtils;
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import cn.lambdalib2.util.SideUtils;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Preconditions;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
@@ -35,8 +38,8 @@ import java.util.stream.IntStream;
 @RegDataPart(EntityPlayer.class)
 public class PresetData extends DataPart<EntityPlayer> {
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent ev) {
         NBTS11n.addBase(Preset.class, new BaseSerializer<NBTBase, Preset>() {
             @Override
             public NBTBase write(Preset value) {
@@ -248,7 +251,7 @@ public class PresetData extends DataPart<EntityPlayer> {
         
         @Override
         public String toString() {
-            ToStringHelper helper = Objects.toStringHelper(this);
+            ToStringHelper helper = MoreObjects.toStringHelper(this);
 
             for (int i = 0; i < data.length; ++i) {
                 helper.add("#" + i, data[i]);
@@ -259,9 +262,8 @@ public class PresetData extends DataPart<EntityPlayer> {
         
     }
 
-    @Registrant
     public static enum Events {
-        @RegEventHandler(Bus.Forge)
+        @RegEventHandler()
         instance;
         
         @SubscribeEvent

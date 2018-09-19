@@ -3,7 +3,7 @@ package cn.academy.terminal.app;
 import cn.academy.ability.client.ui.SkillTreeAppUI;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
-import cn.academy.terminal.registry.AppRegistration.RegApp;
+import cn.academy.terminal.RegApp;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

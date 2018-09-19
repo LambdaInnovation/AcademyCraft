@@ -1,6 +1,7 @@
 package cn.academy.block.tileentity;
 
 import cn.academy.client.render.block.RenderCatEngine;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -13,12 +14,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileCatEngine extends TileGeneratorBase {
     
-    @SideOnly(Side.CLIENT)
-    @RegTileEntity.Render
-    public static RenderCatEngine renderer;
+//    @SideOnly(Side.CLIENT)
+//    @RegTileEntity.Render
+//    public static RenderCatEngine renderer;
 
     private final TickScheduler scheduler = new TickScheduler();
 

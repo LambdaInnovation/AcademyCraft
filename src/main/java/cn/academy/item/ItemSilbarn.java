@@ -12,8 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSilbarn extends Item {
     
-    @SideOnly(Side.CLIENT)
-    public static RenderSilbarn render;
+//    @SideOnly(Side.CLIENT)
+//    public static RenderSilbarn render;
     
     public ItemSilbarn() {
     }
@@ -32,17 +32,18 @@ public class ItemSilbarn extends Item {
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
-    @SideOnly(Side.CLIENT)
-    public static class RenderSilbarn extends RenderModelItem {
-
-        public RenderSilbarn() {
-            super(new ItemModelCustom(Resources.getModel("silbarn")), Resources.getTexture("models/silbarn"));
-            this.renderInventory = false;
-            this.setStdRotation(90, 0, 0);
-            this.setEquipRotation(0, 90, 0);
-            this.setEquipOffset(.5, 0.1, -.2);
-        }
-        
-    }
-    
+    // TODO new item render routine
+//    @SideOnly(Side.CLIENT)
+//    public static class RenderSilbarn extends RenderModelItem {
+//
+//        public RenderSilbarn() {
+//            super(new ItemModelCustom(Resources.getModel("silbarn")), Resources.getTexture("models/silbarn"));
+//            this.renderInventory = false;
+//            this.setStdRotation(90, 0, 0);
+//            this.setEquipRotation(0, 90, 0);
+//            this.setEquipOffset(.5, 0.1, -.2);
+//        }
+//
+//    }
+//
 }

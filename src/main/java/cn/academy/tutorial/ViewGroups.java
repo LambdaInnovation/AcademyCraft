@@ -6,22 +6,22 @@ import cn.academy.tutorial.ACTutorial.Tag;
 import cn.academy.tutorial.client.RecipeHandler;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.render.obj.ObjLegacyRender;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.vis.model.CompTransform;
+import cn.lambdalib2.vis.CompTransform;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import cn.lambdalib2.render.legacy.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.util.Color;
 
 import java.util.Random;
 
@@ -90,7 +90,7 @@ public final class ViewGroups {
             public Widget[] getSubViews() {
                 return new Widget[] { withDraw(() -> {
                     RenderUtils.loadTexture(icon_res);
-                    color.bind();
+                    Colors.bindToGL(color);
 
                     glDepthFunc(GL_ALWAYS);
                     glPushMatrix();
@@ -169,23 +169,24 @@ public final class ViewGroups {
             @Override
             public Widget[] getSubViews() {
                 return new Widget[] { withDraw(() -> {
-                    final Minecraft mc = Minecraft.getMinecraft();
-                    final RenderBlocks renderer = RenderBlocks.getInstance();
-                    final Tessellator tes = Tessellator.instance;
-
-                    renderer.blockAccess = Minecraft.getMinecraft().theWorld;
-
-                    mc.world.setBlock(0, 0, 0, block, metadata, 0x00);
-                    RenderUtils.loadTexture(TextureMap.locationBlocksTexture);
-                    glCullFace(GL_BACK);
-                    glTranslated(0.15, 0.1, -1);
-                    glRotated((GameTimer.getAbsTime() / 80.0) % 360.0, 0, 1, 0);
-                    glScaled(.8, .8, .8);
-                    glTranslated(-.5, -.5, -.5);
-                    tes.startDrawingQuads();
-                    renderer.renderBlockAllFaces(block, 0, 0, 0);
-                    tes.draw();
-                    glCullFace(GL_FRONT);
+                    // TODO new block render routine
+//                    final Minecraft mc = Minecraft.getMinecraft();
+//                    final RenderBlocks renderer = RenderBlocks.getInstance();
+//                    final Tessellator tes = Tessellator.instance;
+//
+//                    renderer.blockAccess = Minecraft.getMinecraft().theWorld;
+//
+//                    mc.world.setBlock(0, 0, 0, block, metadata, 0x00);
+//                    RenderUtils.loadTexture(TextureMap.locationBlocksTexture);
+//                    glCullFace(GL_BACK);
+//                    glTranslated(0.15, 0.1, -1);
+//                    glRotated((GameTimer.getAbsTime() / 80.0) % 360.0, 0, 1, 0);
+//                    glScaled(.8, .8, .8);
+//                    glTranslated(-.5, -.5, -.5);
+//                    tes.startDrawingQuads();
+//                    renderer.renderBlockAllFaces(block, 0, 0, 0);
+//                    tes.draw();
+//                    glCullFace(GL_FRONT);
                 })};
             }
 
@@ -204,13 +205,14 @@ public final class ViewGroups {
             @Override
             public Widget[] getSubViews() {
                 return new Widget[] { withDraw(() -> {
-                    glDepthFunc(GL_ALWAYS);
-                    RenderItem.renderInFrame = true;
-                    glTranslated(0.54, 0.5, 0);
-                    glScaled(-1/16.0, -1/16.0, 1);
-                    RenderUtils.loadTexture(TextureMap.locationItemsTexture);
-                    RenderUtils.renderItemInventory(stack);
-                    glDepthFunc(GL_LEQUAL);
+                    // TODO new Item render routine
+//                    glDepthFunc(GL_ALWAYS);
+//                    RenderItem.renderInFrame = true;
+//                    glTranslated(0.54, 0.5, 0);
+//                    glScaled(-1/16.0, -1/16.0, 1);
+//                    RenderUtils.loadTexture(TextureMap.locationItemsTexture);
+//                    RenderUtils.renderItemInventory(stack);
+//                    glDepthFunc(GL_LEQUAL);
                 })};
             }
 

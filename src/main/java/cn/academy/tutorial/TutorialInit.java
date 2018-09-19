@@ -1,11 +1,9 @@
 package cn.academy.tutorial;
 
-import cn.academy.ability.ModuleAbility;
+import cn.academy.ACBlocks;
+import cn.academy.ACItems;
 import cn.academy.client.gui.GuiTutorial;
 import cn.academy.Resources;
-import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
-import cn.academy.worldgen.WorldGenInit;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.item.ItemApp;
 import cn.academy.support.rf.RFSupport;
 import cn.academy.terminal.App;
@@ -13,6 +11,7 @@ import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
 import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -30,47 +29,47 @@ public class TutorialInit {
         defnTut("welcome");
 
         defnTut("ores")
-                .addCondition(itemObtained(WorldGenInit.oreConstraintMetal))
-                .addCondition(itemObtained(WorldGenInit.oreImagSil))
-                .addCondition(itemObtained(WorldGenInit.oreImagCrystal))
-                .addCondition(itemObtained(WorldGenInit.oreResoCrystal))
-                .addPreview(drawsBlock(WorldGenInit.oreConstraintMetal))
-                .addPreview(drawsBlock(WorldGenInit.oreImagSil))
-                .addPreview(drawsBlock(WorldGenInit.oreImagCrystal))
-                .addPreview(drawsBlock(WorldGenInit.oreResoCrystal))
+                .addCondition(itemObtained(ACBlocks.constraint_metal))
+                .addCondition(itemObtained(ACBlocks.imagsil_ore))
+                .addCondition(itemObtained(ACBlocks.crystal_ore))
+                .addCondition(itemObtained(ACBlocks.reso_ore))
+                .addPreview(drawsBlock(ACBlocks.constraint_metal))
+                .addPreview(drawsBlock(ACBlocks.imagsil_ore))
+                .addPreview(drawsBlock(ACBlocks.crystal_ore))
+                .addPreview(drawsBlock(ACBlocks.reso_ore))
                 .addPreview(displayIcon("items/matter_unit/phase_liquid_mat",
                         0, 0,
-                        1, Color.white()))
-                .addPreview(recipes(WorldGenInit.constPlate))
-                .addPreview(recipes(WorldGenInit.ingotImagSil))
-                .addPreview(recipes(WorldGenInit.wafer))
-                .addPreview(recipes(WorldGenInit.silPiece));
+                        1, Colors.white()))
+                .addPreview(recipes(ACItems.constraint_plate))
+                .addPreview(recipes(ACItems.imag_silicon_ingot))
+                .addPreview(recipes(ACItems.wafer))
+                .addPreview(recipes(ACItems.imag_silicon_piece));
 
         defnTut("phase_generator")
-                .addCondition(itemObtained(ModuleEnergy.phaseGen))
-                .addPreview(recipes(ModuleEnergy.phaseGen));
+                .addCondition(itemObtained(ACBlocks.phase_gen))
+                .addPreview(recipes(ACBlocks.phase_gen));
 
         defnTut("solar_generator")
-                .addCondition(itemObtained(ModuleEnergy.solarGen))
-                .addPreview(recipes(ModuleEnergy.solarGen));
+                .addCondition(itemObtained(ACBlocks.solar_gen))
+                .addPreview(recipes(ACBlocks.solar_gen));
 
         defnTut("wind_generator")
-                .addCondition(itemObtained(ModuleEnergy.windgenBase))
-                .addCondition(itemObtained(ModuleEnergy.windgenFan))
-                .addCondition(itemObtained(ModuleEnergy.windgenMain))
-                .addCondition(itemObtained(ModuleEnergy.windgenPillar))
-                .addPreview(recipes(ModuleEnergy.windgenBase))
-                .addPreview(recipes(ModuleEnergy.windgenPillar))
-                .addPreview(recipes(ModuleEnergy.windgenMain))
-                .addPreview(recipes(ModuleEnergy.windgenFan));
+                .addCondition(itemObtained(ACBlocks.windgen_base))
+                .addCondition(itemObtained(ACItems.windgen_fan))
+                .addCondition(itemObtained(ACBlocks.windgen_main))
+                .addCondition(itemObtained(ACBlocks.windgen_pillar))
+                .addPreview(recipes(ACBlocks.windgen_base))
+                .addPreview(recipes(ACBlocks.windgen_pillar))
+                .addPreview(recipes(ACBlocks.windgen_main))
+                .addPreview(recipes(ACItems.windgen_fan));
 
         defnTut("metal_former")
-                .addCondition(itemObtained(WorldGenInit.metalFormer))
-                .addPreview(recipes(WorldGenInit.metalFormer));
+                .addCondition(itemObtained(ACBlocks.metal_former))
+                .addPreview(recipes(ACBlocks.metal_former));
 
         defnTut("imag_fusor")
-                .addCondition(itemObtained(WorldGenInit.imagFusor))
-                .addPreview(recipes(WorldGenInit.imagFusor));
+                .addCondition(itemObtained(ACBlocks.imag_fusor))
+                .addPreview(recipes(ACBlocks.imag_fusor));
 
         ACTutorial tutorialTerminal = defnTut("terminal")
                 .addCondition(itemObtained(ModuleTerminal.terminalInstaller))
@@ -84,12 +83,12 @@ public class TutorialInit {
         }
 
         defnTut("ability_developer")
-                .addCondition(itemObtained(ModuleAbility.developerPortable))
-                .addCondition(itemObtained(ModuleAbility.developerNormal))
-                .addCondition(itemObtained(ModuleAbility.developerAdvanced))
-                .addPreview(recipes(ModuleAbility.developerPortable))
-                .addPreview(recipes(ModuleAbility.developerNormal))
-                .addPreview(recipes(ModuleAbility.developerAdvanced));
+                .addCondition(itemObtained(ACItems.developer_portable))
+                .addCondition(itemObtained(ACBlocks.dev_normal))
+                .addCondition(itemObtained(ACBlocks.dev_advanced))
+                .addPreview(recipes(ACItems.developer_portable))
+                .addPreview(recipes(ACBlocks.dev_normal))
+                .addPreview(recipes(ACBlocks.dev_advanced));
 
         defnTut("ability_basis");
 

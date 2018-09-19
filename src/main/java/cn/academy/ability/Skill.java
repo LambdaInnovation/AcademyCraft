@@ -2,6 +2,7 @@ package cn.academy.ability;
 
 import cn.academy.ability.context.*;
 import cn.academy.ability.context.Context.Status;
+import cn.academy.advancements.ACAchievements;
 import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.condition.DevConditionDep;
@@ -10,7 +11,6 @@ import cn.academy.ability.develop.condition.DevConditionLevel;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.Resources;
 import cn.academy.ACConfig;
-import cn.academy.achievement.ACAchievements;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.typesafe.config.Config;

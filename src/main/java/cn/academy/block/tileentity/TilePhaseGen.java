@@ -11,6 +11,7 @@ import cn.academy.worldgen.WorldGenInit;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.academy.client.render.block.RenderPhaseGen;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -25,7 +26,6 @@ import net.minecraftforge.fluids.*;
  * @author WeAthFolD
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     
     // 废话~~~
@@ -33,11 +33,12 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
         SLOT_LIQUID_IN = ContainerPhaseGen.SLOT_LIQUID_IN,
         SLOT_LIQUID_OUT = ContainerPhaseGen.SLOT_LIQUID_OUT,
         SLOT_OUTPUT = ContainerPhaseGen.SLOT_OUTPUT;
-    
-    @RegTileEntity.Render
-    @SideOnly(Side.CLIENT)
-    public static RenderPhaseGen renderer;
-    
+
+    // TODO
+//    @RegTileEntity.Render
+//    @SideOnly(Side.CLIENT)
+//    public static RenderPhaseGen renderer;
+//
     static final int CONSUME_PER_TICK = 100;
     static final double GEN_PER_MB = 0.5;
     

@@ -16,6 +16,7 @@ import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.Transform.WidthAlign;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.render.legacy.LegacyShaderProgram;
 import cn.lambdalib2.util.*;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontAlign;
@@ -588,12 +589,12 @@ public class CPBar extends Widget {
         }
     }
     
-    private static class ShaderOverloaded extends ShaderProgram {
+    private static class ShaderOverloaded extends LegacyShaderProgram {
         
         final int locTexOffset;
         
         private ShaderOverloaded() {
-            this.linkShader(new ResourceLocation("lambdalib:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
+            this.linkShader(new ResourceLocation("lambdalib2:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
             this.linkShader(new ResourceLocation("academy:shaders/cpbar_overload.frag"), GL20.GL_FRAGMENT_SHADER);
             this.compile();
             
@@ -611,10 +612,10 @@ public class CPBar extends Widget {
         
     }
     
-    private static class ShaderCPBar extends ShaderProgram {
+    private static class ShaderCPBar extends LegacyShaderProgram {
         
         private ShaderCPBar() {
-            this.linkShader(new ResourceLocation("lambdalib:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
+            this.linkShader(new ResourceLocation("lambdalib2:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
             this.linkShader(new ResourceLocation("academy:shaders/cpbar_cp.frag"), GL20.GL_FRAGMENT_SHADER);
             this.compile();
             

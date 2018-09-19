@@ -19,18 +19,17 @@ import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.GameTimer;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -111,7 +110,7 @@ public enum RecipeHandler {
             listen(FrameEvent.class, (w, e) ->
             {
                 // Renders recipe type hint
-                String str = StatCollector.translateToLocal("ac.gui.crafttype." + description);
+                String str = I18n.format("ac.gui.crafttype." + description);
                 Resources.font().draw(str, transform.width / 2 - 30, -28, option);
             });
             addComponent(new DrawTexture().setTex(instance.tex));
@@ -126,7 +125,7 @@ public enum RecipeHandler {
     static class StackDisplay extends Widget {
 
         private static Minecraft mc = Minecraft.getMinecraft();
-        private static RenderItem itemRender = RenderItem.getInstance();
+//        private static RenderItem itemRender = RenderItem.getInstance();
         static final double ALTERNATE_TIME = 2;
 
         private final ItemStack[] stacks;
@@ -164,7 +163,8 @@ public enum RecipeHandler {
                     glTranslatef(0, 0, 1.0F);
 
                     FontRenderer font = stack.getItem().getFontRenderer(stack);
-                    itemRender.renderItemIntoGUI(font, mc.getTextureManager(), stack, 0, 0);
+//                    itemRender.renderItemIntoGUI(font, mc.getTextureManager(), stack, 0, 0);
+                    // TODO
 
                     // WTF, you have opened up lighting???
                     glDisable(GL_LIGHTING);
@@ -223,11 +223,11 @@ public enum RecipeHandler {
     }
 
     private StackDisplay[] toDisplay(ShapedOreRecipe recipe) {
-        return remap(toDisplay(recipe.getInput()), getWidth(recipe));
+        return remap(toDisplay(recipe.getIngredients().toArray()), getWidth(recipe));
     }
 
     private StackDisplay[] toDisplay(ShapedRecipes recipe) {
-        return remap(toDisplay(recipe.recipeItems), recipe.recipeWidth);
+        return remap(toDisplay(recipe.recipeItems.toArray()), recipe.recipeWidth);
     }
 
     private StackDisplay[] toDisplay(ShapelessRecipes recipe) {
@@ -235,7 +235,7 @@ public enum RecipeHandler {
     }
 
     private StackDisplay[] toDisplay(ShapelessOreRecipe recipe) {
-        return toDisplay(recipe.getInput().toArray());
+        return toDisplay(recipe.getIngredients().toArray());
     }
 
     private boolean matchStack(ItemStack s1, ItemStack s2) {
@@ -294,7 +294,7 @@ public enum RecipeHandler {
     public Widget[] recipeOfStack(ItemStack stack) {
         List<Widget> ret = new ArrayList<>();
 
-        for(IRecipe o : (List<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
+        for(IRecipe o : CraftingManager.REGISTRY) {
             if(matchStack(o.getRecipeOutput(), stack)) {
                 StackDisplay[] arr;
                 String desc;
@@ -333,7 +333,7 @@ public enum RecipeHandler {
             ret.addAll(recipes);
         }
         { // Smelting
-            Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.smelting().getSmeltingList();
+            Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.instance().getSmeltingList();
             smeltingList.entrySet()
                     .stream()
                     .filter(entry -> {

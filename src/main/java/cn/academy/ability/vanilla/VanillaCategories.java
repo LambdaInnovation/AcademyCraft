@@ -22,7 +22,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 @ObjectHolder("academy")
-@RegACRecipeNames
 public class VanillaCategories {
 
     @RegCategory
@@ -39,13 +38,13 @@ public class VanillaCategories {
 
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate), new ItemStack(ACItems.needle, 6),
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(ACItems.reinforced_iron_plate), new ItemStack(ACItems.needle, 6),
                 Mode.INCISE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(Block.getBlockFromName("rail")), new ItemStack(ACItems.needle, 2),
                 Mode.INCISE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate, 2), new ItemStack(ACItems.coin, 3),
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(ACItems.reinforced_iron_plate, 2), new ItemStack(ACItems.coin, 3),
                 Mode.PLATE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.wafer), new ItemStack(ACItems.silbarn), Mode.ETCH);
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(ACItems.wafer), new ItemStack(ACItems.silbarn), Mode.ETCH);
     }
 
     public static void addGenericSkills(Category category) {

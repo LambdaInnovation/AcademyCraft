@@ -70,32 +70,33 @@ public class RendererCoinThrowing extends Render {
     protected ResourceLocation getEntityTexture(Entity var1) {
         return null;
     }
-    
-    public static class ItemRender implements IItemRenderer {
-        @Override
-        public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
-            return type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.EQUIPPED;
-        }
-    
-        @Override
-        public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-                ItemRendererHelper helper) {
-            return false;
-        }
-    
-        @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-            EntityLivingBase elb = (EntityLivingBase) data[1];
-            if(!(elb instanceof EntityPlayer)) return;
-            EntityPlayer player = (EntityPlayer) elb;
-            double scale = type == ItemRenderType.EQUIPPED ? 0.6 : .8;
-            GL11.glPushMatrix();
-            { //FIX: Added matrix state for transform.
-                GL11.glScaled(scale, scale, scale);
-                RenderUtils.drawEquippedItem(0.04, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
-            }
-            GL11.glPopMatrix();
-        }
-    }
+
+    //TODO
+//    public static class ItemRender implements IItemRenderer {
+//        @Override
+//        public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
+//            return type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.EQUIPPED;
+//        }
+//
+//        @Override
+//        public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
+//                ItemRendererHelper helper) {
+//            return false;
+//        }
+//
+//        @Override
+//        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+//            EntityLivingBase elb = (EntityLivingBase) data[1];
+//            if(!(elb instanceof EntityPlayer)) return;
+//            EntityPlayer player = (EntityPlayer) elb;
+//            double scale = type == ItemRenderType.EQUIPPED ? 0.6 : .8;
+//            GL11.glPushMatrix();
+//            { //FIX: Added matrix state for transform.
+//                GL11.glScaled(scale, scale, scale);
+//                RenderUtils.drawEquippedItem(0.04, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
+//            }
+//            GL11.glPopMatrix();
+//        }
+//    }
 
 }

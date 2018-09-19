@@ -4,6 +4,7 @@ import cn.academy.event.ability.*;
 import cn.academy.event.ability.CalcEvent.CPRecoverSpeed;
 import cn.academy.event.ability.CalcEvent.OverloadRecoverSpeed;
 import cn.academy.ACConfig;
+import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage;
@@ -527,9 +528,8 @@ public class CPData extends DataPart<EntityPlayer> {
                 new AbilityDeactivateEvent(getEntity()));
     }
 
-    @Registrant
     public enum Events {
-        @RegEventHandler(Bus.Forge)
+        @RegEventHandler()
         instance;
 
         @SubscribeEvent

@@ -7,6 +7,7 @@ import cn.academy.crafting.MetalFormerRecipes;
 import cn.academy.crafting.MetalFormerRecipes.RecipeObject;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -40,16 +41,15 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack item, int side) {
-        return this.isItemValidForSlot(slot, item);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack item, int side) {
-        return side == 0;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return direction.getIndex() == 0;
     }
 
-    @Registrant
     @NetworkS11nType
     public enum Mode { 
         PLATE, INCISE, ETCH, REFINE; 

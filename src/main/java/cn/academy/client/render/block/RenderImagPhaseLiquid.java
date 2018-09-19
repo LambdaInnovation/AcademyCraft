@@ -10,9 +10,9 @@ import cn.lambdalib2.render.legacy.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.RenderBlockFluid;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -24,7 +24,7 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
 
     private Tessellator t;
 
-    private RenderBlockFluid rbf = RenderBlockFluid.instance;
+//    private RenderBlockFluid rbf = RenderBlockFluid.instance;
     
     public RenderImagPhaseLiquid() {
         t = Tessellator.instance;
@@ -32,14 +32,15 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x,
-            double y, double z, float w) {
+    public void render(TileEntity te, double x,
+            double y, double z, float w, int destroyStage, float alpha_) {
         
         if(!(te.getBlockType() instanceof BlockFluidClassic))
             return;
         
         BlockFluidClassic liq = (BlockFluidClassic) te.getBlockType();
-        double distSq = Minecraft.getMinecraft().thePlayer.getDistanceSq(te.x + .5, te.y + .5, te.z + .5);
+        BlockPos p = te.getPos();
+        double distSq = Minecraft.getMinecraft().player.getDistanceSq(p.getX() + .5, p.getY() + .5, p.getZ() + .5);
         double alpha = 1 / (1 + 0.2 * Math.pow(distSq, 0.5));
         
         if(alpha < 1E-1)
@@ -59,9 +60,11 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
         
         RenderHelper.disableStandardItemLighting();
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.defaultTexUnit, 240f, 240f);
-        double ht = 1.2 * Math.sqrt(rbf.getFluidHeightForRender(te.getWorld(), 
-                te.x, te.y, te.z,
-                (BlockFluidBase) te.getBlockType()));
+        double ht = 0;
+        // TODO
+//        double ht = 1.2 * Math.sqrt(rbf.getFluidHeightForRender(te.getWorld(),
+//                te.x, te.y, te.z,
+//                (BlockFluidBase) te.getBlockType()));
         
         
         GL11.glEnable(GL11.GL_BLEND);
@@ -80,9 +83,9 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
     }
     
     private void drawLayer(int layer, double height, double vx, double vz, double density) {
-        long time = GameTimer.getTime();
-        double du = (time * 0.001 * vx) % 1;
-        double dv = (time * 0.001 * vz) % 1;
+        double time = GameTimer.getTime();
+        double du = (time * vx) % 1;
+        double dv = (time * vz) % 1;
         
         RenderUtils.loadTexture(layers[layer]);
         t.startDrawingQuads();

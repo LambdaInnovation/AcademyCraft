@@ -6,6 +6,7 @@ import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.block.block.BlockNode.NodeType;
 import cn.academy.energy.impl.WirelessNet;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -22,16 +23,16 @@ import net.minecraft.nbt.NBTTagCompound;
  *
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileNode extends TileInventory implements IWirelessNode, IInventory, ITickable  {
     
     static IFItemManager itemManager = IFItemManager.instance;
 
     static final String MSG_SYNC = "sync";
-    
-    @SideOnly(Side.CLIENT)
-    @RegTileEntity.Render
-    public static RenderDynamicBlock renderer;
+
+    // TODO
+//    @SideOnly(Side.CLIENT)
+//    @RegTileEntity.Render
+//    public static RenderDynamicBlock renderer;
 
     protected double energy;
     

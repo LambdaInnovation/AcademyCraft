@@ -1,7 +1,7 @@
 package cn.academy.tutorial;
 
+import cn.academy.client.gui.GuiTutorial.ViewRenderEvent;
 import cn.academy.tutorial.ACTutorial.Tag;
-import cn.academy.event.ViewRenderEvent;
 import cn.lambdalib2.cgui.Widget;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

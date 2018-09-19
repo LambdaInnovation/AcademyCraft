@@ -2,8 +2,7 @@ package cn.academy.item;
 
 import cn.academy.Resources;
 import cn.academy.event.MatterUnitHarvestEvent;
-import cn.academy.client.render.item.RendererMatterUnit;
-import cn.lambdalib2.util.mc.PlayerUtils;
+import cn.lambdalib2.util.PlayerUtils;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -15,11 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +25,9 @@ import java.util.List;
  */
 public class ItemMatterUnit extends Item {
     
-    @RegItem.Render
-    @SideOnly(Side.CLIENT)
-    public static RendererMatterUnit renderer;
+//    @RegItem.Render
+//    @SideOnly(Side.CLIENT)
+//    public static RendererMatterUnit renderer;
     
     public static class MatterMaterial {
         
