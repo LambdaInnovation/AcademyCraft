@@ -1,7 +1,6 @@
 package cn.academy.item;
 
 import cn.academy.Resources;
-import cn.academy.client.render.item.RenderItemAchievement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
@@ -15,9 +14,9 @@ import java.util.ArrayList;
  */
 public final class ItemAchievement extends Item {
 
-    @RegItem.Render
-    @SideOnly(Side.CLIENT)
-    public static RenderItemAchievement render;
+//    @RegItem.Render
+//    @SideOnly(Side.CLIENT)
+//    public static RenderItemAchievement render;
     
     private static ItemAchievement ITEM = null;
     

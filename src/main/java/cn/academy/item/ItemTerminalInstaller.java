@@ -2,7 +2,6 @@ package cn.academy.item;
 
 import cn.academy.terminal.TerminalData;
 import cn.academy.client.auxgui.TerminalInstallEffect;
-import cn.academy.client.render.item.TerminalInstallerRenderer;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
@@ -16,7 +15,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
 /**
@@ -24,10 +22,6 @@ import net.minecraft.world.World;
  */
 @NetworkS11nType
 public class ItemTerminalInstaller extends Item  {
-    
-    @SideOnly(Side.CLIENT)
-    @RegItem.Render
-    public static TerminalInstallerRenderer renderer;
 
     public ItemTerminalInstaller() {
         this.bFull3D = true;

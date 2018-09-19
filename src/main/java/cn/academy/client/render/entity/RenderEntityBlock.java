@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import cn.lambdalib2.render.legacy.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -24,8 +25,12 @@ import javax.annotation.Nullable;
 @RegEntityRender(EntityBlock.class)
 public class RenderEntityBlock extends Render<EntityBlock> {
 
-    public static RenderBlocks renderBlocks = RenderBlocks.getInstance();
-    
+//    public static RenderBlocks renderBlocks = RenderBlocks.getInstance();
+
+    protected RenderEntityBlock(RenderManager renderManager) {
+        super(renderManager);
+    }
+
     @Override
     public void doRender(EntityBlock e, double x, double y,
             double z, float pt, float b) {

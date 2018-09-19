@@ -21,7 +21,6 @@ import cn.lambdalib2.util.*;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
-import cn.lambdalib2.util.shader.ShaderProgram;
 //import cn.lambdalib2.util.Color;
 import cn.lambdalib2.vis.curve.CubicCurve;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

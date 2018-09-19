@@ -9,7 +9,6 @@ import cn.academy.support.rf.RFSupport;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
-import cn.academy.terminal.ModuleTerminal;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.RandUtils;
@@ -72,8 +71,8 @@ public class TutorialInit {
                 .addPreview(recipes(ACBlocks.imag_fusor));
 
         ACTutorial tutorialTerminal = defnTut("terminal")
-                .addCondition(itemObtained(ModuleTerminal.terminalInstaller))
-                .addPreview(recipes(ModuleTerminal.terminalInstaller));
+                .addCondition(itemObtained(ACItems.terminal_installer))
+                .addPreview(recipes(ACItems.terminal_installer));
 
         for(App app : AppRegistry.enumeration()) {
             if(!app.isPreInstalled()) {

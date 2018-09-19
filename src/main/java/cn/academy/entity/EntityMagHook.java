@@ -1,5 +1,6 @@
 package cn.academy.entity;
 
+import cn.academy.ACItems;
 import cn.academy.ability.vanilla.VanillaCategories;
 import cn.academy.client.render.entity.RendererMagHook;
 import cn.lambdalib2.registry.mc.RegEntity;
@@ -157,7 +158,7 @@ public class EntityMagHook extends EntityAdvanced
     }
     
     private void dropAsItem() {
-        getEntityWorld().spawnEntity(new EntityItem(getEntityWorld(), posX, posY, posZ, new ItemStack(VanillaCategories.magHook)));
+        getEntityWorld().spawnEntity(new EntityItem(getEntityWorld(), posX, posY, posZ, new ItemStack(ACItems.mag_hook)));
         setDead();
     }
     

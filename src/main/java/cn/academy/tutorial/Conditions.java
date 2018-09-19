@@ -1,8 +1,10 @@
 package cn.academy.tutorial;
 
+import cn.lambdalib2.registry.StateEventCallback;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
@@ -119,8 +121,8 @@ public class Conditions {
 
     }
 
-    @RegInitCallback
-    private static void _init() {
+    @StateEventCallback
+    private static void _init(FMLInitializationEvent ev) {
         Conditions instance = new Conditions();
         MinecraftForge.EVENT_BUS.register(instance);
         FMLCommonHandler.instance().bus().register(instance);
@@ -138,7 +140,7 @@ public class Conditions {
 
     @SubscribeEvent
     public void onItemPickup(ItemPickupEvent evt) {
-        trigger(pickupConds, evt.pickedUp.getEntityItem(), evt.player);
+        trigger(pickupConds, evt.pickedUp.getItem(), evt.player);
     }
 
     private void trigger(Multimap<Item, ItemInfo> map, ItemStack stack, EntityPlayer player) {

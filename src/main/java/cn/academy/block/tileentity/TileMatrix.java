@@ -8,6 +8,7 @@ import cn.academy.client.render.block.RenderMatrix;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import net.minecraft.util.ITickable;
@@ -23,12 +24,11 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author WeAthFolD
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile, ITickable {
     
-    @RegTileEntity.Render
-    @SideOnly(Side.CLIENT)
-    public static RenderMatrix renderer;
+//    @RegTileEntity.Render
+//    @SideOnly(Side.CLIENT)
+//    public static RenderMatrix renderer;
     
     // Client-only for display
     public int plateCount;

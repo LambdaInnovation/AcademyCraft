@@ -7,13 +7,13 @@ import cn.lambdalib2.cgui.component.Component;
 import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.cgui.event.*;
-import cn.lambdalib2.util.Color;
 import cn.lambdalib2.input.KeyManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.Color;
 
 public class PropertyElements {
     
@@ -76,9 +76,9 @@ public class PropertyElements {
     
     private static class EditKey extends Component {
         
-        static final Color 
-            CRL_NORMAL = new Color().setColor4i(200, 200, 200, 200),
-            CRL_EDIT = new Color().setColor4i(251, 133, 37, 200);
+        static final Color
+            CRL_NORMAL = new Color(200, 200, 200, 200),
+            CRL_EDIT = new Color(251, 133, 37, 200);
         
         IGuiEventHandler<MouseClickEvent> gMouseHandler;
         
@@ -124,7 +124,7 @@ public class PropertyElements {
             textBox.setContent("PRESS");
             textBox.option.color = CRL_EDIT;
             
-            widget.getGui().eventBus.listen(MouseClickEvent.class, 
+            widget.getGui().listen(MouseClickEvent.class,
             gMouseHandler = (w, event) -> {
                 endEditing(event.button - 100);
             });
@@ -142,7 +142,7 @@ public class PropertyElements {
             }
             
             updateKeyName();
-            widget.getGui().eventBus.unlisten(MouseClickEvent.class, gMouseHandler);
+            widget.getGui().unlisten(MouseClickEvent.class, gMouseHandler);
             MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(prop));
         }
         

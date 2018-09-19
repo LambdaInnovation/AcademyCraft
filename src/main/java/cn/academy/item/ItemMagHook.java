@@ -20,8 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemMagHook extends Item {
     
-    @SideOnly(Side.CLIENT)
-    public static HookRender render;
+//    @SideOnly(Side.CLIENT)
+//    public static HookRender render;
 
     public ItemMagHook() {
         setCreativeTab(AcademyCraft.cct);
@@ -46,25 +46,25 @@ public class ItemMagHook extends Item {
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
     
-    @SideOnly(Side.CLIENT)
-    public static class HookRender extends RenderModelItem {
-        public HookRender() {
-            super(new ItemModelCustom(Resources.getModel("maghook")), 
-                Resources.getTexture("models/maghook"));
-            renderInventory = false;
-            this.setScale(0.15d);
-            this.setStdRotation(0, -90, 90);
-            this.setOffset(0, 0.0, -3);
-            this.setEquipOffset(1, 0, 0);
-        }
-        
-        @Override
-        protected void renderAtStdPosition(float i) {
-            this.setOffset(0, 0, 1);
-            this.setEquipOffset(0.5, 0.1, 0);
-            super.renderAtStdPosition(i);
-        }
-    }
+//    @SideOnly(Side.CLIENT)
+//    public static class HookRender extends RenderModelItem {
+//        public HookRender() {
+//            super(new ItemModelCustom(Resources.getModel("maghook")),
+//                Resources.getTexture("models/maghook"));
+//            renderInventory = false;
+//            this.setScale(0.15d);
+//            this.setStdRotation(0, -90, 90);
+//            this.setOffset(0, 0.0, -3);
+//            this.setEquipOffset(1, 0, 0);
+//        }
+//
+//        @Override
+//        protected void renderAtStdPosition(float i) {
+//            this.setOffset(0, 0, 1);
+//            this.setEquipOffset(0.5, 0.1, 0);
+//            super.renderAtStdPosition(i);
+//        }
+//    }
 
 
 }

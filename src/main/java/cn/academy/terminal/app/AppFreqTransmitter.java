@@ -5,7 +5,6 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.client.auxgui.TerminalUI;
 import cn.academy.terminal.RegApp;
-import cn.lambdalib2.util.auxgui.AuxGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

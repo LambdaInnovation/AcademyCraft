@@ -9,11 +9,15 @@ import cn.academy.datapart.CPData;
 import cn.academy.util.ACCommand;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.datapart.PlayerDataTag;
+import cn.lambdalib2.util.PlayerUtils;
+import crafttweaker.api.event.PlayerUseItemTickEvent;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.List;
 
@@ -24,12 +28,15 @@ import java.util.List;
 public abstract class CommandAIMBase extends ACCommand {
 
     private static final String MSG_CLEAR_COOLDOWN = "clearcd";
+
+    private static void sendChat(ICommandSender s, String key, Object ...pars) {
+        PlayerUtils.sendChat(s, key, pars);
+    }
     
     /**
      * This is the command used by the client, doesn't specify the player and works on the user.
      * This command will display a warning before you can use it.
      */
-    @Registrant
     @RegCommand
     public static class CommandAIM extends CommandAIMBase {
         
@@ -40,8 +47,13 @@ public abstract class CommandAIMBase extends ACCommand {
         }
         
         @Override
-        public void processCommand(ICommandSender commandSender, String[] pars) {
-            EntityPlayer player = super.getCommandSenderAsPlayer(commandSender);
+        public void execute(MinecraftServer svr, ICommandSender commandSender, String[] pars) {
+            EntityPlayer player = null;
+            try {
+                player = super.getCommandSenderAsPlayer(commandSender);
+            } catch (PlayerNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
             if(!isActive(player) && player.getEntityWorld().getWorldInfo().areCommandsAllowed()) {
                 setActive(player, true);
@@ -71,7 +83,7 @@ public abstract class CommandAIMBase extends ACCommand {
                 return;
             }
             
-            matchCommands(commandSender, CommandBase.getCommandSenderAsPlayer(commandSender), pars);
+            matchCommands(commandSender, player, pars);
         }
         
         private void setActive(EntityPlayer player, boolean data) {
@@ -87,7 +99,6 @@ public abstract class CommandAIMBase extends ACCommand {
     /**
      * This is the command for the OPs and server console. You must specify the player name.
      */
-    @Registrant
     @RegCommand
     public static class CommandAIMP extends CommandAIMBase {
 
@@ -96,7 +107,7 @@ public abstract class CommandAIMBase extends ACCommand {
         }
         
         @Override
-        public void processCommand(ICommandSender ics, String[] pars) {
+        public void execute(MinecraftServer svr, ICommandSender ics, String[] pars) {
             if(pars.length == 0) {
                 sendChat(ics, getLoc("help"));
                 return;
@@ -106,13 +117,7 @@ public abstract class CommandAIMBase extends ACCommand {
             EntityPlayer player = null;
             
             //Using player parameter
-            for(Object p : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
-                EntityPlayer p2 = (EntityPlayer) p;
-                if(p2.getCommandSenderName().equals(pars[0])) {
-                    player = p2;
-                    break;
-                }
-            }
+            player = svr.getPlayerList().getPlayerByUsername(pars[0]);
             
             if(player != null) {
                 String[] newPars = new String[pars.length - 1];
@@ -155,7 +160,7 @@ public abstract class CommandAIMBase extends ACCommand {
             if(pars.length == 1) {
                 sendChat(ics, getLoc("curcat"), aData.hasCategory() ?
                         aData.getCategory().getDisplayName() :
-                        StatCollector.translateToLocal(getLoc("nonecat")));
+                        I18n.translateToLocal(getLoc("nonecat")));
                 return;
             } else if(pars.length == 2) {
                 String catName = pars[1];

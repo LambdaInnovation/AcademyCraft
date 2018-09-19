@@ -3,6 +3,7 @@ package cn.academy.ability;
 import cn.academy.AcademyCraft;
 import cn.academy.event.BlockDestroyEvent;
 import cn.lambdalib2.registry.StateEventCallback;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +50,7 @@ public class AbilityPipeline {
         int x, int y, int z)
     {
         return !MinecraftForge.EVENT_BUS.post(
-            new BlockDestroyEvent(world, player, x, y, z));
+            new BlockDestroyEvent(world, player, new BlockPos(x, y, z)));
     }
 
     public static boolean canUseMouseWheel(){
@@ -62,7 +63,7 @@ public class AbilityPipeline {
      */
     static boolean canBreakBlock(World world, int x, int y, int z) {
         return !MinecraftForge.EVENT_BUS.post(
-            new BlockDestroyEvent(world, x, y, z));
+            new BlockDestroyEvent(world, new BlockPos(x, y, z)));
     }
 
     /**
@@ -72,7 +73,7 @@ public class AbilityPipeline {
      */
     static boolean canBreakBlock(EntityPlayer player, int x, int y, int z) {
         return !MinecraftForge.EVENT_BUS.post(
-            new BlockDestroyEvent(player, x, y, z));
+            new BlockDestroyEvent(player, new BlockPos(x, y, z)));
     }
 
     // PROPERTIES

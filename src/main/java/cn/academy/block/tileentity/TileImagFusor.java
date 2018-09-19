@@ -32,16 +32,16 @@ import net.minecraftforge.fluids.*;
  * @author WeAthFolD
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileImagFusor extends TileReceiverBase implements IFluidHandler, ISidedInventory {
     
     static final double WORK_SPEED = 1.0 / 120;
     static final double CONSUME_PER_TICK = 12;
     static final int SYNC_INTV = 5;
-    
-    @RegTileEntity.Render
-    @SideOnly(Side.CLIENT)
-    public static RenderDynamicBlock renderer;
+
+    // TODO
+//    @RegTileEntity.Render
+//    @SideOnly(Side.CLIENT)
+//    public static RenderDynamicBlock renderer;
     
     static final int TANK_SIZE = 8000;
     static final int PER_UNIT = 1000;

@@ -34,7 +34,7 @@ public class AppEnvironment {
 
     @SideOnly(Side.CLIENT)
     protected EntityPlayer getPlayer() {
-        return Minecraft.getMinecraft().thePlayer;
+        return Minecraft.getMinecraft().player;
     }
 
 }

@@ -1,11 +1,13 @@
 package cn.academy.crafting;
 
 import cn.academy.block.tileentity.TileMetalFormer.Mode;
+import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public enum MetalFormerRecipes {
             return  stack != null &&
                     mode == mode2 &&
                     input.getItem() == stack.getItem() &&
-                    input.stackSize <= stack.stackSize && 
+                    input.getCount() <= stack.getCount() &&
                     input.getItemDamage() == stack.getItemDamage();
         }
     }
@@ -58,8 +60,8 @@ public enum MetalFormerRecipes {
         return objects;
     }
 
-    @RegInitCallback
-    private static void _init() {
+    @StateEventCallback
+    private static void _init(FMLInitializationEvent ev) {
         NetworkS11n.addDirect(RecipeObject.class, new NetS11nAdaptor<RecipeObject>() {
             @Override
             public void write(ByteBuf buf, RecipeObject obj) {

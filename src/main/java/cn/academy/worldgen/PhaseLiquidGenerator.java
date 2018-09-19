@@ -1,6 +1,7 @@
 package cn.academy.worldgen;
 
 import cn.lambdalib2.registry.StateEventCallback;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -34,8 +35,9 @@ public class PhaseLiquidGenerator implements IWorldGenerator {
         if(WorldGenInit.GENERATE_PHASE_LIQUID &&
                 world.provider.getDimensionType()== DimensionType.OVERWORLD) {
             if (random.nextDouble() < 0.3) {
-                genLakes.generate(world, random, chunkX * 16 + random.nextInt(16), 5 + random.nextInt(30),
-                        chunkZ * 16 + random.nextInt(16));
+                genLakes.generate(world, random,
+                    new BlockPos(chunkX * 16 + random.nextInt(16), 5 + random.nextInt(30), chunkZ * 16 + random.nextInt(16))
+                );
             }
         }
     }

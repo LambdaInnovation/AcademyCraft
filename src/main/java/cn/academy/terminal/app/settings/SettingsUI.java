@@ -10,6 +10,7 @@ import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.cgui.event.DragEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
 import cn.lambdalib2.registry.StateEventCallback;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -104,7 +105,7 @@ public class SettingsUI extends CGuiScreen {
     }
 
     private String local(String id) {
-        return StatCollector.translateToLocal("ac.settings." + id);
+        return I18n.format("ac.settings." + id);
     }
 
 }

@@ -1,7 +1,9 @@
 package cn.academy.client.sound;
 
+import cn.academy.Resources;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 /**
  * @author WeAthFolD
@@ -10,8 +12,8 @@ public class PositionedSound extends MovingSound {
     
     public double x, y, z;
 
-    public PositionedSound(double _x, double _y, double _z, String name) {
-        super(new ResourceLocation("academy:" + name));
+    public PositionedSound(double _x, double _y, double _z, String name, SoundCategory category) {
+        super(Resources.sound(name), category);
         x = _x;
         y = _y;
         z = _z;

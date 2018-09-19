@@ -1,7 +1,5 @@
 package cn.academy.block.tileentity;
 
-import cn.academy.client.render.block.RenderDeveloperAdvanced;
-import cn.academy.client.render.block.RenderDeveloperNormal;
 import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
@@ -9,6 +7,7 @@ import cn.academy.block.block.BlockDeveloper;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -34,38 +33,32 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
         MSG_UNUSE = "unuse",
         MSG_SYNC  = "sync";
 
-    @Registrant
     @RegTileEntity
-    @RegTileEntity.HasRender
     public static class Normal extends TileDeveloper {
         
         public Normal() {
             super(DeveloperType.NORMAL);
         }
         
-        @SideOnly(Side.CLIENT)
-        @RegTileEntity.Render
-        public static RenderDeveloperNormal renderer;
+//        @SideOnly(Side.CLIENT)
+//        @RegTileEntity.Render
+//        public static RenderDeveloperNormal renderer;
     }
 
-    @Registrant
     @RegTileEntity
-    @RegTileEntity.HasRender
     public static class Advanced extends TileDeveloper {
         
         public Advanced() {
             super(DeveloperType.ADVANCED);
         }
         
-        @SideOnly(Side.CLIENT)
-        @RegTileEntity.Render
-        public static RenderDeveloperAdvanced renderer;
-        
+//        @SideOnly(Side.CLIENT)
+//        @RegTileEntity.Render
+//        public static RenderDeveloperAdvanced renderer;
     }
     
-    @SideOnly(Side.CLIENT)
-    @RegTileEntity.Render
-    public static RenderDeveloperNormal renderer;
+//    @SideOnly(Side.CLIENT)
+//    public static RenderDeveloperNormal renderer;
     
     public final DeveloperType type;
     

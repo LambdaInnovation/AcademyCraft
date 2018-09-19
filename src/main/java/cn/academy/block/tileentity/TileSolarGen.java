@@ -6,6 +6,7 @@ import cn.academy.client.render.block.RenderSolarGen;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,6 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  */
 @RegTileEntity
-@RegTileEntity.HasRender
 public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
 
     public static final int SLOT_BATTERY = 0;
@@ -28,9 +28,9 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
         STOPPED, WEAK, STRONG
     }
     
-    @SideOnly(Side.CLIENT)
-    @RegTileEntity.Render
-    public static RenderSolarGen renderer;
+//    @SideOnly(Side.CLIENT)
+//    @RegTileEntity.Render
+//    public static RenderSolarGen renderer;
 
     public TileSolarGen() {
         super("solar_generator", 1, 1000, IFConstants.LATENCY_MK2);

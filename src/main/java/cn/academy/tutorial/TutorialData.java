@@ -1,7 +1,9 @@
 package cn.academy.tutorial;
 
+import cn.academy.ACItems;
 import cn.academy.AcademyCraft;
 import cn.academy.event.TutorialActivatedEvent;
+import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -11,6 +13,7 @@ import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.TickScheduler;
 import com.google.common.base.Preconditions;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,8 +30,8 @@ import java.util.HashSet;
 @RegDataPart(EntityPlayer.class)
 public class TutorialData extends DataPart<EntityPlayer> {
 
-    @RegPreInitCallback
-    private static void __init() {
+    @StateEventCallback
+    private static void __init(FMLInitializationEvent ev) {
         // Force the property to load, so it will be refreshed once after startup
         canAcquireTutorial();
     }
@@ -80,9 +83,9 @@ public class TutorialData extends DataPart<EntityPlayer> {
             scheduler.every(10).atOnly(Side.SERVER).run(() -> {
                 if (!tutorialAcquired) {
                     EntityPlayer player = getEntity();
-                    player.world.spawnEntityInWorld(new EntityItem(player.world,
+                    player.world.spawnEntity(new EntityItem(player.world,
                             player.posX, player.posY + 1.0, player.posZ,
-                            new ItemStack(TutorialInit.itemTutorial)));
+                            new ItemStack(ACItems.tutorial)));
 
                     tutorialAcquired = true;
                 }
