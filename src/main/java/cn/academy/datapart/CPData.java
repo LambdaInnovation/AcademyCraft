@@ -556,14 +556,14 @@ public class CPData extends DataPart<EntityPlayer> {
 
         @SubscribeEvent
         public void playerWakeup(PlayerWakeUpEvent event) {
-            if(!event.wakeImmediatly && !event.updateWorld && event.setSpawn)
-                CPData.get(event.entityPlayer).recoverAll();
+            if(!event.wakeImmediately() && !event.updateWorld() && event.shouldSetSpawn())
+                CPData.get(event.getEntityPlayer()).recoverAll();
         }
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void playerDeath(LivingDeathEvent event) {
-            if(event.entityLiving instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) event.entityLiving;
+            if(event.getEntityLiving() instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) event.getEntityLiving();
                 CPData cpData = CPData.get(player);
 
                 cpData.recoverAll();

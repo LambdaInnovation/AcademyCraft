@@ -51,7 +51,7 @@ public final class BukkitAdapter {
                     player == null ? dummy : event.player.getUniqueID());
             }
             event.setCanceled((boolean) checkBlockDestroy_.invoke(null,
-                event.x, event.y, event.z));
+                event.pos.getX(), event.pos.getY(), event.pos.getZ()));
         }
         catch (Throwable e) {
             AcademyCraft.log.error("Failed to handle BlockDestroyEvent", e);
