@@ -1,6 +1,8 @@
 package cn.academy.worldgen;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
@@ -15,9 +17,9 @@ public class CustomWorldGen {
     
     int yLimit;
     int densityPerChunk;
-    int[] biomeIds;
+    Biome[] biomeIds;
     
-    public CustomWorldGen(WorldGenerator _gen, int _yLimit, int _density, int... _biomeIds) {
+    public CustomWorldGen(WorldGenerator _gen, int _yLimit, int _density, Biome... _biomeIds) {
         gen = _gen;
         yLimit = _yLimit;
         densityPerChunk = _density;
@@ -32,16 +34,15 @@ public class CustomWorldGen {
                 y = rand.nextInt(yLimit),
                 z = chunkMinZ + rand.nextInt(16);
             
-            gen.generate(world, rand, x, y, z);
+            gen.generate(world, rand, new BlockPos(x, y, z));
         }
     }
     
     private boolean canGen(World world, int x, int z) {
         if(biomeIds.length == 0) return true;
-        WorldChunkManager chunkmgr = new WorldChunkManager(world);
-        int biomeId = chunkmgr.getBiomeGenAt(x, z).biomeID;
-        for(int i : biomeIds)
-            if(i == biomeId) return true;
+        Biome chunkmgr = world.getBiome(new BlockPos(x, 0, z));
+        for(Biome i : biomeIds)
+            if(i == chunkmgr) return true;
         return false;
     }
 

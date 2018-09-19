@@ -1,10 +1,14 @@
 package cn.academy.worldgen;
 
+import cn.academy.ACBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
@@ -14,12 +18,13 @@ public class WorldGenPhaseLiq extends WorldGenerator {
     private Block theBlock;
 
     public WorldGenPhaseLiq() {
-        this.theBlock = WorldGenInit.imagPhase;
+        this.theBlock = ACBlocks.imag_phase;
     }
 
     @Override
-    public boolean generate(World world, Random random, int x, int y, int z) {
-        for (x -= 8, z -= 8; y > 5 && world.isAirBlock(x, y, z); --y)
+    public boolean generate(World world, Random random, BlockPos pos) {
+        int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+        for (x -= 8, z -= 8; y > 5 && world.isAirBlock(new BlockPos(x, y, z)); --y)
             ; // Find a non-air-block as origin to generate.
 
         if (y <= 4)
@@ -66,13 +71,15 @@ public class WorldGenPhaseLiq extends WorldGenerator {
                             || j1 > 0 && buffer[(i * 16 + j2) * 8 + (j1 - 1)]);
 
                     if (flag) {
-                        Material material = world.getBlock(x + i, y + j1, z + j2).getMaterial();
+                        BlockPos bpos = new BlockPos(x+i, y+ j1, z + j2);
+                        IBlockState ibs = world.getBlockState(bpos);
+                        Material material = ibs.getMaterial();
 
                         if (j1 >= 4 && material.isLiquid()) {
                             return false;
                         }
 
-                        if (j1 < 4 && !material.isSolid() && world.getBlock(x + i, y + j1, z + j2) != this.theBlock) {
+                        if (j1 < 4 && !material.isSolid() && ibs.getBlock() != this.theBlock) {
                             return false;
                         }
                     }
@@ -84,7 +91,8 @@ public class WorldGenPhaseLiq extends WorldGenerator {
             for (int j2 = 0; j2 < 16; ++j2) {
                 for (int j1 = 0; j1 < 8; ++j1) {
                     if (buffer[(i1 * 16 + j2) * 8 + j1]) {
-                        world.setBlock(x + i1, y + j1, z + j2, j1 >= 4 ? Blocks.air : this.theBlock, 0, 2);
+                        world.setBlockState(new BlockPos(x + i1, y + j1, z + j2),
+                                j1 >= 4 ? Blocks.AIR.getDefaultState() : this.theBlock.getDefaultState(), 2);
                     }
                 }
             }
@@ -93,15 +101,16 @@ public class WorldGenPhaseLiq extends WorldGenerator {
         for (int i1 = 0; i1 < 16; ++i1) {
             for (int j2 = 0; j2 < 16; ++j2) {
                 for (int j1 = 4; j1 < 8; ++j1) {
+                    BlockPos bPos = new BlockPos(x + i1, y + j1 - 1, z + j2);
+                    IBlockState ibs = world.getBlockState(bPos);
+                    if (buffer[(i1 * 16 + j2) * 8 + j1] && ibs.getBlock() == Blocks.DIRT
+                            && world.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(x + i1, y + j1, z + j2)) > 0) {
+                        Biome biomegenbase = world.getBiomeProvider().getBiome(bPos);
 
-                    if (buffer[(i1 * 16 + j2) * 8 + j1] && world.getBlock(x + i1, y + j1 - 1, z + j2) == Blocks.dirt
-                            && world.getSavedLightValue(EnumSkyBlock.Sky, x + i1, y + j1, z + j2) > 0) {
-                        BiomeGenBase biomegenbase = world.getBiomeGenForCoords(x + i1, z + j2);
-
-                        if (biomegenbase.topBlock == Blocks.mycelium) {
-                            world.setBlock(x + i1, y + j1 - 1, z + j2, Blocks.mycelium, 0, 2);
+                        if (biomegenbase.topBlock == Blocks.MYCELIUM) {
+                            world.setBlockState(bPos, Blocks.MYCELIUM.getDefaultState(), 2);
                         } else {
-                            world.setBlock(x + i1, y + j1 - 1, z + j2, Blocks.grass, 0, 2);
+                            world.setBlockState(bPos, Blocks.GRASS.getDefaultState(), 2);
                         }
                     }
                 }
@@ -110,8 +119,9 @@ public class WorldGenPhaseLiq extends WorldGenerator {
 
         for (int i1 = 0; i1 < 16; ++i1) {
             for (int j2 = 0; j2 < 16; ++j2) {
-                if (world.isBlockFreezable(x + i1, y + 4, z + j2)) {
-                    world.setBlock(x + i1, y + 4, z + j2, Blocks.ice, 0, 2);
+                BlockPos bPos = new BlockPos(x + i1, y + 4, z + j2);
+                if (world.canBlockFreezeWater(bPos)) {
+                    world.setBlockState(bPos, Blocks.ICE.getDefaultState(), 2);
                 }
             }
         }

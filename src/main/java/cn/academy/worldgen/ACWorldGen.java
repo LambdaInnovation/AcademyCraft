@@ -1,7 +1,9 @@
 package cn.academy.worldgen;
 
+import cn.academy.ACBlocks;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -18,23 +20,21 @@ public class ACWorldGen implements IWorldGenerator {
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world,
-            IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-        if(WorldGenInit.GENERATE_ORES && world.provider.getDimensionName().equals("Overworld")) {
+                         IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+        if(WorldGenInit.GENERATE_ORES && world.provider.getDimensionType()== DimensionType.OVERWORLD) {
             genOverworld(world, random, chunkX * 16, chunkZ * 16);
         }
     }
     
-    private List<CustomWorldGen> generators = Arrays.asList(new CustomWorldGen[] {
-            new CustomWorldGen(new WorldGenMinable(WorldGenInit.oreResoCrystal, 0, 4, Blocks.stone), 60, 18),
-            new CustomWorldGen(new WorldGenMinable(WorldGenInit.oreConstraintMetal, 0, 4, Blocks.stone), 60, 24),
-            new CustomWorldGen(new WorldGenMinable(WorldGenInit.oreImagCrystal, 0, 3, Blocks.stone), 60, 48),
-            new CustomWorldGen(new WorldGenMinable(WorldGenInit.oreImagSil, 0, 4, Blocks.stone), 60, 22)
-    });
+    private List<CustomWorldGen> generators = Arrays.asList(
+            new CustomWorldGen(new WorldGenMinable(ACBlocks.reso_ore.getDefaultState(), 4), 60, 18),
+            new CustomWorldGen(new WorldGenMinable(ACBlocks.constraint_metal.getDefaultState(),  4), 60, 24),
+            new CustomWorldGen(new WorldGenMinable(ACBlocks.crystal_ore.getDefaultState(), 3), 60, 48),
+            new CustomWorldGen(new WorldGenMinable(ACBlocks.imagsil_ore.getDefaultState(),  4), 60, 22));
     
     private void genOverworld(World world, Random random, int x, int z) {
         for(CustomWorldGen gen : generators) {
             gen.generate(world, random, x, z);
         }
     }
-
 }
