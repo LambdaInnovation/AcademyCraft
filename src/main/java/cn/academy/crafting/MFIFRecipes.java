@@ -1,35 +1,44 @@
 package cn.academy.crafting;
 
-import cn.academy.worldgen.WorldGenInit;
+import cn.academy.ACBlocks;
+import cn.academy.ACItems;
+import cn.academy.block.tileentity.TileMetalFormer.Mode;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 // TODO: Make recipes data driven
 public class MFIFRecipes {
 
     static void init(FMLInitializationEvent ev) {
         ImagFusorRecipes ifr = ImagFusorRecipes.INSTANCE;
-        ifr.addRecipe(new ItemStack(crystalLow), 3000, new ItemStack(crystalNormal));
-        ifr.addRecipe(new ItemStack(crystalNormal), 8000, new ItemStack(crystalPure));
+        ifr.addRecipe(new ItemStack(ACItems.crystal_low), 3000, new ItemStack(ACItems.crystal_normal));
+        ifr.addRecipe(new ItemStack(ACItems.crystal_normal), 8000, new ItemStack(ACItems.crystal_pure));
 
         MetalFormerRecipes mfr = MetalFormerRecipes.INSTANCE;
-        mfr.add(new ItemStack(ingotImagSil), new ItemStack(wafer, 2), Mode.INCISE);
-        mfr.add(new ItemStack(wafer), new ItemStack(silPiece, 4), Mode.INCISE);
-        mfr.add(new ItemStack(dataChip), new ItemStack(calcChip), Mode.ETCH);
-        mfr.add(new ItemStack(Items.iron_ingot), new ItemStack(rfIronPlate), Mode.PLATE);
-        mfr.add(new ItemStack(ingotConst), new ItemStack(WorldGenInit.constPlate), Mode.PLATE);
-        mfr.add(new ItemStack(oreImagSil), new ItemStack(ingotImagSil, 4), Mode.REFINE);
-        mfr.add(new ItemStack(oreConstraintMetal), new ItemStack(ingotConst, 2), Mode.REFINE);
-        mfr.add(new ItemStack(oreResoCrystal), new ItemStack(resoCrystal, 3), Mode.REFINE);
-        mfr.add(new ItemStack(oreImagCrystal), new ItemStack(crystalLow, 4), Mode.REFINE);
+        mfr.add(new ItemStack(ACItems.imag_silicon_ingot), new ItemStack(ACItems.wafer, 2), Mode.INCISE);
+        mfr.add(new ItemStack(ACItems.wafer), new ItemStack(ACItems.imag_silicon_piece, 4), Mode.INCISE);
+        mfr.add(new ItemStack(ACItems.data_chip), new ItemStack(ACItems.calc_chip), Mode.ETCH);
+        mfr.add(new ItemStack(Items.IRON_INGOT), new ItemStack(ACItems.reinforced_iron_plate), Mode.PLATE);
+        mfr.add(new ItemStack(ACItems.constraint_ingot), new ItemStack(ACItems.constraint_plate), Mode.PLATE);
+        mfr.add(new ItemStack(ACBlocks.item_imagsil_ore), new ItemStack(ACItems.imag_silicon_ingot, 4), Mode.REFINE);
+        mfr.add(new ItemStack(ACBlocks.item_constraint_metal), new ItemStack(ACItems.constraint_ingot, 2), Mode.REFINE);
+        mfr.add(new ItemStack(ACBlocks.item_reso_ore), new ItemStack(ACItems.reso_crystal, 3), Mode.REFINE);
+        mfr.add(new ItemStack(ACBlocks.item_crystal_ore), new ItemStack(ACItems.crystal_low, 4), Mode.REFINE);
 
-        addOreDictRefineRecipe("oreGold",new ItemStack(Items.gold_ingot,2));
-        addOreDictRefineRecipe("oreIron",new ItemStack(Items.iron_ingot,2));
-        addOreDictRefineRecipe("oreEmerald",new ItemStack(Items.emerald,2));
-        addOreDictRefineRecipe("oreQuartz",new ItemStack(Items.quartz,2));
-        addOreDictRefineRecipe("oreDiamond",new ItemStack(Items.diamond,2));
-        addOreDictRefineRecipe("oreRedstone",new ItemStack(Blocks.redstone_block));
-        addOreDictRefineRecipe("oreLapis",new ItemStack(Items.dye,12,4));
-        addOreDictRefineRecipe("oreCoal",new ItemStack(Items.coal,2));
+        addOreDictRefineRecipe("oreGold",new ItemStack(Items.GOLD_INGOT,2));
+        addOreDictRefineRecipe("oreIron",new ItemStack(Items.IRON_INGOT,2));
+        addOreDictRefineRecipe("oreEmerald",new ItemStack(Items.EMERALD,2));
+        addOreDictRefineRecipe("oreQuartz",new ItemStack(Items.QUARTZ,2));
+        addOreDictRefineRecipe("oreDiamond",new ItemStack(Items.DIAMOND_PICKAXE,2));
+        addOreDictRefineRecipe("oreRedstone",new ItemStack(Blocks.REDSTONE_BLOCK));
+        addOreDictRefineRecipe("oreLapis",new ItemStack(Items.DYE,12,4));
+        addOreDictRefineRecipe("oreCoal",new ItemStack(Items.COAL,2));
         addDefaultOreDictRefineRecipe("Copper");
         addDefaultOreDictRefineRecipe("Tin");
         addDefaultOreDictRefineRecipe("Lead");
@@ -46,19 +55,19 @@ public class MFIFRecipes {
 
     private static void addOreDictRefineRecipe(String orename, String outputname)
     {
-        ArrayList<ItemStack> outputList = OreDictionary.getOres(outputname);
+        List<ItemStack> outputList = OreDictionary.getOres(outputname);
         if (outputList == null || outputList.size() == 0)
             return;
         ItemStack output = outputList.get(0).copy();
         List<ItemStack> oreList = OreDictionary.getOres(orename);
         if (oreList == null || oreList.size() == 0)
             return;
-        ItemStack stack = FurnaceRecipes.smelting().getSmeltingResult(oreList.get(0));
+        ItemStack stack = FurnaceRecipes.instance().getSmeltingResult(oreList.get(0));
         if (stack == null)
             return;
-        int outputsize = stack.stackSize;
+        int outputsize = stack.getCount();
         outputsize = outputsize < 32 ? (2 * outputsize) : 64;
-        output.stackSize = outputsize;
+        output.setCount(outputsize);
         for(ItemStack ore : oreList)
         {
             MetalFormerRecipes.INSTANCE.add(ore, output, Mode.REFINE);
