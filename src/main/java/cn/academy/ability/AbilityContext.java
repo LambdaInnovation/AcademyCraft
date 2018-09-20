@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -127,6 +128,9 @@ public class AbilityContext {
 
     public boolean canBreakBlock(World world, int x, int y, int z) {
         return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, player, x, y, z);
+    }
+    public boolean canBreakBlock(World world, BlockPos pos) {
+        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, player, pos);
     }
 
     public boolean canBreakBlock(World world) {

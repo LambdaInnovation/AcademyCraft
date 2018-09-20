@@ -52,6 +52,11 @@ public class AbilityPipeline {
         return !MinecraftForge.EVENT_BUS.post(
             new BlockDestroyEvent(world, player, new BlockPos(x, y, z)));
     }
+    static boolean canBreakBlock(World world, EntityPlayer player, BlockPos pos)
+    {
+        return !MinecraftForge.EVENT_BUS.post(
+                new BlockDestroyEvent(world, player, pos));
+    }
 
     public static boolean canUseMouseWheel(){
         return propUseMouseWheel.getBoolean();
@@ -65,6 +70,10 @@ public class AbilityPipeline {
         return !MinecraftForge.EVENT_BUS.post(
             new BlockDestroyEvent(world, new BlockPos(x, y, z)));
     }
+    static boolean canBreakBlock(World world, BlockPos pos) {
+        return !MinecraftForge.EVENT_BUS.post(
+                new BlockDestroyEvent(world, pos));
+    }
 
     /**
      * Tests if the block at the specified coordinates can be broken by a
@@ -74,6 +83,10 @@ public class AbilityPipeline {
     static boolean canBreakBlock(EntityPlayer player, int x, int y, int z) {
         return !MinecraftForge.EVENT_BUS.post(
             new BlockDestroyEvent(player, new BlockPos(x, y, z)));
+    }
+    static boolean canBreakBlock(EntityPlayer player, BlockPos pos) {
+        return !MinecraftForge.EVENT_BUS.post(
+                new BlockDestroyEvent(player, pos));
     }
 
     // PROPERTIES
