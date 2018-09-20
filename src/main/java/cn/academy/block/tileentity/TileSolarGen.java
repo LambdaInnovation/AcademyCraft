@@ -2,7 +2,7 @@ package cn.academy.block.tileentity;
 
 import cn.academy.block.tileentity.TileGeneratorBase;
 import cn.academy.energy.IFConstants;
-import cn.academy.client.render.block.RenderSolarGen;
+//import cn.academy.client.render.block.RenderSolarGen;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;

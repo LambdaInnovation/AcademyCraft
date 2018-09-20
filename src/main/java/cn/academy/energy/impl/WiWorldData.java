@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
-import org.jetbrains.annotations.NotNull;
 //import net.minecraft.world.WorldSavedData;
 
 import java.util.*;
@@ -266,9 +265,8 @@ public class WiWorldData extends WorldSavedData {
             loadNode(tag1);
     }
 
-    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         NBTTagCompound tag1 = new NBTTagCompound();
         saveNetwork(tag1);
         tag.setTag("net", tag1);

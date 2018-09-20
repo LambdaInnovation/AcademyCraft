@@ -9,6 +9,8 @@ import cn.academy.event.energy.*;
 import cn.academy.energy.impl.VBlocks.VNGenerator;
 import cn.academy.energy.impl.VBlocks.VNReceiver;
 import cn.academy.energy.impl.VBlocks.VWNode;
+import cn.lambdalib2.registry.mc.RegEventHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -31,7 +33,7 @@ public class WirelessSystem {
         if (event.phase == Phase.START)
             return;
 
-        for(WorldServer ws : MinecraftServer.getServer().worldServers) {
+        for(WorldServer ws : FMLCommonHandler.instance().getMinecraftServerInstance().worlds) {
             WiWorldData data = WiWorldData.getNonCreate(ws);
 
             if(data != null) {
