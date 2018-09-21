@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  */
 public class MTSupport {
 
-    private static final String MODID = "MineTweaker3";
+    private static final String MODID = "crafttweaker";
 
     @StateEventCallback
     @Optional.Method(modid=MODID)

@@ -34,7 +34,7 @@ public class IC2Support {
      */
     public static final double CONV_RATE = 1;
 
-    private static final String MODID = "IC2";
+    private static final String MODID = "ic2";
 
     private static IC2SkillHelper helper;
 
