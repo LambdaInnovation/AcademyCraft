@@ -45,7 +45,7 @@ public class FleshRipping extends Skill
 
     @Override
     public void activate(ClientRuntime rt , int keyID){
-        activateSingleKey(rt, keyID, FRContext::new);
+        activateSingleKey2(rt, keyID, FRContext::new);
     }
 
     static final String MSG_ABORT = "abort";

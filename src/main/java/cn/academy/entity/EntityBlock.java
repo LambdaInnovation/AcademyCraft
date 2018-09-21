@@ -10,6 +10,7 @@ import cn.lambdalib2.util.entityx.event.CollideEvent;
 import cn.lambdalib2.util.entityx.handlers.Rigidbody;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -37,11 +38,11 @@ public class EntityBlock extends EntityAdvanced {
      * DOESN't set the coordinate, do it yourself!
      * @return An setup entity block, or null if convert failed.
      */
-    public static EntityBlock convert(World world, int x, int y, int z) {
+    public static EntityBlock convert(World world, BlockPos pos) {
         EntityBlock ret = new EntityBlock(world);
-        if(!ret.setBlock(world.getBlockState(new BlockPos(x, y, z)).getBlock(), world.getBlockMetadata(x, y, z)))
+        if(!ret.setBlock(world.getBlockState(pos).getBlock(), world.getBlockState(pos)))
             return null;
-        ret.setTileEntity(world.getTileEntity(new BlockPos(x, y, z)));
+        ret.setTileEntity(world.getTileEntity(pos));
         return ret;
     }
     
@@ -51,7 +52,7 @@ public class EntityBlock extends EntityAdvanced {
     private static final DataParameter<Byte> META = EntityDataManager.<Byte>createKey(EntityMagHook.class, DataSerializers.BYTE);
     
     public Block block;
-    public int metadata = 0;
+    public IBlockState _blockState;
     public TileEntity tileEntity;
     
     // other
@@ -114,14 +115,15 @@ public class EntityBlock extends EntityAdvanced {
 
         if(world.isRemote) {
             block = Block.getBlockById(dataManager.get(BLOCKID));
-            metadata = dataManager.get(META);
+            _blockState = block.getStateFromMeta(dataManager.get(META));
         } else {
             if(block != null) {
                 dataManager.set(BLOCKID, Block.getIdFromBlock(block));
-                dataManager.set(META, (byte) metadata);
-                
-                if(tileEntity != null)
-                    tileEntity.blockMetadata = metadata;
+                dataManager.set(META, (byte) block.getMetaFromState(_blockState));
+
+                // FIXME
+//                if(tileEntity != null)
+//                    tileEntity.blockMetadata = -1;
             }
         }
     }
@@ -146,9 +148,10 @@ public class EntityBlock extends EntityAdvanced {
                             ty += event.result.sideHit.getDirectionVec().getY();
                             tz += event.result.sideHit.getDirectionVec().getZ();
                         } else {
+                            int metadata = block.getMetaFromState(_blockState);
                             ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
                                     new ItemStack(block, 0, metadata), player, world, new BlockPos(tx, ty, tz), event.result.sideHit,
-                                    tx, ty, tz, metadata);
+                                    tx, ty, tz, _blockState);
                             break;
                         }
                     }
@@ -180,25 +183,14 @@ public class EntityBlock extends EntityAdvanced {
         block = _block;
     }
     
-    public boolean setBlock(Block _block, int _metadata) {
+    public boolean setBlock(Block _block, IBlockState blockState) {
         if(Item.getItemFromBlock(_block) == null)
             return false;
         block = _block;
-        metadata = _metadata;
+        _blockState = blockState;
         return true;
     }
-    
-    public void fromItemStack(ItemStack stack) {
-        Block block = Block.getBlockFromItem(stack.getItem());
-        int meta = stack.getItemDamage();
-        setBlock(block, meta);
-        if(block instanceof ITileEntityProvider) {
-            TileEntity te = ((ITileEntityProvider)block)
-                    .createNewTileEntity(getWorld(), meta);
-            setTileEntity(te);
-        }
-    }
-    
+
     public void setTileEntity(TileEntity _te) {
         tileEntity = _te;
     }
@@ -209,7 +201,7 @@ public class EntityBlock extends EntityAdvanced {
     
     @Override
     public boolean shouldRenderInPass(int pass) {
-        return (block != null && block.getRenderBlockPass() == pass) || 
+        return (block != null /* FIXME && block.getRenderBlockPass() == pass */ ) ||
                 (tileEntity != null && tileEntity.shouldRenderInPass(pass));
     }
     

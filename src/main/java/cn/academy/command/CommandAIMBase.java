@@ -7,6 +7,7 @@ import cn.academy.datapart.CooldownData;
 import cn.academy.datapart.AbilityData;
 import cn.academy.datapart.CPData;
 import cn.academy.util.ACCommand;
+import cn.lambdalib2.registry.mc.RegCommand;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.datapart.PlayerDataTag;
 import cn.lambdalib2.util.PlayerUtils;
@@ -16,7 +17,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
 import net.minecraft.util.text.translation.I18n;
 
 import java.util.List;
