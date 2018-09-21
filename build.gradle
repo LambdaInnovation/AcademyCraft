@@ -46,7 +46,7 @@ minecraft {
 
     // Replacing stuff in the source
 	replace "@VERSION@", config.mod_ver
-    replace "@LL_VERSION@", config.lambdalib_ver
+    replace "@LAMBDA_LIB_VERSION@", config.lambdalib_ver
     replace "@MC_VERSION@", config.mc_ver
 }
 
