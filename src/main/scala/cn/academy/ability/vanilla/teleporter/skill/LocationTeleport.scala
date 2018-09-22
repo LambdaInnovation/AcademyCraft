@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.teleporter.skill
 
 import java.util
-import java.util.function.Predicate
+import java.util.function.{Consumer, Predicate}
 
 import cn.academy.Resources
 import cn.academy.ability.{AbilityContext, Skill}
@@ -397,10 +397,11 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       }
 
       wrapButton(ret.child("btn_remove"), count, 0.05, () => {
-        LTNetDelegate.send(MSG_REMOVE, player, location.id, Future.create((list: util.List[Location]) => {
+        LTNetDelegate.send(MSG_REMOVE, player, location.id, Future.create(new Consumer[util.List[Location]]{
+          override def accept(list: util.List[Location]) = {
           import scala.collection.JavaConversions._
           updateList(list.toList)
-        }))
+        }}))
       })
 
       {
@@ -449,9 +450,10 @@ object LocationTeleport extends Skill("location_teleport", 3) {
 
       def confirmInput() = {
         LTNetDelegate.send(MSG_ADD, player, inputText.component[TextBox].content.take(16),
-          Future.create((list: util.List[Location]) => {
+          Future.create(new Consumer[util.List[Location]]{
+            override def accept(list: util.List[Location]): Unit ={
             updateList(list.toList)
-          }))
+          }}))
 
         gui.removeFocus()
         textBox.allowEdit = false

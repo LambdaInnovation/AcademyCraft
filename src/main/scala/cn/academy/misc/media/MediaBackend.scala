@@ -83,6 +83,7 @@ private object MediaBackendHelper {
 @RegDataPart(value=classOf[EntityPlayer], side=Array(Side.CLIENT))
 class MediaBackend extends DataPart[EntityPlayer] {
   import MediaBackendHelper._
+  import scala.collection.JavaConversions._
 
   final val MEDIA_ID = "AC_MediaPlayer"
 
@@ -94,21 +95,25 @@ class MediaBackend extends DataPart[EntityPlayer] {
 
   val scheduler = new TickScheduler
 
-  scheduler.every(5).run(() => {
-    currentPlaying match {
-      case Some(PlayInfo(_, false, _)) => stopVanillaSound()
-      case _ =>
+  scheduler.every(5).run(new Runnable() {
+    override def run(): Unit = {
+      currentPlaying match {
+        case Some(PlayInfo(_, false, _)) => stopVanillaSound()
+        case _ =>
+      }
     }
   })
 
-  scheduler.every(5).run(() => {
-    // Synchronize play state
-    playState match {
-      case Some(state) =>
-        if (!sndSystem.playing(MEDIA_ID)) {
-          playState = None
-        }
-      case _ =>
+  scheduler.every(5).run(new Runnable{
+    override def run() = {
+      // Synchronize play state
+      playState match {
+        case Some(state) =>
+          if (!sndSystem.playing(MEDIA_ID)) {
+            playState = None
+          }
+        case _ =>
+      }
     }
   })
 
