@@ -206,6 +206,10 @@ public enum RecipeHandler {
                     .mapToObj(i -> new ItemStack(item, 1, i))
                     .toArray(ItemStack[]::new);
         }
+        if (obj instanceof Ingredient) {
+            Ingredient ingredient = ((Ingredient) obj);
+            return ingredient.getMatchingStacks();
+        }
         return new ItemStack[] { (ItemStack) obj };
     }
 
@@ -242,6 +246,8 @@ public enum RecipeHandler {
         if(s1 == null || s2 == null) {
             return false;
         }
+        if (s1 == ItemStack.EMPTY || s2 == ItemStack.EMPTY)
+            return false;
         return s1.getItem() == s2.getItem() &&
                 (!s1.getItem().getHasSubtypes() || s1.getItemDamage() == s2.getItemDamage());
     }
@@ -312,7 +318,7 @@ public enum RecipeHandler {
                     arr = toDisplay((ShapelessOreRecipe) o);
                     desc = "shapeless";
                 } else {
-                    throw new RuntimeException("Invalid recipe");
+                    throw new RuntimeException("Invalid recipe " + o);
                 }
 
                 ret.add(new CraftingGridDisplay(new StackDisplay(o.getRecipeOutput()), arr, desc));

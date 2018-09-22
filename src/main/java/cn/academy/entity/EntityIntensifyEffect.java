@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityIntensifyEffect extends EntitySurroundArc {
 
     public EntityIntensifyEffect(EntityPlayer player) {

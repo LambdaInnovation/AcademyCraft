@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityBarrageRayPre extends EntityRayBase {
 
     public static BRPRender renderer;

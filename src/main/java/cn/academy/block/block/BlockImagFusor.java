@@ -40,6 +40,20 @@ public class BlockImagFusor extends ACBlockContainer {
         setHarvestLevel("pickaxe", 1);
     }
 
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FACING).ordinal();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FACING, EnumFacing.values()[meta]);
+    }
 //    @Override
 //    @SideOnly(Side.CLIENT)
 //    public void registerBlockIcons(IIconRegister ir) {

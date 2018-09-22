@@ -42,9 +42,6 @@ public class RFSupport {
 
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
-        GameRegistry.registerTileEntity(TileRFInput.class, new ResourceLocation("academy","rf_input"));
-        GameRegistry.registerTileEntity(TileRFOutput.class,  new ResourceLocation("academy","rf_output"));
-
         EnergyBlockHelper.register(new RFProviderManager());
         EnergyBlockHelper.register(new RFReceiverManager());
         
@@ -71,7 +68,7 @@ public class RFSupport {
         rfInput.setUnlocalizedName("ac_rf_input");
         event.getRegistry().register(rfInput);
 
-        rfOutput.setRegistryName("academy:eu_output");
+        rfOutput.setRegistryName("academy:rf_output");
         rfOutput.setUnlocalizedName("rf_output");
         event.getRegistry().register(rfOutput);
 

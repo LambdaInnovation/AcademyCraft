@@ -98,9 +98,7 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   }
 
   // Check player in the area and interfere them
-  scheduler.every(10).atOnly(Side.SERVER).condition(new Supplier[lang.Boolean] {
-    override def get(): lang.Boolean = enabled
-  }).run(() => {
+  scheduler.every(10).atOnly(Side.SERVER).condition(() => enabled).run(() => {
     if(cost()){
       val boundingBox = testBB
       val players = WorldUtils.getEntities(getWorld, boundingBox, EntitySelectors.survivalPlayer)

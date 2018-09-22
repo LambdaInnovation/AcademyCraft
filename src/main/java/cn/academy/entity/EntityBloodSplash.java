@@ -21,7 +21,6 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityBloodSplash extends EntityAdvanced
 {
 

@@ -133,7 +133,17 @@ public class BlockNode extends ACBlockContainer {
     public TileEntity createNewTileEntity(World var1, int var2) {
         return new TileNode();
     }
-    
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(VARIANT, NodeType.values()[meta]);
+    }
+
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
         @Override

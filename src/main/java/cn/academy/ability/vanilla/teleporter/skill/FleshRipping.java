@@ -139,7 +139,7 @@ public class FleshRipping extends Skill
 
     @SideOnly(Side.CLIENT)
     @RegClientContext(FRContext.class)
-    class FRContextC extends ClientContext
+    static class FRContextC extends ClientContext
     {
         FRContext par;
         public FRContextC(FRContext par)

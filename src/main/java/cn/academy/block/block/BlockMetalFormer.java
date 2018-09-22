@@ -7,6 +7,7 @@ import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -52,8 +53,23 @@ public class BlockMetalFormer extends ACBlockContainer {
         setHardness(3.0f);
         setHarvestLevel("pickaxe", 1);
     }
-    
-//    @Override
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FACING, EnumFacing.values()[meta]);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FACING).ordinal();
+    }
+
+    //    @Override
 //    @SideOnly(Side.CLIENT)
 //    public void registerBlockIcons(IIconRegister ir)  {
 //        sideIcons[0] = this.ricon(ir, "metal_former_front");

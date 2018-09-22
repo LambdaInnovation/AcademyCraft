@@ -26,7 +26,6 @@ import org.lwjgl.opengl.GL11;
  * @author WeAthFolD
  *
  */
-@RegEntity()
 @SideOnly(Side.CLIENT)
 public class EntityArc extends EntityAdvanced implements ViewOptimize.IAssociatePlayer
 {

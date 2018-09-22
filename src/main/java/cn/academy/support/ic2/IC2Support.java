@@ -56,21 +56,18 @@ public class IC2Support {
     @Optional.Method(modid=MODID)
     @StateEventCallback
     public static void init(FMLInitializationEvent event){
-
-        GameRegistry.registerTileEntity(TileEUInput.class, new ResourceLocation("academy","eu_input"));
-        GameRegistry.registerTileEntity(TileEUOutput.class,  new ResourceLocation("academy","eu_output"));
-
         EnergyBlockHelper.register(new EUSinkManager());
         EnergyBlockHelper.register(new EUSourceManager());
 
+        // https://github.com/TinyModularThings/IC2Classic/blob/master/src/main/java/ic2/api/item/IC2Items.java
         GameRegistry.addShapedRecipe(new ResourceLocation("academy","eu_input"), null,
                 new ItemStack(euInput), "abc", " d ",
                 'a', ACItems.energy_unit, 'b', ACBlocks.machine_frame,
-                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ACItems.energy_convert_component);
+                'c', IC2Items.getItem("cable", "type:copper,insulation:1"), 'd', ACItems.energy_convert_component);
         GameRegistry.addShapedRecipe(new ResourceLocation("academy","eu_output"), null,
                 new ItemStack(euOutput), "abc", " d ",
-                'a', IC2Items.getItem("batBox"), 'b', ACBlocks.machine_frame,
-                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ACItems.energy_convert_component);
+                'a', IC2Items.getItemAPI().getItemStack("te", "batbox"), 'b', ACBlocks.machine_frame,
+                'c', IC2Items.getItem("cable", "type:copper,insulation:1"), 'd', ACItems.energy_convert_component);
 
         GameRegistry.addShapedRecipe(new ResourceLocation("academy","eu_input_output"), null,
                 new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
@@ -89,15 +86,13 @@ public class IC2Support {
         helper = new IC2SkillHelper();
         helper.init();
 
-
-        euInput.setRegistryName("academy:ac_eu_input");
+        euInput.setRegistryName("academy:eu_input");
         euInput.setUnlocalizedName("ac_eu_input");
         event.getRegistry().register(euInput);
 
         euOutput.setRegistryName("academy:eu_output");
-        euOutput.setUnlocalizedName("eu_output");
+        euOutput.setUnlocalizedName("ac_eu_output");
         event.getRegistry().register(euOutput);
-
     }
 
     @Optional.Method(modid=MODID)
@@ -105,9 +100,11 @@ public class IC2Support {
     private static void registerItems(RegistryEvent.Register<Item> event){
         item_euInput.setRegistryName(euInput.getRegistryName());
         item_euInput.setUnlocalizedName(euInput.getUnlocalizedName());
+        event.getRegistry().register(item_euInput);
+
         item_euOutput.setRegistryName(euOutput.getRegistryName());
         item_euOutput.setUnlocalizedName(euOutput.getUnlocalizedName());
-
+        event.getRegistry().register(item_euOutput);
     }
 
     public static IC2SkillHelper getHelper() {
