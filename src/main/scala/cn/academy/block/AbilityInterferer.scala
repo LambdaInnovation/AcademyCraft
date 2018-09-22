@@ -1,7 +1,7 @@
 package cn.academy.block
 
 import java.lang
-import java.util.function.Supplier
+import java.util.function.{Consumer, Supplier}
 
 import cn.academy.client.render.block.RenderDynamicBlock
 import cn.academy.energy.IFConstants
@@ -98,27 +98,32 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   }
 
   // Check player in the area and interfere them
-  scheduler.every(10).atOnly(Side.SERVER).condition(() => enabled).run(() => {
-    if(cost()){
-      val boundingBox = testBB
-      val players = WorldUtils.getEntities(getWorld, boundingBox, EntitySelectors.survivalPlayer)
-      players foreach {
-        case player: EntityPlayer =>
-          CPData.get(player).addInterf(sourceName, new IInterfSource {
-            override def interfering(): Boolean =
-              boundingBox.contains(new Vec3d(player.posX, player.posY, player.posZ)) &&
-                !TileAbilityInterferer.this.isInvalid &&
-                !player.capabilities.isCreativeMode &&
-                enabled
-          })
+  scheduler.every(10).atOnly(Side.SERVER).condition(new Supplier[lang.Boolean] {
+    override def get(): lang.Boolean = enabled
+  }).run(new Runnable {
+    override def run(): Unit = {
+      if (cost()) {
+        val boundingBox = testBB
+        val players = WorldUtils.getEntities(getWorld, boundingBox, EntitySelectors.survivalPlayer)
+        players foreach {
+          case player: EntityPlayer =>
+            CPData.get(player).addInterf(sourceName, new IInterfSource {
+              override def interfering(): Boolean =
+                boundingBox.contains(new Vec3d(player.posX, player.posY, player.posZ)) &&
+                  !TileAbilityInterferer.this.isInvalid &&
+                  !player.capabilities.isCreativeMode &&
+                  enabled
+            })
+        }
       }
-    }
-    else
-      enabled_ = false
-  })
+      else
+        enabled_ = false
+    }})
 
   // Sync data to client
-  scheduler.every(20).atOnly(Side.SERVER).run(() => sync())
+  scheduler.every(20).atOnly(Side.SERVER).run(new Runnable {
+    override def run(): Unit = sync()
+  })
 
   override def update(){
     super.update()
@@ -140,7 +145,8 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   }
 
   // Network-cross modifiers
-  private def signalFuture(cb: () => Any) = Future.create((_: Any) => cb())
+  private def signalFuture(cb: () => Any) = Future.create(new Consumer[Any] {
+    override def accept(t: Any): Unit = cb()})
 
   def setRangeClient(value: Double, callback: () => Any) = send(MSG_UPDATE_RANGE, value, signalFuture(callback))
 

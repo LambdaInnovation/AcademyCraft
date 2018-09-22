@@ -1,5 +1,7 @@
 package cn.academy.core.client.ui
 
+import java.util.function.Consumer
+
 import cn.academy.Resources
 import cn.lambdalib2.registry.StateEventCallback
 import net.minecraft.util.math.BlockPos
@@ -619,16 +621,19 @@ object WirelessPage {
     val world = node.getWorld
 
     def rebuild(): Unit = {
-      def newFuture() = Future.create((_: Boolean) => rebuild())
+      def newFuture() = Future.create(new Consumer[Boolean]{
+        override def accept(b: Boolean) = rebuild()
+      })
 
-      send(MSG_FIND_NETWORKS, node, Future.create((data: NodeResult) => {
-        val linked = Option(data.linked).map(matrix => new LinkedTarget {
-          override def disconnect() = {
-            send(MSG_NODE_DISCONNECT, node, newFuture())
-          }
-          override def name = matrix.ssid
-        })
-        val avail = data.avail
+      send(MSG_FIND_NETWORKS, node, Future.create(new Consumer[NodeResult]{
+        override def accept(data: NodeResult) = {
+          val linked = Option(data.linked).map(matrix => new LinkedTarget {
+            override def disconnect() = {
+              send(MSG_NODE_DISCONNECT, node, newFuture())
+            }
+            override def name = matrix.ssid
+          })
+          val avail = data.avail
             .map(matrix => (matrix, matrix.tile(world)))
             .map {
               case (matrix, Some(tile)) =>
@@ -641,7 +646,8 @@ object WirelessPage {
                 }
             }
 
-        rebuildPage(ret.window, linked, avail)
+          rebuildPage(ret.window, linked, avail)
+        }
       }))
     }
 
@@ -658,9 +664,9 @@ object WirelessPage {
     val world = user.getWorld
 
     def rebuild(): Unit = {
-      def newFuture() = Future.create((result: Boolean) => rebuild())
+      def newFuture() = Future.create2((result: Boolean) => rebuild())
 
-      send(MSG_FIND_NODES, user, Future.create((result: UserResult) => {
+      send(MSG_FIND_NODES, user, Future.create2((result: UserResult) => {
         val linked = Option(result.linked).flatMap(_.tile(world)).map(node => new LinkedTarget {
           override def disconnect() = send(MSG_USER_DISCONNECT, user, newFuture())
           override def name: String = node.getNodeName

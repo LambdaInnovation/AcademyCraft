@@ -65,7 +65,7 @@ object GuiNode {
     {
       var load = 1
 
-      send(MSG_INIT, tile, Future.create((cap: Int) => load = cap))
+      send(MSG_INIT, tile, Future.create2((cap: Int) => load = cap))
 
       ret.infoPage
         .histogram(
@@ -90,7 +90,7 @@ object GuiNode {
       ret.main.listens[FrameEvent](() => {
         val dt = GameTimer.getTime - time
         if (dt > 2000) {
-          send(MSG_QUERY_LINK, tile, Future.create((res: Boolean) => state = if (res) STATE_LINKED else STATE_UNLINKED))
+          send(MSG_QUERY_LINK, tile, Future.create2((res: Boolean) => state = if (res) STATE_LINKED else STATE_UNLINKED))
           time = GameTimer.getTime
         }
       })

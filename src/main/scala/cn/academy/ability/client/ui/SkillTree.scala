@@ -1,6 +1,7 @@
 package cn.academy.ability.client.ui
 
 import java.util
+import java.util.function.Consumer
 
 import cn.academy.{ACItems, AcademyCraft, Resources}
 import cn.academy.ability.{AbilityLocalization, Skill}
@@ -479,8 +480,8 @@ private object Common {
         progRate.progress = developer.getType.syncRate
         developer match {
           case tile: TileDeveloper =>
-            send(NetDelegate.MSG_GET_NODE, tile, Future.create((result: String) => {
-              panel.child("button_wireless/text_nodename").component[TextBox].content = if (result != null) result else "N/A"
+            send(NetDelegate.MSG_GET_NODE, tile, Future.create(new Consumer[String]{
+              override def accept(result: String): Unit = {panel.child("button_wireless/text_nodename").component[TextBox].content = if (result != null) result else "N/A"}
             }))
             panel.child("button_wireless").listens[LeftClickEvent](() => {
               val wirelessPage = WirelessPage.userPage(tile).window.centered()

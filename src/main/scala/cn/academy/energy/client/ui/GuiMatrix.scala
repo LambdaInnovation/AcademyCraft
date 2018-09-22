@@ -74,8 +74,8 @@ object GuiMatrix2 {
               .blank(1)
               .button("INIT", () => {
                 val (ssidBox, passBox) = (ssidCell(0), passwordCell(0))
-                send(MSG_INIT, tile, ssidBox.content, passBox.content, Future.create((_: Boolean) =>
-                  send(MSG_GATHER_INFO, tile, Future.create((inf: InitData) => rebuildInfo(inf)))
+                send(MSG_INIT, tile, ssidBox.content, passBox.content, Future.create2((_: Boolean) =>
+                  send(MSG_GATHER_INFO, tile, Future.create2((inf: InitData) => rebuildInfo(inf)))
                 ))
               })
           } else {
@@ -84,7 +84,7 @@ object GuiMatrix2 {
         }
       }
 
-      send(MSG_GATHER_INFO, tile, Future.create((inf: InitData) => rebuildInfo(inf)))
+      send(MSG_GATHER_INFO, tile, Future.create2((inf: InitData) => rebuildInfo(inf)))
     }
 
     ret
