@@ -23,7 +23,7 @@ public class PhaseLiquidGenerator implements IWorldGenerator {
     {
         GameRegistry.registerWorldGenerator(INSTANCE,1);
     }
-    public static PhaseLiquidGenerator INSTANCE;
+    public static PhaseLiquidGenerator INSTANCE = new PhaseLiquidGenerator();
 
     WorldGenPhaseLiq genLakes = new WorldGenPhaseLiq();
 

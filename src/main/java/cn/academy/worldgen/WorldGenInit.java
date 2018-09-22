@@ -23,7 +23,7 @@ public class WorldGenInit {
     {
         GameRegistry.registerWorldGenerator(worldGen,1);
     }
-    public static ACWorldGen worldGen;
+    public static ACWorldGen worldGen = new ACWorldGen();
 
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
