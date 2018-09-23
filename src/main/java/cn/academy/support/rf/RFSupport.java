@@ -19,8 +19,8 @@ public class RFSupport {
     /** The convert rate (1IF = <CONV_RATE> RF) */
     public static final double CONV_RATE = 4;
 
-    public static Block rfInput = new BlockRFInput();
-    public static Block rfOutput = new BlockRFOutput();
+    public static final Block rfInput = new BlockRFInput();
+    public static final Block rfOutput = new BlockRFOutput();
 
     public static final ItemBlock item_rfInput = new ItemBlock(rfInput);
     public static final ItemBlock item_rfOutput = new ItemBlock(rfOutput);
@@ -78,8 +78,11 @@ public class RFSupport {
     private static void registerItems(RegistryEvent.Register<Item> event){
         item_rfInput.setRegistryName(rfInput.getRegistryName());
         item_rfInput.setUnlocalizedName(rfInput.getUnlocalizedName());
+        event.getRegistry().register(item_rfInput);
+
         item_rfOutput.setRegistryName(rfOutput.getRegistryName());
         item_rfOutput.setUnlocalizedName(rfOutput.getUnlocalizedName());
+        event.getRegistry().register(item_rfOutput);
 
     }
     
