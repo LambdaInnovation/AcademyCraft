@@ -3,6 +3,9 @@ package cn.academy.support.rf;
 import cn.academy.ACBlocks;
 import cn.academy.ACItems;
 import cn.academy.support.EnergyBlockHelper;
+import cn.academy.tutorial.Conditions;
+import cn.academy.tutorial.TutorialInit;
+import cn.academy.tutorial.ViewGroups;
 import cn.lambdalib2.registry.RegistryCallback;
 import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.item.Item;
@@ -10,6 +13,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -59,6 +63,16 @@ public class RFSupport {
                 new ItemStack(rfInput), "X",'X',new ItemStack(rfOutput));
         GameRegistry.addShapedRecipe(new ResourceLocation("academy","rf_output_input"),null,
                 new ItemStack(rfOutput), "X",'X',new ItemStack(rfInput));
+    }
+    
+    @StateEventCallback
+    private static void postInit(FMLPostInitializationEvent ev) {
+        // Craft tutorial for energy bridge
+        TutorialInit.defnTut("energy_bridge")
+            .addCondition(Conditions.itemObtained(RFSupport.rfInput))
+            .addCondition(Conditions.itemObtained(RFSupport.rfOutput))
+            .addPreview(ViewGroups.recipes(RFSupport.rfInput))
+            .addPreview(ViewGroups.recipes(RFSupport.rfOutput));
     }
 
     @RegistryCallback

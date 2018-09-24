@@ -5,7 +5,6 @@ import cn.academy.ACItems;
 import cn.academy.client.gui.GuiTutorial;
 import cn.academy.Resources;
 import cn.academy.item.ItemApp;
-import cn.academy.support.rf.RFSupport;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
@@ -91,11 +90,6 @@ public class TutorialInit {
 
         defnTut("ability_basis");
 
-        defnTut("energy_bridge")
-                .addCondition(itemObtained(RFSupport.rfInput))
-                .addCondition(itemObtained(RFSupport.rfOutput))
-                .addPreview(recipes(RFSupport.rfInput))
-                .addPreview(recipes(RFSupport.rfOutput));
 
         defnTut("misc");
 
@@ -136,7 +130,7 @@ public class TutorialInit {
         }.setPreInstalled());
     }
 
-    private static ACTutorial defnTut(String name) {
+    public static ACTutorial defnTut(String name) {
         return TutorialRegistry.addTutorial(name);
     }
 }
