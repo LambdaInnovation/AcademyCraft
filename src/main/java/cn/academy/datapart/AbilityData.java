@@ -12,6 +12,7 @@ import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
 import com.google.common.base.Preconditions;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  */
 @RegDataPart(EntityPlayer.class)
 public class AbilityData extends DataPart<EntityPlayer> {
+
 
     public static AbilityData get(EntityPlayer player) {
         return EntityData.get(player).getPart(AbilityData.class);

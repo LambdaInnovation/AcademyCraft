@@ -9,10 +9,7 @@ import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.obj.ObjLegacyRender;
-import cn.lambdalib2.util.EntitySelectors;
-import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.util.RandUtils;
-import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.*;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.EntityCallback;
 import cn.lambdalib2.util.entityx.MotionHandler;
@@ -140,28 +137,31 @@ public class EntitySilbarn extends EntityAdvanced
         this.isAirBorne = true;
         this.onGround = false;
     }
-    
-    @SideOnly(Side.CLIENT)
+
     public EntitySilbarn(World world) {
         super(world);
-        this.createTime = GameTimer.getTime();
-        
-        this.regEventHandler(new CollideEvent.CollideHandler() {
-            @Override
-            public void onEvent(CollideEvent event) {
-                if(!hit) {
-                    RayTraceResult res = event.result;
-                    EnumFacing dir = res.sideHit;
-                    final double mul = 0.1;
-                    double tx = res.hitVec.x + dir.getFrontOffsetX() * mul,
-                        ty = res.hitVec.y + dir.getFrontOffsetY() * mul,
-                        tz = res.hitVec.z + dir.getFrontOffsetZ() * mul;
-                    spawnEffects(tx, ty, tz);
-                    setDead();
+        if(SideUtils.isClient())
+        {
+            this.createTime = GameTimer.getTime();
+
+            this.regEventHandler(new CollideEvent.CollideHandler() {
+                @Override
+                public void onEvent(CollideEvent event) {
+                    if(!hit) {
+                        RayTraceResult res = event.result;
+                        EnumFacing dir = res.sideHit;
+                        final double mul = 0.1;
+                        double tx = res.hitVec.x + dir.getFrontOffsetX() * mul,
+                                ty = res.hitVec.y + dir.getFrontOffsetY() * mul,
+                                tz = res.hitVec.z + dir.getFrontOffsetZ() * mul;
+                        spawnEffects(tx, ty, tz);
+                        setDead();
+                    }
+                    hit = true;
                 }
-                hit = true;
-            }
-        });
+            });
+        }
+
         
         this.isAirBorne = true;
         this.onGround = false;

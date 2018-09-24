@@ -104,7 +104,7 @@ public class WorldGenPhaseLiq extends WorldGenerator {
                     BlockPos bPos = new BlockPos(x + i1, y + j1 - 1, z + j2);
                     IBlockState ibs = world.getBlockState(bPos);
                     if (buffer[(i1 * 16 + j2) * 8 + j1] && ibs.getBlock() == Blocks.DIRT
-                            && world.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(x + i1, y + j1, z + j2)) > 0) {
+                            && ibs.getBlock().getLightValue(ibs, world, new BlockPos(x + i1, y + j1, z + j2)) > 0) {
                         Biome biomegenbase = world.getBiomeProvider().getBiome(bPos);
 
                         if (biomegenbase.topBlock == Blocks.MYCELIUM) {

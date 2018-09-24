@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -148,11 +149,12 @@ public class CatElectromaster extends Category {
         }
 
         String[] defaultEntities = {"MinecartRideable", "MinecartChest", "MinecartFurnace", "MinecartTNT", "MinecartHopper",
-                "MinecartSpawner", "MinecartCommandBlock", "academy-craft.ac_Entity_EntityMagHook", "VillagerGolem"};
+                "MinecartSpawner", "MinecartCommandBlock", "academy.ac_Entity_EntityMagHook", "VillagerGolem"};
         String[] cfgEntities = AcademyCraft.config.getStringList("metalEntities", "ability", defaultEntities,
                 "Supported Metal Entities of Electro Master. The entity name can be used.");
         for (String entity : cfgEntities) {
-            Class<? extends Entity> c = (Class<? extends Entity>) EntityList.getClassFromName(entity);
+            AcademyCraft.log.info("Try add entity class: "+entity);
+            Class<? extends Entity> c = EntityList.getClass(new ResourceLocation(entity));
             metalEntities.add(c);
         }
 

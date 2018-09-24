@@ -3,6 +3,8 @@ package cn.academy.ability.context;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.ReflectionUtils;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,6 +23,7 @@ public @interface RegClientContext {
     Class<? extends Context> value();
 }
 
+@SideOnly(Side.CLIENT)
 class RegClientContextImpl {
 
     @StateEventCallback
