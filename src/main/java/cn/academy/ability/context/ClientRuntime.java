@@ -67,7 +67,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
     {
         setTick(true);
-        setClearOnDeath();
     }
 
     /**
@@ -136,6 +135,12 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
                         delegates.get(e.getKey()).delegate.onKeyAbort();
                     }
                 });
+    }
+
+    @Override
+    public void onPlayerDead() {
+        clearAllKeys();
+        keyStates.clear();
     }
 
     private KeyState getKeyState(int keyID) {

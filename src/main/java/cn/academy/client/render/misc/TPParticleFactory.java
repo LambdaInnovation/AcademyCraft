@@ -3,8 +3,10 @@ package cn.academy.client.render.misc;
 import cn.academy.Resources;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.particle.ParticleFactory;
+import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 /**
  * @author WeAthFolD
@@ -13,9 +15,11 @@ import net.minecraft.world.World;
 public class TPParticleFactory extends ParticleFactory
 {
 
-    static Particle template = new Particle();
+    static Particle template;
 
-    static {
+    @StateEventCallback(priority = -100)
+    private static void postInit(FMLPostInitializationEvent ev) {
+        template = new Particle();
         template.texture = Resources.getTexture("effects/tp_particle");
         template.size = 0.1f;
         template.hasLight = false;
