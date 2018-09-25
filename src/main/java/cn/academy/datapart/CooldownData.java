@@ -59,7 +59,6 @@ public class CooldownData extends DataPart<EntityPlayer> {
 
     {
         setTick(true);
-        setClearOnDeath();
 
         scheduler.everyTick().run(() -> {
             for (Iterator<SkillCooldown> itr = cooldownMap.values().iterator();

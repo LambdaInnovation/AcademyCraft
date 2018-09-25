@@ -67,7 +67,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
     {
         setTick(true);
-        setClearOnDeath();
     }
 
     /**
