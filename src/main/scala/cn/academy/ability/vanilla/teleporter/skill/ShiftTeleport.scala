@@ -25,8 +25,6 @@ import org.lwjgl.util.Color
   */
 object ShiftTeleport extends Skill("shift_tp", 4) {
 
-  expCustomized = true
-
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyID: Int): Unit = activateSingleKey(rt, keyID, p => new STContext(p))
 
