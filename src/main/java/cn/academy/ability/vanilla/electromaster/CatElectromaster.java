@@ -12,6 +12,7 @@ import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -98,7 +99,7 @@ public class CatElectromaster extends Category {
             return true;
         }
 
-        if (Item.getItemFromBlock(block) == null)
+        if (Item.getItemFromBlock(block) == Items.AIR)
             return false;
         ItemStack stack = new ItemStack(block);
         int[] val = OreDictionary.getOreIDs(stack);

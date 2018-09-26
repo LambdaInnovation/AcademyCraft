@@ -1,5 +1,6 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
+import cn.academy.AcademyCraft
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
@@ -26,7 +27,10 @@ import net.minecraft.util.math.{BlockPos, RayTraceResult}
 object ArcGen extends Skill("arc_gen", 1) {
 
   @SideOnly(Side.CLIENT)
-  override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new ArcGenContext(p))
+  override def activate(rt: ClientRuntime, keyid: Int) = {
+    activateSingleKey(rt, keyid, p => new ArcGenContext(p))
+    AcademyCraft.log.info("Press key:" + keyid)
+  }
 
 }
 
@@ -100,10 +104,10 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
           } else {
             if (RandUtils.ranged(0, 1) < igniteProb) {
               val pos = new BlockPos(hx, hy + 1, hz)
-              val state = world.getBlockState(pos)
-              if (state.getBlock == Blocks.AIR) {
-
-                world.setBlockState(pos, Blocks.FIRE.getDefaultState)
+              AcademyCraft.log.info("Block = " +world.getBlockState(new BlockPos(hx,hy,hz)).getBlock + " above block is "+
+              world.getBlockState(pos).getBlock)
+              if (world.isAirBlock(pos)) {
+                world.setBlockState(pos, Blocks.FIRE.getDefaultState())
               }
             }
           }

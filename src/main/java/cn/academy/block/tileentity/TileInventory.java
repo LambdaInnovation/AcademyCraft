@@ -19,6 +19,10 @@ public class TileInventory extends TileEntity implements IInventory {
     
     public TileInventory(String _invName, int size) {
         inventory = new ItemStack[size];
+        for(int i=0;i<size;i++)
+        {
+            inventory[i]=ItemStack.EMPTY;
+        }
         invName = _invName;
     }
     
