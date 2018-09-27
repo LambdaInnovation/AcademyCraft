@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityMineRayExpert extends EntityRayBase {
 
     public static ExpertRayRenderer renderer;

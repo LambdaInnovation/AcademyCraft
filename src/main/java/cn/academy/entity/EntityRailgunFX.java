@@ -25,7 +25,6 @@ import org.lwjgl.opengl.GL11;
  * @author WeAthFolD
  *
  */
-@RegEntity
 @SideOnly(Side.CLIENT)
 public class EntityRailgunFX extends EntityRayBase {
     

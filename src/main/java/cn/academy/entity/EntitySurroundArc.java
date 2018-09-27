@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntitySurroundArc extends EntityAdvanced {
     
     static final int TEMPLATES = 15;

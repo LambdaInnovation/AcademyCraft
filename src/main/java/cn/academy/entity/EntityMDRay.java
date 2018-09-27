@@ -18,7 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityMDRay extends EntityRayBase {
 
     public EntityMDRay(EntityPlayer spawner, double length) {

@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityMineRayLuck extends EntityRayBase {
     
     static final ResourceLocation texture = Resources.getTexture("effects/md_particle_luck");

@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityMdRayBarrage extends EntityRayBase {
 
     private SubRay[] subrays;

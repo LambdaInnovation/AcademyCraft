@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityMdRaySmall extends EntityRayBase {
 
     public EntityMdRaySmall(World world) {

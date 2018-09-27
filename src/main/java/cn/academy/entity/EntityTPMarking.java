@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * 
  * @author WeathFolD
  */
-@RegEntity
 @SideOnly(Side.CLIENT)
 public class EntityTPMarking extends EntityAdvanced {
 

@@ -15,7 +15,6 @@ import org.lwjgl.util.Color;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegEntity
 public class EntityRippleMark extends EntityAdvanced
 {
 
