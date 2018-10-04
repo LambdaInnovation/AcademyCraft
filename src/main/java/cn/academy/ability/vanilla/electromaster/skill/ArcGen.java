@@ -101,7 +101,6 @@ public class ArcGen extends Skill
                     BlockPos pos = result.getBlockPos();
                     IBlockState ibs = player.world.getBlockState(pos);
                     Block block = ibs.getBlock();
-                    AcademyCraft.log.info("Trace block: "+block+" at " + pos);
                     if (block == Blocks.WATER) {
                         if (RandUtils.ranged(0, 1) < fishProb) {
                             world.spawnEntity(new EntityItem(
