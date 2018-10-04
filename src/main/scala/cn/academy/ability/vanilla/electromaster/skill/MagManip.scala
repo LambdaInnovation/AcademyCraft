@@ -2,6 +2,7 @@ package cn.academy.ability.vanilla.electromaster.skill
 
 import java.util.function.Predicate
 
+import cn.academy.AcademyCraft
 import cn.academy.ability.{AbilityContext, Skill}
 import cn.academy.ability.context._
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
@@ -10,6 +11,7 @@ import cn.academy.ability.vanilla.electromaster.CatElectromaster
 import cn.academy.entity.EntitySurroundArc.ArcType
 import cn.lambdalib2.multiblock.BlockMulti
 import cn.lambdalib2.registry.mc.RegEntity
+import cn.lambdalib2.s11n.network.NetworkMessage
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.EntitySyncer.Synchronized
 import cn.lambdalib2.util._
@@ -22,10 +24,10 @@ import net.minecraft.block.{Block, BlockDoor}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
-import net.minecraft.util.math.{BlockPos, MathHelper, RayTraceResult, Vec3d}
+import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 import net.minecraft.util.{EnumHand, SoundCategory}
 import net.minecraft.world.World
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint
 
 private[electromaster] object MagManip extends Skill("mag_manip", 2) {
 
@@ -220,7 +222,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
 
   var damage: Float = _
 
-  @Synchronized
+  //@Synchronized
   var player2: EntityPlayer = null
 
   val yawSpeed: Float = RandUtils.rangef(1, 3)
@@ -277,11 +279,26 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
     if (world.isRemote) {
       startClient()
     }
+    else
+    {
+      NetworkMessage.sendToAllAround(new TargetPoint(world.provider.getDimension, posX, posY, posZ, 40),
+        this, "MSG_ENT_SYNC", player2.getEntityId.asInstanceOf[AnyRef])
+    }
+  }
+
+  @SideOnly(value=Side.CLIENT)
+  @Listener(channel="MSG_ENT_SYNC", side=Array(Side.CLIENT))
+  def onClientSyncEntity(id: Int): Unit ={
+    player2 = world.getEntityByID(id).asInstanceOf[EntityPlayer]
   }
 
   override def onUpdate() = {
-    syncer.update()
 
+    if(!world.isRemote){
+      NetworkMessage.sendToAllAround(new TargetPoint(world.provider.getDimension, posX, posY, posZ, 40),
+        this, "MSG_ENT_SYNC", player2.getEntityId.asInstanceOf[AnyRef])
+    }
+    syncer.update()
     super.onUpdate()
 
     yaw += yawSpeed

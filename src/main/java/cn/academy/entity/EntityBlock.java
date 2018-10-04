@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -181,10 +182,11 @@ public class EntityBlock extends EntityAdvanced {
 
     public void setBlock(Block _block) {
         block = _block;
+        _blockState = block.getDefaultState();
     }
     
     public boolean setBlock(Block _block, IBlockState blockState) {
-        if(Item.getItemFromBlock(_block) == null)
+        if(Item.getItemFromBlock(_block) == Items.AIR)
             return false;
         block = _block;
         _blockState = blockState;
