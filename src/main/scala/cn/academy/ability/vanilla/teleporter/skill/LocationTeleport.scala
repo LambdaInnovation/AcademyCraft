@@ -149,8 +149,8 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val (px, py, pz) = (player.posX, player.posY, player.posZ)
     entitiesToTeleport.foreach(e => {
       val (dx, dy, dz) = (e.posX - px, e.posY - py, e.posZ - pz)
-      if(e.isRiding())e.dismountRidingEntity
-      e.setPositionAndRotation(dest.x + dx, dest.y + dy, dest.z + dz, e.rotationYaw, e.rotationPitch);
+      if(e.isRiding)e.dismountRidingEntity()
+      e.setPositionAndUpdate(dest.x + dx, dest.y + dy, dest.z + dz)
     })
 
     ACSounds.playClient(player.getEntityWorld, player.posX, player.posY, player.posZ,"academy:tp.tp", SoundCategory.AMBIENT, 0.5f, 1.0f)
@@ -161,7 +161,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
-    ACAchievements.trigger(player.asInstanceOf, "teleporter.ignore_barrier")
+    ACAchievements.trigger(player.asInstanceOf[EntityPlayer], "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)
   }
 
