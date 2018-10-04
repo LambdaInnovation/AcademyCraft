@@ -28,7 +28,7 @@ import java.util.HashSet;
 public class CatElectromaster extends Category {
 
     public static final Skill
-        arcGen = ArcGen$.MODULE$,
+        arcGen = ArcGen.instance,
         magManip = MagManip$.MODULE$,
         mineDetect = MineDetect$.MODULE$,
         railgun = Railgun$.MODULE$,
