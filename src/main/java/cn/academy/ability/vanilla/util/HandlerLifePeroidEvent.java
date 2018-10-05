@@ -23,6 +23,8 @@ public abstract class HandlerLifePeroidEvent
 
     @SubscribeEvent
     public void onEvent(TickEvent.ClientTickEvent event){
+        if(event.phase == TickEvent.Phase.END)
+            return;
         if(tick >= maxTick){
             onDeath();
         }

@@ -297,13 +297,13 @@ public class Flashing extends Skill {
             double dist = lerpf(12, 18, exp);
 
             Vec3d dir = VecUtils.copy(dirs[keyid]);
-            VecUtils.rotateAroundZ(dir, player.rotationPitch * MathUtils.PI_F / 180);
-            dir.rotateYaw((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
+            dir = VecUtils.rotateAroundZ(dir, player.rotationPitch * MathUtils.PI_F / 180)
+                    .rotateYaw((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
 
+            Vec3d dst = VecUtils.add(player.getPositionEyes(1F),VecUtils.multiply(dir, dist));
             RayTraceResult mop = Raytrace.perform(player.getEntityWorld(), player.getPositionVector(),
-                    VecUtils.add(player.getPositionVector(),VecUtils.multiply(dir, dist)),
-                    EntitySelectors.living().and(EntitySelectors.exclude(player)));
+                    dst, EntitySelectors.living().and(EntitySelectors.exclude(player)));
 
             double x, y, z;
 
@@ -348,9 +348,9 @@ public class Flashing extends Skill {
                     y += mop.entityHit.getEyeHeight();
                 }
             } else {
-                x = player.posX;
-                y = player.posY;
-                z = player.posZ;
+                x = dst.x;
+                y = dst.y;
+                z = dst.z;
             }
 
             return new Vec3d(x, y, z);
