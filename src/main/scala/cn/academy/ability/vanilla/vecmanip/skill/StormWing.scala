@@ -136,7 +136,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
         val res: RayTraceResult = Raytrace.perform(world, VecUtils.add(player.getPositionVector, new Vec3d(0, 0.5, 0)),
           VecUtils.add(player.getPositionVector, new Vec3d(0, -0.3, 0)),
           EntitySelectors.nothing)
-        if(res.typeOfHit==RayTraceResult.Type.MISS){
+        if(res==null || res.typeOfHit==RayTraceResult.Type.MISS){
           player.motionY += 0.078
         }
         else{
@@ -233,9 +233,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   private def worldSpace(x: Double, y: Double, z: Double) = {
     val moveDir = new Vec3d(x, y, z)
     val (yaw, pitch) = (toRadians(player.rotationYawHead), toRadians(player.rotationPitch))
-    moveDir.rotatePitch(-pitch)
-    moveDir.rotateYaw(-yaw)
-    moveDir
+    moveDir.rotatePitch(-pitch).rotateYaw(-yaw)
   }
 
   @Listener(channel=MSG_SYNC_STATE, side=Array(Side.CLIENT, Side.SERVER))
