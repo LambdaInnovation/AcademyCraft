@@ -28,16 +28,16 @@ item.ac_matter_unit.name=Matter Unit
 item.ac_matter_unit_phase_liquid.name=Imag Phase Liquid Unit
 item.ac_matter_unit_none.name=Empty Unit
 item.ac_matrix_core.name=Matrix Core
-item.ac_matrix_core_0.name=Basic Matrix Core
-item.ac_matrix_core_1.name=Improved Matrix Core
-item.ac_matrix_core_2.name=Advanced Matrix Core
+item.ac_mat_core_0.name=Basic Matrix Core
+item.ac_mat_core_1.name=Improved Matrix Core
+item.ac_mat_core_2.name=Advanced Matrix Core
 item.ac_energy_unit.name=Energy Unit
 item.ac_windgen_fan.name=Wind Generator Fan
 
 item.ac_coin.name=Coin
 item.ac_silbarn.name=Silicon Barn
 item.ac_needle.name=Needle
-item.ac_maghook.name=Magnetic Hook
+item.ac_mag_hook.name=Magnetic Hook
 
 item.ac_terminal_installer.name=Data Terminal
 item.ac_apps.name=App Installer

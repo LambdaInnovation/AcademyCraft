@@ -28,16 +28,16 @@ item.ac_matter_unit.name=物質單元
 item.ac_matter_unit_phase_liquid.name=虛相位液體單元
 item.ac_matter_unit_none.name=空單元
 item.ac_matrix_core.name=矩陣核心
-item.ac_matrix_core_0.name=基礎矩陣核心
-item.ac_matrix_core_1.name=改良矩陣核心
-item.ac_matrix_core_2.name=高階矩陣核心
+item.ac_mat_core_0.name=基礎矩陣核心
+item.ac_mat_core_1.name=改良矩陣核心
+item.ac_mat_core_2.name=高階矩陣核心
 item.ac_energy_unit.name=能量單元
 item.ac_windgen_fan.name=風力能量發生機 - 扇葉
 
 item.ac_coin.name=硬幣
 item.ac_silbarn.name=擴散性支援半導體
 item.ac_needle.name=鋼針
-item.ac_maghook.name=磁力鉤
+item.ac_mag_hook.name=磁力鉤
 
 item.ac_terminal_installer.name=資料終端
 item.ac_apps.name=應用安裝器

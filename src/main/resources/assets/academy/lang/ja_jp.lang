@@ -28,16 +28,16 @@ item.ac_matter_unit.name=マターユニット
 item.ac_matter_unit_phase_liquid.name=虚相位液体ユニット
 item.ac_matter_unit_none.name=エンプティユニット
 item.ac_matrix_core.name=マトリックスコア
-item.ac_matrix_core_0.name=基本マトリックスコア
-item.ac_matrix_core_1.name=改良マトリックスコア
-item.ac_matrix_core_2.name=先進マトリックスコア
+item.ac_mat_core_0.name=基本マトリックスコア
+item.ac_mat_core_1.name=改良マトリックスコア
+item.ac_mat_core_2.name=先進マトリックスコア
 item.ac_energy_unit.name=エネルギーユニット
 item.ac_windgen_fan.name=風力発電機 - ファン
 
 item.ac_coin.name=コイン
 item.ac_silbarn.name=拡散支援半導体
 item.ac_needle.name=金属矢
-item.ac_maghook.name=磁気フック
+item.ac_mag_hook.name=磁気フック
 
 item.ac_terminal_installer.name=データ端末
 item.ac_apps.name=アプリケーションインストーラ
