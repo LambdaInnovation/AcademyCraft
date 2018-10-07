@@ -3,7 +3,10 @@ package cn.academy.item;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,6 +38,17 @@ public class ItemEnergyBase extends Item implements ImagEnergyItem {
         
         setMaxStackSize(1);
         setMaxDamage(13);
+        addPropertyOverride(
+            new ResourceLocation("energy"),
+            (stack, worldIn, entityIn) -> {
+                int damage = stack.getItemDamage();
+                if (damage < 3)
+                    return 1.0f;
+                if (damage > 10)
+                    return 0.0f;
+                return 0.5f;
+            }
+        );
     }
     
 //    @Override

@@ -1,9 +1,7 @@
 package cn.academy.block.container;
 
-import cn.academy.ACBlocks;
 import cn.academy.ACItems;
 import cn.academy.block.tileentity.TileImagFusor;
-import cn.academy.worldgen.WorldGenInit;
 import cn.academy.crafting.ImagFusorRecipes;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.energy.api.IFItemManager;
@@ -29,8 +27,8 @@ public class ContainerImagFusor extends TechUIContainer<TileImagFusor> {
     private void initInventory() {
         this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, 13, 49));
         this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 143, 49));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ACBlocks.imag_phase.mat, SLOT_IMAG_INPUT, 13, 10));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ACBlocks.imag_phase.mat, SLOT_IMAG_OUTPUT, 143, 10));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ItemMatterUnit.MAT_PHASE_LIQUID, SLOT_IMAG_INPUT, 13, 10));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ItemMatterUnit.MAT_PHASE_LIQUID, SLOT_IMAG_OUTPUT, 143, 10));
         this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 42, 80));
         
         mapPlayerInventory();
@@ -39,7 +37,7 @@ public class ContainerImagFusor extends TechUIContainer<TileImagFusor> {
         SlotGroup inventoryGroup = gRange(4, inventorySlots.size());
 
         this.addTransferRule(inventoryGroup,
-                stack -> unit.getMaterial(stack) == ACBlocks.imag_phase.mat,
+                stack -> unit.getMaterial(stack) == ItemMatterUnit.MAT_PHASE_LIQUID,
                 gSlots(2));
 
         this.addTransferRule(inventoryGroup,

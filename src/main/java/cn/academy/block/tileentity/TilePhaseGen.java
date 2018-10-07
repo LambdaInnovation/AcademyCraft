@@ -4,20 +4,15 @@ import cn.academy.ACBlocks;
 import cn.academy.ACItems;
 import cn.academy.block.block.ACFluids;
 import cn.academy.block.container.ContainerPhaseGen;
-import cn.academy.block.tileentity.TileGeneratorBase;
 import cn.academy.network.MessageMachineInfoSync;
 import cn.academy.network.NetworkManager;
-import cn.academy.worldgen.WorldGenInit;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
-import cn.academy.client.render.block.RenderPhaseGen;
 import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.*;
@@ -84,7 +79,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
                         output.grow(1);
                     } else {
                         this.setInventorySlotContents(SLOT_LIQUID_OUT,
-                            ACItems.matter_unit.create(ItemMatterUnit.NONE));
+                            ACItems.matter_unit.create(ItemMatterUnit.MAT_NONE));
                     }
                 }
             }
@@ -160,13 +155,13 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
 
     private boolean isPhaseLiquid(ItemStack stack) {
         return stack.getItem() == ACItems.matter_unit &&
-                ACItems.matter_unit.getMaterial(stack) == ACBlocks.imag_phase.mat;
+                ACItems.matter_unit.getMaterial(stack) == ItemMatterUnit.MAT_PHASE_LIQUID;
     }
     
     private boolean isOutputSlotAvailable() {
         ItemStack stack = getStackInSlot(SLOT_LIQUID_OUT);
         return stack == null || (stack.getItem() == ACItems.matter_unit &&
-                ACItems.matter_unit.getMaterial(stack) == ItemMatterUnit.NONE && stack.getCount() < stack.getMaxStackSize());
+                ACItems.matter_unit.getMaterial(stack) == ItemMatterUnit.MAT_NONE && stack.getCount() < stack.getMaxStackSize());
     }
 
 }

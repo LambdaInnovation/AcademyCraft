@@ -1,0 +1,1 @@
+{"__xconfgen":true,"overrides":[{"model":"academy:item/matter_unit_phase_liquid_1","predicate":{"frame":1}},{"model":"academy:item/matter_unit_phase_liquid_2","predicate":{"frame":2}},{"model":"academy:item/matter_unit_phase_liquid_3","predicate":{"frame":3}}],"parent":"item/generated","textures":{"layer0":"academy:items/matter_unit_phase_liquid_0"}}

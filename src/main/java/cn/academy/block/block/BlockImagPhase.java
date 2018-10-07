@@ -50,18 +50,14 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
         
     }
     
-    public final MatterMaterial mat;
-//    public IIcon fluidIcon;
-    
+
     public BlockImagPhase() {
         super(ACFluids.fluidImagProj, Material.WATER);
         setCreativeTab(AcademyCraft.cct);
 
         this.setQuantaPerBlock(3);
         
-        mat = new MatterMaterial("phase_liquid", this);
-        ItemMatterUnit.addMatterMaterial(mat);
-        
+
         MinecraftForge.EVENT_BUS.register(this);
     }
     
@@ -92,7 +88,7 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
         Block b = event.getWorld().getBlockState(event.getPos()).getBlock();
         ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
         if(b == this && stack != null && stack.getItem() == ACItems.matter_unit) {
-            ACItems.matter_unit.setMaterial(stack, mat);
+            ACItems.matter_unit.setMaterial(stack, ItemMatterUnit.MAT_PHASE_LIQUID);
         }
     }
     

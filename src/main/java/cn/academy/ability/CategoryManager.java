@@ -1,8 +1,12 @@
 package cn.academy.ability;
 
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.Debug;
 import com.google.common.collect.ImmutableList;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -12,13 +16,21 @@ import java.util.List;
 public class CategoryManager {
 
     public static CategoryManager INSTANCE = new CategoryManager();
-    List<Category> catList = new ArrayList();
+
+    @StateEventCallback
+    private static void postInit(FMLPostInitializationEvent ev) {
+         INSTANCE.bake();
+    }
+
+    private final List<Category> catList = new ArrayList<>();
+
+    private boolean _baked = false;
     
     private CategoryManager() {}
     
     public void register(Category cat) {
+        Debug.require(!_baked, "CategoryManager.registry() can only be called before postInit");
         catList.add(cat);
-        cat.catID = catList.size() - 1;
     }
     
     public Category getCategory(int id) {
@@ -34,12 +46,19 @@ public class CategoryManager {
     }
     
     public Category getCategory(String name) {
-        //This is a very small list so looping is acceptable
         for(Category c : catList) {
             if(c.getName().equals(name))
                 return c;
         }
         return null;
+    }
+
+    private void bake() {
+        _baked = true;
+        catList.sort(Comparator.comparing(it -> it.getName()));
+        for (int idx = 0; idx < catList.size(); ++idx) {
+            catList.get(idx).catID = idx;
+        }
     }
     
 }

@@ -1,8 +1,12 @@
 package cn.academy.item;
 
+import cn.academy.ACBlocks;
 import cn.academy.Resources;
 import cn.academy.event.MatterUnitHarvestEvent;
+import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.PlayerUtils;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -16,6 +20,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +56,16 @@ public class ItemMatterUnit extends Item {
     
     private static List<MatterMaterial> materials = new ArrayList<>();
     
-    public static final MatterMaterial NONE = new MatterMaterial("none", Blocks.AIR);
+    public static final MatterMaterial MAT_NONE = new MatterMaterial("none", Blocks.AIR);
+    public static final MatterMaterial MAT_PHASE_LIQUID = new MatterMaterial("phase_liquid", ACBlocks.imag_phase);
+
     static {
-        addMatterMaterial(NONE);
+        // !!! Order is important here, only append at the end
+        addMatterMaterial(MAT_NONE);
+        addMatterMaterial(MAT_PHASE_LIQUID);
     }
     
-    public static void addMatterMaterial(MatterMaterial mat) {
+    private static void addMatterMaterial(MatterMaterial mat) {
         for(MatterMaterial prev : materials) {
             if(prev.name.equals(mat.name))
                 throw new RuntimeException("Duplicate MatterMaterial Key " + mat.name);
@@ -78,6 +88,7 @@ public class ItemMatterUnit extends Item {
     public ItemMatterUnit() {
         setMaxStackSize(16);
         hasSubtypes = true;
+        addPropertyOverride(new ResourceLocation("frame"), (stack, worldIn, entityIn) -> (int) (GameTimer.getTime() * 4) % 4);
     }
     
     public MatterMaterial getMaterial(ItemStack stack) {
@@ -85,8 +96,8 @@ public class ItemMatterUnit extends Item {
             return null;
         MatterMaterial mat = materials.get(stack.getItemDamage());
         if(mat == null) {
-            setMaterial(stack, NONE);
-            return NONE;
+            setMaterial(stack, MAT_NONE);
+            return MAT_NONE;
         }
         return mat;
     }
@@ -112,7 +123,7 @@ public class ItemMatterUnit extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        boolean isNone = getMaterial(stack) == NONE;
+        boolean isNone = getMaterial(stack) == MAT_NONE;
         RayTraceResult rayRes = rayTrace(world, player, isNone);
 
         if (rayRes == null) {
@@ -163,7 +174,7 @@ public class ItemMatterUnit extends Item {
                         world.setBlockState(npos, getMaterial(stack).block.getBlockState().getBaseState());
                     }
                     ItemStack newStack = new ItemStack(this);
-                    this.setMaterial(newStack, NONE);
+                    this.setMaterial(newStack, MAT_NONE);
                     int left = PlayerUtils.mergeStackable(player.inventory, newStack);
                     if(left > 0 && !world.isRemote) {
                         newStack.setCount(left);
@@ -172,7 +183,7 @@ public class ItemMatterUnit extends Item {
                     if(!player.capabilities.isCreativeMode) {
                         stack.shrink(1);
                     }
-                    MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, NONE));
+                    MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, MAT_NONE));
                 }
             }
 

@@ -2,13 +2,11 @@ package cn.academy.block.tileentity;
 
 import cn.academy.ACItems;
 import cn.academy.block.block.ACFluids;
-import cn.academy.client.render.block.RenderDynamicBlock;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.client.sound.PositionedSound;
 import cn.academy.client.sound.TileEntitySound;
 import cn.academy.network.MessageMachineInfoSync;
 import cn.academy.network.NetworkManager;
-import cn.academy.worldgen.WorldGenInit;
 import cn.academy.crafting.ImagFusorRecipes;
 import cn.academy.crafting.ImagFusorRecipes.IFRecipe;
 import cn.academy.item.ItemMatterUnit;
@@ -143,7 +141,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
                     inventory[SLOT_IMAG_INPUT] = null;
 
                 if (imagOutStack == null) {
-                    inventory[SLOT_IMAG_OUTPUT] = ACItems.matter_unit.create(ItemMatterUnit.NONE);
+                    inventory[SLOT_IMAG_OUTPUT] = ACItems.matter_unit.create(ItemMatterUnit.MAT_NONE);
                 } else {
                     imagOutStack.grow(1);
                 }

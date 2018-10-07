@@ -5,7 +5,6 @@ import cn.academy.ability.Category;
 import cn.academy.ability.Skill;
 import cn.academy.ability.RegCategory;
 import cn.academy.ability.develop.condition.DevConditionAnySkillOfLevel;
-import cn.academy.worldgen.WorldGenInit;
 import cn.academy.crafting.MetalFormerRecipes;
 import cn.academy.block.tileentity.TileMetalFormer.Mode;
 import cn.academy.ability.vanilla.electromaster.CatElectromaster;
@@ -16,10 +15,9 @@ import cn.academy.ability.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.ability.vanilla.teleporter.CatTeleporter;
 import cn.academy.ability.vanilla.vecmanip.CatVecManip;
 import cn.lambdalib2.registry.StateEventCallback;
-import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 public class VanillaCategories {
 
@@ -39,7 +37,7 @@ public class VanillaCategories {
     private static void init(FMLInitializationEvent event) {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ACItems.reinforced_iron_plate), new ItemStack(ACItems.needle, 6),
                 Mode.INCISE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(Block.getBlockFromName("rail")), new ItemStack(ACItems.needle, 2),
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(Blocks.RAIL), new ItemStack(ACItems.needle, 2),
                 Mode.INCISE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ACItems.reinforced_iron_plate, 2), new ItemStack(ACItems.coin, 3),
                 Mode.PLATE);
