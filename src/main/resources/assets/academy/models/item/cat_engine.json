@@ -1,1 +1,1 @@
-{"__xconfgen":true,"parent":"academy:block/cat_engine"}
+{"parent":"item/generated","textures":{"layer0":"academy:blocks/cat_engine"},"__xconfgen":true}

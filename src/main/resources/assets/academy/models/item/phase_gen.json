@@ -1,1 +1,1 @@
-{"__xconfgen":true,"parent":"academy:block/phase_gen"}
+{"parent":"item/generated","textures":{"layer0":"academy:blocks/phase_gen"},"__xconfgen":true}

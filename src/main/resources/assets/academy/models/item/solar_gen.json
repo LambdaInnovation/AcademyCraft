@@ -1,1 +1,1 @@
-{"__xconfgen":true,"parent":"academy:block/solar_gen"}
+{"parent":"item/generated","textures":{"layer0":"academy:blocks/solar_gen"},"__xconfgen":true}

@@ -1,1 +1,1 @@
-{"__xconfgen":true,"parent":"academy:block/windgen_base"}
+{"parent":"item/generated","textures":{"layer0":"academy:blocks/windgen_base"},"__xconfgen":true}

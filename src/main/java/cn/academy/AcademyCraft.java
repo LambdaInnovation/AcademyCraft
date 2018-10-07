@@ -59,20 +59,14 @@ public class AcademyCraft {
 
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
-    public static Item logo;
-
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
-        final ItemStack iconStack = new ItemStack(logo);
+        final ItemStack iconStack = new ItemStack(ACItems.logo);
 
         @Override
         public ItemStack getTabIconItem() {
             return iconStack;
         }
     };
-
-    private static void registerItems(Register<Item> registry) {
-        registry.getRegistry().register(logo);
-    }
 
     @StateEventCallback(priority = 1)
     private static void preInit(FMLPreInitializationEvent event) {
