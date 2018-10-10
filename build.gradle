@@ -74,6 +74,11 @@ repositories {
         name = "CoFH Maven"
         url = "http://maven.covers1624.net"
     }
+    maven {
+        // The main host of CraftTweaker related libs
+        name = "jared"
+        url = "http://maven.blamejared.com"
+    }
 }
 
 configurations {
@@ -95,6 +100,9 @@ dependencies {
     compile "codechicken:CodeChickenLib:1.12.2-${config.ccl_ver}:deobf"
     compile "codechicken:NotEnoughItems:1.12.2-${config.nei_ver}:deobf"
     deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
+    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.9.6"
+    deobfCompile "CraftTweaker2:CraftTweaker2-API:4.1.9.6"
+    deobfCompile "CraftTweaker2:ZenScript:4.1.9.6"
 }
 
 processResources {
@@ -117,11 +125,3 @@ processResources {
 }
 
 compileJava.options.encoding = "UTF-8"
-
-task getLibs << {
-    ant.mkdir(dir: 'libs')
-    ant.get(src: 'https://minecraft.curseforge.com/projects/crafttweaker/files/2452011/download',
-            dest: 'libs/CraftTweaker3-Dev-3.0.9C.jar', skipexisting: 'true')
-}
-
-sourceMainJava.dependsOn getLibs
