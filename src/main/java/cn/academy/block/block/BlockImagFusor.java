@@ -51,8 +51,16 @@ public class BlockImagFusor extends ACBlockContainer {
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.values()[meta]);
+    public IBlockState getStateFromMeta(int meta)
+    {
+        EnumFacing enumfacing = EnumFacing.getFront(meta);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+        {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 //    @Override
 //    @SideOnly(Side.CLIENT)

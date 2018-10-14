@@ -7,6 +7,7 @@ import cn.academy.worldgen.WorldGenInit;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.item.ItemMatterUnit.MatterMaterial;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -87,7 +88,7 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
     public void onInteract(PlayerInteractEvent.RightClickBlock event) {
         Block b = event.getWorld().getBlockState(event.getPos()).getBlock();
         ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
-        if(b == this && stack != null && stack.getItem() == ACItems.matter_unit) {
+        if(b == this && !stack.isEmpty() && stack.getItem() == ACItems.matter_unit) {
             ACItems.matter_unit.setMaterial(stack, ItemMatterUnit.MAT_PHASE_LIQUID);
         }
     }
