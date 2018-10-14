@@ -1,20 +1,21 @@
 package cn.academy.support.minetweaker;
 
 import cn.academy.block.tileentity.TileMetalFormer.Mode;
+import cn.academy.crafting.MetalFormerRecipes;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import static cn.academy.crafting.MetalFormerRecipes.INSTANCE;
-import static cn.academy.support.minetweaker.MTSupport.toStack;
 /**
  * 
  * @author 3TUSK
  */
 @ZenClass("mods.academycraft.MetalFormer")
+@ZenRegister
 public class MetalFormerSupport {
     
     @ZenMethod
@@ -39,14 +40,14 @@ public class MetalFormerSupport {
         Mode mode;
         
         public AddMetalFormerRecipe(IItemStack input, IItemStack output, Mode mode) {
-            this.input = toStack(input);
-            this.output = toStack(output);
+            this.input = MTSupport.toStack(input);
+            this.output = MTSupport.toStack(output);
             this.mode = mode;
         }
         
         @Override
         public void apply() {
-            INSTANCE.add(input, output, mode);
+            MetalFormerRecipes.INSTANCE.add(input, output, mode);
         }
 
         @Override
