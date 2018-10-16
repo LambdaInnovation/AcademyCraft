@@ -55,7 +55,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
   private def s_onEnd() = {
     if(ctx.consume(consumption, overload)) {
       sendToClient(MSG_MARK_END)
-      sendToSelf(MSG_TRIGGER, getDest.addVector(0, 1.65, 0))
+      sendToSelf(MSG_TRIGGER, getDest.add(0, 1.65, 0))
       ctx.addSkillExp(.004f)
       JetEngine.triggerAchievement(player)
       ctx.setCooldown(lerpf(60, 30, exp).toInt)

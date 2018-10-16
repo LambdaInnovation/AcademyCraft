@@ -60,11 +60,9 @@ public class AcademyCraft {
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
-        final ItemStack iconStack = new ItemStack(ACItems.logo);
-
         @Override
-        public ItemStack getTabIconItem() {
-            return iconStack;
+        public ItemStack createIcon() {
+            return new ItemStack(ACItems.logo);
         }
     };
 
@@ -104,9 +102,9 @@ public class AcademyCraft {
                 Object obj = entry.getValue();
                 String str1 = entry.getKey(), str2;
                 if (obj instanceof Item) {
-                    str2 = I18n.translateToLocal(((Item) obj).getUnlocalizedName() + ".name");
+                    str2 = I18n.translateToLocal(((Item) obj).getTranslationKey() + ".name");
                 } else if (obj instanceof Block) {
-                    str2 = I18n.translateToLocal(((Block) obj).getUnlocalizedName() + ".name");
+                    str2 = I18n.translateToLocal(((Block) obj).getTranslationKey() + ".name");
                 } else {
                     str2 = obj.toString();
                 }

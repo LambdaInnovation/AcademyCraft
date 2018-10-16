@@ -150,7 +150,7 @@ private object MediaManagerInit {
   }
 
   @SideOnly(Side.CLIENT)
-  def _rootFolder_c: File = new File(Minecraft.getMinecraft.mcDataDir, "acmedia")
+  def _rootFolder_c: File = new File(Minecraft.getMinecraft.gameDir, "acmedia")
 
 }
 

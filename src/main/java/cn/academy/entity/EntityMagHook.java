@@ -211,7 +211,7 @@ public class EntityMagHook extends EntityAdvanced
     @Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         isHit = tag.getBoolean("isHit");
-        hitSide = EnumFacing.getFront(tag.getInteger("hitSide"));
+        hitSide = EnumFacing.byIndex(tag.getInteger("hitSide"));
         hookX = tag.getInteger("hookX");
         hookY = tag.getInteger("hookY");
         hookZ = tag.getInteger("hookZ");

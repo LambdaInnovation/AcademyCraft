@@ -106,7 +106,7 @@ public class RangedRayDamage {
             Predicate<Entity> areaSelector = target -> {
                 Vec3d dv = subtract(new Vec3d(target.posX, target.posY, target.posZ), start);
                 Vec3d proj = dv.crossProduct(slope);
-                return proj.lengthVector() < range * 1.2;
+                return proj.length() < range * 1.2;
             };
             List<Entity> targets = WorldUtils.getEntities(world, aabb, entitySelector.and(areaSelector));
             targets.sort((lhs, rhs) -> {
@@ -208,7 +208,7 @@ public class RangedRayDamage {
 
     protected boolean attackEntity(Entity target) {
         Vec3d dv = subtract(new Vec3d(target.posX, target.posY, target.posZ), start);
-        float dist = Math.min(maxIncrement, (float) dv.crossProduct(slope).lengthVector());
+        float dist = Math.min(maxIncrement, (float) dv.crossProduct(slope).length());
         
         float realDmg = this.startDamage * MathUtils.lerpf(1, 0.2f, dist / maxIncrement);
         return applyAttack(target, realDmg);

@@ -37,7 +37,7 @@ public class ItemApp extends Item {
         for(App app : AppRegistry.enumeration()) {
             if(!app.isPreInstalled()) {
                 ItemApp item = new ItemApp(app);
-                item.setUnlocalizedName("ac_app_" + app.getName());
+                item.setTranslationKey("ac_app_" + app.getName());
                 item.setRegistryName("academy:app_" + app.getName());
 
                 event.getRegistry().register(item);

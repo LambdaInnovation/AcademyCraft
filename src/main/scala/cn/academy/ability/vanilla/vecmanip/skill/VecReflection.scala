@@ -49,7 +49,7 @@ private object VecReflectionContext {
 
   def reflect(entity: Entity, player: EntityPlayer): Unit = {
     val lookPos = Raytrace.getLookingPos(player, 20).getLeft
-    val speed = new Vec3d(entity.motionX, entity.motionY, entity.motionZ).lengthVector
+    val speed = new Vec3d(entity.motionX, entity.motionY, entity.motionZ).length()
     val vel = multiply(subtract(lookPos, entityHeadPos(entity)).normalize, speed)
     entity.motionX = vel.x
     entity.motionY = vel.y
@@ -139,7 +139,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
     fireball.setPosition(source.posX, source.posY, source.posZ)
     val lookPos = Raytrace.getLookingPos(player, 20).getLeft
-    val speed = new Vec3d(source.motionX, source.motionY, source.motionZ).lengthVector
+    val speed = new Vec3d(source.motionX, source.motionY, source.motionZ).length()
     val vel = multiply(subtract(lookPos, entityHeadPos(source)).normalize, speed)
     setMotion(fireball, vel)
     EntityAffection.mark(fireball)

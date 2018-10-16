@@ -183,7 +183,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
 
   private[skill] def tryMove(): Unit = {
     val rawDelta = subtract(destination, chargePosition)
-    if (rawDelta.lengthVector() < 1) return
+    if (rawDelta.length() < 1) return
 
     val delta = multiply(rawDelta.normalize(), MOVING_SPEED)
     chargePosition = add(chargePosition, delta)

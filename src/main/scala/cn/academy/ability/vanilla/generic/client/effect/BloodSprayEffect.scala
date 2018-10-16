@@ -100,9 +100,9 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
       m(bounds.minZ, bounds.maxZ))
 
     this.setPosition(
-      x + xm + dir.getFrontOffsetX * 0.51 * dx,
-      y + ym + dir.getFrontOffsetY * 0.51 * dy,
-      z + zm + dir.getFrontOffsetZ * 0.51 * dz
+      x + xm + dir.getXOffset * 0.51 * dx,
+      y + ym + dir.getYOffset * 0.51 * dy,
+      z + zm + dir.getZOffset * 0.51 * dz
     )
   }
 

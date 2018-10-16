@@ -172,7 +172,7 @@ class LSContextC(par: LSContext) extends ClientContext(par) {
   private def c_update() = {
     if (RandUtils.nextFloat < 0.3f) {
       val s: Double = 0.5
-      val mo = VecUtils.lookingPos(player, 1).addVector(
+      val mo = VecUtils.lookingPos(player, 1).add(
         ranged(-s, s), ranged(-s, s), ranged(-s, s)
       )
       val p: Particle = MdParticleFactory.INSTANCE.next(world, new Vec3d(mo.x, mo.y, mo.z),

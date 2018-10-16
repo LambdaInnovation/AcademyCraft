@@ -103,7 +103,7 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
       world.spawnEntity(splash)
     })
 
-    val headPos = targ.getPositionVector.addVector(0, targ.height * 0.6, 0)
+    val headPos = targ.getPositionVector.add(0, targ.height * 0.6, 0)
 
     List(0, 30, 45, 60, 80, -30, -45, -60, -80)
       .map(angle => Vec3d.fromPitchYaw(player.rotationYawHead + rangef(-20, 20), angle))

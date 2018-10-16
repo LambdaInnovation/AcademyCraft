@@ -192,8 +192,8 @@ public class ItemMatterUnit extends Item {
     }
     
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName() + "_" + getMaterial(stack).name;
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "_" + getMaterial(stack).name;
     }
     
     @SideOnly(Side.CLIENT)

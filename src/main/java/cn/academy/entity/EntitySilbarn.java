@@ -151,9 +151,9 @@ public class EntitySilbarn extends EntityAdvanced
                         RayTraceResult res = event.result;
                         EnumFacing dir = res.sideHit;
                         final double mul = 0.1;
-                        double tx = res.hitVec.x + dir.getFrontOffsetX() * mul,
-                                ty = res.hitVec.y + dir.getFrontOffsetY() * mul,
-                                tz = res.hitVec.z + dir.getFrontOffsetZ() * mul;
+                        double tx = res.hitVec.x + dir.getYOffset() * mul,
+                                ty = res.hitVec.y + dir.getYOffset() * mul,
+                                tz = res.hitVec.z + dir.getZOffset() * mul;
                         spawnEffects(tx, ty, tz);
                         setDead();
                     }

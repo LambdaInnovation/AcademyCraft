@@ -21,8 +21,8 @@ public class ItemMatrixCore extends Item {
     }
     
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return super.getUnlocalizedName(stack) + "_" + stack.getItemDamage();
+    public String getTranslationKey(ItemStack stack) {
+        return super.getTranslationKey(stack) + "_" + stack.getItemDamage();
     }
     
 //    @SideOnly(Side.CLIENT)

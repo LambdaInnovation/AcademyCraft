@@ -164,9 +164,9 @@ public class ShiftTeleport extends Skill
             RayTraceResult result = Raytrace.traceLiving(player, range, EntitySelectors.nothing());
             if(result != null) {
                 EnumFacing dir =result.sideHit;
-                return new int[]{result.getBlockPos().getX() + dir.getFrontOffsetX(),
-                        result.getBlockPos().getY() + dir.getFrontOffsetY(),
-                        result.getBlockPos().getZ() + dir.getFrontOffsetZ()};
+                return new int[]{result.getBlockPos().getX() + dir.getXOffset(),
+                        result.getBlockPos().getY() + dir.getYOffset(),
+                        result.getBlockPos().getZ() + dir.getZOffset()};
             }
             Vec3d mo = VecUtils.lookingPos(player, range);
             return new int[]{(int) mo.x, (int) mo.y, (int) mo.z};
@@ -177,8 +177,8 @@ public class ShiftTeleport extends Skill
             RayTraceResult result = Raytrace.traceLiving(player, range, EntitySelectors.nothing());
             if(result != null) {
               EnumFacing dir = result.sideHit;
-              result.hitVec = result.hitVec.addVector(dir.getFrontOffsetX(),
-                      dir.getFrontOffsetY(), dir.getFrontOffsetZ());
+              result.hitVec = result.hitVec.add(dir.getXOffset(),
+                      dir.getYOffset(), dir.getZOffset());
               return result;
             }
             Vec3d mo = VecUtils.lookingPos(player, range);
