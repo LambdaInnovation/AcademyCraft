@@ -128,7 +128,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
             val block = world.getBlock(i, j, k)
             val meta = world.getBlockMetadata(i, j, k)
             val hardness = block.getBlockHardness(world, i, j, k)
-            if (0 <= hardness && hardness <= breakHardness && ctx.getSkillExp==1f)
+            if (0 <= hardness && hardness <= breakHardness && ctx.getSkillExp==1f && ctx.canBreakBlock(world, i, j, k))
             {
               val itemStack=new ItemStack(block)
               world.spawnEntityInWorld(new EntityItem(world,i,j,k,itemStack));
