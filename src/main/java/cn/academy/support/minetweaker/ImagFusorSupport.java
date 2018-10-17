@@ -40,7 +40,7 @@ public class ImagFusorSupport {
 
         @Override
         public String describe() {
-            return "Add extra ImagFusor recipe for " + input.getUnlocalizedName();
+            return "Add extra ImagFusor recipe for " + input.getTranslationKey();
         }
         
     }

@@ -79,11 +79,11 @@ public class RFSupport {
     private static void registerBlocks(RegistryEvent.Register<Block> event) {
 
         rfInput.setRegistryName("academy:ac_rf_input");
-        rfInput.setUnlocalizedName("ac_rf_input");
+        rfInput.setTranslationKey("ac_rf_input");
         event.getRegistry().register(rfInput);
 
         rfOutput.setRegistryName("academy:rf_output");
-        rfOutput.setUnlocalizedName("rf_output");
+        rfOutput.setTranslationKey("rf_output");
         event.getRegistry().register(rfOutput);
 
     }
@@ -91,11 +91,11 @@ public class RFSupport {
     @RegistryCallback
     private static void registerItems(RegistryEvent.Register<Item> event){
         item_rfInput.setRegistryName(rfInput.getRegistryName());
-        item_rfInput.setUnlocalizedName(rfInput.getUnlocalizedName());
+        item_rfInput.setTranslationKey(rfInput.getTranslationKey());
         event.getRegistry().register(item_rfInput);
 
         item_rfOutput.setRegistryName(rfOutput.getRegistryName());
-        item_rfOutput.setUnlocalizedName(rfOutput.getUnlocalizedName());
+        item_rfOutput.setTranslationKey(rfOutput.getTranslationKey());
         event.getRegistry().register(item_rfOutput);
 
     }

@@ -33,7 +33,7 @@ public abstract class IACRecipeCategory  implements IRecipeCategory<IRecipeWrapp
     @Override
     public String getUid()
     {
-        return block.getUnlocalizedName();
+        return block.getTranslationKey();
     }
 
     @Override

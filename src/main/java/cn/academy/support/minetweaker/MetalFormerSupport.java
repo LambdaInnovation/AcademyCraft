@@ -52,7 +52,7 @@ public class MetalFormerSupport {
 
         @Override
         public String describe() {
-            return "Add extra metal former etching recipe for " + input.getUnlocalizedName();
+            return "Add extra metal former etching recipe for " + input.getTranslationKey();
         }
         
     }

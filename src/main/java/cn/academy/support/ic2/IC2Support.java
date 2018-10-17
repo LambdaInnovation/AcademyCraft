@@ -87,11 +87,11 @@ public class IC2Support {
         helper.init();
 
         euInput.setRegistryName("academy:eu_input");
-        euInput.setUnlocalizedName("ac_eu_input");
+        euInput.setTranslationKey("ac_eu_input");
         event.getRegistry().register(euInput);
 
         euOutput.setRegistryName("academy:eu_output");
-        euOutput.setUnlocalizedName("ac_eu_output");
+        euOutput.setTranslationKey("ac_eu_output");
         event.getRegistry().register(euOutput);
     }
 
@@ -99,11 +99,11 @@ public class IC2Support {
     @RegistryCallback
     private static void registerItems(RegistryEvent.Register<Item> event){
         item_euInput.setRegistryName(euInput.getRegistryName());
-        item_euInput.setUnlocalizedName(euInput.getUnlocalizedName());
+        item_euInput.setTranslationKey(euInput.getTranslationKey());
         event.getRegistry().register(item_euInput);
 
         item_euOutput.setRegistryName(euOutput.getRegistryName());
-        item_euOutput.setUnlocalizedName(euOutput.getUnlocalizedName());
+        item_euOutput.setTranslationKey(euOutput.getTranslationKey());
         event.getRegistry().register(item_euOutput);
     }
 
