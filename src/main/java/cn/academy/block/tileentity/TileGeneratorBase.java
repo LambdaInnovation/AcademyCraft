@@ -7,12 +7,14 @@ import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
  */
-public abstract class TileGeneratorBase extends TileInventory implements IWirelessGenerator {
+public abstract class TileGeneratorBase extends TileInventory implements IWirelessGenerator, ITickable
+{
     
     public final double bufferSize;
     public final double bandwidth;
@@ -29,7 +31,8 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
         bufferSize = _bufferSize;
         bandwidth = _bandwidth;
     }
-    
+
+    @Override
     public void update() {
         if(!getWorld().isRemote) {
             double required = bufferSize - energy;

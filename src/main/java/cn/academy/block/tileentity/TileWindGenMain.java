@@ -13,6 +13,7 @@ import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkMessage.NullablePar;
+import net.minecraft.init.Items;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -129,7 +130,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile, ITicka
     
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return slot != 0 || (stack != null && stack.getItem() == ACItems.windgen_fan);
+        return slot != 0 || (stack.getItem() == ACItems.windgen_fan);
     }
     
     @SideOnly(Side.CLIENT)
