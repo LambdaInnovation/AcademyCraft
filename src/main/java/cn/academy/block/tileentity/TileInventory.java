@@ -42,34 +42,34 @@ public class TileInventory extends TileEntity implements IInventory {
     
     @Override
     public ItemStack decrStackSize(int slot, int count) {
-        if (inventory[slot] != null) {
+        if (inventory[slot] != ItemStack.EMPTY) {
             ItemStack itemstack;
 
             if (inventory[slot].getCount() <= count) {
                 itemstack = inventory[slot];
-                inventory[slot] = null;
+                inventory[slot] = ItemStack.EMPTY;
             } else {
                 itemstack = inventory[slot].splitStack(count);
 
                 if (inventory[slot].getCount() == 0) {
-                    inventory[slot] = null;
+                    inventory[slot] = ItemStack.EMPTY;//setCount(0) will make it empty, maybe this code can be removed.
                 }
             }
             this.markDirty();
             return itemstack;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public ItemStack removeStackFromSlot(int slot) {
-        if (inventory[slot] != null) {
+        if (inventory[slot] != ItemStack.EMPTY) {
             ItemStack itemstack = inventory[slot];
-            inventory[slot] = null;
+            inventory[slot] = ItemStack.EMPTY;
             return itemstack;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -77,7 +77,7 @@ public class TileInventory extends TileEntity implements IInventory {
     public void setInventorySlotContents(int slot, ItemStack stack) {
         inventory[slot] = stack;
 
-        if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
+        if (stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
         }
 
