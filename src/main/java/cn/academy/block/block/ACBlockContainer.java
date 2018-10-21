@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +27,7 @@ public abstract class ACBlockContainer extends BlockContainer {
     public ACBlockContainer(Material mat) {
         this(mat, null);
     }
-    
+
     public ACBlockContainer(Material mat, GuiHandlerBase _guiHandler) {
         super(mat);
         guiHandler = _guiHandler;
@@ -56,6 +57,11 @@ public abstract class ACBlockContainer extends BlockContainer {
             }
         }
         super.breakBlock(world, pos, state);
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
 }

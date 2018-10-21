@@ -6,7 +6,9 @@ import cn.academy.block.tileentity.TileNode;
 import cn.academy.energy.client.ui.GuiNode;
 import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumBlockRenderType;
@@ -28,7 +30,9 @@ import net.minecraft.world.World;
  */
 public class BlockNode extends ACBlockContainer {
 
-    public static PropertyEnum<NodeType> VARIANT = PropertyEnum.create("type", NodeType.class);
+    public static PropertyBool CONNECTED = PropertyBool.create("connected");
+
+    public static PropertyInteger ENERGY = PropertyInteger.create("energy", 0, 4);
 
     public enum NodeType implements IStringSerializable {
         BASIC("basic", 15000, 150, 9, 5),
@@ -55,23 +59,41 @@ public class BlockNode extends ACBlockContainer {
 //    IIcon iconTop_disabled, iconTop_enabled;
 //    IIcon sideIcon[];
 
+    @Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        boolean enabled;
+        int pct;
+        if(te instanceof TileNode) {
+            TileNode node = (TileNode) te;
+            enabled = node.enabled;
+            pct = (int) Math.min(4, Math.round((4 * node.getEnergy() / node.getMaxEnergy())));
+        } else {
+            enabled = false;
+            pct = 0;
+        }
+
+        return state
+            .withProperty(CONNECTED, enabled)
+            .withProperty(ENERGY, pct);
+    }
+
     public BlockNode(NodeType _type) {
         super(Material.ROCK, guiHandler);
         setCreativeTab(AcademyCraft.cct);
         setHardness(2.5f);
         setHarvestLevel("pickaxe", 1);
-        
+
         type = _type;
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT);
+        return new BlockStateContainer(this, CONNECTED, ENERGY);
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        world.setBlockState(pos, state.withProperty(VARIANT, type));
         if (placer instanceof EntityPlayer) {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileNode) {
@@ -90,22 +112,13 @@ public class BlockNode extends ACBlockContainer {
 //            sideIcon[i] = ir.registerIcon("academy:node_" + type.name + "_side_" + i);
 //        }
 //    }
-    
+
 //    @Override
 //    @SideOnly(Side.CLIENT)
 //    public IIcon getIcon(int side, int meta) {
 //        return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
 //    }
 //
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
-    }
 
 //    @SideOnly(Side.CLIENT)
 //    @Override
@@ -130,18 +143,18 @@ public class BlockNode extends ACBlockContainer {
 //    }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int var2) {
-        return new TileNode();
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState();
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
+        return 0;
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(VARIANT, NodeType.values()[meta]);
+    public TileEntity createNewTileEntity(World var1, int var2) {
+        return new TileNode();
     }
 
     @RegGuiHandler

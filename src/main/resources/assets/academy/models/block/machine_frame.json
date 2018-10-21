@@ -1,1 +1,1 @@
-{"__xconfgen":true,"parent":"block/cube_all","textures":{"all":"academy:blocks/machine_frame"}}
+{"parent":"block/cube_all","textures":{"all":"academy:blocks/machine_frame"},"__xconfgen":true}

@@ -1,1 +1,1 @@
-{"__xconfgen":true,"parent":"block/cube_all","textures":{"all":"academy:blocks/ability_interferer"}}
+{"parent":"block/cube_all","textures":{"all":"academy:blocks/ability_interferer"},"__xconfgen":true}
