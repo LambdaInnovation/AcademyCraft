@@ -56,11 +56,9 @@ public class BlockNode extends ACBlockContainer {
     }
     
     final NodeType type;
-//    IIcon iconTop_disabled, iconTop_enabled;
-//    IIcon sideIcon[];
 
     @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         boolean enabled;
         int pct;
@@ -101,46 +99,6 @@ public class BlockNode extends ACBlockContainer {
             }
         }
     }
-
-    //    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(IIconRegister ir) {
-//        iconTop_disabled = ir.registerIcon("academy:node_top_0");
-//        iconTop_enabled = ir.registerIcon("academy:node_top_1");
-//        sideIcon = new IIcon[5];
-//        for(int i = 0; i < 5; ++i) {
-//            sideIcon[i] = ir.registerIcon("academy:node_" + type.name + "_side_" + i);
-//        }
-//    }
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public IIcon getIcon(int side, int meta) {
-//        return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
-//    }
-//
-
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-//        TileEntity te = world.getTileEntity(x, y, z);
-//        boolean enabled;
-//        int pct;
-//        if(te instanceof TileNode) {
-//            TileNode node = (TileNode) te;
-//            enabled = node.enabled;
-//            pct = (int) Math.min(4, Math.round((4 * node.getEnergy() / node.getMaxEnergy())));
-//        } else {
-//            enabled = false;
-//            pct = 0;
-//        }
-//        if(side == 0 || side == 1) {
-//            return enabled ? iconTop_enabled : iconTop_disabled;
-//        }
-//
-//
-//        return sideIcon[pct];
-//    }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
