@@ -155,7 +155,7 @@ object TechUI {
     */
   def breatheAlpha = {
     val time = GameTimer.getTime
-    val sin = (1 + math.sin(time / 800.0)) * 0.5
+    val sin = (1 + math.sin(time / 0.8)) * 0.5
 
     (0.675 + sin * 0.175).toFloat
   }
@@ -241,7 +241,7 @@ object TechUI {
       private val blendStartTime = GameTimer.getTime
 
       this.listens[FrameEvent](() => {
-        val dt = math.min(GameTimer.getTime - lastFrameTime, 500) / 1000.0
+        val dt = math.min(GameTimer.getTime - lastFrameTime, 0.5)
         def move(fr: Float, to: Float): Float = {
           val max: Float = dt.toFloat * 500
           val delta = to - fr
@@ -250,7 +250,7 @@ object TechUI {
         transform.width = move(transform.width, expectWidth)
         transform.height = move(transform.height, expectHeight)
 
-        val balpha: Float = MathUtils.clampd(0, 1, (GameTimer.getTime - blendStartTime - 300) / 300.0).toFloat
+        val balpha: Float = MathUtils.clampd(0, 1, (GameTimer.getTime - blendStartTime - 0.3) / 0.3).toFloat
         uas foreach (ua => ua(balpha))
 
         lastFrameTime = GameTimer.getTime
