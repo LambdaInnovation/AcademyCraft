@@ -7,6 +7,8 @@ import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -17,6 +19,7 @@ public class TPParticleFactory extends ParticleFactory
 
     static Particle template;
 
+    @SideOnly(Side.CLIENT)
     @StateEventCallback(priority = -100)
     private static void postInit(FMLPostInitializationEvent ev) {
         template = new Particle();
