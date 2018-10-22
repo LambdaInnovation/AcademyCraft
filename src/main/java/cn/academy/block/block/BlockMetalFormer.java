@@ -44,9 +44,6 @@ public class BlockMetalFormer extends ACBlockContainer {
         }
     };
     
-//    IIcon topIcon, bottomIcon;
-//    IIcon sideIcons[] = new IIcon[4];
-
     public BlockMetalFormer() {
         super(Material.ROCK, guiHandler);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -77,32 +74,6 @@ public class BlockMetalFormer extends ACBlockContainer {
         return state.getValue(FACING).ordinal();
     }
 
-    //    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(IIconRegister ir)  {
-//        sideIcons[0] = this.ricon(ir, "metal_former_front");
-//        sideIcons[1] = this.ricon(ir, "metal_former_right");
-//        sideIcons[2] = this.ricon(ir, "metal_former_back");
-//        sideIcons[3] = this.ricon(ir, "metal_former_left");
-//        topIcon      = this.ricon(ir, "metal_former_top");
-//        bottomIcon   = this.ricon(ir, "metal_former_bottom");
-//    }
-    
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public IIcon getIcon(int side, int meta) {
-//        // Fix for the mystery 32767 metadata passed in when crafting.
-//        meta %= 4;
-//
-//        if(side == 1)
-//            return topIcon;
-//        if(side == 0)
-//            return bottomIcon;
-//
-//        final int offsets[] = { 2, 3, 1, 0 };
-//
-//        return sideIcons[(offsets[meta] + side) % 4];
-//    }
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
     }
@@ -110,16 +81,6 @@ public class BlockMetalFormer extends ACBlockContainer {
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileMetalFormer();
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
     }
 
 }

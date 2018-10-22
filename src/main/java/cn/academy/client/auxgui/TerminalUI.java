@@ -413,7 +413,7 @@ public class TerminalUI extends AuxGui {
             app = _app;
 
             listen(FrameEvent.class, (w, e) -> {
-                float mAlpha = MathUtils.clampf(0.0f, 1.0f, (float) (getLifetime() - ((id + 1) * 100)) / 400.0f);
+                float mAlpha = MathUtils.clampf(0.0f, 1.0f, (float) (getLifetime() - ((id + 1) * 0.1f)) / 0.40f);
                 boolean selected = getSelectedApp() == w;
                 
                 if(selected) {

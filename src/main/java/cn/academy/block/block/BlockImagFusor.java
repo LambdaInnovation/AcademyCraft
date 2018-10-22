@@ -9,6 +9,7 @@ import cn.lambdalib2.util.GameTimer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumBlockRenderType;
@@ -30,6 +31,7 @@ import net.minecraft.world.World;
  */
 public class BlockImagFusor extends ACBlockContainer {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyInteger FRAME = PropertyInteger.create("frame", 0, 4);
 //    IIcon bottom, top, mside, side_idle;
 //    IIcon[] side_working = new IIcon[4];
 
@@ -42,7 +44,7 @@ public class BlockImagFusor extends ACBlockContainer {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, FRAME);
     }
 
     @Override
@@ -115,8 +117,17 @@ public class BlockImagFusor extends ACBlockContainer {
 //        default:
 //            throw new RuntimeException("WTF");
 //        }
-//    }
-    
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileImagFusor te = check(world, pos);
+        int frame = 0;
+        if (te != null && te.isWorking()) {
+            frame = 1 + (int) ((GameTimer.getTime() * 2.5f) % 4);
+        }
+        return state.withProperty(FRAME, frame);
+    }
+
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
         return new TileImagFusor();
@@ -124,7 +135,7 @@ public class BlockImagFusor extends ACBlockContainer {
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-        TileImagFusor te = check(world, pos.getX(), pos.getY(), pos.getZ());
+        TileImagFusor te = check(world, new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
         if(te == null)
             return super.getLightValue(state, world, pos);
         return te.isWorking() ? 6 : 0;
@@ -135,31 +146,21 @@ public class BlockImagFusor extends ACBlockContainer {
         @SideOnly(Side.CLIENT)
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
-            TileImagFusor te = check(world, x, y, z);
+            TileImagFusor te = check(world, new BlockPos(x, y, z));
             return te == null ? null : GuiImagFusor.apply(new ContainerImagFusor(te, player));
         }
 
         @Override
         protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
-            TileImagFusor te = check(world, x, y, z);
+            TileImagFusor te = check(world, new BlockPos(x, y, z));
             return te == null ? null : new ContainerImagFusor(te, player);
         }
         
     };
     
-    private static TileImagFusor check(IBlockAccess world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+    private static TileImagFusor check(IBlockAccess world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
         return (TileImagFusor) (te instanceof TileImagFusor ? te : null);
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
     }
 
 }

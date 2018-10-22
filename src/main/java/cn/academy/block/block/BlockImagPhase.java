@@ -69,15 +69,6 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
 //        fluidIcon = ir.registerIcon("academy:phase_liquid");
 //    }
 //
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
-    }
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {

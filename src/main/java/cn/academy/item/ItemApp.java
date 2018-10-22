@@ -5,12 +5,15 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
 import cn.lambdalib2.registry.RegistryCallback;
+import cn.lambdalib2.util.SideUtils;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,12 +40,26 @@ public class ItemApp extends Item {
         for(App app : AppRegistry.enumeration()) {
             if(!app.isPreInstalled()) {
                 ItemApp item = new ItemApp(app);
-                item.setTranslationKey("ac_app_" + app.getName());
+                item.setTranslationKey("ac_apps");
                 item.setRegistryName("academy:app_" + app.getName());
 
                 event.getRegistry().register(item);
                 AcademyCraft.recipes.map("app_" + app.getName(), item);
                 items.put(app, item);
+            }
+        }
+
+        if (SideUtils.isClient())
+            registerItemModels();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void registerItemModels() {
+        for (App app : AppRegistry.enumeration()) {
+            if (!app.isPreInstalled()) {
+                ItemApp item = items.get(app);
+                ModelLoader.setCustomModelResourceLocation(item, 0,
+                    new ModelResourceLocation(item.getRegistryName(), "inventory"));
             }
         }
     }
@@ -55,6 +72,7 @@ public class ItemApp extends Item {
 
     private ItemApp(App _app) {
         app = _app;
+        setCreativeTab(AcademyCraft.cct);
     }
     
     @Override

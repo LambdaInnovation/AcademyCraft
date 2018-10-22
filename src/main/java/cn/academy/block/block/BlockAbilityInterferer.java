@@ -5,9 +5,13 @@ import cn.academy.block.container.ContainAbilityInterferer;
 import cn.academy.crafting.client.ui.GuiAbilityInterferer;
 import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -22,6 +26,9 @@ import net.minecraft.world.World;
  */
 public class BlockAbilityInterferer extends ACBlockContainer
 {
+
+    public static final PropertyBool PROP_ON = PropertyBool.create("on");
+
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
         @SideOnly(Side.CLIENT)
@@ -42,8 +49,33 @@ public class BlockAbilityInterferer extends ACBlockContainer
         }
     };
 
-//    private IIcon iconOn;
-//    private IIcon iconOff;
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, PROP_ON);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+
+        boolean on = false;
+        if (tile instanceof TileAbilityInterferer)
+        {
+            if (((TileAbilityInterferer) tile).enabled())
+                on = true;
+        }
+        return state.withProperty(PROP_ON, on);
+    }
 
     public BlockAbilityInterferer() {
         super(Material.ROCK, guiHandler);
@@ -56,13 +88,6 @@ public class BlockAbilityInterferer extends ACBlockContainer
         return new TileAbilityInterferer();
     }
 
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(IIconRegister ir){
-//        iconOn = ricon(ir, "ability_interf_on");
-//        iconOff = ricon(ir, "ability_interf_off");
-//    }
-
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity tile = world.getTileEntity(pos);
@@ -71,31 +96,4 @@ public class BlockAbilityInterferer extends ACBlockContainer
         }
     }
 
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
-//    {
-//        TileEntity tile = world.getTileEntity(x, y, z);
-//        if (tile instanceof TileAbilityInterferer)
-//        {
-//            if (((TileAbilityInterferer) tile).enabled())
-//                return iconOn;
-//            else
-//                return iconOff;
-//        }
-//        return iconOn;
-//    }
-//
-//    @Override
-//    public IIcon getIcon(int side,int meta){return iconOff;}
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
-    }
 }
