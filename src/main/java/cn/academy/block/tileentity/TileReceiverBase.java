@@ -5,6 +5,7 @@ import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
  * This class will automatically sync its energy field to client side.
  * @author WeAthFolD
  */
-public class TileReceiverBase extends TileInventory implements IWirelessReceiver {
+public class TileReceiverBase extends TileInventory implements IWirelessReceiver, ITickable {
     
     private static final int UPDATE_WAIT = 20;
 
