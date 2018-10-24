@@ -112,7 +112,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
             if(!world.isRemote) {
                 if(--checkCooldown <= 0) {
                     checkCooldown = 10;
-                    if(inventory[SLOT_INPUT] != null) {
+                    if(!inventory[SLOT_INPUT].isEmpty()) {
                         IFRecipe recipe = ImagFusorRecipes.INSTANCE.getRecipe(inventory[SLOT_INPUT]);
                         if(recipe != null) {
                             startWorking(recipe);
@@ -130,17 +130,17 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
         // Update liquid
         {
             ItemStack imagOutStack = inventory[SLOT_IMAG_OUTPUT];
-            if(inventory[SLOT_IMAG_INPUT] != null &&
-               (imagOutStack == null || imagOutStack.getCount() < imagOutStack.getMaxStackSize()) &&
+            if(!inventory[SLOT_IMAG_INPUT].isEmpty() &&
+               (!imagOutStack.isEmpty() || imagOutStack.getCount() < imagOutStack.getMaxStackSize()) &&
                 getLiquidAmount() + PER_UNIT <= TANK_SIZE) {
 
                 this.tank.fill(new FluidStack(ACFluids.fluidImagProj, PER_UNIT), true);
 
                 inventory[SLOT_IMAG_INPUT].shrink(1);
                 if(inventory[SLOT_IMAG_INPUT].getCount() == 0)
-                    inventory[SLOT_IMAG_INPUT] = null;
+                    inventory[SLOT_IMAG_INPUT] = ItemStack.EMPTY;
 
-                if (imagOutStack == null) {
+                if (imagOutStack.isEmpty()) {
                     inventory[SLOT_IMAG_OUTPUT] = ACItems.matter_unit.create(ItemMatterUnit.MAT_NONE);
                 } else {
                     imagOutStack.grow(1);
@@ -187,9 +187,9 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
             // Also check whether the amount of Liquid is enough,
             // and whether the output of currentRecipe can be outputed into outputslot
             // Added by Shielian
-        if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()
+        if(inventory[0].isEmpty() || currentRecipe.consumeType.getItem() != inventory[0].getItem()
                 || this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK || this.getLiquidAmount() < currentRecipe.consumeLiquid
-                || (inventory[SLOT_OUTPUT] != null && inventory[SLOT_OUTPUT].getItem() != currentRecipe.output.getItem())
+                || (!inventory[SLOT_OUTPUT].isEmpty() && inventory[SLOT_OUTPUT].getItem() != currentRecipe.output.getItem())
                 ) {
             abortWorking();
             return;
@@ -209,9 +209,9 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
             if(!world.isRemote) {
                 inventory[0].shrink(currentRecipe.consumeType.getCount());
                 if(inventory[0].getCount() <= 0)
-                    inventory[0] = null;
+                    inventory[0]=ItemStack.EMPTY;
                 
-                if(inventory[1] != null) {
+                if(!inventory[1].isEmpty()) {
                     inventory[1].grow(currentRecipe.output.getCount());
                 } else {
                     inventory[1] = currentRecipe.output.copy();
@@ -236,7 +236,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     public boolean isActionBlocked() {
         return !isWorking() || 
             (inventory[0].getCount() < currentRecipe.consumeType.getCount()) ||
-            (inventory[1] != null && (!StackUtils.isStackDataEqual(inventory[1], currentRecipe.output) ||
+            (!inventory[1].isEmpty() && (!StackUtils.isStackDataEqual(inventory[1], currentRecipe.output) ||
             inventory[1].getCount() + currentRecipe.output.getCount() > inventory[1].getMaxStackSize())) ||
             currentRecipe.consumeLiquid > this.getLiquidAmount();
     }

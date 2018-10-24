@@ -262,7 +262,7 @@ private object Common {
         skills.zipWithIndex.foreach { case (skill, idx) =>
           val StateIdle = 0
           val StateHover = 1
-          val TransitTime = 100.0
+          val TransitTime = 0.1
 
           val WidgetSize = 16.0f
           val ProgSize = 31.0f
@@ -280,7 +280,7 @@ private object Common {
           var lastTransit = GameTimer.getTime - 2
           var state = StateIdle
           val creationTime = GameTimer.getTime
-          val blendOffset = idx * 80 + 100
+          val blendOffset = idx * 0.08 + 0.1
 
           val mAlpha = (learned, if (skill.getParent == null) true else aData.isSkillLearned(skill.getParent)) match {
             case (true, _)  => 1.0
@@ -898,7 +898,7 @@ private object Common {
       widget.transform.width = widget.getGui.getWidth
       widget.transform.height = widget.getGui.getHeight
 
-      val src = clampd(0, 1, dt / 200.0)
+      val src = clampd(0, 1, dt / 0.2)
       val alpha = if (ended) 1 - src else src
 
       glColor4d(0, 0, 0, alpha * 0.7)
@@ -1001,7 +1001,7 @@ private object Common {
 
       outputs.zipWithIndex foreach { case (line, idx) =>
         if (idx == outputs.size() - 1 && currentTask == inputTask) {
-          font.draw(line + input + (if (GameTimer.getTime % 1000 < 500) "_" else ""), x, y, FO)
+          font.draw(line + input + (if (((GameTimer.getTime*1000).toInt % 1000) < 500) "_" else ""), x, y, FO)
         } else {
           font.draw(line, x, y, FO)
         }
@@ -1083,8 +1083,8 @@ private object Common {
       }
     }
 
-    def pause(time: Long) = enqueue(new TimedTask {
-      override def life: Long = time
+    def pause(time: Double) = enqueue(new TimedTask {
+      override def life: Double = time
     })
 
     def enqueueRebuild() = enqueue(new Task {
@@ -1114,7 +1114,7 @@ private object Common {
     def isFinished: Boolean
   }
   trait TimedTask extends Task {
-    def life: Long
+    def life: Double
 
     private var creationTime: Double = -1
 
@@ -1122,7 +1122,7 @@ private object Common {
 
     override def begin() = creationTime = GameTimer.getTime
 
-    override def isFinished = ((GameTimer.getTime - creationTime) * 1000) >= life
+    override def isFinished = (GameTimer.getTime - creationTime) >= life
   }
 
   def printTask(str: String)(implicit console: Console): Task = new Task {
