@@ -107,7 +107,7 @@ public class BlockNode extends ACBlockContainer {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return 0;
+        return type==null?0:type.ordinal();
     }
 
     @Override
