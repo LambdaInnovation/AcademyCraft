@@ -1,6 +1,7 @@
 package cn.academy.block.tileentity;
 
 import cn.academy.ACItems;
+import cn.academy.AcademyCraft;
 import cn.academy.block.block.ACFluids;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.client.sound.PositionedSound;
@@ -180,7 +181,10 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
      * @return The working progress, or 0.0 if isn't crafting
      */
     public double getWorkProgress() {
-        return isWorking() ? workProgress : 0.0;
+        if(!world.isRemote)
+            return isWorking() ? workProgress : 0.0;
+        else
+            return workProgress;
     }
     
     private void startWorking(IFRecipe recipe) {
@@ -265,12 +269,20 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         tank.readFromNBT(tag);
+        int curRcp = tag.getInteger("_work_recipe");
+        if(curRcp==-1)
+            currentRecipe=null;
+        else
+            currentRecipe= ImagFusorRecipes.INSTANCE.getAllRecipe().get(curRcp);
+        workProgress = tag.getDouble("_work_progress");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tank.writeToNBT(tag);
+        tag.setInteger("_work_recipe", currentRecipe==null?-1:currentRecipe.getID());
+        tag.setDouble("_work_progress", workProgress);
         return tag;
     }
 

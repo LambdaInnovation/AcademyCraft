@@ -3,6 +3,7 @@ package cn.academy.crafting;
 import cn.academy.ACBlocks;
 import cn.academy.ACItems;
 import cn.academy.block.tileentity.TileMetalFormer.Mode;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import java.util.List;
 // TODO: Make recipes data driven
 public class MFIFRecipes {
 
+    @StateEventCallback
     static void init(FMLInitializationEvent ev) {
         ImagFusorRecipes ifr = ImagFusorRecipes.INSTANCE;
         ifr.addRecipe(new ItemStack(ACItems.crystal_low), 3000, new ItemStack(ACItems.crystal_normal));
@@ -63,7 +65,7 @@ public class MFIFRecipes {
         if (oreList == null || oreList.size() == 0)
             return;
         ItemStack stack = FurnaceRecipes.instance().getSmeltingResult(oreList.get(0));
-        if (stack == null)
+        if (stack.isEmpty())
             return;
         int outputsize = stack.getCount();
         outputsize = outputsize < 32 ? (2 * outputsize) : 64;
