@@ -101,7 +101,7 @@ dependencies {
     deobfCompile "cn.lambdalib2:LambdaLib2:${config.lambdalib_ver}"
     deobfCompile "codechicken:CodeChickenLib:1.12.2-${config.ccl_ver}:universal"
     deobfCompile "mezz.jei:jei_1.12.2:4.8.0.119"
-    deobfCompile "codechicken:NotEnoughItems:1.12.2-${config.nei_ver}:universal"
+    //deobfCompile "codechicken:NotEnoughItems:1.12.2-${config.nei_ver}:universal"
     deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.9.6"
     deobfCompile "CraftTweaker2:CraftTweaker2-API:4.1.9.6"

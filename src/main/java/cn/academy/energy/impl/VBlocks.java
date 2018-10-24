@@ -37,7 +37,7 @@ public class VBlocks {
         
         public boolean isLoaded(World world) {
 //            return world.getChunkProvider().chunkExists(x >> 4, z >> 4);
-            return world.isChunkGeneratedAt(x, z);
+            return world.isChunkGeneratedAt(x>>4, z>>4);
         }
         
         public T get(World world) {

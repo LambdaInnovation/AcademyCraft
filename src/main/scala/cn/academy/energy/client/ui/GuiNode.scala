@@ -86,10 +86,10 @@ object GuiNode {
     }
 
     { // Update node status listener
-      var time = GameTimer.getTime - 2000
+      var time = GameTimer.getTime - 2
       ret.main.listens[FrameEvent](() => {
         val dt = GameTimer.getTime - time
-        if (dt > 2000) {
+        if (dt > 2) {
           send(MSG_QUERY_LINK, tile, Future.create2((res: Boolean) => state = if (res) STATE_LINKED else STATE_UNLINKED))
           time = GameTimer.getTime
         }

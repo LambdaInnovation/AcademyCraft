@@ -93,11 +93,11 @@ public class AcademyCraft {
 //        recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
 
         if (DEBUG_MODE) {
-            Debug.log("|-------------------------------------------------------\n");
-            Debug.log("| AC Recipe Name Mappings\n");
-            Debug.log("|--------------------------|----------------------------\n");
-            Debug.log(String.format("| %-25s| Object Name\n", "Recipe Name"));
-            Debug.log("|--------------------------|----------------------------\n");
+            Debug.log("|-------------------------------------------------------");
+            Debug.log("| AC Recipe Name Mappings");
+            Debug.log("|--------------------------|----------------------------");
+            Debug.log(String.format("| %-25s| Object Name", "Recipe Name"));
+            Debug.log("|--------------------------|----------------------------");
             for (Entry<String, Object> entry : recipes.getNameMappingForDebug().entrySet()) {
                 Object obj = entry.getValue();
                 String str1 = entry.getKey(), str2;
@@ -108,9 +108,9 @@ public class AcademyCraft {
                 } else {
                     str2 = obj.toString();
                 }
-                Debug.log(String.format("| %-25s| %s\n", str1, str2));
+                Debug.log(String.format("| %-25s| %s", str1, str2));
             }
-            Debug.log("|-------------------------------------------------------\n");
+            Debug.log("|-------------------------------------------------------");
         }
 
         recipes = null; // Release and have fun GC
