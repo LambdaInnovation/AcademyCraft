@@ -1,5 +1,6 @@
 package cn.academy.network;
 
+import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.WorldUtils;
 import com.typesafe.config.Config;
@@ -23,11 +24,12 @@ public class NetworkManager
 {
     public static SimpleNetworkWrapper instance = NetworkRegistry.INSTANCE.newSimpleChannel("AcademyCraft");
     private static int nextID = 0;
+
+    @StateEventCallback
     public static void init(FMLPreInitializationEvent event)
     {
         registerMessage(MessageConfig.Handler.class, MessageConfig.class, Side.CLIENT);
         registerMessage(MessageSBEffect.Handler.class, MessageSBEffect.class, Side.CLIENT);
-        registerMessage(MessageMachineInfoSync.Handler.class, MessageMachineInfoSync.class, Side.CLIENT);
     }
 
     private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

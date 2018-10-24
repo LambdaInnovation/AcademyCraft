@@ -5,14 +5,13 @@ import cn.academy.block.block.ACFluids;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.client.sound.PositionedSound;
 import cn.academy.client.sound.TileEntitySound;
-import cn.academy.network.MessageMachineInfoSync;
-import cn.academy.network.NetworkManager;
 import cn.academy.crafting.ImagFusorRecipes;
 import cn.academy.crafting.ImagFusorRecipes.IFRecipe;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib2.registry.mc.RegTileEntity;
+import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.util.StackUtils;
 import net.minecraft.util.EnumFacing;
@@ -160,13 +159,20 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
         if (!world.isRemote) {
             if(--syncCooldown <= 0) {
                 syncCooldown = SYNC_INTV;
-                NetworkManager.instance.sendToAllAround(new MessageMachineInfoSync(this), TargetPoints.convert(this, 15));
+                NBTTagCompound nbt = new NBTTagCompound();
+                writeToNBT(nbt);
+                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, "MSG_INFO_SYNC", nbt);
             }
         }
 
         if (world.isRemote) {
             updateSounds();
         }
+    }
+    @NetworkMessage.Listener(channel="MSG_INFO_SYNC", side=Side.CLIENT)
+    private void onSync(NBTTagCompound nbt)
+    {
+        readFromNBT(nbt);
     }
     
     //---Work API

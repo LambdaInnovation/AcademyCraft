@@ -1,14 +1,12 @@
 package cn.academy.block.tileentity;
 
-import cn.academy.ACBlocks;
 import cn.academy.ACItems;
 import cn.academy.block.block.ACFluids;
 import cn.academy.block.container.ContainerPhaseGen;
-import cn.academy.network.MessageMachineInfoSync;
-import cn.academy.network.NetworkManager;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.lambdalib2.registry.mc.RegTileEntity;
+import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -16,6 +14,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
@@ -149,8 +148,15 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     }
 
     private void sync() {
-        NetworkManager.instance.sendToAllAround(new MessageMachineInfoSync(this), TargetPoints.convert(this, 15));
+        NBTTagCompound nbt = new NBTTagCompound();
+        writeToNBT(nbt);
+        NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, "MSG_INFO_SYNC", nbt);
+    }
 
+    @NetworkMessage.Listener(channel="MSG_INFO_SYNC", side= Side.CLIENT)
+    private void onSync(NBTTagCompound nbt)
+    {
+        readFromNBT(nbt);
     }
 
     private boolean isPhaseLiquid(ItemStack stack) {
