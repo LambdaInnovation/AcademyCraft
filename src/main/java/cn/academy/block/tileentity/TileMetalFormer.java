@@ -99,9 +99,9 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
                         ItemStack outputSlot = this.getStackInSlot(SLOT_OUT);
                         inputSlot.shrink(current.input.getCount());
                         if(inputSlot.getCount() == 0)
-                            this.setInventorySlotContents(SLOT_IN, null);
+                            this.setInventorySlotContents(SLOT_IN, ItemStack.EMPTY);
                         
-                        if(outputSlot != null)
+                        if(!outputSlot.isEmpty())
                             outputSlot.grow(current.output.getCount());
                         else
                             this.setInventorySlotContents(SLOT_OUT, current.output.copy());
@@ -122,7 +122,7 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
             
             /* Process energy in/out */ {
                 ItemStack stack = this.getStackInSlot(SLOT_BATTERY);
-                if(stack != null && EnergyItemHelper.isSupported(stack)) {
+                if(!stack.isEmpty() && EnergyItemHelper.isSupported(stack)) {
                     double gain = EnergyItemHelper
                             .pull(stack, Math.min(getMaxEnergy() - getEnergy(), getBandwidth()), false);
                     this.injectEnergy(gain);
@@ -164,7 +164,7 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
         
         ItemStack inputSlot = this.getStackInSlot(SLOT_IN), outputSlot = this.getStackInSlot(SLOT_OUT);
         return !(current.accepts(inputSlot, mode) && 
-            (outputSlot == null || 
+            (outputSlot.isEmpty() ||
             (outputSlot.getItem() == current.output.getItem() && 
             outputSlot.getItemDamage() == current.output.getItemDamage() &&
             outputSlot.getCount() + current.output.getCount() <= outputSlot.getMaxStackSize())));
