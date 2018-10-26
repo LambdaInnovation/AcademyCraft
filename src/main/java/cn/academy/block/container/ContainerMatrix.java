@@ -43,7 +43,7 @@ public class ContainerMatrix extends TechUIContainer<TileMatrix> {
         
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return stack != null && stack.getItem() == ACItems.mat_core;
+            return !stack.isEmpty() && stack.getItem() == ACItems.mat_core;
         }
         
     }
@@ -56,7 +56,7 @@ public class ContainerMatrix extends TechUIContainer<TileMatrix> {
         
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return stack != null && stack.getItem() == ACItems.mat_core;
+            return !stack.isEmpty() && stack.getItem() == ACItems.constraint_plate;
         }
         
     }

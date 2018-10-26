@@ -63,18 +63,16 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
             { // Sink in liquid
                 stack = getStackInSlot(SLOT_LIQUID_IN);
                 
-                if(stack != null && isPhaseLiquid(stack) && isOutputSlotAvailable() && 
+                if(!stack.isEmpty() && isPhaseLiquid(stack) && isOutputSlotAvailable() &&
                         (getTankSize() - getLiquidAmount() > PER_UNIT)) {
                     
                     if(stack.getCount() > 0) {
                         tank.fill(new FluidStack(ACFluids.fluidImagProj, PER_UNIT), true);
                         stack.shrink(1);
                     }
-                    if(stack.getCount() <= 0)
-                        setInventorySlotContents(0, null);
                     
                     ItemStack output = getStackInSlot(SLOT_LIQUID_OUT);
-                    if(output != null) {
+                    if(!output.isEmpty()) {
                         output.grow(1);
                     } else {
                         this.setInventorySlotContents(SLOT_LIQUID_OUT,
@@ -85,7 +83,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
             
             { // Output energy
                 stack = getStackInSlot(SLOT_OUTPUT);
-                if(stack != null)
+                if(!stack.isEmpty())
                     this.tryChargeStack(stack);
             }
         }
@@ -166,7 +164,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     
     private boolean isOutputSlotAvailable() {
         ItemStack stack = getStackInSlot(SLOT_LIQUID_OUT);
-        return stack == null || (stack.getItem() == ACItems.matter_unit &&
+        return stack.isEmpty() || (stack.getItem() == ACItems.matter_unit &&
                 ACItems.matter_unit.getMaterial(stack) == ItemMatterUnit.MAT_NONE && stack.getCount() < stack.getMaxStackSize());
     }
 

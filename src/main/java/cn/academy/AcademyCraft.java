@@ -73,8 +73,6 @@ public class AcademyCraft {
         log.info("http://ac.li-dev.cn/");
 
         config = new Configuration(event.getSuggestedConfigurationFile());
-
-        NetworkManager.init(event);
     }
 
     @EventHandler

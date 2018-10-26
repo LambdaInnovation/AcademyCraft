@@ -43,7 +43,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if(stack == null)
+        if(stack.isEmpty())
             return false;
         if (0 <= slot && slot <= 2) {
             return stack.getItem() == ACItems.constraint_plate;
@@ -127,7 +127,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     public int getPlateCount() {
         int count = 0;
         for(int i = 0; i < 3; ++i) {
-            if(this.getStackInSlot(i) != null)
+            if(!this.getStackInSlot(i).isEmpty())
                 count++;
         }
         return count;
