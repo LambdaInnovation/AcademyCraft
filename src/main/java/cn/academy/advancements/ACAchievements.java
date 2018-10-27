@@ -22,78 +22,45 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  */
 public class ACAchievements {
 
-    public static final ACTrigger aPhaseLiquid = new ACTrigger("phase_liquid");
-    public static final ACTrigger aMatrix1 = new ACTrigger("matrix1");
-    public static final ACTrigger aMatrix2 = new ACTrigger("matrix2");
-    public static final ACTrigger aNode = new ACTrigger("node");
-    public static final ACTrigger aDeveloper1 = new ACTrigger("developer1");
-    public static final ACTrigger aDeveloper2 = new ACTrigger("developer2");
-    public static final ACTrigger aDeveloper3 = new ACTrigger("developer3");
-    public static final ACTrigger aPhaseGen = new ACTrigger("phasegen");
-    public static final ACTrigger aSolarGen = new ACTrigger("solargen");
-    public static final ACTrigger aWindGen = new ACTrigger("windgen");
-    public static final ACTrigger aCrystal = new ACTrigger("crystal");
-    public static final ACTrigger aTerminal = new ACTrigger("terminal");
+    public static final ACTrigger aJoinGame = new ACTrigger("join_game");
+    public static final ACTrigger aOpenTutorial = new ACTrigger("open_tutorial");
+    public static final ACTrigger aGettingPhase = new ACTrigger("getting_phase");
+    public static final ACTrigger aPhaseGen = new ACTrigger("crafting_phase_gen");
+    public static final ACTrigger aNode = new ACTrigger("crafting_node");
+    public static final ACTrigger aMatrix = new ACTrigger("ac_matrix");
+    public static final ACTrigger aTerminalInstalled = new ACTrigger("ac_terminal_installed");
+    public static final ACTrigger aGettingFactor = new ACTrigger("getting_factor");
+    public static final ACTrigger aDeveloper = new ACTrigger("ac_developer");
+    public static final ACTrigger aDevCategory= new ACTrigger("dev_category");
+    public static final ACTrigger aLevel3= new ACTrigger("ac_level_3");
+    public static final ACTrigger aLevel5= new ACTrigger("ac_level_5");
+    public static final ACTrigger aConvertCategory = new ACTrigger("convert_category");
+    public static final ACTrigger aLearnSkill = new ACTrigger("ac_learning_skill");
+    public static final ACTrigger aMilestone = new ACTrigger("ac_milestone");
+    public static final ACTrigger aExpFull = new ACTrigger("ac_exp_full");
+    public static final ACTrigger aOverload = new ACTrigger("ac_overload");
 
-    public static final ACLevelChangeTrigger<CatElectromaster> eLv1 = new ACLevelChangeTrigger<>(1, VanillaCategories.electromaster, "lv1");
-    public static final ACLevelChangeTrigger<CatElectromaster> eLv2 = new ACLevelChangeTrigger<>(2, VanillaCategories.electromaster, "lv2");
-    public static final ACLevelChangeTrigger<CatElectromaster> eLv3 = new ACLevelChangeTrigger<>(3, VanillaCategories.electromaster, "lv3");
-    public static final ACLevelChangeTrigger<CatElectromaster> eLv4 = new ACLevelChangeTrigger<>(4, VanillaCategories.electromaster, "lv4");
-    public static final ACLevelChangeTrigger<CatElectromaster> eLv5 = new ACLevelChangeTrigger<>(5, VanillaCategories.electromaster, "lv5");
-
-    public static final ACTrigger aArcGen = new ACTrigger(CatElectromaster.arcGen.getName());
-    public static final ACTrigger aAtCreeper = new ACTrigger("attack_creeper");
-    public static final ACTrigger aBodyIntensify = new ACTrigger(CatElectromaster.bodyIntensify.getName());
-    public static final ACTrigger aMagMovement = new ACTrigger(CatElectromaster.magMovement.getName());
-    public static final ACTrigger aMagManip = new ACTrigger(CatElectromaster.magMovement.getName());
-    //public static final ACAchievement aIronSand;                //Manual
-    public static final ACTrigger aMineDetect = new ACTrigger(CatElectromaster.mineDetect.getName());
-    public static final ACTrigger aThunderBolt = new ACTrigger(CatElectromaster.thunderBolt.getName());
-    public static final ACTrigger aRailgun = new ACTrigger(CatElectromaster.railgun.getName());
-    public static final ACTrigger aThunderClap = new ACTrigger(CatElectromaster.thunderClap.getName());
-
-    public static final ACLevelChangeTrigger<CatMeltdowner> mLv1 = new ACLevelChangeTrigger<>(1, VanillaCategories.meltdowner, "lv1");
-    public static final ACLevelChangeTrigger<CatMeltdowner> mLv2 = new ACLevelChangeTrigger<>(2, VanillaCategories.meltdowner, "lv2");
-    public static final ACLevelChangeTrigger<CatMeltdowner> mLv3 = new ACLevelChangeTrigger<>(3, VanillaCategories.meltdowner, "lv3");
-    public static final ACLevelChangeTrigger<CatMeltdowner> mLv4 = new ACLevelChangeTrigger<>(4, VanillaCategories.meltdowner, "lv4");
-    public static final ACLevelChangeTrigger<CatMeltdowner> mLv5 = new ACLevelChangeTrigger<>(5, VanillaCategories.meltdowner, "lv5");
-
-    public static final ACTrigger aRadIntensify = new ACTrigger(CatMeltdowner.radIntensify.getName());
-    public static final ACTrigger aLightShield = new ACTrigger(CatMeltdowner.lightShield.getName());
-    public static final ACTrigger aMeltdowner = new ACTrigger(CatMeltdowner.meltdowner.getName());
-    public static final ACTrigger aMineRay = new ACTrigger("mine_ray");
-    public static final ACTrigger aJetEngine = new ACTrigger(CatMeltdowner.jetEngine.getName());
-    public static final ACTrigger aElectronMissile = new ACTrigger(CatMeltdowner.electronMissile.getName());
-
-
-    public static final ACLevelChangeTrigger<CatTeleporter> tLv1 = new ACLevelChangeTrigger<>(1, VanillaCategories.teleporter, "lv1");
-    public static final ACLevelChangeTrigger<CatTeleporter> tLv2 = new ACLevelChangeTrigger<>(2, VanillaCategories.teleporter, "lv2");
-    public static final ACLevelChangeTrigger<CatTeleporter> tLv3 = new ACLevelChangeTrigger<>(3, VanillaCategories.teleporter, "lv3");
-    public static final ACLevelChangeTrigger<CatTeleporter> tLv4 = new ACLevelChangeTrigger<>(4, VanillaCategories.teleporter, "lv4");
-    public static final ACLevelChangeTrigger<CatTeleporter> tLv5 = new ACLevelChangeTrigger<>(5, VanillaCategories.teleporter, "lv5");
-
-    public static final ACTrigger aThreateningTeleport = new ACTrigger(CatTeleporter.threateningTP.getName());
-    public static final ACTrigger aCriticalAttack  = new ACTrigger("critical_attack");
-    public static final ACTrigger aIgnoreBarrier = new ACTrigger("ignore_barrier");
-    public static final ACTrigger aFlashing = new ACTrigger(CatTeleporter.flashing.getName());
-    public static final ACTrigger aMastery = new ACTrigger("mastery");
-
-
-    public static final ACLevelChangeTrigger<CatVecManip> vLv1 = new ACLevelChangeTrigger<>(1, VanillaCategories.vecManip, "lv1");
-    public static final ACLevelChangeTrigger<CatVecManip> vLv2 = new ACLevelChangeTrigger<>(2, VanillaCategories.vecManip, "lv2");
-    public static final ACLevelChangeTrigger<CatVecManip> vLv3 = new ACLevelChangeTrigger<>(3, VanillaCategories.vecManip, "lv3");
-    public static final ACLevelChangeTrigger<CatVecManip> vLv4 = new ACLevelChangeTrigger<>(4, VanillaCategories.vecManip, "lv4");
-    public static final ACLevelChangeTrigger<CatVecManip> vLv5 = new ACLevelChangeTrigger<>(5, VanillaCategories.vecManip, "lv5");
-
-    public static final ACTrigger aGroundshock = new ACTrigger(Groundshock.getName());
-    public static final ACTrigger aDirBlast = new ACTrigger(DirectedBlastwave.getName());
-    public static final ACTrigger aStormWing = new ACTrigger(StormWing.getName());
-    public static final ACTrigger aBloodRetro = new ACTrigger(BloodRetrograde.getName());
-    public static final ACTrigger aVecReflection = new ACTrigger(VecReflection.getName());
 
     @StateEventCallback
     public static void init(FMLInitializationEvent event) {
         DispatcherAch.init();
+        CriteriaTriggers.register(aJoinGame);
+        CriteriaTriggers.register(aOpenTutorial);
+        CriteriaTriggers.register(aGettingPhase);
+        CriteriaTriggers.register(aPhaseGen);
+        CriteriaTriggers.register(aNode);
+        CriteriaTriggers.register(aMatrix);
+        CriteriaTriggers.register(aTerminalInstalled);
+        CriteriaTriggers.register(aGettingFactor);
+        CriteriaTriggers.register(aDeveloper);
+        CriteriaTriggers.register(aDevCategory);
+        CriteriaTriggers.register(aLevel3);
+        CriteriaTriggers.register(aLevel5);
+        CriteriaTriggers.register(aConvertCategory);
+        CriteriaTriggers.register(aLearnSkill);
+        CriteriaTriggers.register(aMilestone);
+        CriteriaTriggers.register(aExpFull);
+        CriteriaTriggers.register(aOverload);
 
     }
     
@@ -107,8 +74,9 @@ public class ACAchievements {
     public static boolean trigger(EntityPlayer player, ResourceLocation achid) {
         if (!(player instanceof EntityPlayerMP))
             return false;
+
         ICriterionTrigger ach = CriteriaTriggers.get(achid);
-        if (ach == null || ach instanceof ACTrigger == false) {
+        if (ach == null || (!(ach instanceof ACTrigger))) {
             AcademyCraft.log.warn("AC Achievement '" + achid + "' does not exist");
             return false;
         }

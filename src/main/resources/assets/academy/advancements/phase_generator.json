@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "academy:phase_gen"
+    },
+    "title": {
+      "translate": "advancements.general.phase_generator"
+    },
+    "description": {
+      "translate": "advancements.general.phase_generator.desc"
+    }
+  },
+  "parent": "academy:getting_phase",
+  "criteria": {
+    "crafting_phase_gen": {
+      "trigger": "academy:crafting_phase_gen"
+    }
+  }
+}

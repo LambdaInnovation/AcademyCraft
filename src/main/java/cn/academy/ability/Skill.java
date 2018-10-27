@@ -33,7 +33,7 @@ import java.util.function.Function;
  * A skill can be specified to not appear in Preset Edit screen. This kind of skills usually serve as 'passive' skills and provide
  *  pipeline functions inside to affect the skill damage or other values. <br/>
  * 
- * You should provide the SkillInstance for the skill via {@link Skill#createSkillInstance(EntityPlayer)}
+ *
  * method so that the skill control will take effect.
  * @author WeAthFolD
  */
@@ -335,13 +335,6 @@ public abstract class Skill extends Controllable {
     @Override
     public String toString() {
         return getFullName();
-    }
-
-    /**
-     * Trigger the achievement in vanilla achievement page, if any.
-     */
-    public void triggerAchievement(EntityPlayer player) {
-        ACAchievements.trigger(player, getFullName());
     }
 
     public class SingleKeyDelegate extends KeyDelegate {

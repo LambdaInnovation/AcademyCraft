@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "academy:node_basic"
+    },
+    "title": {
+      "translate": "advancements.general.ac_node"
+    },
+    "description": {
+      "translate": "advancements.general.ac_node.desc"
+    }
+  },
+  "parent": "academy:phase_generator",
+  "criteria": {
+    "crafting_node": {
+      "trigger": "academy:crafting_node"
+    }
+  }
+}

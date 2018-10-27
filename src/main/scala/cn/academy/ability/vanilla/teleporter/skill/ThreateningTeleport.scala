@@ -8,6 +8,7 @@ import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityMarker
 import cn.academy.ability.vanilla.VanillaCategories
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
+import cn.academy.advancements.ACAchievements
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -56,18 +57,18 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_madeAlive() = {
-    if(player.getHeldItemMainhand == null) terminate()
+    if(player.getHeldItemMainhand.isEmpty) terminate()
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_tick() = {
-    if(player.getHeldItemMainhand == null) terminate()
+    if(player.getHeldItemMainhand.isEmpty) terminate()
   }
 
   @Listener(channel=MSG_EXECUTE, side=Array(Side.SERVER))
   private def s_execute() = {
     val curStack: ItemStack = player.getHeldItemMainhand
-    if(curStack != null && ctx.consume(getOverload(exp), getConsumption(exp))) {
+    if(!curStack.isEmpty && ctx.consume(getOverload(exp), getConsumption(exp))) {
       attacked = true
       val result: TraceResult = calcDropPos
       var dropProb: Double = 1.0
@@ -75,17 +76,17 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
       if(result.target != null) {
         attacked_ = true
         TPSkillHelper.attackIgnoreArmor(ctx, result.target, getDamage(curStack))
-        ThreateningTeleport.triggerAchievement(player)
         dropProb = 0.3
       }
       if(!player.capabilities.isCreativeMode) {
-        if({curStack.setCount(curStack.getCount-1); curStack.getCount} <= 0) player.setHeldItem(EnumHand.MAIN_HAND, null)
+        curStack.setCount(curStack.getCount-1)
       }
       if(RandUtils.ranged(0, 1) < dropProb) {
         val drop: ItemStack = curStack.copy
         drop.setCount(drop.getCount-1)
         player.world.spawnEntity(new EntityItem(player.world, result.x, result.y, result.z, drop))
       }
+      if(exp>0.5) ACAchievements.trigger(player, ACAchievements.aMilestone.ID)
       ctx.addSkillExp(getExpIncr(attacked_))
       ctx.setCooldown(lerpf(30, 15, exp).toInt)
     }

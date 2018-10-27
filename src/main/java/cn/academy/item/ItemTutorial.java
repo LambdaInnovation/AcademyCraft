@@ -1,5 +1,6 @@
 package cn.academy.item;
 
+import cn.academy.advancements.ACAchievements;
 import cn.academy.client.gui.GuiTutorial;
 import net.minecraft.item.Item;
 import net.minecraft.util.ActionResult;
@@ -24,6 +25,7 @@ public class ItemTutorial extends Item {
         if(world.isRemote) {
             Minecraft.getMinecraft().displayGuiScreen(new GuiTutorial());
         }
+        ACAchievements.trigger(player, ACAchievements.aOpenTutorial.ID);
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
     

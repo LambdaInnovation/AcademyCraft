@@ -155,7 +155,6 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
   private def s_onEnd() = {
     val traveledDistance = MathUtils.distance(sx, sy, sz, player.posX, player.posY, player.posZ)
     ctx.addSkillExp(getExpIncr(traveledDistance))
-    MagMovement.triggerAchievement(player)
 
     player.fallDistance = 0.0f
   }

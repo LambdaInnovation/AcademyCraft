@@ -234,7 +234,6 @@ public class Flashing extends Skill {
                 player.fallDistance = 0.0f;
 
                 ctx.addSkillExp(.002f);
-                instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
                 sendToClient(MSG_PERFORM);

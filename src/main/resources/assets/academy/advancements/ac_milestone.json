@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "academy:reso_crystal"
+    },
+    "title": {
+      "translate": "advancements.general.ac_milestone"
+    },
+    "description": {
+      "translate": "advancements.general.ac_milestone.desc"
+    }
+  },
+  "parent": "academy:ac_learning_skill",
+  "criteria": {
+    "ac_milestone": {
+      "trigger": "academy:ac_milestone"
+    }
+  }
+}

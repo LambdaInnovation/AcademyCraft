@@ -96,7 +96,6 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 
     ctx.setCooldown(getCooldown(exp, ticks))
     ctx.addSkillExp(0.003f)
-    ThunderClap.triggerAchievement(player)
     terminate()
   }
 

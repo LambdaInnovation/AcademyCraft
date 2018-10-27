@@ -52,7 +52,6 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
       sendToClient(MSG_PERFORM, targ)
       ctx.attack(targ, damage)
       ctx.addSkillExp(0.002f)
-      if(ctx.getSkillExp == 1f) BloodRetrograde.triggerAchievement(player)
     }
 
     terminate()

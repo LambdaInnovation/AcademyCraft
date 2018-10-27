@@ -2,6 +2,7 @@ package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.advancements.ACAchievements
 import cn.academy.client.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, GameTimer, Raytrace}
@@ -82,6 +83,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
         knockback(entity)
         ctx.setCooldown(lerpf(60, 20, ctx.getSkillExp).toInt)
         sendToClient(MSG_GENERATE_EFFECT, entity)
+        if (ctx.getSkillExp >= 0.5f) ACAchievements.trigger(player, ACAchievements.aMilestone.ID)
 
         val delta = multiply(subtract(entity.getPositionVector, player.getPositionVector).normalize(), 0.24)
         entity.motionX += delta.x

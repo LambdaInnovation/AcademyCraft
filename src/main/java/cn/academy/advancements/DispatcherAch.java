@@ -1,14 +1,19 @@
 package cn.academy.advancements;
 
+import cn.academy.ACBlocks;
+import cn.academy.ACItems;
 import cn.academy.ability.Category;
 import cn.academy.ability.Skill;
+import cn.academy.ability.vanilla.VanillaCategories;
+import cn.academy.ability.vanilla.electromaster.CatElectromaster;
 import cn.academy.advancements.triggers.ACLevelTrigger;
 import cn.academy.advancements.triggers.ACTrigger;
 import cn.academy.datapart.AbilityData;
-import cn.academy.event.ability.LevelChangeEvent;
-import cn.academy.event.ability.SkillLearnEvent;
+import cn.academy.event.ability.*;
 import cn.academy.event.MatterUnitHarvestEvent;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -56,26 +61,33 @@ public final class DispatcherAch {
         if (set != null)
             if (event.player instanceof EntityPlayerMP)
                 for (ACTrigger a : set)
-                    a.trigger((EntityPlayerMP) event.player);
+                    ACAchievements.trigger(event.player, a.getId());
     }
     
     
     //cn.academy.event.ability.LevelChangeEvent
     
-    private final HashMap<Category, ACLevelTrigger[]> hcLevelChange = new HashMap<>();
-    
-    public void rgLevelChange(Category cat, int lv, ACLevelTrigger ach) {
+    private final HashMap<Category, ACTrigger[]> hcLevelChange = new HashMap<>();
+
+    public void rgLevelChange(int lv, ACTrigger ach) {
+        rgLevelChange(VanillaCategories.electromaster, lv, ach);
+        rgLevelChange(VanillaCategories.meltdowner, lv, ach);
+        rgLevelChange(VanillaCategories.teleporter, lv, ach);
+        rgLevelChange(VanillaCategories.vecManip, lv, ach);
+    }
+
+    public void rgLevelChange(Category cat, int lv, ACTrigger ach) {
         if (hcLevelChange.containsKey(cat))
             hcLevelChange.get(cat)[lv - 1] = ach;
         else {
-            ACLevelTrigger[] arr = new ACLevelTrigger[5];
+            ACTrigger[] arr = new ACTrigger[5];
             arr[lv - 1] = ach;
             hcLevelChange.put(cat, arr);
         }
     }
     
     public void urLevelChange(Category cat, int lv) {
-        ACLevelTrigger[] arr = hcLevelChange.get(cat);
+        ACTrigger[] arr = hcLevelChange.get(cat);
         if (arr != null)
             arr[lv - 1] = null;
     }
@@ -85,10 +97,10 @@ public final class DispatcherAch {
         AbilityData data = AbilityData.get(event.player);
         if (data.hasCategory()) {
             int xlv = data.getLevel() - 1;
-            ACLevelTrigger[] arr = hcLevelChange.get(data.getCategory());
+            ACTrigger[] arr = hcLevelChange.get(data.getCategory());
             if(event.player instanceof EntityPlayerMP){
                 if (arr != null && xlv >= 0 && arr[xlv] != null)
-                    arr[xlv].trigger((EntityPlayerMP) event.player);
+                    ACAchievements.trigger(event.player, arr[xlv].ID);
             }
         }
     }
@@ -96,7 +108,7 @@ public final class DispatcherAch {
     @SubscribeEvent
     public void onMatterUnitHarvest(MatterUnitHarvestEvent event) {
         if(event.player instanceof EntityPlayerMP)
-            ACAchievements.aPhaseLiquid.trigger((EntityPlayerMP) event.player);
+            ACAchievements.trigger(event.player, ACAchievements.aGettingPhase.ID);
     }
     
     
@@ -122,7 +134,7 @@ public final class DispatcherAch {
     
     //net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent
     
-    private final Map<Item, ACTrigger> hcPlayerPickup = new HashMap();
+    private final Map<Item, ACTrigger> hcPlayerPickup = new HashMap<>();
     
     public void rgPlayerPickup(ItemStack stack, ACTrigger ach) {
         hcPlayerPickup.put(stack.getItem(), ach);
@@ -137,15 +149,49 @@ public final class DispatcherAch {
                 ach.trigger((EntityPlayerMP) event.player);
         }
     }
+
+    @SubscribeEvent
+    public void onPlayerTransformCategory(TransformCategoryEvent event)
+    {
+        ACAchievements.trigger(event.player, ACAchievements.aConvertCategory.ID);
+    }
+
+    @SubscribeEvent
+    public void onPlayerLearnSkill(SkillLearnEvent event)
+    {
+        ACAchievements.trigger(event.player, ACAchievements.aLearnSkill.ID);
+    }
+
+    @SubscribeEvent
+    public void onSkillExpAdded(SkillExpAddedEvent event)
+    {
+        if(event.skill.getSkillExp(AbilityData.get(event.player))>=1.0f)
+            ACAchievements.trigger(event.player, ACAchievements.aExpFull.ID);
+    }
+
+    @SubscribeEvent
+    public void onPlayerOverload(OverloadEvent event)
+    {
+        ACAchievements.trigger(event.player, ACAchievements.aOverload.ID);
+    }
     
     //Init
     
     private DispatcherAch() {
         MinecraftForge.EVENT_BUS.register(this);
+
     }
     
     //stub method for loading
     public static void init() {
+        INSTANCE.rgItemCrafted(ACBlocks.item_phase_gen, ACAchievements.aPhaseGen);
+        INSTANCE.rgItemCrafted(ACBlocks.item_node_basic, ACAchievements.aNode);
+        INSTANCE.rgItemCrafted(ACBlocks.item_matrix, ACAchievements.aMatrix);
+        INSTANCE.rgPlayerPickup(new ItemStack(ACItems.induction_factor, 1,0), ACAchievements.aGettingFactor);
+        INSTANCE.rgItemCrafted(ACItems.developer_portable, ACAchievements.aDeveloper);
+        INSTANCE.rgLevelChange(1, ACAchievements.aDevCategory);
+        INSTANCE.rgLevelChange(3, ACAchievements.aLevel3);
+        INSTANCE.rgLevelChange(5, ACAchievements.aLevel5);
     }
     
 }

@@ -57,7 +57,6 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       sendToClient(MSG_MARK_END)
       sendToSelf(MSG_TRIGGER, getDest.add(0, 1.65, 0))
       ctx.addSkillExp(.004f)
-      JetEngine.triggerAchievement(player)
       ctx.setCooldown(lerpf(60, 30, exp).toInt)
     } else {
       sendToClient(MSG_MARK_END)

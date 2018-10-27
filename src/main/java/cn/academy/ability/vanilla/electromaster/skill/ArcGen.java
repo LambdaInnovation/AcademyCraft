@@ -6,6 +6,7 @@ import cn.academy.ability.context.ClientContext;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.Context;
 import cn.academy.ability.context.RegClientContext;
+import cn.academy.advancements.ACAchievements;
 import cn.academy.client.render.util.ArcPatterns;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.entity.EntityArc;
@@ -109,7 +110,7 @@ public class ArcGen extends Skill
                                     result.hitVec.y,
                                     result.hitVec.z,
                                     new ItemStack(Items.COOKED_FISH)));
-                            ArcGen.instance.triggerAchievement(player);
+                            ACAchievements.trigger(player, ACAchievements.aMilestone.ID);
                         }
                     }
                     else
@@ -118,6 +119,7 @@ public class ArcGen extends Skill
                             pos = pos.add(0, 1, 0);
                             if (world.isAirBlock(pos)) {
                                 world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+                                ACAchievements.trigger(player, ACAchievements.aMilestone.ID);
                             }
                         }
                     }

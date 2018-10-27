@@ -153,7 +153,6 @@ object Railgun extends Skill("railgun", 4) {
       })
       damage.startDamage = dmg
       damage.perform()
-      Railgun.triggerAchievement(player)
 
       if(hitEntity) ctx.addSkillExp(0.01f) else ctx.addSkillExp(0.005f)
 

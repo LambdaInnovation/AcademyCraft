@@ -2,13 +2,16 @@ package cn.academy.ability.develop.action;
 
 import cn.academy.ACItems;
 import cn.academy.ability.Category;
+import cn.academy.advancements.ACAchievements;
 import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
+import cn.academy.event.ability.TransformCategoryEvent;
 import cn.academy.item.ItemInductionFactor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,14 +59,16 @@ public class DevelopActionReset implements IDevelopAction {
 
         Category newCat = ItemInductionFactor.getCategory(factor);
 
-        int prevLevel = data.getLevel();
+        int prevLevel = data.getLevel() - 1;
+        if(!MinecraftForge.EVENT_BUS.post(new TransformCategoryEvent(player, newCat, prevLevel)))
+        {
+            data.setCategory(newCat);
+            data.setLevel(prevLevel);
 
-        data.setCategory(newCat);
-        data.setLevel(prevLevel - 1);
+            player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 
-        player.setHeldItem(EnumHand.MAIN_HAND, null);
-
-        int factorIdx = Collections.singletonList(player.inventory.mainInventory).indexOf(factor);
-        player.inventory.mainInventory.set(factorIdx, null);
+            int factorIdx = Collections.singletonList(player.inventory.mainInventory).indexOf(factor);
+            player.inventory.mainInventory.set(factorIdx, ItemStack.EMPTY);
+        }
     }
 }

@@ -89,7 +89,6 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
       })
 
       ctx.addSkillExp(getExpIncr(effective))
-      ThunderBolt.triggerAchievement(player)
 
       ctx.setCooldown(lerpf(120, 50, exp).toInt)
     }

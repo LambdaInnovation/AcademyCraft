@@ -78,7 +78,6 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
     if(consume()) {
       player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("blindness"), TIME))
       ctx.addSkillExp(0.008f)
-      MineDetect.triggerAchievement(player)
       sendToClient(MSG_EFFECT, range.asInstanceOf[AnyRef], isAdvanced.asInstanceOf[AnyRef])
 
       val exp = ctx.getSkillExp

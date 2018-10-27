@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "academy:tutorial"
+    },
+    "title": {
+      "translate": "advancements.general.open_tutorial"
+    },
+    "description": {
+      "translate": "advancements.general.open_tutorial.desc"
+    }
+  },
+  "parent": "academy:root",
+  "criteria": {
+    "open_tutorial": {
+      "trigger": "academy:open_tutorial"
+    }
+  }
+}
