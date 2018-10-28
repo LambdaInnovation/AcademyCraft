@@ -27,7 +27,7 @@ public class RenderEntityBlock extends Render<EntityBlock> {
 
 //    public static RenderBlocks renderBlocks = RenderBlocks.getInstance();
 
-    protected RenderEntityBlock(RenderManager renderManager) {
+    public RenderEntityBlock(RenderManager renderManager) {
         super(renderManager);
     }
 

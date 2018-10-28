@@ -228,7 +228,7 @@ public class EntitySilbarn extends EntityAdvanced
         private final ObjLegacyRender model = Resources.getModel("silbarn");
         private final ResourceLocation tex = Resources.getTexture("models/silbarn");
 
-        protected RenderSibarn(RenderManager renderManager) {
+        public RenderSibarn(RenderManager renderManager) {
             super(renderManager);
         }
 

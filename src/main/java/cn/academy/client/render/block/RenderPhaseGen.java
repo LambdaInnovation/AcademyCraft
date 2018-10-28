@@ -2,6 +2,7 @@ package cn.academy.client.render.block;
 
 import cn.academy.Resources;
 import cn.academy.block.tileentity.TilePhaseGen;
+import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.obj.ObjLegacyRender;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.MathUtils;
@@ -13,6 +14,9 @@ import org.lwjgl.opengl.GL11;
  * @author WeAthFolD
  */
 public class RenderPhaseGen extends TileEntitySpecialRenderer<TilePhaseGen> {
+
+    @RegTileEntityRender(TilePhaseGen.class)
+    public static final RenderPhaseGen instance = new RenderPhaseGen();
     
     ObjLegacyRender model;
     ResourceLocation[] textures;

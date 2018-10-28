@@ -28,7 +28,7 @@ public class MarkRender extends Render<EntityTPMarking> {
     protected ResourceLocation[] tex = Resources.getEffectSeq("tp_mark", 7);
     protected SimpleModelBiped model = new SimpleModelBiped();
 
-    protected MarkRender(RenderManager renderManager) {
+    public MarkRender(RenderManager renderManager) {
         super(renderManager);
     }
 

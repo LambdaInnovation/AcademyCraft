@@ -25,7 +25,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         this.shadowOpaque = 0;
     }
 
-    protected RendererRayBaseGlow(RenderManager renderManager) {
+    public RendererRayBaseGlow(RenderManager renderManager) {
         super(renderManager);
     }
 

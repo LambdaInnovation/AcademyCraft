@@ -3,9 +3,10 @@ package cn.academy.client.render.block;
 import cn.academy.Resources;
 import cn.academy.block.tileentity.TileMatrix;
 import cn.lambdalib2.multiblock.RenderBlockMulti;
+import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.obj.ObjLegacyRender;
-import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -15,6 +16,9 @@ import org.lwjgl.opengl.GL11;
  *
  */
 public class RenderMatrix extends RenderBlockMulti {
+
+    @RegTileEntityRender(TileMatrix.class)
+    public static final RenderMatrix instance = new RenderMatrix();
 
     ObjLegacyRender model;
     ResourceLocation texture;

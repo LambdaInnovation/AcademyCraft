@@ -25,7 +25,6 @@ import net.minecraft.tileentity.TileEntity;
  * @author WeAthFolD
  *
  */
-@RegTileEntity
 public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile, IDeveloper {
 
     private static final String
@@ -35,31 +34,18 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 
     @RegTileEntity
     public static class Normal extends TileDeveloper {
-        
         public Normal() {
             super(DeveloperType.NORMAL);
         }
-        
-//        @SideOnly(Side.CLIENT)
-//        @RegTileEntity.Render
-//        public static RenderDeveloperNormal renderer;
     }
 
     @RegTileEntity
     public static class Advanced extends TileDeveloper {
-        
         public Advanced() {
             super(DeveloperType.ADVANCED);
         }
-        
-//        @SideOnly(Side.CLIENT)
-//        @RegTileEntity.Render
-//        public static RenderDeveloperAdvanced renderer;
     }
-    
-//    @SideOnly(Side.CLIENT)
-//    public static RenderDeveloperNormal renderer;
-    
+
     public final DeveloperType type;
     
     private int syncCD;

@@ -181,7 +181,7 @@ public class EntitySurroundArc extends EntityAdvanced {
     @RegEntityRender(EntitySurroundArc.class)
     public static class Renderer extends Render<EntitySurroundArc> {
 
-        protected Renderer(RenderManager renderManager) {
+        public Renderer(RenderManager renderManager) {
             super(renderManager);
         }
 

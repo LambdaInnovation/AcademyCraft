@@ -145,7 +145,10 @@ public class ClientResources {
     }
 
     public static ObjLegacyRender getModel(String mdlName) {
-        return cachedModels.computeIfAbsent(new ResourceLocation("academy", "models/" + mdlName), (loc) -> new ObjLegacyRender(ObjParser.parse(loc)));
+        return cachedModels.computeIfAbsent(
+            new ResourceLocation("academy", "models/" + mdlName + ".obj"), 
+            (loc) -> new ObjLegacyRender(ObjParser.parse(loc))
+        );
     }
 
     private static void checkFontInit() {

@@ -1,7 +1,5 @@
 package cn.academy.entity;
 
-import cn.academy.client.render.entity.RenderMarker;
-import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.entity.Entity;

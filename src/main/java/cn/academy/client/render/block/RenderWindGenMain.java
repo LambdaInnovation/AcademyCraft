@@ -43,7 +43,7 @@ public class RenderWindGenMain extends RenderBlockMulti {
             double time = GameTimer.getTime();
             double dt = gen.lastFrame == -1 ? 0 : time - gen.lastFrame;
             gen.lastFrame = time;
-            gen.lastRotation += gen.getSpinSpeed() * dt / 1000.0;
+            gen.lastRotation += gen.getSpinSpeed() * dt;
 
             GL11.glPushMatrix();
             GL11.glTranslated(0, 0.5, 0.82);

@@ -23,7 +23,7 @@ public class RendererMagHook extends Render {
     
     final ResourceLocation texture = Resources.getTexture("models/maghook");
 
-    protected RendererMagHook(RenderManager renderManager) {
+    public RendererMagHook(RenderManager renderManager) {
         super(renderManager);
     }
 

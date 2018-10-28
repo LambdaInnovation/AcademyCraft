@@ -27,7 +27,7 @@ public class RenderMarker extends Render {
             { 1, 1, 1 }, { 0, 1, 1 }, };
     final double[] rotArray = { 0, -90, -180, -270, 0, -90, -180, -270 };
 
-    protected RenderMarker(RenderManager renderManager) {
+    public RenderMarker(RenderManager renderManager) {
         super(renderManager);
     }
 
