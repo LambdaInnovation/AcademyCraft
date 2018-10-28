@@ -155,25 +155,11 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
                     .pull(inventory[SLOT_ENERGY_INPUT], Math.min(getMaxEnergy() - getEnergy(), getBandwidth()), false);
             this.injectEnergy(gain);
         }
-        
-        // Synchronization
-        if (!world.isRemote) {
-            if(--syncCooldown <= 0) {
-                syncCooldown = SYNC_INTV;
-                NBTTagCompound nbt = new NBTTagCompound();
-                writeToNBT(nbt);
-                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, "MSG_INFO_SYNC", nbt);
-            }
-        }
+
 
         if (world.isRemote) {
             updateSounds();
         }
-    }
-    @NetworkMessage.Listener(channel="MSG_INFO_SYNC", side=Side.CLIENT)
-    private void onSync(NBTTagCompound nbt)
-    {
-        readFromNBT(nbt);
     }
     
     //---Work API

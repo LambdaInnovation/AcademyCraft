@@ -42,8 +42,20 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
             
             if(--updateTicker == 0) {
                 updateTicker = 20;
-                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20), this, "sync_energy", energy);
+                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20)
+                        , this, ".tile.sync", writeToNBT(new NBTTagCompound()));
             }
+        }
+    }
+
+    @Override
+    public void onLoad()
+    {
+        super.onLoad();
+        if(!world.isRemote)
+        {
+            NetworkMessage.sendToAllAround(TargetPoints.convert(this, 25),
+                    this, ".tile.sync", writeToNBT(new NBTTagCompound()));
         }
     }
     
@@ -65,7 +77,7 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
     @Override
     public double getProvidedEnergy(double req) {
         if(req > energy) req = energy;
-        
+
         energy -= req;
         return req;
     }
@@ -112,9 +124,9 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
      */
     public abstract double getGeneration(double required);
 
-    @Listener(channel="sync_energy", side=Side.CLIENT)
-    private void hSync(double energy) {
-        this.energy = energy;
+    @Listener(channel=".tile.sync", side=Side.CLIENT)
+    private void hSync(NBTTagCompound nbt) {
+        readFromNBT(nbt);
     }
 
 }

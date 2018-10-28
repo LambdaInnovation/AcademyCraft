@@ -6,6 +6,7 @@ import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.TickScheduler;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,12 +31,6 @@ public class TileCatEngine extends TileGeneratorBase {
     public double rotation;
     public long lastRender;
 
-    {
-        scheduler.every(20).atOnly(Side.SERVER).run(() -> {
-            NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20), this, "sync_genspeed", thisTickGen);
-        });
-    }
-
     public TileCatEngine() {
         super("infinite_generator", 0, 2000, 200);
     }
@@ -51,9 +46,18 @@ public class TileCatEngine extends TileGeneratorBase {
         return (thisTickGen = Math.min(required, 500));
     }
 
-    @Listener(channel="sync_genspeed", side=Side.CLIENT)
-    private void hSync(double genSpeed) {
-        this.thisTickGen = genSpeed;
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag)
+    {
+        super.writeToNBT(tag);
+        tag.setDouble("tickGen", thisTickGen);
+        return tag;
     }
 
+    @Override
+    public void readFromNBT(NBTTagCompound tag)
+    {
+        super.readFromNBT(tag);
+        thisTickGen = tag.getDouble("tickGen");
+    }
 }

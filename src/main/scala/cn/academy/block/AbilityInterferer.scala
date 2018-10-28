@@ -175,7 +175,8 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   override def readFromNBT(tag: NBTTagCompound) = {
     super.readFromNBT(tag)
     enabled_ = tag.getBoolean("enabled_")
-    whitelist_ = SortedSet(NBTS11n.readBase(tag.getTag("whitelist_"), classOf[Array[String]]): _*)
+    if(tag.hasKey("whitelist_"))
+      whitelist_ = SortedSet(NBTS11n.readBase(tag.getTag("whitelist_"), classOf[Array[String]]): _*)
     range_ = tag.getFloat("range_")
   }
 

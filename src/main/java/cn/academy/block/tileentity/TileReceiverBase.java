@@ -34,8 +34,19 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
         if(!getWorld().isRemote) {
             if(++updateTicker == UPDATE_WAIT) {
                 updateTicker = 0;
-                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, "sync_energy", energy);
+                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, ".tile.sync", writeToNBT(new NBTTagCompound()));
             }
+        }
+    }
+
+    @Override
+    public void onLoad()
+    {
+        super.onLoad();
+        if(!world.isRemote)
+        {
+            NetworkMessage.sendToAllAround(TargetPoints.convert(this, 25),
+                    this, ".tile.sync", writeToNBT(new NBTTagCompound()));
         }
     }
     
@@ -78,9 +89,9 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
         return tag;
     }
 
-    @Listener(channel="sync_energy", side=Side.CLIENT)
-    private void hSync(double energy) {
-        this.energy = energy;
+    @Listener(channel=".tile.sync", side=Side.CLIENT)
+    private void hSync(NBTTagCompound nbt) {
+        readFromNBT(nbt);
     }
 
     @Override
