@@ -13,8 +13,6 @@ import java.util.List;
 public class ItemMatrixCore extends Item {
     
     int LEVELS = 3;
-    
-//    IIcon icons[] = new IIcon[LEVELS];
 
     public ItemMatrixCore() {
         this.setHasSubtypes(true);
@@ -25,19 +23,6 @@ public class ItemMatrixCore extends Item {
         return super.getTranslationKey(stack) + "_" + stack.getItemDamage();
     }
     
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public void registerIcons(IIconRegister ir) {
-//        for(int i = 0; i < LEVELS; ++i) {
-//            icons[i] = ir.registerIcon("academy:matrix_core_" + i);
-//        }
-//    }
-//
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public IIcon getIconFromDamage(int meta) {
-//        return icons[meta];
-//    }
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (isInCreativeTab(tab)) {
             for(int i = 0; i < LEVELS; ++i)
