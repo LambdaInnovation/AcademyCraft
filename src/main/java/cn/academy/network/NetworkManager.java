@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * Created by Paindar on 2016/8/31.
  */
+@Deprecated
 public class NetworkManager
 {
     public static SimpleNetworkWrapper instance = NetworkRegistry.INSTANCE.newSimpleChannel("AcademyCraft");
