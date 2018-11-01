@@ -36,7 +36,7 @@ public class PhaseLiquidGenerator implements IWorldGenerator {
                 world.provider.getDimensionType()== DimensionType.OVERWORLD) {
             if (random.nextDouble() < 0.3) {
                 genLakes.generate(world, random,
-                    new BlockPos(chunkX * 16 + random.nextInt(16), 5 + random.nextInt(30), chunkZ * 16 + random.nextInt(16))
+                    new BlockPos(chunkX * 16 + random.nextInt(16)+8, 5 + random.nextInt(30), chunkZ * 16 + random.nextInt(16)+8)
                 );
             }
         }

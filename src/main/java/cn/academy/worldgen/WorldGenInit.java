@@ -21,7 +21,7 @@ public class WorldGenInit {
     @StateEventCallback
     public static void preInit(FMLPreInitializationEvent event)
     {
-        GameRegistry.registerWorldGenerator(worldGen,1);
+        GameRegistry.registerWorldGenerator(worldGen,2);
     }
     public static final ACWorldGen worldGen = new ACWorldGen();
 
