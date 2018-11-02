@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/logo.png)  
 
-A Minecraft mod about superability, including its aquiring, upgrading and using. The inspiration of AcademyCraft comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but the mod content is not limited of the background.
+A Minecraft mod about superability, including acquiring, upgrading and using it. The inspiration of AcademyCraft comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but the mod content is not limited of the background.
 
 Visit [AcademyCraft's Website](http://ac.li-dev.cn/) to get the latest release and 
 know more about it.
@@ -8,7 +8,7 @@ know more about it.
 Developement
 ===========
 
-Before either build the mod or setup the workspace, you must first build [LambdaLib][lambdalib] 
+Before either building the mod or setting up the workspace, you must first build [LambdaLib][lambdalib] 
 with the required version as specified in `build.properties` locally (using `gradlew install`).
 
 ## Build
@@ -28,10 +28,10 @@ Any issue should be prefixed with the version associated. For example, `[1.0.0] 
 
 ## Bug
 
-Please provide the following information if you are to submit a bug:
+Please provide the following information if you are submitting a bug:
 
 * A brief description of the bug
-* A repeatible way to reproduce the bug, if you can find any
+* A repeatable way to reproduce the bug, if you can find any
 * Crash report and the latest client/server log
 
 Localization
@@ -46,7 +46,7 @@ Misc
 
 ## Donation
 
-You can support developement of AcademyCraft by donating. This will secure us more time to make the mod more intriguing! 
+You can support the developement of AcademyCraft by donating. This will secure us more time to make the mod more intriguing! 
 
 You would also be able to be in our donator list, both on website and in-game :beer:
 
