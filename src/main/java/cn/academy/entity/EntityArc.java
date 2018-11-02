@@ -9,6 +9,7 @@ import cn.lambdalib2.util.deprecated.ViewOptimize.IAssociatePlayer;
 import cn.lambdalib2.util.Motion3D;
 import cn.lambdalib2.util.entityx.EntityAdvanced;*/
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.util.EntityLook;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
@@ -65,8 +66,8 @@ public class EntityArc extends EntityAdvanced implements ViewOptimize.IAssociate
     public EntityArc(EntityPlayer _player, Arc[]_patterns) {
         super(_player.getEntityWorld());
         this.player = _player;
-        this.setPosition(player.posX, player.posY, player.posZ);
-        //TODO Motion3D.apply
+        this.setPosition(player.posX, player.posY + _player.eyeHeight, player.posZ);
+        new EntityLook(_player).applyToEntity(this);
         ignoreFrustumCheck = true;
         iid = new int[n];
         

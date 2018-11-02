@@ -252,11 +252,14 @@ public class CPBar extends Widget {
             bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
             
             if(mAlpha > 0) {
+                checkGLError("DrawCPBar");
                 /* Draw CPBar */ {
                     if(!cpData.isOverloaded()) {
                         drawNormal(bufferedOverload);
+                        checkGLError("DrawNormal post");
                     } else {
                         drawOverload(bufferedOverload);
+                        checkGLError("DrawOverload post");
                     }
                     
                     if(chProvider != null && !chProvider.alive())
@@ -280,7 +283,8 @@ public class CPBar extends Widget {
                         drawCPBar(bufferedCP, low);
                     }
                 }
-                
+
+                checkGLError("DrawPresetHint");
                 /* Draw Preset Hint */ {
                     final long preset_wait = 2000L;
                     if(time - presetChangeTime < preset_wait)
@@ -288,6 +292,7 @@ public class CPBar extends Widget {
                             time - lastPresetTime);
                 }
 
+                checkGLError("DrawData");
                 // Draw data
                 {
                     float alpha;
@@ -350,6 +355,7 @@ public class CPBar extends Widget {
             GL11.glPopMatrix(); // Pop 1
         });
     }
+
     
     private void drawOverload(float overload) {
         //Draw plain background
@@ -392,6 +398,8 @@ public class CPBar extends Widget {
         
         color4d(1, 1, 1, .8);
         HudUtils.rect(WIDTH, HEIGHT);
+
+        checkGLError("DrawNormal 1");
         
         //Overload progress
         final double X0 = 0, Y0 = 21, WIDTH = 943, HEIGHT = 104;
@@ -400,7 +408,9 @@ public class CPBar extends Widget {
         double len = overload * WIDTH;
         
         RenderUtils.loadTexture(TEX_MASK);
+        checkGLError("DrawNormal 1.5");
         subHud(X0 + WIDTH - len, Y0, len, HEIGHT);
+        checkGLError("DrawNormal 2");
     }
 
     private float getConsumptionHint() {
@@ -427,27 +437,35 @@ public class CPBar extends Widget {
         final double OFF = 103 * sin41, X0 = 47, Y0 = 30, WIDTH = 883, HEIGHT = 84;
         Tessellator t = Tessellator.instance;
         double len = WIDTH * prog, len2 = len - OFF;
-        
+
+        checkGLError("DrawCPBar 0");
         if(shaderLoaded) {
             shaderCPBar.useProgram();
         }
-        
+
+        checkGLError("DrawCPBar 1");
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         RenderUtils.loadTexture(overlayTexture);
         
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         RenderUtils.loadTexture(TEX_CP);
-        
+
+        checkGLError("DrawCPBar Pre");
+
+        double texWidth = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH),
+            texHeight= GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
         t.startDrawingQuads();
-        addVertex(X0 + (WIDTH - len), Y0);
-        addVertex(X0 + (WIDTH - len2), Y0 + HEIGHT);
-        addVertex(X0 + WIDTH, Y0 + HEIGHT);
-        addVertex(X0 + WIDTH, Y0);
+        addVertex(X0 + (WIDTH - len), Y0, texWidth, texHeight);
+        addVertex(X0 + (WIDTH - len2), Y0 + HEIGHT, texWidth, texHeight);
+        addVertex(X0 + WIDTH, Y0 + HEIGHT, texWidth, texHeight);
+        addVertex(X0 + WIDTH, Y0, texWidth, texHeight);
         t.draw();
         
         GL20.glUseProgram(0);
-        
+        checkGLError("DrawCPBar Post");
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -529,17 +547,17 @@ public class CPBar extends Widget {
     
     private void subHud(double x, double y, double width, double height) {
         Tessellator t = Tessellator.instance;
+        double texWidth = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH),
+            texHeight= GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
         t.startDrawingQuads();
-        addVertex(x,          y);
-        addVertex(x,          y + height);
-        addVertex(x + width, y + height);
-        addVertex(x + width, y);
+        addVertex(x, y, texWidth, texHeight);
+        addVertex(x, y + height, texWidth, texHeight);
+        addVertex(x + width, y + height, texWidth, texHeight);
+        addVertex(x + width, y, texWidth, texHeight);
         t.draw();
     }
     
-    private void addVertex(double x, double y) {
-        double width = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH),
-                height = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+    private void addVertex(double x, double y, double width, double height) {
         Tessellator.instance.addVertexWithUV(x, y, -90, x / width, y / height);
     }
     
@@ -572,6 +590,12 @@ public class CPBar extends Widget {
         delta = Math.signum(delta) * Math.min(max, Math.abs(delta));
         
         return from + delta;
+    }
+
+    private void checkGLError(String stage) {
+        if (GL11.glGetError() != 0) {
+            Debug.error("[CPBar] GL error @ " + stage);
+        }
     }
     
     private static ResourceLocation tex(String name) {
