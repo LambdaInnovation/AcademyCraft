@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:open_misaka_cloud",
-  "criteria": {
+  "criteria":{
     "ac_developer": {
       "trigger": "academy:ac_developer"
     }

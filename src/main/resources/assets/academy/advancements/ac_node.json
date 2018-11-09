@@ -11,9 +11,9 @@
     }
   },
   "parent": "academy:phase_generator",
-  "criteria": {
-    "crafting_node": {
-      "trigger": "academy:crafting_node"
+  "criteria":{
+    "ac_node": {
+      "trigger": "academy:ac_node"
     }
   }
 }

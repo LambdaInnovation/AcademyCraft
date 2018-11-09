@@ -4,16 +4,16 @@
       "item": "academy:terminal_installer"
     },
     "title": {
-      "translate": "advancements.general.terminal_installer"
+      "translate": "advancements.general.terminal_installed"
     },
     "description": {
-      "translate": "advancements.general.terminal_installer.desc"
+      "translate": "advancements.general.terminal_installed.desc"
     }
   },
   "parent": "academy:open_misaka_cloud",
-  "criteria": {
-    "ac_terminal_installed": {
-      "trigger": "academy:ac_terminal_installed"
+  "criteria":{
+    "terminal_installed": {
+      "trigger": "academy:terminal_installed"
     }
   }
 }

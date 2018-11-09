@@ -1,6 +1,6 @@
 package cn.academy.command;
 
-import cn.academy.advancements.ACAchievements;
+import cn.academy.advancements.ACAdvancements;
 import cn.academy.util.ACCommand;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.PlayerUtils;
@@ -44,7 +44,7 @@ public class CommandACACH extends ACCommand {
             PlayerUtils.sendChat(sender, locNoPlayer());
             return;
         }
-        if (ACAchievements.trigger(player, nAch))
+        if (ACAdvancements.trigger(player, nAch))
             PlayerUtils.sendChat(sender, locSuccessful());
         else
             PlayerUtils.sendChat(sender, "No such achievement found");

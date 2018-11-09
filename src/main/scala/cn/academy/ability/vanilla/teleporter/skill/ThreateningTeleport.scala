@@ -8,7 +8,7 @@ import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityMarker
 import cn.academy.ability.vanilla.VanillaCategories
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
-import cn.academy.advancements.ACAchievements
+import cn.academy.advancements.ACAdvancements
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -86,7 +86,7 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
         drop.setCount(drop.getCount-1)
         player.world.spawnEntity(new EntityItem(player.world, result.x, result.y, result.z, drop))
       }
-      if(exp>0.5) ACAchievements.trigger(player, ACAchievements.aMilestone.ID)
+      if(exp>0.5) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID)
       ctx.addSkillExp(getExpIncr(attacked_))
       ctx.setCooldown(lerpf(30, 15, exp).toInt)
     }

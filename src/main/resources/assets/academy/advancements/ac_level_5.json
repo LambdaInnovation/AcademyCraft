@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:ac_level_3",
-  "criteria": {
+  "criteria":{
     "ac_level_5": {
       "trigger": "academy:ac_level_5"
     }

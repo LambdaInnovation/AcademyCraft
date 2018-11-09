@@ -61,7 +61,7 @@ public final class DispatcherAch {
         if (set != null)
             if (event.player instanceof EntityPlayerMP)
                 for (ACTrigger a : set)
-                    ACAchievements.trigger(event.player, a.getId());
+                    ACAdvancements.trigger(event.player, a.getId());
     }
     
     
@@ -100,7 +100,7 @@ public final class DispatcherAch {
             ACTrigger[] arr = hcLevelChange.get(data.getCategory());
             if(event.player instanceof EntityPlayerMP){
                 if (arr != null && xlv >= 0 && arr[xlv] != null)
-                    ACAchievements.trigger(event.player, arr[xlv].ID);
+                    ACAdvancements.trigger(event.player, arr[xlv].ID);
             }
         }
     }
@@ -108,7 +108,7 @@ public final class DispatcherAch {
     @SubscribeEvent
     public void onMatterUnitHarvest(MatterUnitHarvestEvent event) {
         if(event.player instanceof EntityPlayerMP)
-            ACAchievements.trigger(event.player, ACAchievements.aGettingPhase.ID);
+            ACAdvancements.trigger(event.player, ACAdvancements.getting_phase.ID);
     }
     
     
@@ -153,26 +153,26 @@ public final class DispatcherAch {
     @SubscribeEvent
     public void onPlayerTransformCategory(TransformCategoryEvent event)
     {
-        ACAchievements.trigger(event.player, ACAchievements.aConvertCategory.ID);
+        ACAdvancements.trigger(event.player, ACAdvancements.convert_category.ID);
     }
 
     @SubscribeEvent
     public void onPlayerLearnSkill(SkillLearnEvent event)
     {
-        ACAchievements.trigger(event.player, ACAchievements.aLearnSkill.ID);
+        ACAdvancements.trigger(event.player, ACAdvancements.ac_learning_skill.ID);
     }
 
     @SubscribeEvent
     public void onSkillExpAdded(SkillExpAddedEvent event)
     {
         if(event.skill.getSkillExp(AbilityData.get(event.player))>=1.0f)
-            ACAchievements.trigger(event.player, ACAchievements.aExpFull.ID);
+            ACAdvancements.trigger(event.player, ACAdvancements.ac_exp_full.ID);
     }
 
     @SubscribeEvent
     public void onPlayerOverload(OverloadEvent event)
     {
-        ACAchievements.trigger(event.player, ACAchievements.aOverload.ID);
+        ACAdvancements.trigger(event.player, ACAdvancements.ac_overload.ID);
     }
     
     //Init
@@ -184,14 +184,14 @@ public final class DispatcherAch {
     
     //stub method for loading
     public static void init() {
-        INSTANCE.rgItemCrafted(ACBlocks.item_phase_gen, ACAchievements.aPhaseGen);
-        INSTANCE.rgItemCrafted(ACBlocks.item_node_basic, ACAchievements.aNode);
-        INSTANCE.rgItemCrafted(ACBlocks.item_matrix, ACAchievements.aMatrix);
-        INSTANCE.rgPlayerPickup(new ItemStack(ACItems.induction_factor, 1,0), ACAchievements.aGettingFactor);
-        INSTANCE.rgItemCrafted(ACItems.developer_portable, ACAchievements.aDeveloper);
-        INSTANCE.rgLevelChange(1, ACAchievements.aDevCategory);
-        INSTANCE.rgLevelChange(3, ACAchievements.aLevel3);
-        INSTANCE.rgLevelChange(5, ACAchievements.aLevel5);
+        INSTANCE.rgItemCrafted(ACBlocks.item_phase_gen, ACAdvancements.phase_generator);
+        INSTANCE.rgItemCrafted(ACBlocks.item_node_basic, ACAdvancements.ac_node);
+        INSTANCE.rgItemCrafted(ACBlocks.item_matrix, ACAdvancements.ac_matrix);
+        INSTANCE.rgPlayerPickup(new ItemStack(ACItems.induction_factor, 1,0), ACAdvancements.getting_factor);
+        INSTANCE.rgItemCrafted(ACItems.developer_portable, ACAdvancements.ac_developer);
+        INSTANCE.rgLevelChange(1, ACAdvancements.dev_category);
+        INSTANCE.rgLevelChange(3, ACAdvancements.ac_level_3);
+        INSTANCE.rgLevelChange(5, ACAdvancements.ac_level_5);
     }
     
 }

@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:dev_category",
-  "criteria": {
+  "criteria":{
     "ac_learning_skill": {
       "trigger": "academy:ac_learning_skill"
     }

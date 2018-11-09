@@ -1,6 +1,6 @@
 package cn.academy.item;
 
-import cn.academy.advancements.ACAchievements;
+import cn.academy.advancements.ACAdvancements;
 import cn.academy.client.gui.GuiTutorial;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -37,7 +37,7 @@ public class ItemTutorial extends Item {
     @Listener(channel=MSG_TRIGGER, side = Side.SERVER)
     public void onTrigger(EntityPlayer player)
     {
-        ACAchievements.trigger(player, ACAchievements.aOpenTutorial.ID);
+        ACAdvancements.trigger(player, ACAdvancements.open_misaka_cloud.ID);
     }
     
 }

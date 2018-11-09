@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:ac_milestone",
-  "criteria": {
+  "criteria":{
     "ac_exp_full": {
       "trigger": "academy:ac_exp_full"
     }

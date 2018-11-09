@@ -11,9 +11,9 @@
     }
   },
   "parent": "academy:getting_phase",
-  "criteria": {
-    "crafting_phase_gen": {
-      "trigger": "academy:crafting_phase_gen"
+  "criteria":{
+    "phase_generator": {
+      "trigger": "academy:phase_generator"
     }
   }
 }

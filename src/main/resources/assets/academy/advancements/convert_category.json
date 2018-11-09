@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:getting_factor",
-  "criteria": {
+  "criteria":{
     "convert_category": {
       "trigger": "academy:convert_category"
     }

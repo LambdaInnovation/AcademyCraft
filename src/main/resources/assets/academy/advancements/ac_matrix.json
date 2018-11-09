@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:ac_node",
-  "criteria": {
+  "criteria":{
     "ac_matrix": {
       "trigger": "academy:ac_matrix"
     }

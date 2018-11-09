@@ -2,7 +2,7 @@ package cn.academy.ability.vanilla.meltdowner.skill
 
 import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.advancements.ACAchievements
+import cn.academy.advancements.ACAdvancements
 import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.entity.{EntityMdBall, EntityMdRaySmall}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
@@ -50,7 +50,7 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
   private def s_execute() = {
     if(consume()) {
       val exp: Float = ctx.getSkillExp
-      if (ctx.getSkillExp >= 0.8f) ACAchievements.trigger(player, ACAchievements.aMilestone.ID)
+      if (ctx.getSkillExp >= 0.8f) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID)
       val ball: EntityMdBall = new EntityMdBall(player, if (ctx.getSkillExp >= 0.8f) LIFE_IMPROVED else LIFE,
         new EntityCallback[EntityMdBall]() {
           def execute(ball: EntityMdBall) {

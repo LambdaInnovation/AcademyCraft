@@ -1,6 +1,6 @@
 package cn.academy.item;
 
-import cn.academy.advancements.ACAchievements;
+import cn.academy.advancements.ACAdvancements;
 import cn.academy.terminal.TerminalData;
 import cn.academy.client.auxgui.TerminalInstallEffect;
 import cn.lambdalib2.s11n.network.NetworkMessage;
@@ -41,7 +41,7 @@ public class ItemTerminalInstaller extends Item  {
                 if(!player.capabilities.isCreativeMode)
                     stack.setCount(stack.getCount() - 1);
                 tData.install();
-                ACAchievements.trigger(player, ACAchievements.aTerminalInstalled.ID);
+                ACAdvancements.trigger(player, ACAdvancements.terminal_installed.ID);
                 NetworkMessage.sendTo(player, NetworkMessage.staticCaller(ItemTerminalInstaller.class), "install");
             }
         }

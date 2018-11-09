@@ -2,7 +2,7 @@ package cn.academy.ability.develop.action;
 
 import cn.academy.ACItems;
 import cn.academy.ability.Category;
-import cn.academy.advancements.ACAchievements;
+import cn.academy.advancements.ACAdvancements;
 import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;

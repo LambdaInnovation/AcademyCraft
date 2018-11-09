@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:ac_developer",
-  "criteria": {
+  "criteria":{
     "dev_category": {
       "trigger": "academy:dev_category"
     }

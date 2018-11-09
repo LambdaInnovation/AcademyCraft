@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:ac_learning_skill",
-  "criteria": {
+  "criteria":{
     "ac_milestone": {
       "trigger": "academy:ac_milestone"
     }

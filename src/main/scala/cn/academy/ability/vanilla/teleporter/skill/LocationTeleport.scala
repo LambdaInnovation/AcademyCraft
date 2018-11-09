@@ -8,7 +8,7 @@ import cn.academy.ability.{AbilityContext, Skill}
 import cn.academy.ability.context.{ClientRuntime, KeyDelegate}
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
-import cn.academy.advancements.ACAchievements
+import cn.academy.advancements.ACAdvancements
 import cn.academy.datapart.AbilityData
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.{CGuiScreen, Widget}
@@ -161,7 +161,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
-    ACAchievements.trigger(player.asInstanceOf[EntityPlayer], "teleporter.ignore_barrier")
+    ACAdvancements.trigger(player.asInstanceOf[EntityPlayer], "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)
   }
 

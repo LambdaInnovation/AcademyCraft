@@ -8,7 +8,8 @@
     },
     "description": {
       "translate": "advancements.general.root.desc"
-    },
+    }
+    ,
     "background": "academy:textures/blocks/reso_ore.png",
     "show_toast": false,
     "announce_to_chat": false

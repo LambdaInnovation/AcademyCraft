@@ -11,7 +11,7 @@
     }
   },
   "parent": "academy:root",
-  "criteria": {
+  "criteria":{
     "getting_factor": {
       "trigger": "academy:getting_factor"
     }

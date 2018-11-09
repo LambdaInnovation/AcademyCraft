@@ -4,16 +4,16 @@
       "item": "academy:tutorial"
     },
     "title": {
-      "translate": "advancements.general.open_tutorial"
+      "translate": "advancements.general.open_misaka_cloud"
     },
     "description": {
-      "translate": "advancements.general.open_tutorial.desc"
+      "translate": "advancements.general.open_misaka_cloud.desc"
     }
   },
   "parent": "academy:root",
-  "criteria": {
-    "open_tutorial": {
-      "trigger": "academy:open_tutorial"
+  "criteria":{
+    "open_misaka_cloud": {
+      "trigger": "academy:open_misaka_cloud"
     }
   }
 }
