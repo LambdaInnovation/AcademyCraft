@@ -179,26 +179,26 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     class Blend(timeOffset: Double, length: Double) {
       private val initTime = GameTimer.getTime
 
-      def alpha: Double = {
+      def alpha: Float = {
         val dt = (GameTimer.getTime - initTime) / 1.0 - timeOffset
-        MathUtils.clampd(0, 1, dt / length)
+        MathUtils.clampd(0, 1, dt / length).toFloat
       }
 
     }
 
     object DefColors {
 
-      val AlphaNormal = 0.1
-      val AlphaHighlight = 0.4
+      val AlphaNormal = 0.1f
+      val AlphaHighlight = 0.4f
 
       val TextNormal = c(0xffc1cfd5)
       val TextHighlight = c(0xff2e3b41)
       val TextDisabled = c(0xffa2a2a2)
 
       private def c(hex: Int): Color = {
-        val a = (hex & 0xff000000)>>6
-        val r = (hex & 0x00ff0000)>>4
-        val g = (hex & 0x0000ff00)>>2
+        val a = (hex & 0xff000000)>>24
+        val r = (hex & 0x00ff0000)>>16
+        val g = (hex & 0x0000ff00)>>8
         val b = (hex & 0x000000ff)>>0
         new Color(r,g,b,a)
 
@@ -316,7 +316,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
         }
 
         val alpha0 = blend.alpha * (if (hovering) DefColors.AlphaHighlight else DefColors.AlphaNormal)
-        Colors.bindToGL(Colors.whiteBlend(alpha0.toFloat))//TODO need support
+        Colors.bindToGL(Colors.whiteBlend(alpha0))//TODO need support
         HudUtils.colorRect(0, 0, ret.transform.width, ret.transform.height)
 
         lastHovering = hovering
@@ -331,7 +331,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       val blend = new Blend(n * ElemTimeStep + offset, 0.1)
       target.listens((evt: FrameEvent) => {
         val a0 = if (evt.hovering) 1.0 else 0.7
-        color.setAlpha((a0 * blend.alpha*256).toInt)
+        color.setAlpha((a0 * blend.alpha*255).toInt)
       })
       target.listens[LeftClickEvent](() => clickCallback())
     }
@@ -407,11 +407,11 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       {
         val wid = ret.child("text")
         val text = wid.component[TextBox]
-        text.option.color.setAlpha((0*256).toInt)
+        text.option.color.setAlpha((0*255).toInt)
 
         val blend = new Blend(count * ElemTimeStep + 0.1, 0.1)
         wid.listens[FrameEvent](() => {
-          text.option.color.setAlpha((blend.alpha*256).toInt)
+          text.option.color.setAlpha((blend.alpha*255).toInt)
         })
       }
 
@@ -436,10 +436,10 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       val blend = new Blend(count * ElemTimeStep, 0.2)
       val inputText = ret.child("input_text")
       val textBox = inputText.component[TextBox]
-      textBox.option.color.setAlpha((0*256).toInt)
+      textBox.option.color.setAlpha((0*255).toInt)
 
       inputText.listens[FrameEvent](() => {
-        textBox.option.color.setAlpha((blend.alpha * (if (inputText.isFocused) 0.8 else 0.4)*256).toInt)
+        textBox.option.color.setAlpha((blend.alpha * (if (inputText.isFocused) 0.8 else 0.4)*255).toInt)
       })
 
       ret.listens[LeftClickEvent](() => if (!inputText.isFocused) {

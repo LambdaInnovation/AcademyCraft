@@ -1,8 +1,8 @@
 #version 120
 
-varying Vec3d camspace;
+varying vec3 camspace;
 
-Vec3d pd(vec4 inp) {
+vec3 pd(vec4 inp) {
     return inp.xyz / inp.w;
 }
 
