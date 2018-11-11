@@ -34,7 +34,7 @@ object MagMovement extends Skill("mag_movement", 2) {
       if(!CatElectromaster.isWeakMetalBlock(block) && !CatElectromaster.isMetalBlock(block)) { return null }
       new PointTarget(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)
     } else {
-      if(CatElectromaster.isEntityMetallic(pos.entityHit)) {
+      if(pos.entityHit != null && CatElectromaster.isEntityMetallic(pos.entityHit)) {
         return new EntityTarget(pos.entityHit)
       }
       null
