@@ -3,8 +3,10 @@ package cn.academy.ability.context;
 import cn.academy.ability.AbilityContext;
 import cn.academy.ability.Skill;
 import cn.academy.AcademyCraft;
+import cn.lambdalib2.LambdaLib2;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.IMessageDelegate;
+import cn.lambdalib2.util.Debug;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -32,6 +34,10 @@ import java.util.function.Function;
  * @author WeAthFolD
  */
 public class Context implements IMessageDelegate {
+
+    // Turn this on if you want to debug context message detail
+    public static final boolean DEBUG_MSG = false;
+
     public static final String
         MSG_TERMINATED = "i_term",
         MSG_MADEALIVE = "i_alive",
@@ -122,22 +128,35 @@ public class Context implements IMessageDelegate {
     }
 
     public void sendToServer(String channel, Object ...args) {
+        messageDebug("ToServer: " + channel);
         mgr.mToServer(this, channel, args);
     }
 
     public void sendToClient(String channel, Object ...args) {
+        messageDebug("ToClient: " + channel);
         mgr.mToClient(this, channel, args);
     }
 
     public void sendToLocal(String channel, Object ...args) {
+        messageDebug("ToLocal: " + channel);
         mgr.mToLocal(this, channel, args);
     }
 
     public void sendToExceptLocal(String channel, Object ...args) {
+        messageDebug("ToExceptLocal: " + channel);
         mgr.mToExceptLocal(this, channel, args);
     }
 
-    public void sendToSelf(String channel, Object ...args) { mgr.mToSelf(this, channel, args); }
+    public void sendToSelf(String channel, Object ...args) {
+        messageDebug("ToSelf: " + channel);
+        mgr.mToSelf(this, channel, args);
+    }
+
+    private void messageDebug(String s) {
+        if (AcademyCraft.DEBUG_MODE && DEBUG_MSG) {
+            Debug.log("[Context]" + (isRemote() ? "[C] " : "[S] " ) +getClass().getSimpleName() + ": " + s);
+        }
+    }
 
     //
 
@@ -165,6 +184,7 @@ public class Context implements IMessageDelegate {
 
     @Override
     public final void onMessage(String channel, Object... args) {
+        messageDebug("Recv: " + channel);
         if (isRemote()) {
             for (ClientContext cctx : clientContexts) {
                 NetworkMessage.sendToSelf(cctx, channel, args);
