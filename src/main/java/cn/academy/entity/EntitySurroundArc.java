@@ -96,11 +96,9 @@ public class EntitySurroundArc extends EntityAdvanced {
         posZ = z;
         pos = new ConstPos(x, y, z);
         pointFactory = new CubePointFactory(wl, h, wl).setCentered(true);
-        Debug.log("SurroundArc construct");
     }
     
     public void updatePos(double x, double y, double z) {
-        Debug.log("SurroundArc updatePos");
         pos.x = x;
         pos.y = y;
         pos.z = z;
@@ -128,7 +126,6 @@ public class EntitySurroundArc extends EntityAdvanced {
     
     @Override
     public void onFirstUpdate() {
-        Debug.log("SurroundArc onFirstUpdate");
         // Create the arcs!
         arcHandler = new SubArcHandler(arcType.templates);
         arcHandler.frameRate = 0.6;
