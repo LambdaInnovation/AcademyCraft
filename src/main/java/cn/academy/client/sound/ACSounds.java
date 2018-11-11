@@ -24,7 +24,7 @@ public class ACSounds {
     @SideOnly(Side.CLIENT)
     public static void playClient(World world, double x, double y, double z, String name, SoundCategory category, float vol, float pitch) {
         world.playSound(x, y, z,
-            new SoundEvent(new ResourceLocation("academy:", name)),
+            new SoundEvent(new ResourceLocation("academy", name)),
             category,
             vol, pitch, false
         );

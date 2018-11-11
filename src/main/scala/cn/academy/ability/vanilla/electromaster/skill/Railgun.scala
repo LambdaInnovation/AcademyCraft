@@ -8,6 +8,7 @@ import cn.academy.ability.context.KeyDelegate.DelegateState
 import scala.collection.JavaConversions._
 import cn.academy.ability.context.{ClientRuntime, KeyDelegate}
 import cn.academy.client.render.misc.RailgunHandEffect
+import cn.academy.client.sound.ACSounds
 import cn.academy.entity.{EntityCoinThrowing, EntityRailgunFX}
 import cn.academy.event.CoinThrowEvent
 import cn.academy.util.RangedRayDamage
@@ -21,7 +22,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.EnumHand
+import net.minecraft.util.{EnumHand, SoundCategory}
 import net.minecraft.util.math.RayTraceResult
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -128,6 +129,14 @@ object Railgun extends Skill("railgun", 4) {
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   private def performClient(player: EntityPlayer, length: Double) = {
+    ACSounds.playClient(
+        player.world,
+        player.posX, player.posY, player.posZ,
+        "em.railgun",
+        SoundCategory.AMBIENT,
+        0.5f,
+        1.0f
+    )
     player.getEntityWorld.spawnEntity(new EntityRailgunFX(player, length))
   }
 

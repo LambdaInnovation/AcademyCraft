@@ -50,8 +50,11 @@ public class EntityRailgunFX extends EntityRayBase {
     public EntityRailgunFX(EntityPlayer player, double length) {
         super(player);
         posX=player.posX;
-        posY=player.posY;
+        posY=player.posY + player.getEyeHeight();
         posZ=player.posZ;
+
+        this.rotationYaw = player.rotationYaw;
+        this.rotationPitch = player.rotationPitch;
         
         this.life = 50;
         this.blendInTime = 150;
@@ -73,7 +76,7 @@ public class EntityRailgunFX extends EntityRayBase {
                 double r = RandUtils.ranged(0.1, 0.25);
                 Vec3d vec = new Vec3d(cur, r * MathHelper.sin(theta), r * MathHelper.cos(theta));
                 VecUtils.rotateAroundZ(vec, rotationPitch * MathUtils.PI_F / 180);
-                vec.rotateYaw((270 - rotationYaw) * MathUtils.PI_F / 180);
+                vec.rotateYaw((rotationYaw) * MathUtils.PI_F / 180);
                 arcHandler.generateAt(vec);
                 
                 cur += RandUtils.ranged(1, 2);
@@ -84,7 +87,6 @@ public class EntityRailgunFX extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        ACSounds.playClient(world, posX, posY, posZ, "academy:em.railgun", SoundCategory.AMBIENT, 0.5f, 1.0f);
     }
     
     @Override
