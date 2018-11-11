@@ -185,7 +185,7 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
     if(isLocal) {
       val dest: Dest = par.getDest
       mark.available = dest.available
-      mark.setPosition(dest.pos.x, dest.pos.y, dest.pos.z)
+      mark.setPosition(dest.pos.x, dest.pos.y + player.eyeHeight, dest.pos.z)
     }
   }
 

@@ -73,16 +73,17 @@ public class RenderMarker extends Render {
             GL11.glTranslated(sx, sy, sz);
             GL11.glRotated(rotArray[i], 0, 1, 0);
             GL11.glLineWidth(3f);
-            BufferBuilder bb = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
-            bb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_TEX);
+//            BufferBuilder bb = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
+//            bb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_TEX);
+            t.startDrawing(GL11.GL_LINES);
 
-            //TODO bb.setBrightness(15728880);
-            bb.pos(0, 0, 0);
-            bb.pos(0, rev ? len : -len, 0);
-            bb.pos(0, 0, 0);
-            bb.pos(len, 0, 0);
-            bb.pos(0, 0, 0);
-            bb.pos(0, 0, len);
+            t.setBrightness(15728880);
+            t.addVertex(0, 0, 0);
+            t.addVertex(0, rev ? len : -len, 0);
+            t.addVertex(0, 0, 0);
+            t.addVertex(len, 0, 0);
+            t.addVertex(0, 0, 0);
+            t.addVertex(0, 0, len);
             t.draw();
 
             GL11.glPopMatrix();

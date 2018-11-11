@@ -17,6 +17,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TPParticleFactory extends ParticleFactory
 {
 
+    public static TPParticleFactory instance;
+
     static Particle template;
 
     @SideOnly(Side.CLIENT)
@@ -27,9 +29,9 @@ public class TPParticleFactory extends ParticleFactory
         template.size = 0.1f;
         template.hasLight = false;
         template.color.set(255, 255, 255, 255);
-    }
 
-    public static TPParticleFactory instance = new TPParticleFactory();
+        instance = new TPParticleFactory();
+    }
 
     public TPParticleFactory() {
         super(template);
