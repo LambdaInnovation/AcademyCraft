@@ -10,11 +10,15 @@ import cn.academy.entity.EntitySurroundArc.ArcType
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
-import cn.lambdalib2.util.{Raytrace, VecUtils}
+import cn.lambdalib2.util.{Debug, Raytrace, VecUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.{RayTraceResult, Vec3d}
+
+import scala.collection.JavaConversions._
+
 /**
   * @author WeAthFolD, KSkun
   */
@@ -49,7 +53,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
   val distance = 15.0d
   private val exp = ctx.getSkillExp
-  private val isItem = ctx.player.getHeldEquipment != null
+  private val isItem = ctx.player.getHeldEquipment.exists(!_.isEmpty)
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
@@ -147,20 +151,21 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
   var arc: EntityArc = _
   var surround: EntitySurroundArc = _
   var sound: FollowEntitySound = _
+  var isItem = false
 
   @Listener(channel=MSG_EFFECT_START, side=Array(Side.CLIENT))
   private def c_startEffects(isItem: Boolean) = {
     if(!isItem) {
       arc = new EntityArc(player, ArcPatterns.chargingArc)
-      player.getEntityWorld.spawnEntity(arc)
       arc.lengthFixed = false
       arc.hideWiggle = 0.8
       arc.showWiggle = 0.2
       arc.texWiggle = 0.8
+      player.world.spawnEntity(arc)
 
-      surround = new EntitySurroundArc(player.getEntityWorld, player.posX, player.posY, player.posZ, 1, 1)
+      surround = new EntitySurroundArc(player.world, player.posX, player.posY, player.posZ, 1, 1)
         .setArcType(ArcType.NORMAL).setLife(100000)
-      player.getEntityWorld.spawnEntity(surround)
+      Debug.require(player.world.spawnEntity(surround))
 
       sound = new FollowEntitySound(player, "em.charge_loop",SoundCategory.AMBIENT).setLoop().setVolume(0.3f)
       ACSounds.playClient(sound)
@@ -170,12 +175,16 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
       surround = new EntitySurroundArc(player)
       surround.setArcType(ArcType.THIN)
       surround.setLife(100000)
-      player.getEntityWorld.spawnEntity(surround)
+      Debug.require(player.world.spawnEntity(surround))
     }
+
+    this.isItem = isItem
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  private def c_updateEffects() = {
+  private def c_updateEffects(): Unit = {
+    if (isItem)
+      return
     // Perform raytrace
     val pos = Raytrace.traceLiving(player, par.distance)
 

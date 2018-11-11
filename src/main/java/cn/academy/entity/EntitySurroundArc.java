@@ -7,6 +7,7 @@ import cn.academy.client.render.util.ArcFactory.Arc;
 import cn.academy.client.render.util.SubArcHandler;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.lambdalib2.util.Debug;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -79,8 +80,9 @@ public class EntitySurroundArc extends EntityAdvanced {
     }
     
     public EntitySurroundArc(Entity follow, double sizeMultiplyer) {
-        super(follow.getEntityWorld());
+        super(follow.world);
         pos = new EntityPos(follow);
+        setPosition(follow.posX, follow.posY, follow.posZ);
         pointFactory = new CubePointFactory(
             follow.width * sizeMultiplyer, 
             follow.height * sizeMultiplyer, 
@@ -89,11 +91,16 @@ public class EntitySurroundArc extends EntityAdvanced {
     
     public EntitySurroundArc(World world, double x, double y, double z, double wl, double h) {
         super(world);
+        posX = x;
+        posY = y;
+        posZ = z;
         pos = new ConstPos(x, y, z);
         pointFactory = new CubePointFactory(wl, h, wl).setCentered(true);
+        Debug.log("SurroundArc construct");
     }
     
     public void updatePos(double x, double y, double z) {
+        Debug.log("SurroundArc updatePos");
         pos.x = x;
         pos.y = y;
         pos.z = z;
@@ -121,6 +128,7 @@ public class EntitySurroundArc extends EntityAdvanced {
     
     @Override
     public void onFirstUpdate() {
+        Debug.log("SurroundArc onFirstUpdate");
         // Create the arcs!
         arcHandler = new SubArcHandler(arcType.templates);
         arcHandler.frameRate = 0.6;
@@ -222,7 +230,7 @@ public class EntitySurroundArc extends EntityAdvanced {
         @Override
         void tick() {
             x = entity.posX;
-            y = isPlayer ? entity.posY - 1.6 : entity.posY;
+            y = entity.posY;
             z = entity.posZ;
             yaw = entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).rotationYawHead : entity.rotationYaw;
             pitch = entity.rotationPitch;

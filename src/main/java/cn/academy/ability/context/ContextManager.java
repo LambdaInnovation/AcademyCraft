@@ -1,5 +1,6 @@
 package cn.academy.ability.context;
 
+import cn.academy.AcademyCraft;
 import cn.academy.ability.context.Context.Status;
 import cn.academy.event.ability.CategoryChangeEvent;
 import cn.academy.event.ability.OverloadEvent;
@@ -153,7 +154,8 @@ public enum ContextManager {
     }
 
     private static void log(Object msg) {
-        // AcademyCraft.log.info("CM: " + msg);
+//        if (AcademyCraft.DEBUG_MODE)
+//             AcademyCraft.log.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")

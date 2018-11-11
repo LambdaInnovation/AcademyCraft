@@ -50,7 +50,9 @@ public class ACRenderingHelper {
     }
     
     public static double getHeightFix(EntityPlayer p) {
-        return isThePlayer(p) ? 0.0 : 1.6;
+    //    return isThePlayer(p) ? 0.0 : 1.6;
+        // !1.12: Difference of reference coordinates has been fixed by mojang
+        return 1.6;
     }
     
     /**

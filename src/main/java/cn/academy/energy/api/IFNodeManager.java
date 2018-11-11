@@ -3,7 +3,9 @@ package cn.academy.energy.api;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyBlockHelper.IEnergyBlockManager;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 /**
  * @author WeAthFolD
@@ -13,8 +15,9 @@ public class IFNodeManager implements IEnergyBlockManager {
 
     public static IFNodeManager instance = new IFNodeManager();
 
-    private IFNodeManager() {
-        EnergyBlockHelper.register(this);
+    @StateEventCallback
+    private static void init(FMLInitializationEvent ev) {
+        EnergyBlockHelper.register(instance);
     }
 
     @Override

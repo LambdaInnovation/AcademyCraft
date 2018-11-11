@@ -18,7 +18,7 @@ public class FollowEntitySound extends MovingSound {
     public final Entity entity;
 
     public FollowEntitySound(Entity _entity, String name, SoundCategory category) {
-        super(new SoundEvent(new ResourceLocation("academy:", name)), category);
+        super(new SoundEvent(new ResourceLocation("academy", name)), category);
         entity = _entity;
         
         update();
