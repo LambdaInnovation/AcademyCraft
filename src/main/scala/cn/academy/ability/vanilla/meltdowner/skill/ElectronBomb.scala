@@ -84,8 +84,7 @@ class EBContextC(par: EBContext) extends ClientContext(par) {
   private def c_spawnEffect(ball: EntityMdBall) = {
     val dest: Vec3d = getDest(player)
     val raySmall: EntityMdRaySmall = new EntityMdRaySmall(player.world)
-    raySmall.setFromTo(ball.posX, ball.posY + (if(ACRenderingHelper.isThePlayer(player)) 0
-    else 1.6), ball.posZ, dest.x, dest.y, dest.z)
+    raySmall.setFromTo(ball.posX, ball.posY + player.eyeHeight, ball.posZ, dest.x, dest.y, dest.z)
     raySmall.viewOptimize = false
     player.world.spawnEntity(raySmall)
   }
