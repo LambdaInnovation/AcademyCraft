@@ -5,6 +5,7 @@ import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.TargetPoints;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
@@ -139,6 +140,11 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
     @Listener(channel=".tile.sync", side=Side.CLIENT)
     private void hSync(NBTTagCompound nbt) {
         readFromNBT(nbt);
+        IBlockState ibs = world.getBlockState(pos);
+        world.markBlockRangeForRenderUpdate(pos, pos);
+        world.notifyBlockUpdate(pos, ibs, ibs, 3);
+        world.scheduleBlockUpdate(pos,this.getBlockType(),0,0);
+        markDirty();
     }
 
 }
