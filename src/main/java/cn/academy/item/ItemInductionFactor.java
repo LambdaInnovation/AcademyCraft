@@ -1,5 +1,6 @@
 package cn.academy.item;
 
+import cn.academy.AcademyCraft;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import com.google.common.base.Preconditions;
@@ -46,8 +47,10 @@ public class ItemInductionFactor extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        for (Category c : CategoryManager.INSTANCE.getCategories()) {
-            items.add(create(c));
+        if (tab == AcademyCraft.cct) {
+            for (Category c : CategoryManager.INSTANCE.getCategories()) {
+                items.add(create(c));
+            }
         }
     }
 
