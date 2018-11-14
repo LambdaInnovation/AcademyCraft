@@ -53,7 +53,7 @@ public class EntityMdBall extends EntityAdvanced
     
     double spawnTime;
     double lastTime;
-    long burstTime = 400;
+    double burstTime = 0.4;
     float alphaWiggle = 0.8f;
     double accel;
     
@@ -185,7 +185,7 @@ public class EntityMdBall extends EntityAdvanced
             }
             
             //System.out.println("AV=>" + alphaVel);
-            alphaWiggle += accel * dt / 1000.0;
+            alphaWiggle += accel * dt;
             if(alphaWiggle > 1) alphaWiggle = 1;
             if(alphaWiggle < 0) alphaWiggle = 0;
         }
@@ -197,7 +197,7 @@ public class EntityMdBall extends EntityAdvanced
         }
         
         //Surrounding
-        float phase = (float) (life / 300.0f);
+        float phase = (float) (life / 0.3f);
         offsetX = 0.03 * MathHelper.sin(phase);
         offsetZ = 0.03 * MathHelper.cos(phase);
         offsetY = 0.04 * MathHelper.cos((float) (phase * 1.4 + Math.PI / 3.5));
@@ -210,15 +210,15 @@ public class EntityMdBall extends EntityAdvanced
     private float getAlpha() {
         float lifeS = life * 0.05f;
         double time = GameTimer.getTime();
-        double dt = time - spawnTime;
+        float dt = (float) (time - spawnTime);
         
         final float blendTime = 0.15f;
         if(dt > lifeS - blendTime)
-            return Math.max(0, MathUtils.lerpf(1, 0, (float) (dt - (lifeS - blendTime)) / blendTime));
+            return Math.max(0, MathUtils.lerpf(1, 0, (dt - (lifeS - blendTime)) / blendTime));
         if(dt > lifeS - burstTime)
-            return MathUtils.lerpf(0.6f, 1.0f, (float) (dt - (lifeS - burstTime)) / (burstTime - blendTime));
-        if(dt < 300)
-            return MathUtils.lerpf(0, 0.6f, (float) dt / 300);
+            return MathUtils.lerpf(0.6f, 1.0f, (float) ((dt - (lifeS - burstTime)) / (burstTime - blendTime)) );
+        if(dt < 0.3f)
+            return MathUtils.lerpf(0, 0.6f, dt / 0.3f);
         return 0.6f;
     }
     
@@ -270,13 +270,10 @@ public class EntityMdBall extends EntityAdvanced
             //HACK: Force set the render pos to prevent glitches
             {
                 x = ent.posX - clientPlayer.posX;
-                y = ent.posY - clientPlayer.posY;
+                y = ent.posY - clientPlayer.posY + 1.6;
                 z = ent.posZ - clientPlayer.posZ;
-                
-                if(!ACRenderingHelper.isThePlayer(ent.getSpawner()))
-                    y += 1.6;
             }
-            
+
             GL11.glPushMatrix();
             {
                 ShaderSimple.instance().useProgram();

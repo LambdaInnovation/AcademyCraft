@@ -9,8 +9,7 @@ import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.entity.EntityMdBall
 import cn.academy.network.NetworkManager
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{RandUtils, VecUtils}
-import cn.lambdalib2.util.{EntitySelectors, Raytrace, WorldUtils}
+import cn.lambdalib2.util._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
@@ -27,15 +26,8 @@ object ScatterBomb extends Skill("scatter_bomb", 2) {
 
 }
 
-object SBContext {
-
-  final val MSG_SYNC_BALLS = "sync_balls"
-
-}
-
 import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
-import SBContext._
 
 class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
 
@@ -78,7 +70,6 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
         val ball: EntityMdBall = new EntityMdBall(player)
         world.spawnEntity(ball)
         balls.add(ball)
-        sendToClient(MSG_SYNC_BALLS, ball)
       }
       val cp: Float = lerpf(3, 6, exp)
       if (!ctx.consume(0, cp)) terminate()
@@ -88,10 +79,6 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
       terminate()
     }
   }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_SYNC_BALLS, side=Array(Side.CLIENT))
-  private def c_syncBalls(ballToAdd: EntityMdBall) = balls.add(ballToAdd)
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
@@ -117,22 +104,14 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
         traceResult.entityHit.hurtResistantTime = -1
         MDDamageHelper.attack(ctx, traceResult.entityHit, getDamage(exp))
       }
-      NetworkManager.sendSBEffectToClient(player,new Vec3d(ball.posX, ball.posY, ball.posZ)
-        ,new Vec3d(dest.x,dest.y,dest.z))
+      NetworkManager.sendSBEffectToClient(player, new Vec3d(ball.posX, ball.posY, ball.posZ), new Vec3d(dest.x,dest.y,dest.z))
       ball.setDead()
     }
     ctx.addSkillExp(0.001f * balls.size)
   }
 
-  private def newDest: Vec3d = VecUtils.lookingPos(player, RAY_RANGE).rotatePitch((RandUtils.nextFloat - 0.5F) * 5).rotateYaw((2.0F * (RandUtils.nextFloat - 0.5F)) * 5)
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
-    import scala.collection.JavaConversions._
-    for (ball <- balls) {
-        ball.setDead()
-    }
-  }
+  private def newDest: Vec3d = VecUtils.lookingPos(player, RAY_RANGE)
+    .rotatePitch( MathUtils.toRadians( (RandUtils.nextFloat - 0.5F) * 5) )
+    .rotateYaw( MathUtils.toRadians( (RandUtils.nextFloat - 0.5F) * 5 ) )
 
 }
