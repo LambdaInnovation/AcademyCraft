@@ -109,7 +109,7 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
       val selector: Predicate[Entity] = EntitySelectors.exclude(silbarn, player)
 
       val pos = player.getPositionVector
-      val mo = VecUtils.entityMotion(player)
+      val mo = player.getLookVec
       
       val v0: Vec3d = player.getPositionVector
       val v1: Vec3d = add(multiply(mo.rotateYaw(minYaw).rotatePitch(minPitch),RAY_DIST), pos)

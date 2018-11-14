@@ -67,7 +67,8 @@ public class RenderMdShield extends Render<EntityMdShield> {
         float alpha = Math.min(entity.ticksExisted / 6.0f, 1.0f);
         
         GL11.glScalef(size, size, 1);
-        
+
+        GL11.glColor4f(1, 1, 1, alpha);
         RenderUtils.loadTexture(texture);
         mesh.draw(ShaderSimple.instance());
         

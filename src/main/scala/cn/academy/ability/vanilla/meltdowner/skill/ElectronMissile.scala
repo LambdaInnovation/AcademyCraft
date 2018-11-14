@@ -83,8 +83,10 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
         }
         if (ticks != 0 && ticks % 8 == 0) {
           val range: Float = lerpf(5, 13, exp)
-          val list: java.util.List[Entity] = WorldUtils.getEntities(player, range, EntitySelectors.exclude(player)
-            .and(EntitySelectors.living))
+          val list: java.util.List[Entity] = WorldUtils.getEntities(
+            player, range,
+            EntitySelectors.exclude(player).and(EntitySelectors.living)
+          )
           if (!active.isEmpty && !list.isEmpty && ctx.consume(overload_attacked, consumption_attacked)) {
             var min: Double = Double.MaxValue
             var result: Entity = null

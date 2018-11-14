@@ -132,7 +132,7 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   private def c_perform(ct: Int, length: Double) {
     val ray: EntityMDRay = new EntityMDRay(ctx.player, length)
-    ACSounds.playClient(ctx.player, "md.meltdowner", SoundCategory.AMBIENT, 0.5f)
+    ACSounds.playClient(ctx.player, "md.meltdowner", SoundCategory.PLAYERS, 0.5f)
     world.spawnEntity(ray)
   }
 

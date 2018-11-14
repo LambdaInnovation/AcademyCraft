@@ -117,18 +117,16 @@ public class EntitySilbarn extends EntityAdvanced
                 if(!hit) {
                     hit = true;
                     if(event.result.entityHit instanceof EntitySilbarn)
-                        ACSounds.playClient(world, posX, posY, posZ, "entity.silbarn_heavy", SoundCategory.AMBIENT,
-                                0.5f, 1.0f);
+                        playSound(Resources.sound("entity.silbarn_heavy"), 0.5f, 1.0f);
                     else
-                        ACSounds.playClient(world, posX, posY, posZ, "entity.silbarn_light", SoundCategory.AMBIENT,
-                                0.5f, 1.0f);
+                        playSound(Resources.sound("entity.silbarn_light"), 0.5f, 1.0f);
                     executeAfter(Entity::setDead, 10);
                 }
             }
             
         });
 
-        setPosition(player.posX, player.posY, player.posZ);
+        setPosition(player.posX, player.posY + player.eyeHeight, player.posZ);
         motionX = player.motionX;
         motionY = player.motionY;
         motionZ = player.motionZ;

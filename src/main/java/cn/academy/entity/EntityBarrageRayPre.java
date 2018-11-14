@@ -19,8 +19,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityBarrageRayPre extends EntityRayBase {
 
-    public static BRPRender renderer;
-
     public EntityBarrageRayPre(World world, boolean hit) {
         super(world);
         

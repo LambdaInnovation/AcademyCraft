@@ -1,8 +1,10 @@
 package cn.academy.entity;
 
 import cn.academy.ACItems;
+import cn.academy.Resources;
 import cn.academy.ability.vanilla.VanillaCategories;
 import cn.academy.client.render.entity.RendererMagHook;
+import cn.academy.client.sound.ACSounds;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
@@ -20,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,11 +55,13 @@ public class EntityMagHook extends EntityAdvanced
     
     public EntityMagHook(final EntityPlayer player) {
         super(player.getEntityWorld());
-        //TODO Motion3D.apply
-        setPosition(player.posX, player.posY, player.posZ);
-        motionX = player.motionX * 2;
-        motionY = player.motionY * 2;
-        motionZ = player.motionZ * 2;
+        setPosition(player.posX, player.posY + player.eyeHeight, player.posZ);
+        Vec3d look = player.getLookVec();
+        motionX = look.x * 2;
+        motionY = look.y * 2;
+        motionZ = look.z * 2;
+
+        setRotation(player.rotationYaw, player.rotationPitch);
         
         Rigidbody rb = this.getMotionHandler(Rigidbody.class);
         rb.entitySel = EntitySelectors.exclude(player);
@@ -169,7 +174,7 @@ public class EntityMagHook extends EntityAdvanced
     private void realSetStill() {    
         motionX = motionY = motionZ = 0;
         if(getEntityWorld() != null) {
-            //world.playSoundAtEntity(this, "academy:maghook_land", .8f, 1.0f);
+            this.playSound(Resources.sound("maghook_land"), .8f, 1.0f);
         }
         this.setSize(1f, 1f);
         this.removeMotionHandlers();

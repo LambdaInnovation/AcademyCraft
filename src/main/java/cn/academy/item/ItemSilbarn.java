@@ -3,6 +3,7 @@ package cn.academy.item;
 import cn.academy.Resources;
 import cn.academy.entity.EntitySilbarn;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -21,10 +22,14 @@ public class ItemSilbarn extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
+        world.playSound(
+            player, player.posX,player.posY,player.posZ,
+            SoundEvents.ENTITY_EGG_THROW,
+            SoundCategory.PLAYERS,
+            0.5F,
+            0.4F / (itemRand.nextFloat() * 0.4F + 0.8F)
+        );
         if(!world.isRemote) {
-            world.playSound(player, player.posX,player.posY,player.posZ,
-                    new SoundEvent(new ResourceLocation( "random.bow"))
-                    , SoundCategory.AMBIENT, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
             world.spawnEntity(new EntitySilbarn(player));
         }
         if(!player.capabilities.isCreativeMode)
