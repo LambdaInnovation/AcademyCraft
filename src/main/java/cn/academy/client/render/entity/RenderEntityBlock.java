@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  * TODO: Investigate new block render pipeline
  * @author WeAthFolD
  */
-@RegEntityRender(EntityBlock.class)
+//@RegEntityRender(EntityBlock.class)
 public class RenderEntityBlock extends Render<EntityBlock> {
 
 //    public static RenderBlocks renderBlocks = RenderBlocks.getInstance();
