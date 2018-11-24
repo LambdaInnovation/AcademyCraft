@@ -25,12 +25,17 @@ import java.util.List;
 public class BakedModelForTEISR implements IBakedModel {
     private ResourceLocation _location;
     private Matrix4f[] _transformMapping = new Matrix4f[TransformType.values().length];
+    private IBakedModel[] _modelMapping = new IBakedModel[TransformType.values().length];
 
     private Matrix4f _identityMatrix = new Matrix4f();
 
     public BakedModelForTEISR(ResourceLocation location) {
         _location = location;
         _identityMatrix.setIdentity();
+    }
+
+    public void mapModel(TransformType type, IBakedModel mdl) {
+        _modelMapping[type.ordinal()] = mdl;
     }
 
     public void mapTransform(TransformType type, org.lwjgl.util.vector.Matrix4f mat) {
@@ -46,15 +51,16 @@ public class BakedModelForTEISR implements IBakedModel {
         return Collections.emptyList();
     }
 
-
     @Override
-    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-        Matrix4f mat;
-        if (_transformMapping[cameraTransformType.ordinal()] != null)
-            mat = _transformMapping[cameraTransformType.ordinal()];
-        else
-            mat = _identityMatrix;
-        return Pair.of(this, mat);
+    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
+        final int ordinal = type.ordinal();
+        Matrix4f mat = _identityMatrix;
+        IBakedModel model = this;
+        if (_transformMapping[ordinal] != null)
+            mat = _transformMapping[ordinal];
+        if (_modelMapping[ordinal] != null)
+            model = _modelMapping[ordinal];
+        return Pair.of(model, mat);
     }
 
     @Override

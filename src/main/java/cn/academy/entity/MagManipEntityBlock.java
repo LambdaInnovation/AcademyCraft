@@ -76,6 +76,7 @@ public class MagManipEntityBlock extends EntityBlock
     }
 
     @Override
+    @SuppressWarnings("sideonly")
     public void onFirstUpdate()
     {
         super.onFirstUpdate();

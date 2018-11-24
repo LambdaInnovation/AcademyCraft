@@ -4,6 +4,7 @@ import cn.academy.Resources;
 import cn.academy.client.render.model.BakedModelForTEISR;
 import cn.academy.entity.EntityCoinThrowing;
 import cn.academy.event.CoinThrowEvent;
+import cn.lambdalib2.render.TransformChain;
 import cn.lambdalib2.render.TransformUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.SideUtils;
@@ -41,9 +42,12 @@ public class ItemCoin extends Item {
 
     private final ModelResourceLocation _modelLocation = new ModelResourceLocation("academy:coin", "inventory");
 
-    @SuppressWarnings("sideonly")
     public ItemCoin() {
-        FMLCommonHandler.instance().bus().register(this);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SuppressWarnings("sideonly")
+    public void afterRegistry() {
         if (SideUtils.isClient())
             initClient();
     }
@@ -67,11 +71,11 @@ public class ItemCoin extends Item {
     @SideOnly(Side.CLIENT)
     public void onModelBake(ModelBakeEvent ev) {
         BakedModelForTEISR bakedModel = new BakedModelForTEISR(_modelLocation);
-        Matrix4f fpTrans = Matrix4f.mul(TransformUtils.translate(0, 0, -.5f), TransformUtils.scale(.5f, .5f, .5f), null);
+        Matrix4f fpTrans = new TransformChain().scale(.5f, .5f, .5f).translate(.2f, 0, -.1f).bulid();
         bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTrans);
         bakedModel.mapTransform(TransformType.FIRST_PERSON_RIGHT_HAND, fpTrans);
 
-        Matrix4f tpTrans = Matrix4f.mul(TransformUtils.translate(0, .1f, .0f), TransformUtils.scale(.3f, .3f, .3f), null);
+        Matrix4f tpTrans = new TransformChain().scale(.2f).translate(0, 0, .0f).bulid();
         bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
         bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
 
