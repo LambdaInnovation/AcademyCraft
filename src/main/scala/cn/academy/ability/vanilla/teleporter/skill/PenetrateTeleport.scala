@@ -68,7 +68,6 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     ctx.consumeWithForce(overload, (distance * getConsumption(exp)).toFloat)
     val expincr: Float = 0.00014f * distance.toFloat
     ctx.addSkillExp(expincr)
-    ACAdvancements.trigger(player, "teleporter.ignore_barrier")
     ctx.setCooldown(lerpf(50, 30, exp).toInt)
     TPSkillHelper.incrTPCount(player)
     if(player.isRiding)

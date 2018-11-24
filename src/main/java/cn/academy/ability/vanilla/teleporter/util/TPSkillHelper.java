@@ -28,7 +28,6 @@ public class TPSkillHelper {
     public static void incrTPCount(EntityPlayer player) {
         int i = player.getEntityData().getInteger(TPC_ID) + 1;
         if (i >= 400) {
-            ACAdvancements.trigger(player, "teleporter.mastery");
         }
         player.getEntityData().setInteger(TPC_ID, i);
     }
@@ -47,7 +46,6 @@ public class TPSkillHelper {
             if (RandUtils.nextFloat() < prob) {
                 damage *= rates[i];
                 player.sendMessage(new TextComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
-                ACAdvancements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
                 aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
 
@@ -71,7 +69,6 @@ public class TPSkillHelper {
             if (RandUtils.nextFloat() < prob) {
                 damage *= rates[i];
                 player.sendMessage(new TextComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
-                ACAdvancements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
                 aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
 

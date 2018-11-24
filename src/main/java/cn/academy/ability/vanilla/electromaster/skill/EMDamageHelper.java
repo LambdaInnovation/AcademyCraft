@@ -33,7 +33,6 @@ class EMDamageHelper {
                 }
                 // Set the creeper to be powered
                 target.getDataManager().set(CREEPER_PWOERED, true);
-                ACAdvancements.trigger(ctx.player, "electromaster.attack_creeper");
             }
         }
     }

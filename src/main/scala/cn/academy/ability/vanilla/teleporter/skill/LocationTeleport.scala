@@ -161,7 +161,6 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
-    ACAdvancements.trigger(player.asInstanceOf[EntityPlayer], "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)
   }
 
