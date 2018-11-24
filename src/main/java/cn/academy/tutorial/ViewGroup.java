@@ -11,11 +11,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public interface ViewGroup {
 
-    Widget[] NO_VIEWS = new Widget[0];
-
     @SideOnly(Side.CLIENT)
     default Widget[] getSubViews() {
-        return NO_VIEWS;
+        return new Widget[0];
     }
 
     @SideOnly(Side.CLIENT)

@@ -58,6 +58,7 @@ public abstract class BlockConverterBase extends ACBlockContainer {
     }
 
     @Override
+    @SuppressWarnings("sideonly")
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
                                     EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);

@@ -21,6 +21,7 @@ public class AppSkillTree extends App {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public AppEnvironment createEnvironment() {
         return new AppEnvironment() {
             @SideOnly(Side.CLIENT)

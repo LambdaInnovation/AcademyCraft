@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RenderWindGenBase extends RenderBlockMulti<TileWindGenBase> {
 
-    @SideOnly(Side.CLIENT)
     @RegTileEntityRender(TileWindGenBase.class)
     public static RenderWindGenBase renderer = new RenderWindGenBase();
 

@@ -241,6 +241,7 @@ public class Flashing extends Skill {
         }
 
         @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
+        @SideOnly(Side.CLIENT)
         void clientPerform() {
             ACSounds.playClient(player, "tp.tp_flashing", SoundCategory.AMBIENT, 1.0f);
             if (isLocal()) {
@@ -254,6 +255,7 @@ public class Flashing extends Skill {
         }
 
         @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        @SideOnly(Side.CLIENT)
         void localTerminate() {
             if (isLocal()) {
                 clientRuntime().removeActiveHandler(activateHandler);

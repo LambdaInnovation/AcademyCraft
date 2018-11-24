@@ -25,11 +25,11 @@ public abstract class App {
         return Resources.getTexture("guis/apps/" + name + "/" + texname);
     }
 
-    @SideOnly(Side.CLIENT)
     protected String local(String key) {
         return I18n.format("ac.app." + name + "." + key);
     }
 
+    @SideOnly(Side.CLIENT)
     public ResourceLocation getIcon() {
         return icon;
     }
@@ -55,11 +55,7 @@ public abstract class App {
         return preInstalled;
     }
 
-    void getEnvironment() {
-        AppEnvironment env = createEnvironment();
-        env.app = this;
-    }
-
+    @SideOnly(Side.CLIENT)
     public abstract AppEnvironment createEnvironment();
 
 }

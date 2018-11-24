@@ -14,6 +14,7 @@ import org.lwjgl.util.Color;
  * {@link KeyDelegate} is provided by a skill and handles key delegation of ONE key.
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public abstract class KeyDelegate {
 
     public enum DelegateState {
@@ -42,12 +43,10 @@ public abstract class KeyDelegate {
 
     public void onKeyTick() {}
 
-    @SideOnly(Side.CLIENT)
     protected final Minecraft getMC() {
         return Minecraft.getMinecraft();
     }
 
-    @SideOnly(Side.CLIENT)
     protected final EntityPlayer getPlayer() {
         return getMC().player;
     }

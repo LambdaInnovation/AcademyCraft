@@ -22,6 +22,7 @@ public class AppSettings extends App {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public AppEnvironment createEnvironment() {
         return new AppEnvironment() {
             @Override

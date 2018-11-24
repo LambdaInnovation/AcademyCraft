@@ -101,6 +101,7 @@ public class TutorialInit {
         AppRegistry.register(new App("tutorial") {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public AppEnvironment createEnvironment() {
                 return new AppEnvironment() {
                     @Override
@@ -113,6 +114,7 @@ public class TutorialInit {
 
             // Random gives icon for more fun >)
             @Override
+            @SideOnly(Side.CLIENT)
             public ResourceLocation getIcon() {
                 float rand = RandUtils.nextFloat();
                 if (rand < 0.2f) {
@@ -124,6 +126,7 @@ public class TutorialInit {
                 }
             }
 
+            @SideOnly(Side.CLIENT)
             private ResourceLocation icon(int id) {
                 return Resources.preloadMipmapTexture("guis/apps/tutorial/icon_" + id);
             }

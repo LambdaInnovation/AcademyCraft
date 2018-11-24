@@ -3,6 +3,8 @@ package cn.academy.client.render.util;
 import cn.academy.client.render.util.ArcFactory.Arc;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
@@ -14,6 +16,7 @@ import java.util.List;
  * this class handles everything else.
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class SubArcHandler {
 
     public final Arc[] arcs;

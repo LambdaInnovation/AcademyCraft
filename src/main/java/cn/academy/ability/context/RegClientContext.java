@@ -34,7 +34,7 @@ class RegClientContextImpl {
                 if (ctor.getParameterCount() == 1 &&
                     Context.class.isAssignableFrom(ctor.getParameterTypes()[0])) {
                     ctor.setAccessible(true);
-                    Context.clientTypes.put(anno.value(), ctx -> {
+                    ClientContext.clientTypes.put(anno.value(), ctx -> {
                         try {
                             return (ClientContext) ctor.newInstance(ctx);
                         } catch (Exception ex) {

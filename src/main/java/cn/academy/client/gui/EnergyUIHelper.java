@@ -8,10 +8,13 @@ import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
 
+@SideOnly(Side.CLIENT)
 public class EnergyUIHelper {
 
     public static final Color

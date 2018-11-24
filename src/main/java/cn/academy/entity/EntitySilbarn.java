@@ -144,6 +144,7 @@ public class EntitySilbarn extends EntityAdvanced
 
             this.regEventHandler(new CollideEvent.CollideHandler() {
                 @Override
+                @SuppressWarnings("sideonly")
                 public void onEvent(CollideEvent event) {
                     if(!hit) {
                         RayTraceResult res = event.result;
@@ -179,7 +180,8 @@ public class EntitySilbarn extends EntityAdvanced
         super.onUpdate();
         sync();
     }
-    
+
+    @SuppressWarnings("sideonly")
     private void sync() {
         if(world.isRemote) {
             boolean b = dataManager.get(HIT_SYNC) != 0;

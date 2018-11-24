@@ -36,6 +36,7 @@ public class ItemDeveloper extends ItemEnergyBase {
     }
     
     @Override
+    @SuppressWarnings("sideonly")
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if(player.world.isRemote) {
             displayGui(player);

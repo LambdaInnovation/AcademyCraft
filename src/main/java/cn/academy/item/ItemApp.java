@@ -36,6 +36,7 @@ public class ItemApp extends Item {
     private static Map<App, ItemApp> items = new HashMap<>();
 
     @RegistryCallback
+    @SuppressWarnings("sideonly")
     private static void regItem(RegistryEvent.Register<Item> event) {
         for(App app : AppRegistry.enumeration()) {
             if(!app.isPreInstalled()) {

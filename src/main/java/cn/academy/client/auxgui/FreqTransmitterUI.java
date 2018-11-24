@@ -118,6 +118,7 @@ public class FreqTransmitterUI extends AuxGui {
 
     private static final String OVERRIDE_GROUP = "AC_FreqTransmitter";
 
+    @SideOnly(Side.CLIENT)
     private abstract class State {
         
         boolean handlesKey;

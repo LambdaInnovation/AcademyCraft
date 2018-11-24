@@ -46,7 +46,8 @@ public class Resources {
     public static SoundEvent sound(String loc) {
         return new SoundEvent(res(loc));
     }
-    
+
+    @SideOnly(Side.CLIENT)
     public static ObjLegacyRender getModel(String mdlName) {
         return ClientResources.getModel(mdlName);
     }

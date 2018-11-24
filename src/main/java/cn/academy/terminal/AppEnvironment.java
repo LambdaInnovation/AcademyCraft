@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class AppEnvironment {
 
     /*
@@ -32,7 +33,6 @@ public class AppEnvironment {
         return terminal;
     }
 
-    @SideOnly(Side.CLIENT)
     protected EntityPlayer getPlayer() {
         return Minecraft.getMinecraft().player;
     }

@@ -3,12 +3,9 @@ package cn.academy.ability.context;
 import cn.academy.ability.AbilityContext;
 import cn.academy.ability.Skill;
 import cn.academy.AcademyCraft;
-import cn.lambdalib2.LambdaLib2;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.IMessageDelegate;
 import cn.lambdalib2.util.Debug;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -53,7 +50,8 @@ public class Context implements IMessageDelegate {
 
     private final ContextManager mgr = ContextManager.instance;
 
-    List<ClientContext> clientContexts = new ArrayList<>();
+    @SideOnly(Side.CLIENT)
+    List<ClientContext> clientContexts;
 
     public final EntityPlayer player;
     public final Skill skill;
@@ -66,6 +64,7 @@ public class Context implements IMessageDelegate {
     /**
      * Default ctor, must be kept for reflection creation
      */
+    @SuppressWarnings("sideonly")
     public Context(EntityPlayer _player, Skill _skill) {
         player = _player;
         skill = _skill;
@@ -79,7 +78,8 @@ public class Context implements IMessageDelegate {
 
     @SideOnly(Side.CLIENT)
     private void constructClientContexts() {
-        for (Function<Context, ClientContext> supplier : clientTypes.get(getClass())) {
+        clientContexts = new ArrayList<>();
+        for (Function<Context, ClientContext> supplier : ClientContext.clientTypes.get(getClass())) {
             clientContexts.add(supplier.apply(this));
         }
     }
@@ -113,6 +113,7 @@ public class Context implements IMessageDelegate {
         return FMLCommonHandler.instance().getEffectiveSide().isClient();
     }
 
+    @SuppressWarnings("sideonly")
     public final boolean isLocal() {
         if (isRemote()) {
             return isLocalClient_();
@@ -183,6 +184,7 @@ public class Context implements IMessageDelegate {
     }
 
     @Override
+    @SuppressWarnings("sideonly")
     public final void onMessage(String channel, Object... args) {
         messageDebug("Recv: " + channel);
         if (isRemote()) {
@@ -191,10 +193,6 @@ public class Context implements IMessageDelegate {
             }
         }
     }
-
-    // RegClientContext support
-    static final Multimap<Class<? extends Context>, Function<Context, ClientContext>>
-            clientTypes = HashMultimap.create();
 
 
 }

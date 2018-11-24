@@ -7,6 +7,8 @@ import cn.lambdalib2.util.VecUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
@@ -22,6 +24,7 @@ import static cn.lambdalib2.util.VecUtils.*;
  * Used the concept of L-system and recursion to generate a lightning pattern.
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class ArcFactory {
     
     static final ResourceLocation TEXTURE = new ResourceLocation("academy:textures/effects/arc/line_segment.png");
@@ -163,7 +166,8 @@ public class ArcFactory {
             alpha = a;
         }
     }
-    
+
+    @SideOnly(Side.CLIENT)
     public static class Arc {
         int listId;
         

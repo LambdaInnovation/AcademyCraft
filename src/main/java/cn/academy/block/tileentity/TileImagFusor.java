@@ -104,6 +104,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     }
 
     @Override
+    @SuppressWarnings("sideonly")
     public void update() {
         super.update();
 

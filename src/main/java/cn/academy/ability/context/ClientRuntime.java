@@ -376,6 +376,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
     }
 
+    @SideOnly(Side.CLIENT)
     public static class ActivateHandlers {
         public static IActivateHandler terminatesContext(Context ctx) {
             return new IActivateHandler() {
@@ -397,6 +398,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public interface IActivateHandler {
 
         String ENDSPECIAL = "endspecial";

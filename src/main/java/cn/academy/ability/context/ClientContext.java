@@ -1,7 +1,11 @@
 package cn.academy.ability.context;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.function.Function;
 
 /**
  * {@link ClientContext} is attached to a certain context and receives all its messages.
@@ -9,6 +13,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class ClientContext extends Context {
+
+    // RegClientContext support
+    static final Multimap<Class<? extends Context>, Function<Context, ClientContext>>
+            clientTypes = HashMultimap.create();
 
     private final Context parent;
 

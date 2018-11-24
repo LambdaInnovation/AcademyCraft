@@ -44,6 +44,7 @@ public final class ViewGroups {
         return drawsBlock(block, 0);
     }
 
+    @SuppressWarnings("sideonly")
     public static ViewGroup drawsBlock(Block block, int meta) {
         if (client()) return drawsBlockImpl(block, meta);
         return nothing;
@@ -53,11 +54,13 @@ public final class ViewGroups {
         return drawsItem(item, 0);
     }
 
+    @SuppressWarnings("sideonly")
     public static ViewGroup drawsItem(Item item, int metadata) {
         if (client()) return drawsItemImpl(item, metadata);
         return nothing;
     }
 
+    @SuppressWarnings("sideonly")
     public static ViewGroup recipes(Item item) {
         if (client()) return recipesImpl(item);
         return nothing;
@@ -67,6 +70,7 @@ public final class ViewGroups {
         return recipes(Item.getItemFromBlock(block));
     }
 
+    @SuppressWarnings("sideonly")
     public static ViewGroup displayModel(
         String model,
         String textureName,
@@ -87,6 +91,7 @@ public final class ViewGroups {
         ResourceLocation icon_res = Resources.getTexture(icon);
         return new ViewGroup() {
             @Override
+            @SideOnly(Side.CLIENT)
             public Widget[] getSubViews() {
                 return new Widget[] { withDraw(() -> {
                     RenderUtils.loadTexture(icon_res);

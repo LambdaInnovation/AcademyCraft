@@ -85,6 +85,7 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
     }
     
     @Override
+    @SuppressWarnings("sideonly")
     public void update() {
         super.update();
         

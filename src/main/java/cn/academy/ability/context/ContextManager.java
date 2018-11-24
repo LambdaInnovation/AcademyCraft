@@ -57,6 +57,7 @@ public enum ContextManager {
     /**
      * Activate the context, which establish the connection of C/S.
      */
+    @SideOnly(Side.CLIENT)
     public void activate(Context ctx) {
         Preconditions.checkState(ctx.status == Status.CONSTRUCTED, "Can't activate one context multiple times");
         Preconditions.checkState(ctx.isLocal(), "Can only activate context at local.");
@@ -78,6 +79,7 @@ public enum ContextManager {
     /**
      * Finds a context of given type that is alive.
      */
+    @SuppressWarnings("sideonly")
     public <T> Optional<T> find(Class<T> type) {
         if (SideUtils.isClient()) {
             Optional<T> test1 = findLocal(type);
@@ -180,6 +182,7 @@ public enum ContextManager {
 
         int nextClientID;
 
+        @SideOnly(Side.CLIENT)
         void activate(Context ctx) {
             ContextData data = new ContextData();
             data.ctx = ctx;
@@ -310,6 +313,7 @@ public enum ContextManager {
         }
 
         @SubscribeEvent
+        @SideOnly(Side.CLIENT)
         public void __onClientTick(ClientTickEvent evt) {
             if (evt.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
                 double time = time();
@@ -591,6 +595,7 @@ public enum ContextManager {
         }
 
         @SubscribeEvent
+        @SideOnly(Side.CLIENT)
         public void __onClientTick(ClientTickEvent evt) {
             if (evt.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
                 long time = time();

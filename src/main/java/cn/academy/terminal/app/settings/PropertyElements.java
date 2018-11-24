@@ -12,9 +12,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.Color;
 
+@SideOnly(Side.CLIENT)
 public class PropertyElements {
     
     public static IPropertyElement CHECKBOX = new IPropertyElement<UIProperty.Config>() {
