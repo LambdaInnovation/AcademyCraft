@@ -35,7 +35,7 @@ public class RendererCoinThrowing extends Render {
         boolean fp = player == Minecraft.getMinecraft().player
                 && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
         
-        double dt = GameTimer.getTime() % 150;
+        double dt = (GameTimer.getTime() * 1000) % 150;
         
         if(etc.player == null)
             return;
@@ -56,7 +56,7 @@ public class RendererCoinThrowing extends Render {
             if(fp) {
                 GL11.glRotated(player.rotationYaw, 0, -1, 0);
             } else GL11.glRotated(player.renderYawOffset, 0, -1, 0);
-            GL11.glTranslated(-0.63, -0.60, 0.30);
+            GL11.glTranslated(-0.63, 1, 0.30);
             float scale = 0.3F;
             GL11.glScalef(scale, scale, scale);
             GL11.glTranslated(0.5, 0.5, 0);
@@ -70,33 +70,5 @@ public class RendererCoinThrowing extends Render {
     protected ResourceLocation getEntityTexture(Entity var1) {
         return null;
     }
-
-    //TODO
-//    public static class ItemRender implements IItemRenderer {
-//        @Override
-//        public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
-//            return type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.EQUIPPED;
-//        }
-//
-//        @Override
-//        public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-//                ItemRendererHelper helper) {
-//            return false;
-//        }
-//
-//        @Override
-//        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-//            EntityLivingBase elb = (EntityLivingBase) data[1];
-//            if(!(elb instanceof EntityPlayer)) return;
-//            EntityPlayer player = (EntityPlayer) elb;
-//            double scale = type == ItemRenderType.EQUIPPED ? 0.6 : .8;
-//            GL11.glPushMatrix();
-//            { //FIX: Added matrix state for transform.
-//                GL11.glScaled(scale, scale, scale);
-//                RenderUtils.drawEquippedItem(0.04, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
-//            }
-//            GL11.glPopMatrix();
-//        }
-//    }
 
 }

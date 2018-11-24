@@ -1,11 +1,20 @@
 package cn.academy.item;
 
 import cn.academy.Resources;
-import cn.academy.client.render.entity.RendererCoinThrowing;
+import cn.academy.client.render.model.BakedModelForTEISR;
 import cn.academy.entity.EntityCoinThrowing;
 import cn.academy.event.CoinThrowEvent;
+import cn.lambdalib2.render.TransformUtils;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.SideUtils;
+import javafx.scene.transform.Transform;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.util.*;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -15,6 +24,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,18 +35,49 @@ import java.util.Map;
  * @author KSkun
  */
 public class ItemCoin extends Item {
-    
-//    @RegItem.Render
-//    @SideOnly(Side.CLIENT)
-//    public static RendererCoinThrowing.ItemRender renderCoin;
-    
+
     // Key: PlayerName
     private static Map<String, EntityCoinThrowing> client = new HashMap<>(), server = new HashMap<>();
-    
+
+    private final ModelResourceLocation _modelLocation = new ModelResourceLocation("academy:coin", "inventory");
+
+    @SuppressWarnings("sideonly")
     public ItemCoin() {
         FMLCommonHandler.instance().bus().register(this);
+        if (SideUtils.isClient())
+            initClient();
     }
-    
+
+    @SideOnly(Side.CLIENT)
+    private void initClient() {
+        ModelLoader.setCustomMeshDefinition(this, stack -> _modelLocation);
+
+        setTileEntityItemStackRenderer(new TileEntityItemStackRenderer() {
+            @Override
+            public void renderByItem(ItemStack itemStackIn) {
+                GL11.glPushMatrix();
+                GL11.glTranslated(0, 0, .5);
+                RenderUtils.drawEquippedItem(0.04f, Resources.TEX_COIN_BACK, Resources.TEX_COIN_FRONT);
+                GL11.glPopMatrix();
+            }
+        });
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onModelBake(ModelBakeEvent ev) {
+        BakedModelForTEISR bakedModel = new BakedModelForTEISR(_modelLocation);
+        Matrix4f fpTrans = Matrix4f.mul(TransformUtils.translate(0, 0, -.5f), TransformUtils.scale(.5f, .5f, .5f), null);
+        bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTrans);
+        bakedModel.mapTransform(TransformType.FIRST_PERSON_RIGHT_HAND, fpTrans);
+
+        Matrix4f tpTrans = Matrix4f.mul(TransformUtils.translate(0, .1f, .0f), TransformUtils.scale(.3f, .3f, .3f), null);
+        bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
+        bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
+
+        ev.getModelRegistry().putObject(_modelLocation, bakedModel);
+    }
+
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
         EntityPlayer player = event.player;

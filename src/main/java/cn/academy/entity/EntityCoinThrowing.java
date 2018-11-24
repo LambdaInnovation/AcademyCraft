@@ -140,13 +140,13 @@ public class EntityCoinThrowing extends EntityAdvanced
         //try merge
         if(!getEntityWorld().isRemote && !player.capabilities.isCreativeMode) {
             ItemStack equipped = player.getHeldItemMainhand();
-            if(equipped == null) {
+            if (equipped.isEmpty()) {
                 player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ACItems.coin));
-            } else if(equipped.getItem() == ACItems.coin && equipped.getCount() < equipped.getMaxStackSize()) {
+            } else if (equipped.getItem() == ACItems.coin && equipped.getCount() < equipped.getMaxStackSize()) {
                 equipped.setCount(equipped.getCount()+1);
 //                player.inventory.inventoryChanged = true;
                 player.inventory.markDirty();
-            } else if(PlayerUtils.mergeStackable(player.inventory, new ItemStack(
+            } else if (PlayerUtils.mergeStackable(player.inventory, new ItemStack(
                     ACItems.coin)) == 0) {
                 ;
             } else {
