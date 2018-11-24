@@ -15,8 +15,8 @@ private object MediaAppInit {
 
 object MediaApp extends App("media_player") {
 
+  @SideOnly(Side.CLIENT)
   override def createEnvironment(): AppEnvironment = new AppEnvironment {
-    @SideOnly(Side.CLIENT)
     override def onStart(): Unit = {
       Minecraft.getMinecraft.displayGuiScreen(new MediaGui)
     }

@@ -33,7 +33,7 @@ import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraft.util.math.MathHelper
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.util.Color
 
 private object LTNetDelegate {
@@ -83,6 +83,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     override def test(t: Entity): Boolean = t.width * t.width * t.height < 80f
   })
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyID: Int): Unit = {
     rt.addKey(keyID, new KeyDelegate {
       override def getIcon: ResourceLocation = getHintIcon
