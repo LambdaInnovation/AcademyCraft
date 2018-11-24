@@ -122,6 +122,7 @@ object Railgun extends Skill("railgun", 4) {
       Railgun, MSG_REFLECT, player, reflector)
   }
 
+  @SideOnly(Side.CLIENT)
   private def spawnClientEffect(target: EntityPlayer) = {
     DummyRenderData.get(target).addRenderHook(new RailgunHandEffect())
   }

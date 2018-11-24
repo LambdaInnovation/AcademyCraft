@@ -5,7 +5,6 @@ import cn.academy.ability.Skill;
 import cn.academy.AcademyCraft;
 import cn.academy.ability.vanilla.VanillaCategories;
 import cn.academy.ability.vanilla.electromaster.skill.*;
-import cn.academy.ability.vanilla.electromaster.skill.MagManip$;
 import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
@@ -29,7 +28,7 @@ public class CatElectromaster extends Category {
 
     public static final Skill
         arcGen = ArcGen.instance,
-        magManip = MagManip$.MODULE$,
+        magManip = MagManip.INSTANCE,
         mineDetect = MineDetect$.MODULE$,
         railgun = Railgun$.MODULE$,
         magMovement = MagMovement$.MODULE$,
