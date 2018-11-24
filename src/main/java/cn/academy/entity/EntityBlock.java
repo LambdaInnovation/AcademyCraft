@@ -49,9 +49,9 @@ public class EntityBlock extends EntityAdvanced {
     
 //    private static final int BLOCKID = 4, META = 5;
 
-    private static final DataParameter<Integer> BLOCKID = EntityDataManager.<Integer>createKey(EntityMagHook.class, DataSerializers.VARINT);
-    private static final DataParameter<Byte> META = EntityDataManager.<Byte>createKey(EntityMagHook.class, DataSerializers.BYTE);
-    
+    private static final DataParameter<Integer> BLOCKID = EntityDataManager.createKey(EntityBlock.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> META = EntityDataManager.createKey(EntityBlock.class, DataSerializers.VARINT);
+
     public Block block;
     public IBlockState _blockState;
     public TileEntity tileEntity;
@@ -101,8 +101,9 @@ public class EntityBlock extends EntityAdvanced {
 
     @Override
     public void entityInit() {
+        super.entityInit();
         dataManager.register(BLOCKID, 0);
-        dataManager.register(META, (byte) 0);
+        dataManager.register(META,  0);
         
         setSize(1, 1);
     }
@@ -120,7 +121,7 @@ public class EntityBlock extends EntityAdvanced {
         } else {
             if(block != null) {
                 dataManager.set(BLOCKID, Block.getIdFromBlock(block));
-                dataManager.set(META, (byte) block.getMetaFromState(_blockState));
+                dataManager.set(META,  block.getMetaFromState(_blockState));
 
                 // FIXME
 //                if(tileEntity != null)
