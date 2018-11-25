@@ -127,9 +127,11 @@ public class EntitySilbarn extends EntityAdvanced
         });
 
         setPosition(player.posX, player.posY + player.eyeHeight, player.posZ);
-        motionX = player.motionX;
-        motionY = player.motionY;
-        motionZ = player.motionZ;
+
+        Vec3d look = player.getLookVec();
+        motionX = look.x;
+        motionY = look.y;
+        motionZ = look.z;
         
         this.rotationYaw = player.rotationYawHead;
         this.isAirBorne = true;

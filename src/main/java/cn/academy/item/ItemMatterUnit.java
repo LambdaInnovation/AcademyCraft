@@ -126,7 +126,7 @@ public class ItemMatterUnit extends Item {
         boolean isNone = getMaterial(stack) == MAT_NONE;
         RayTraceResult rayRes = rayTrace(world, player, isNone);
 
-        if (rayRes.typeOfHit== RayTraceResult.Type.MISS) {
+        if (rayRes == null || rayRes.typeOfHit== RayTraceResult.Type.MISS) {
             return new ActionResult<>(EnumActionResult.PASS, stack);
         } else {
             if (rayRes.typeOfHit == RayTraceResult.Type.BLOCK) {

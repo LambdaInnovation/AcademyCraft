@@ -11,6 +11,7 @@ import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.vis.CompTransform;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -210,14 +211,12 @@ public final class ViewGroups {
             @Override
             public Widget[] getSubViews() {
                 return new Widget[] { withDraw(() -> {
-                    // TODO new Item render routine
-//                    glDepthFunc(GL_ALWAYS);
-//                    RenderItem.renderInFrame = true;
-//                    glTranslated(0.54, 0.5, 0);
-//                    glScaled(-1/16.0, -1/16.0, 1);
-//                    RenderUtils.loadTexture(TextureMap.locationItemsTexture);
-//                    RenderUtils.renderItemInventory(stack);
-//                    glDepthFunc(GL_LEQUAL);
+                    RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+                    glDepthFunc(GL_ALWAYS);
+                    glTranslated(0.54, 0.5, 0);
+                    glScaled(-1/16.0, -1/16.0, 1);
+                    renderItem.renderItemIntoGUI(stack, 0, 0);
+                    glDepthFunc(GL_LEQUAL);
                 })};
             }
 

@@ -39,6 +39,7 @@ public class ItemMagHook extends Item {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @SuppressWarnings("sideonly")
     public void afterRegistry() {
         if (SideUtils.isClient())
             initClient();
