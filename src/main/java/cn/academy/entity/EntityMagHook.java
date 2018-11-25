@@ -1,6 +1,7 @@
 package cn.academy.entity;
 
 import cn.academy.ACItems;
+import cn.academy.AcademyCraft;
 import cn.academy.Resources;
 import cn.academy.ability.vanilla.VanillaCategories;
 import cn.academy.client.render.entity.RendererMagHook;
@@ -11,6 +12,7 @@ import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.MotionHandler;
 import cn.lambdalib2.util.entityx.event.CollideEvent;
 import cn.lambdalib2.util.entityx.handlers.Rigidbody;
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -81,8 +83,8 @@ public class EntityMagHook extends EntityAdvanced
                     isHit = true;
                     hitSide = res.sideHit;
                     hookX = res.getBlockPos().getX();
-                    hookY = res.getBlockPos().getX();
-                    hookZ = res.getBlockPos().getX();
+                    hookY = res.getBlockPos().getY();
+                    hookZ = res.getBlockPos().getZ();
                     setStill();
                 }
             }
