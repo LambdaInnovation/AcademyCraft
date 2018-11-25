@@ -1,14 +1,12 @@
 package cn.academy.item;
 
 import cn.academy.Resources;
-import cn.academy.client.render.model.BakedModelForTEISR;
+import cn.academy.client.render.item.BakedModelForTEISR;
 import cn.academy.entity.EntityCoinThrowing;
 import cn.academy.event.CoinThrowEvent;
 import cn.lambdalib2.render.TransformChain;
-import cn.lambdalib2.render.TransformUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.SideUtils;
-import javafx.scene.transform.Transform;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
@@ -16,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.*;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -71,11 +68,11 @@ public class ItemCoin extends Item {
     @SideOnly(Side.CLIENT)
     public void onModelBake(ModelBakeEvent ev) {
         BakedModelForTEISR bakedModel = new BakedModelForTEISR(_modelLocation);
-        Matrix4f fpTrans = new TransformChain().scale(.5f, .5f, .5f).translate(.2f, 0, -.1f).bulid();
+        Matrix4f fpTrans = new TransformChain().scale(.5f, .5f, .5f).translate(.2f, 0, -.1f).build();
         bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTrans);
         bakedModel.mapTransform(TransformType.FIRST_PERSON_RIGHT_HAND, fpTrans);
 
-        Matrix4f tpTrans = new TransformChain().scale(.2f).translate(0, 0, .0f).bulid();
+        Matrix4f tpTrans = new TransformChain().scale(.2f).translate(0, 0, .0f).build();
         bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
         bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
 

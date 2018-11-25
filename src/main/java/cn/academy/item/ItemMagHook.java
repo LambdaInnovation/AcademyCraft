@@ -2,32 +2,93 @@ package cn.academy.item;
 
 import cn.academy.AcademyCraft;
 import cn.academy.Resources;
+import cn.academy.client.render.item.BakedModelForTEISR;
+import cn.academy.client.render.item.TEISRModel;
 import cn.academy.entity.EntityMagHook;
+import cn.lambdalib2.render.TransformChain;
+import cn.lambdalib2.util.SideUtils;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.util.vector.Matrix4f;
+
+import java.util.Objects;
 
 /**
  * Elec Move Support Hook
  * @author WeathFolD
  */
 public class ItemMagHook extends Item {
-    
-//    @SideOnly(Side.CLIENT)
-//    public static HookRender render;
+
+    private ModelResourceLocation _modelLocation;
 
     public ItemMagHook() {
         setCreativeTab(AcademyCraft.cct);
+        MinecraftForge.EVENT_BUS.register(this);
     }
-    
+
+    public void afterRegistry() {
+        if (SideUtils.isClient())
+            initClient();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void initClient() {
+        _modelLocation = new ModelResourceLocation(
+            Objects.requireNonNull(getRegistryName()),
+            "inventory");
+        ModelLoader.setCustomMeshDefinition(this, stack -> _modelLocation);
+        setTileEntityItemStackRenderer(new TEISRModel(
+            Resources.getModel("maghook"),
+            Resources.getTexture("models/maghook"),
+            new TransformChain().scale(0.01f).build()
+        ));
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onModelBake(ModelBakeEvent ev) {
+        BakedModelForTEISR bakedModel = new BakedModelForTEISR(_modelLocation);
+
+        IBakedModel original = ev.getModelRegistry().getObject(_modelLocation);
+        bakedModel.mapModel(TransformType.GUI, original);
+
+        Matrix4f fpTrans = new TransformChain()
+            .scale(1.4f)
+            .rotate(0, 90, 180)
+            .translate(0f, .5f, 0.4f)
+            .build();
+
+        Matrix4f tpTrans = new TransformChain()
+            .rotate(0, 90, 180)
+            .scale(.8f)
+            .translate(-.4f, .5f, .7f)
+            .build();
+
+        bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTrans);
+        bakedModel.mapTransform(TransformType.FIRST_PERSON_RIGHT_HAND, fpTrans);
+
+        bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
+        bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
+
+        bakedModel.mapTransform(TransformType.GROUND,
+            new TransformChain().rotate(0, 90, 180).translate(-.4f, .5f, .7f).build());
+
+        ev.getModelRegistry().putObject(_modelLocation, bakedModel);
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
@@ -46,26 +107,5 @@ public class ItemMagHook extends Item {
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
-    
-//    @SideOnly(Side.CLIENT)
-//    public static class HookRender extends RenderModelItem {
-//        public HookRender() {
-//            super(new ItemModelCustom(Resources.getModel("maghook")),
-//                Resources.getTexture("models/maghook"));
-//            renderInventory = false;
-//            this.setScale(0.15d);
-//            this.setStdRotation(0, -90, 90);
-//            this.setOffset(0, 0.0, -3);
-//            this.setEquipOffset(1, 0, 0);
-//        }
-//
-//        @Override
-//        protected void renderAtStdPosition(float i) {
-//            this.setOffset(0, 0, 1);
-//            this.setEquipOffset(0.5, 0.1, 0);
-//            super.renderAtStdPosition(i);
-//        }
-//    }
-
 
 }

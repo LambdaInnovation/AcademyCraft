@@ -1,4 +1,4 @@
-package cn.academy.client.render.model;
+package cn.academy.client.render.item;
 
 import cn.lambdalib2.render.TransformUtils;
 import cn.lambdalib2.util.Debug;
@@ -29,6 +29,8 @@ public class BakedModelForTEISR implements IBakedModel {
 
     private Matrix4f _identityMatrix = new Matrix4f();
 
+    public Runnable fiddleRuntime;
+
     public BakedModelForTEISR(ResourceLocation location) {
         _location = location;
         _identityMatrix.setIdentity();
@@ -53,6 +55,9 @@ public class BakedModelForTEISR implements IBakedModel {
 
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
+        if (fiddleRuntime != null)
+            fiddleRuntime.run();
+
         final int ordinal = type.ordinal();
         Matrix4f mat = _identityMatrix;
         IBakedModel model = this;
