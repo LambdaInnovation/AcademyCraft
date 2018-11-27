@@ -24,6 +24,8 @@ import scala.collection.mutable.ArrayBuffer
 @SideOnly(Side.CLIENT)
 class ParabolaEffect(val ctx: VecAccelContext) extends LocalEntity(ctx.player.getEntityWorld) {
 
+  this.setPosition(ctx.player.posX, ctx.player.posY, ctx.player.posZ)
+
   ignoreFrustumCheck = true
 
   var canPerform = false
@@ -65,7 +67,7 @@ class ParabolaRenderer(m: RenderManager) extends Render[ParabolaEffect](m) {
           var lookRot = new Vec3d(lookFix.x, 0, lookFix.z)
           lookRot = lookRot.rotateYaw(90)
           lookRot = VecUtils.multiply(lookRot.normalize(), -0.08)
-          lookRot = new Vec3d(lookRot.x, -0.04, lookRot.z)
+          lookRot = new Vec3d(lookRot.x, 1.56, lookRot.z)
 
           var pos = VecUtils.subtract(lookRot, VecUtils.multiply(lookFix, 0.12))
 
@@ -88,7 +90,7 @@ class ParabolaRenderer(m: RenderManager) extends Render[ParabolaEffect](m) {
           glDisable(GL_ALPHA_TEST)
           glColor4f(1, 1, 1, 0.6f)
           (1 until vertices.size) foreach (idx => {
-            val h = 0.02
+            val h = .02
 
             val (prev, cur) = (vertices(idx - 1), vertices(idx))
 

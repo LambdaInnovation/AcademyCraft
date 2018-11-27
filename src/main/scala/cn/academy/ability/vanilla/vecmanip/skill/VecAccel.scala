@@ -106,8 +106,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
     val p1 = new Vec3d(p0.x, p0.y - 2,p0.z)
 
     val traceResult: RayTraceResult = Raytrace.perform(world, p0, p1, EntitySelectors.nothing, BlockSelectors.filNothing)
-    traceResult.typeOfHit==RayTraceResult.Type.BLOCK
-
+    traceResult != null && traceResult.typeOfHit==RayTraceResult.Type.BLOCK
   }
 
 }

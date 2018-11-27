@@ -28,7 +28,7 @@ object EntityAffection {
 
     val excluded = cfg.getStringList("excluded")
 
-    (entityData, excluded.toSet.map(EntityList.getClassFromName))
+    (entityData, excluded.toSet.map(EntityList.getClassFromName).filter(_ != null))
   }
 
   def getAffectInfo(entity: Entity): AffectInfo = {

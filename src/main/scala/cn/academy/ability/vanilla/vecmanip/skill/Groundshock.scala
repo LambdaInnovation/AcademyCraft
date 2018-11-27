@@ -26,12 +26,6 @@ object Groundshock extends Skill("ground_shock", 1) {
 
 }
 
-private object IVec {
-  def apply(arr: Array[Int]) = new IVec(arr(0), arr(1), arr(2))
-}
-
-private case class IVec(x: Int, y: Int, z: Int)
-
 private object GroundshockContext {
 
   final val MSG_PERFORM = "perform"
@@ -87,7 +81,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
       var iter = maxIter
 
       var energy = initEnergy
-      val dejavu_blocks = mutable.Set[IVec]()
+      val dejavu_blocks = mutable.Set[BlockPos]()
       val dejavu_ent    = mutable.Set[Entity]()
 
       val rot = copy(planeLook)
@@ -130,15 +124,14 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
         deltas.foreach { case (delta, prob) => {
 
-          val pt = IVec((x + delta.x).floor.toInt, (y + delta.y).floor.toInt, (z + delta.z).floor.toInt)
-          val pos = new BlockPos(pt.x,pt.y, pt.z)
+          val pos = new BlockPos((x + delta.x).floor.toInt, (y + delta.y).floor.toInt, (z + delta.z).floor.toInt)
           val is = world.getBlockState(pos)
           val block: Block = is.getBlock
 
           if (RandUtils.nextDouble() < prob) {
             if (block != Blocks.AIR &&
-              !dejavu_blocks.contains(pt)) {
-              dejavu_blocks += pt
+              !dejavu_blocks.contains(pos)) {
+              dejavu_blocks += pos
 
               block match {
                 case Blocks.STONE =>
@@ -156,7 +149,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
                 breakWithForce(x, y, z, drop = false)
               }
 
-              val aabb = new AxisAlignedBB(pt.x-0.2, pt.y-0.2, pt.z-0.2, pt.x+1.4, pt.y+2.2, pt.z+1.4)
+              val aabb = new AxisAlignedBB(pos.getX-0.2, pos.getY-0.2, pos.getZ-0.2, pos.getX+1.4, pos.getY+2.2, pos.getZ+1.4)
               val entities = WorldUtils.getEntities(world, aabb, selector)
               entities.foreach(entity => {
                 if (!dejavu_ent.contains(entity)) {
@@ -195,7 +188,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
       ctx.addSkillExp(0.001f)
       ctx.setCooldown(cooldown)
-      sendToClient(MSG_PERFORM, dejavu_blocks.map(v => Array(v.x, v.y, v.z)).toArray)
+      sendToClient(MSG_PERFORM, dejavu_blocks.map(v => Array(v.getX, v.getY, v.getZ)).toArray)
     }
     terminate()
   }
@@ -250,12 +243,11 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
 
     ACSounds.playClient(player, "vecmanip.groundshock", SoundCategory.AMBIENT, 2)
 
-    affectedBlocks.map(arr => IVec(arr)).foreach(pt => {
+    affectedBlocks.map(arr => new BlockPos(arr(0), arr(1), arr(2))).foreach(pt => {
       import cn.lambdalib2.util.RandUtils._
       for (i <- 0 until rangei(4, 8)) {
         def randvel() = ranged(-0.2, 0.2)
-        val pos = new BlockPos(pt.x, pt.y, pt.z)
-        val is = world.getBlockState(pos)
+        val is = world.getBlockState(pt)
 
         // TODO use new digging FX
 //        val entity = new EntityDiggingFX(
@@ -270,7 +262,7 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
 
       if (nextFloat() < 0.5f) {
         val eff = new SmokeEffect(world)
-        val pos = (pt.x + 0.5 + ranged(-.3, .3), pt.y + 1 + ranged(0, 0.2), pt.z + 0.5 + ranged(-.3, .3))
+        val pos = (pt.getX + 0.5 + ranged(-.3, .3), pt.getY + 1 + ranged(0, 0.2), pt.getZ + 0.5 + ranged(-.3, .3))
         val vel = (ranged(-.03, .03), ranged(.03, .06), ranged(-.03, .03))
 
         eff.setPosition(pos._1, pos._2, pos._3)
