@@ -1,23 +1,21 @@
 package cn.academy.client.auxgui;
 
+import cn.academy.Resources;
 import cn.academy.datapart.AbilityData;
 import cn.academy.datapart.CPData;
-import cn.academy.Resources;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.registry.mc.gui.RegAuxGui;
 import cn.lambdalib2.util.Colors;
+import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
-//import cn.lambdalib2.util.auxgui.AuxGui;
-//import cn.lambdalib2.util.auxgui.AuxGuiRegistry.RegAuxGui;
-//import cn.lambdalib2.util.Color;
-import cn.lambdalib2.util.GameTimer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
@@ -76,6 +74,7 @@ public class BackgroundMask extends AuxGui {
             
             GL11.glColor4d(r, g, b, a);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
+            GlStateManager.bindTexture(0);
             RenderUtils.loadTexture(MASK);
             HudUtils.rect(0, 0, sr.getScaledWidth_double(), sr.getScaledHeight_double());
             GL11.glColor4f(1, 1, 1, 1);
