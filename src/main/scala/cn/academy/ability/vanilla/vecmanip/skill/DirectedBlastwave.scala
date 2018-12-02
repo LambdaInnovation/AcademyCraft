@@ -4,6 +4,8 @@ import cn.academy.ability.Skill
 import cn.academy.ability.context._
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.client.effect.WaveEffect
+import cn.academy.client.render.util.{IHandRenderer, VanillaHandRenderer}
+import cn.academy.datapart.HandRenderOverrideData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import cn.lambdalib2.vis.animation.presets.CompTransformAnim
@@ -83,10 +85,14 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   def s_perform(ticks: Int) = {
     if (tryConsume()) {
       val trace: RayTraceResult = Raytrace.traceLiving(player, 4, EntitySelectors.living)
-      val position = trace.typeOfHit match {
-        case RayTraceResult.Type.BLOCK => add(player.getPositionVector, multiply(player.getLookVec, 4))
-        case RayTraceResult.Type.ENTITY => entityHeadPos(trace.entityHit)
-        case _ => trace.hitVec
+      val position = {
+        if (trace == null || trace.typeOfHit == RayTraceResult.Type.BLOCK) {
+          add(player.getPositionVector, multiply(player.getLookVec, 4))
+        } else if (trace.typeOfHit == RayTraceResult.Type.ENTITY) {
+          entityHeadPos(trace.entityHit)
+        } else {
+          trace.hitVec
+        }
       }
 
       ctx.setCooldown(cooldown)
@@ -206,10 +212,9 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
 
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[BlastwaveContext])
-// TODO fix hand effect
 class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
 
-//  var handEffect: HandRenderer = _
+  var handEffect: IHandRenderer = _
 
   var anim: CompTransformAnim = _
 
@@ -244,20 +249,20 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
       math.min(2.0, dt / 0.150)
     }
 
-//    handEffect = new HandRenderer {
-//      override def render(partialTicks: Float) = {
-//        anim.perform(timeProvider())
-//        HandRenderer.renderHand(partialTicks, anim.target)
-//      }
-//    }
+    handEffect = new IHandRenderer {
+      override def renderHand(partialTicks: Float) = {
+        anim.perform(timeProvider())
+        VanillaHandRenderer.renderHand(partialTicks, anim.target)
+      }
+    }
 
-//    HandRenderInterrupter(player).addInterrupt(handEffect)
+    HandRenderOverrideData.get(player).addInterrupt(handEffect)
   }
 
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
-//    HandRenderInterrupter(player).stopInterrupt(handEffect)
+    HandRenderOverrideData.get(player).stopInterrupt(handEffect)
   }
 
   @SideOnly(Side.CLIENT)

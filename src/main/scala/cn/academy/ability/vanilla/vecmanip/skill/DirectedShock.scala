@@ -3,7 +3,9 @@ package cn.academy.ability.vanilla.vecmanip.skill
 import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.advancements.ACAdvancements
+import cn.academy.client.render.util.{IHandRenderer, VanillaHandRenderer}
 import cn.academy.client.sound.ACSounds
+import cn.academy.datapart.HandRenderOverrideData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, GameTimer, Raytrace}
 import cn.lambdalib2.vis.animation.presets.CompTransformAnim
@@ -26,7 +28,7 @@ private object ShockContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import ShockContext._
+import cn.academy.ability.vanilla.vecmanip.skill.ShockContext._
 import cn.academy.client.render.util.AnimPresets._
 
 class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
@@ -77,7 +79,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
 
     if (consume()) {
       val trace: RayTraceResult = Raytrace.traceLiving(player, 3, EntitySelectors.living)
-      if(trace.typeOfHit == RayTraceResult.Type.ENTITY){
+      if(trace != null && trace.typeOfHit == RayTraceResult.Type.ENTITY){
         val entity = trace.entityHit
         ctx.attack(entity, damage)
         knockback(entity)
@@ -91,9 +93,9 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
         entity.motionZ += delta.z
 
         ctx.addSkillExp(0.0035f)
-      }else {
+      } else {
           ctx.addSkillExp(0.0010f)
-        }
+      }
     }
 
     terminate()
@@ -129,7 +131,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
 @RegClientContext(classOf[ShockContext])
 class ShockContextC(par: ShockContext) extends ClientContext(par) {
 
-//  var handEffect: HandRenderer = _
+  var handEffect: IHandRenderer = _
 
   var anim: CompTransformAnim = _
 
@@ -162,19 +164,19 @@ class ShockContextC(par: ShockContext) extends ClientContext(par) {
       math.min(2.0, dt / 0.15)
     }
 
-//    handEffect = new HandRenderer {
-//      override def render(partialTicks: Float) = {
-//        anim.perform(timeProvider())
-//        HandRenderer.renderHand(partialTicks, anim.target)
-//      }
-//    }
+    handEffect = new IHandRenderer {
+      override def renderHand(partialTicks: Float) = {
+        anim.perform(timeProvider())
+        VanillaHandRenderer.renderHand(partialTicks, anim.target)
+      }
+    }
 
-//    HandRenderInterrupter(player).addInterrupt(handEffect)
+    HandRenderOverrideData.get(player).addInterrupt(handEffect)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
-//    HandRenderInterrupter(player).stopInterrupt(handEffect)
+    HandRenderOverrideData.get(player).stopInterrupt(handEffect)
   }
 
 }
