@@ -172,7 +172,8 @@ public class PresetEditUI extends GuiScreen {
     @Override
     public void drawScreen(int mx, int my, float partialTicks) {
         RenderUtils.drawBlackout();
-        
+
+        GL11.glEnable(GL11.GL_BLEND);
         if(transiting) {
             updateTransit();
             transitor.resize(width, height);
@@ -182,6 +183,7 @@ public class PresetEditUI extends GuiScreen {
             foreground.resize(width, height);
             foreground.draw(mx, my);
         }
+        GL11.glDisable(GL11.GL_BLEND);
     }
     
     private float getXFor(int i, int active) {
