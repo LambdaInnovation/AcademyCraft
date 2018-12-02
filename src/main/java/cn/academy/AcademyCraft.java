@@ -1,6 +1,5 @@
 package cn.academy;
 
-import cn.academy.network.NetworkManager;
 import cn.lambdalib2.crafting.CustomMappingHelper;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -55,7 +53,7 @@ public class AcademyCraft {
 
     public static Configuration config;
 
-    public static RecipeRegistry recipes = new RecipeRegistry();
+    public static RecipeRegistry recipes;
 
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
@@ -71,6 +69,7 @@ public class AcademyCraft {
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2018");
         log.info("http://ac.li-dev.cn/");
+        recipes = new RecipeRegistry();
 
         config = new Configuration(event.getSuggestedConfigurationFile());
     }
@@ -82,13 +81,9 @@ public class AcademyCraft {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        // Load recipes names before loading script
-        // FIXME
-//        RegistrationManager.INSTANCE.registerAll(this, "AC_RecipeNames");
 
         // Load script, where names now are available
-        // FIXME
-//        recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
+        recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
 
         if (DEBUG_MODE) {
             Debug.log("|-------------------------------------------------------");
