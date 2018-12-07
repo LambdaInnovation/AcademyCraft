@@ -6,14 +6,18 @@ import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
-import cn.lambdalib2.render.legacy.Tessellator;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -34,6 +38,20 @@ public class RenderEntityBlock extends Render<EntityBlock> {
     @Override
     public void doRender(EntityBlock e, double x, double y,
             double z, float pt, float b) {
+        if (e.block == null)
+            return;
+        RenderUtils.loadTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+        Tessellator t = Tessellator.getInstance();
+        BufferBuilder bb = t.getBuffer();
+
+        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(
+            e._blockState, BlockPos.ORIGIN, e.getEntityWorld(), bb);
+
+        t.draw();
+    }
+
+    private void ref() {
         // FIXME
 //        EntityBlock entity = (EntityBlock) e;
 //
@@ -88,11 +106,12 @@ public class RenderEntityBlock extends Render<EntityBlock> {
 //                }
 //            }
 //        }
+
     }
 
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityBlock entity) {
-        return null;
+        return TextureMap.LOCATION_BLOCKS_TEXTURE;
     }
 }
