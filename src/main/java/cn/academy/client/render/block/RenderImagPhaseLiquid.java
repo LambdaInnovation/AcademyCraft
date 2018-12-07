@@ -107,8 +107,8 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
         double dv = (time * vz) % 1;
         
         RenderUtils.loadTexture(layers[layer]);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
         t.startDrawingQuads();
-        t.setBrightness(15728880);
         t.addVertexWithUV(0, height, 0, du, dv);
         t.addVertexWithUV(1, height, 0, du + density, dv);
         t.addVertexWithUV(1, height, 1, du + density, dv + density);

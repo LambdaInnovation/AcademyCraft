@@ -7,6 +7,7 @@ import cn.lambdalib2.render.legacy.Tessellator;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -75,9 +76,9 @@ public class RenderMarker extends Render {
             GL11.glLineWidth(3f);
 //            BufferBuilder bb = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
 //            bb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_TEX);
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
             t.startDrawing(GL11.GL_LINES);
 
-            t.setBrightness(15728880);
             t.addVertex(0, 0, 0);
             t.addVertex(0, rev ? len : -len, 0);
             t.addVertex(0, 0, 0);
