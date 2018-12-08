@@ -11,10 +11,11 @@ import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, RandUtils, VecUtils, WorldUtils}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
+import net.minecraft.client.particle.ParticleDigging
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, SoundEvents}
-import net.minecraft.util.{EnumFacing, SoundCategory}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes, SoundCategory}
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos, Vec3d}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -249,15 +250,15 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
         def randvel() = ranged(-0.2, 0.2)
         val is = world.getBlockState(pt)
 
-        // TODO use new digging FX
-//        val entity = new EntityDiggingFX(
-//          world,
-//          pt.x + nextDouble(), pt.y + 1 + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
-//          randvel(), 0.1 + nextDouble() * 0.2, randvel(),
-//          is.getBlock,
-//          EnumFacing.UP.ordinal())
-//
-//        Minecraft.getMinecraft.effectRenderer.addEffect(entity)
+        val particleManager = Minecraft.getMinecraft.effectRenderer
+        val particle = particleManager.spawnEffectParticle(
+          EnumParticleTypes.BLOCK_CRACK.getParticleID,
+          pt.getX + nextDouble(), pt.getY + 1 + nextDouble() * 0.5 + 0.2, pt.getZ + nextDouble(),
+          randvel(), 0.1 + nextDouble() * 0.2, randvel(),
+          Block.getIdFromBlock(is.getBlock),
+          EnumFacing.UP.ordinal()
+        ).asInstanceOf[ParticleDigging]
+        particle.setBlockPos(pt)
       }
 
       if (nextFloat() < 0.5f) {
@@ -265,11 +266,12 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
         val pos = (pt.getX + 0.5 + ranged(-.3, .3), pt.getY + 1 + ranged(0, 0.2), pt.getZ + 0.5 + ranged(-.3, .3))
         val vel = (ranged(-.03, .03), ranged(.03, .06), ranged(-.03, .03))
 
+        eff.forceSpawn = true
         eff.setPosition(pos._1, pos._2, pos._3)
         eff.motionX = vel._1
         eff.motionY = vel._2
         eff.motionZ = vel._3
-        world.spawnEntity(eff)
+        print(world.spawnEntity(eff))
       }
     })
   }

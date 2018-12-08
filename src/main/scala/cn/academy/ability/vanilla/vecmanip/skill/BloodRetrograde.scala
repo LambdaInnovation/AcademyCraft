@@ -110,6 +110,7 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
         new Vec3d(headPos.x - look.x * 0.5, headPos.y - look.y * 0.5, headPos.z - look.z * 0.5),
         new Vec3d(headPos.x + look.x * 0.5, headPos.y + look.y * 0.5, headPos.z + look.z * 0.5),
         EntitySelectors.nothing, BlockSelectors.filNormal))
+      .filter(_ != null)
       .foreach(r=> {
         if(r.typeOfHit==RayTraceResult.Type.BLOCK){
           (0 until rangei(2, 3)).foreach(_ => {

@@ -95,7 +95,7 @@ class SmokeEffect(world: World) extends LocalEntity(world) {
     case _ =>  0.0f
   })
 
-  private def deltaTime = (time - initTime) / 1000.0f
+  private def deltaTime = (time - initTime)
 
   private def time = GameTimer.getTime
 

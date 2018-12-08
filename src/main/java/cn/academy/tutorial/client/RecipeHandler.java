@@ -19,6 +19,11 @@ import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.GameTimer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -162,9 +167,11 @@ public enum RecipeHandler {
                     glScaled(2, 2, 1);
                     glTranslatef(0, 0, 1.0F);
 
-                    FontRenderer font = stack.getItem().getFontRenderer(stack);
-//                    itemRender.renderItemIntoGUI(font, mc.getTextureManager(), stack, 0, 0);
-                    // TODO
+                    RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+                    glDisable(GL_LIGHTING);
+                    RenderHelper.enableStandardItemLighting();
+                    renderItem.renderItemIntoGUI(stack, 0, 0);
+                    RenderHelper.disableStandardItemLighting();
 
                     // WTF, you have opened up lighting???
                     glDisable(GL_LIGHTING);

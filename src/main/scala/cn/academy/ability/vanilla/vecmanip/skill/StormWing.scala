@@ -9,7 +9,7 @@ import cn.lambdalib2.util.MathUtils._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.util.{ResourceLocation, SoundCategory}
+import net.minecraft.util.{EnumParticleTypes, ResourceLocation, SoundCategory}
 import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.Skill
@@ -17,8 +17,12 @@ import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.util.RandUtils._
 import cn.lambdalib2.util.{EntitySelectors, Raytrace, VecUtils, WorldUtils}
+import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
+import net.minecraft.client.particle.ParticleBlockDust
 import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
+import net.minecraft.world.World
 
 object StormWing extends Skill("storm_wing", 3) {
 
@@ -325,13 +329,22 @@ class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
       val (cth, sth) = (math.cos(theta), math.sin(theta))
       val (dx, dy, dz) = (rzx * cth, r * math.cos(phi), rzx * sth)
 
-      // TODO fix particle
-//      val particle = new EntityBlockDustFX(world,
-//        player.posX + dx, player.posY + dy, player.posZ + dz,
-//        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.DIRT, 0) { particleGravity = 0.02f }
-//      particle.multipleParticleScaleBy(0.5f)
-//      Minecraft.getMinecraft.effectRenderer.addEffect(particle)
+      val particle = new MyDustParticle(world,
+        player.posX + dx, player.posY + dy, player.posZ + dz,
+        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f,
+        Blocks.DIRT.getDefaultState)
+      particle.setBlockPos(player.getPosition)
+      Minecraft.getMinecraft.effectRenderer.addEffect(particle)
     }
+  }
+
+  class MyDustParticle(world: World, x: Double, y: Double, z: Double,
+                 vx: Double, vy: Double, vz: Double, state: IBlockState)
+    extends ParticleBlockDust(world, x, y, z, vx, vy, vz, state)
+  {
+    particleGravity = .02f
+    multipleParticleScaleBy(.5f)
+
   }
 
 }
