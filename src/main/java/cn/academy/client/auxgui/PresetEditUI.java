@@ -171,9 +171,9 @@ public class PresetEditUI extends GuiScreen {
     
     @Override
     public void drawScreen(int mx, int my, float partialTicks) {
+        GL11.glEnable(GL11.GL_BLEND);
         RenderUtils.drawBlackout();
 
-        GL11.glEnable(GL11.GL_BLEND);
         if(transiting) {
             updateTransit();
             transitor.resize(width, height);
