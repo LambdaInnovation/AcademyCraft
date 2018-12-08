@@ -35,7 +35,7 @@ public class TutorialInit {
                 .addPreview(drawsBlock(ACBlocks.imagsil_ore))
                 .addPreview(drawsBlock(ACBlocks.crystal_ore))
                 .addPreview(drawsBlock(ACBlocks.reso_ore))
-                .addPreview(displayIcon("items/matter_unit/phase_liquid_mat",
+                .addPreview(displayIcon("items/phase_liquid_mat",
                         0, 0,
                         1, Colors.white()))
                 .addPreview(recipes(ACItems.constraint_plate))
