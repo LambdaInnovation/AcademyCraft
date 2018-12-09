@@ -4,11 +4,13 @@ import cn.academy.block.tileentity.TileGeneratorBase;
 import cn.lambdalib2.registry.mc.RegTileEntity;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 
 import static cn.academy.support.rf.RFSupport.if2rf;
 import static cn.academy.support.rf.RFSupport.rf2if;
 
 @RegTileEntity
+@Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyReceiver")
 public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver
 {
     
