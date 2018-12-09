@@ -49,6 +49,7 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     // Replacing stuff in the source
+    // Currently stale, see mySourcesJava task
 	replace "@VERSION@", config.mod_ver
     replace "@LAMBDA_LIB_VERSION@", config.lambdalib_ver
     replace "@MC_VERSION@", config.mc_ver
@@ -120,7 +121,7 @@ idea {
 
 sourceSets.main {
     java.srcDirs = []
-    scala.srcDirs =  ['src/main/java', 'src/main/scala']
+    scala.srcDirs =  ['src/main/scala', 'build/tempSourcesJava']
 }
 processResources {
     // this will ensure that this task is redone when the versions change.
@@ -148,6 +149,22 @@ task deobfJar(type: Jar, dependsOn: 'jar') {
     classifier 'dev'
     from sourceSets.main.output
 }
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+// see: https://stackoverflow.com/questions/30038540/replace-token-in-file-before-building-but-keep-token-in-sources
+// Currently scala compilation task doesn't respect minecraft.replace options. We have to manually replace the tokens by ourselves.
+// That also mean currently minecraft { replace ... } are all useless, but they are kept for future reference.
+task mySourcesJava(type: Copy) {
+    from 'src/main/java'
+    into 'build/tempSourcesJava'
+    filteringCharset = 'UTF-8'
+    filter(ReplaceTokens, tokens: [VERSION: config.mod_ver])
+    filter(ReplaceTokens, tokens: [LAMBDA_LIB_VERSION: config.lambdalib_ver])
+    filter(ReplaceTokens, tokens: [MC_VERSION: config.mc_ver])
+}
+
+compileScala.dependsOn mySourcesJava
 
 artifacts {
     archives deobfJar
