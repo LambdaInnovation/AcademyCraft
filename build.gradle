@@ -165,6 +165,8 @@ task mySourcesJava(type: Copy) {
 }
 
 compileScala.dependsOn mySourcesJava
+retromapReplacedMain.dependsOn compileScala
+extractRangemapReplacedMain.dependsOn compileScala
 
 artifacts {
     archives deobfJar
