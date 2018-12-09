@@ -2,6 +2,10 @@ buildscript {
     repositories {
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -109,6 +113,16 @@ dependencies {
     deobfCompile "net.industrial-craft:industrialcraft-2:2.8.90-ex112"
 }
 
+idea {
+    module{
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
+
+sourceSets.main {
+    java.srcDirs = []
+    scala.srcDirs =  ['src/main/java', 'src/main/scala']
+}
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
