@@ -97,9 +97,6 @@ idea {
     }
 }
 
-configurations {
-    all*.transitive=false
-}
 
 dependencies {
     deobfCompile "cn.lambdalib2:LambdaLib2:${config.lambdalib_ver}"
@@ -112,6 +109,8 @@ dependencies {
     deobfCompile "CraftTweaker2:ZenScript:4.1.9.6"
     deobfCompile "net.industrial-craft:industrialcraft-2:2.8.90-ex112"
 }
+
+//sourceSets.main.compileClasspath += [configurations.provided]
 
 idea {
     module{
@@ -143,3 +142,13 @@ processResources {
 }
 
 compileJava.options.encoding = "UTF-8"
+compileScala.options.encoding = "UTF-8"
+
+task deobfJar(type: Jar, dependsOn: 'jar') {
+    classifier 'dev'
+    from sourceSets.main.output
+}
+
+artifacts {
+    archives deobfJar
+}
