@@ -112,10 +112,10 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
   def calcDropPos: TraceResult = {
     val range: Double = getRange(exp)
     var pos: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.living, BlockSelectors.filEverything)
-    if(pos == null) pos = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
+    if(pos.typeOfHit eq RayTraceResult.Type.MISS) pos = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     val ret: TraceResult = new TraceResult
-    if(pos == null) {
-      val mo = VecUtils.add(player.getPositionVector, VecUtils.multiply(player.getLookVec, range))
+    if(pos.typeOfHit eq RayTraceResult.Type.MISS) {
+      val mo = VecUtils.add(player.getPositionEyes(1.0F), VecUtils.multiply(player.getLookVec, range))
       ret.setPos(mo.x, mo.y, mo.z)
     }
     else if(pos.typeOfHit eq RayTraceResult.Type.BLOCK) ret.setPos(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)

@@ -92,7 +92,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
     var x: Double = .0
     var y: Double = .0
     var z: Double = .0
-    if(mop != null) {
+    if(mop.typeOfHit != RayTraceResult.Type.MISS) {
       x = mop.hitVec.x
       y = mop.hitVec.y
       z = mop.hitVec.z
@@ -124,7 +124,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
         }
       } else y += mop.entityHit.getEyeHeight
     } else {
-      val mo = VecUtils.add(player.getPositionVector, VecUtils.multiply(player.getLookVec, dist))
+      val mo = VecUtils.add(player.getPositionEyes(1f), VecUtils.multiply(player.getLookVec, dist))
       x = mo.x
       y = mo.y
       z = mo.z

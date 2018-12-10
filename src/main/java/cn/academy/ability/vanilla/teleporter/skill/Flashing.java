@@ -308,7 +308,7 @@ public class Flashing extends Skill {
 
             double x, y, z;
 
-            if (mop != null) {
+            if (mop.typeOfHit != RayTraceResult.Type.MISS) {
                 x = mop.hitVec.x;
                 y = mop.hitVec.y;
                 z = mop.hitVec.z;
