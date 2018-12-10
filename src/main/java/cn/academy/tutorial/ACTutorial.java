@@ -64,8 +64,8 @@ public class ACTutorial {
         try {
             String lang = Minecraft.getMinecraft().gameSettings.language;
             InputStream stream = ResourceUtils.getResourceStream(location(lang));
-            if (stream == null) { // Make en_US the default fallback
-                stream = ResourceUtils.getResourceStream(location("en_US"));
+            if (stream == null) { // Make en_us the default fallback
+                stream = ResourceUtils.getResourceStream(location("en_us"));
             }
             if (stream == null) {
                 return unknown;
