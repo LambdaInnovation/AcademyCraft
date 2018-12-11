@@ -37,7 +37,7 @@ public class MFIFRecipes {
         addOreDictRefineRecipe("oreIron",new ItemStack(Items.IRON_INGOT,2));
         addOreDictRefineRecipe("oreEmerald",new ItemStack(Items.EMERALD,2));
         addOreDictRefineRecipe("oreQuartz",new ItemStack(Items.QUARTZ,2));
-        addOreDictRefineRecipe("oreDiamond",new ItemStack(Items.DIAMOND_PICKAXE,2));
+        addOreDictRefineRecipe("oreDiamond",new ItemStack(Items.DIAMOND,2));
         addOreDictRefineRecipe("oreRedstone",new ItemStack(Blocks.REDSTONE_BLOCK));
         addOreDictRefineRecipe("oreLapis",new ItemStack(Items.DYE,12,4));
         addOreDictRefineRecipe("oreCoal",new ItemStack(Items.COAL,2));
