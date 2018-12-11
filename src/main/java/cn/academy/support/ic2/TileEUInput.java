@@ -1,6 +1,8 @@
 package cn.academy.support.ic2;
 
+import cn.academy.AcademyCraft;
 import cn.academy.block.tileentity.TileGeneratorBase;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -15,6 +17,7 @@ import static cn.academy.support.ic2.IC2Support.if2eu;
  * 
  * @author KSkun
  */
+@RegTileEntity
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     private boolean isRegistered  = false;
@@ -42,18 +45,18 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
         return if2eu(addEnergy(eu2if(amount)));
     }
-    
+
     @Override
-    public void update() {
-        if(!isRegistered && !getWorld().isRemote) {
-            isRegistered = MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-        }
-        super.update();
+    public void onLoad()
+    {
+        if(!getWorld().isRemote)
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+        super.onLoad();
     }
     
     @Override
     public void onChunkUnload() {
-        if(!isRegistered && !getWorld().isRemote) {
+        if(!getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.onChunkUnload();
@@ -61,7 +64,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     @Override
     public void invalidate() {
-        if(!isRegistered && !getWorld().isRemote) {
+        if(!getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.invalidate();
