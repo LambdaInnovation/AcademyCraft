@@ -167,6 +167,11 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
     }
 
     @Override
+    public Vec3d getRayPosition() {
+        return getPositionVector();
+    }
+
+    @Override
     public double getGlowAlpha() {
         long dt = getDeltaTime();
         long lifeMS = getLifeMS();

@@ -40,7 +40,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         
         doTransform(ray);
         
-        Vec3d position = ray.getPositionVector();
+        Vec3d position = ray.getRayPosition();
         Vec3d relativePosition = VecUtils.subtract(position,
                 new Vec3d(x, y, y));
         glTranslated(x, y, z);

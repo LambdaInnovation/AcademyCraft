@@ -12,7 +12,7 @@ public interface IRay extends ViewOptimize.IAssociatePlayer {
     
     void onRenderTick();
     
-    Vec3d getPositionVector();
+    Vec3d getRayPosition();
     
     /**
      * @return If this ray is spawned at player's hand and need to be treated differently for 1st and 3rd person
