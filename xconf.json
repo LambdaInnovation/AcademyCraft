@@ -18,7 +18,8 @@
       ],
       "block": [
         "cn.academy.block.block.BlockNode.NodeType",
-        "cn.academy.ability.develop.DeveloperType"
+        "cn.academy.ability.develop.DeveloperType",
+        "cn.lambdalib2.multiblock.*"
       ]
     }
   }
