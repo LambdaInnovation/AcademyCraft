@@ -835,7 +835,7 @@ private object Common {
               console.output(Console.localized("dev_fail"))
             }
 
-            console.pause(500)
+            console.pause(0.5)
             console.enqueueRebuild()
           }
         })
@@ -868,7 +868,7 @@ private object Common {
               console.output(Console.localized("reset_fail"))
             }
 
-            console.pause(500)
+            console.pause(0.5)
             console.enqueueRebuild()
           }
         })
@@ -960,12 +960,12 @@ private object Common {
     private var input: String = ""
 
     enqueue(slowPrintTask(localized("init", player.getName)))
-    pause(400)
+    pause(0.4)
 
     val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
       ((64 + RandUtils.nextInt(4)) + "%") :: localized("boot_failed") :: Nil
 
-    animSequence(300, numSeq: _*)
+    animSequence(0.3, numSeq: _*)
 
     {
       val startupText: String = (emergency, hasDeveloper) match {
@@ -1064,7 +1064,7 @@ private object Common {
 
     def outputln() = output("\n")
 
-    def animSequence(time: Long, strs: String*) = {
+    def animSequence(time: Double, strs: String*) = {
       for ((s, idx) <- strs.zipWithIndex) {
         enqueue(new TimedTask {
           override def life = time
@@ -1133,7 +1133,7 @@ private object Common {
   }
 
   def slowPrintTask(str: String)(implicit console: Console): Task = new Task {
-    val PerCharTime = 0.002
+    val PerCharTime = 0.01
 
     private var idx = 0
     private var last :Double = -1
