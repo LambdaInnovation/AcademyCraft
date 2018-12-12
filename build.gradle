@@ -64,7 +64,8 @@ repositories {
     }
     maven {
         name = "private"
-        url = "http://git.project-gearbox.net:9010/content/repositories/thirdparty"
+        url = "http://139.199.206.70:8081/nexus/content/groups/public"
+        // url = "http://git.project-gearbox.net:9010/content/repositories/thirdparty"
     }
     maven {
         name = "ic2"
