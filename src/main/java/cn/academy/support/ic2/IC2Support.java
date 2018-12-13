@@ -28,13 +28,15 @@ import net.minecraft.item.ItemStack;
  * @author KSkun
  */
 public class IC2Support {
-    
+    static final String IC2_MODID = "ic2";
+
+    // A placeholder interface to express @Optional.Interface dependency
+    static final String IC2_IFACE = "ic2.api.energy.tile.IEnergySource";
+
     /**
      * The convert rate from EU to IF(1IF = <CONV_RATE>EU).
      */
     public static final double CONV_RATE = 1;
-
-    private static final String MODID = "ic2";
 
     private static IC2SkillHelper helper;
 
@@ -53,7 +55,7 @@ public class IC2Support {
         return ifEnergy * CONV_RATE;
     }
 
-    @Optional.Method(modid=MODID)
+    @Optional.Method(modid= IC2_MODID)
     @StateEventCallback
     public static void init(FMLInitializationEvent event){
         EnergyBlockHelper.register(new EUSinkManager());
@@ -80,7 +82,7 @@ public class IC2Support {
     }
 
 
-    @Optional.Method(modid=MODID)
+    @Optional.Method(modid= IC2_MODID)
     @RegistryCallback
     private static void registerBlocks(RegistryEvent.Register<Block> event) {
         helper = new IC2SkillHelper();
@@ -95,7 +97,7 @@ public class IC2Support {
         event.getRegistry().register(euOutput);
     }
 
-    @Optional.Method(modid=MODID)
+    @Optional.Method(modid= IC2_MODID)
     @RegistryCallback
     private static void registerItems(RegistryEvent.Register<Item> event){
         item_euInput.setRegistryName(euInput.getRegistryName());

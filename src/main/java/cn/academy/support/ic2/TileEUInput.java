@@ -9,6 +9,7 @@ import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Optional;
 
 import static cn.academy.support.ic2.IC2Support.eu2if;
 import static cn.academy.support.ic2.IC2Support.if2eu;
@@ -18,6 +19,7 @@ import static cn.academy.support.ic2.IC2Support.if2eu;
  * @author KSkun
  */
 @RegTileEntity
+@Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     private boolean isRegistered  = false;
