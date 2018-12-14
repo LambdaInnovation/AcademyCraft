@@ -26,7 +26,9 @@ configFile.withReader {
 
 version = config.mod_ver
 group = config.mod_group 
-archivesBaseName = config.mod_name+System.getenv()['BRANCH']
+archivesBaseName = config.mod_name+"-"+System.getenv()['BRANCH']
+ext.usr = "$System.env.USR"
+ext.pswd = "$System.env.PSWD"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
