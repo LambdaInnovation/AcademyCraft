@@ -27,7 +27,7 @@ configFile.withReader {
 version = config.mod_ver
 group = config.mod_group 
 archivesBaseName = config.mod_name
-appendix = TRAVIS_BRANCH
+appendix = BRANCH
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
