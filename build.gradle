@@ -27,7 +27,7 @@ configFile.withReader {
 version = config.mod_ver
 group = config.mod_group 
 archivesBaseName = config.mod_name
-if(System.getenv()['BRANCH']!="null")
+if(System.getenv()['BRANCH']!=null)
 {
     archivesBaseName+=("-"+System.getenv()['BRANCH'])
 }
