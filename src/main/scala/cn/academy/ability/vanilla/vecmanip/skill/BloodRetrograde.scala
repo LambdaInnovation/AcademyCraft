@@ -5,7 +5,6 @@ import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegCli
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityBloodSplash
 import cn.academy.ability.vanilla.generic.client.effect.BloodSprayEffect
-import cn.academy.ability.vanilla.teleporter.skill.TraceResult
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{BlockSelectors, EntitySelectors, Raytrace}
 import net.minecraft.entity.EntityLivingBase
