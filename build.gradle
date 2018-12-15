@@ -128,7 +128,7 @@ sourceSets.main {
 idea {
     module{
         scopes.PROVIDED.plus += [configurations.provided]
-        sourceDirs = ['src/main/java', 'src/main/scala']
+        sourceDirs = [file('src/main/java'), file('src/main/scala')]
     }
 }
 
