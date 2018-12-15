@@ -86,8 +86,8 @@ public class RFSupport {
         rfInput.setTranslationKey("ac_rf_input");
         event.getRegistry().register(rfInput);
 
-        rfOutput.setRegistryName("academy:rf_output");
-        rfOutput.setTranslationKey("rf_output");
+        rfOutput.setRegistryName("academy:ac_rf_output");
+        rfOutput.setTranslationKey("ac_rf_output");
         event.getRegistry().register(rfOutput);
 
     }

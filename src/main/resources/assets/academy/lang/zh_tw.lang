@@ -49,13 +49,13 @@ item.ac_induction_factor.name=能力誘導因子
 item.ac_tutorial.name=御坂雲終端
 
 # 方塊名稱
-tile.ac_constraint_metal_ore.name=束能金屬礦
+tile.ac_constraint_metal.name=束能金屬礦
 tile.ac_crystal_ore.name=虛能水晶礦
-tile.ac_imag_silicon_ore.name=虛像矽礦
-tile.ac_reso_crystal_ore.name=諧振水晶礦
+tile.ac_imagsil_ore.name=虛像矽礦
+tile.ac_reso_ore.name=諧振水晶礦
 tile.ac_machine_frame.name=機械框架
 
-tile.ac_phase_liquid.name=虛相位液體
+tile.ac_imag_liquid.name=虛相位液體
 
 tile.ac_imag_fusor.name=虛能融合機
 tile.ac_matrix.name=無線虛能矩陣
@@ -65,7 +65,7 @@ tile.ac_node_advanced.name=高階無線虛能節點
 tile.ac_metal_former.name=金屬處理機
 tile.ac_solar_gen.name=太陽能能量發生機
 tile.ac_cat_engine.name=吐司貓
-tile.ac_phase_generator.name=虛相位能量發生機
+tile.ac_phase_gen.name=虛相位能量發生機
 tile.ac_windgen_base.name=風力能量發生器 - 支架底座
 tile.ac_windgen_pillar.name=風力能量發生器 - 支架
 tile.ac_windgen_main.name=風力能量發生器 - 主機
@@ -73,8 +73,8 @@ tile.ac_eu_output.name=能源橋 (IC2 EU輸出)
 tile.ac_eu_input.name=能源橋 (IC2 EU輸入) 
 tile.ac_rf_output.name=能源橋 (CoFH RF輸出)
 tile.ac_rf_input.name=能源橋 (CoFH RF輸入)
-tile.ac_developer_normal.name=基礎能力開發機
-tile.ac_developer_advanced.name=高階能力開發機
+tile.ac_dev_normal.name=基礎能力開發機
+tile.ac_dev_advanced.name=高階能力開發機
 tile.ac_ability_interferer.name=能力干涉方塊
 
 # 資料終端
