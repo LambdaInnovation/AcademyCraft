@@ -124,7 +124,6 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
 
   final val lifeTime: Int = _time
   final val range: Double = Math.min(_range, 28)
-  val safeDistSq = range * 0.2 * range * 0.2
 
   var lastX, lastY, lastZ: Double = 0d
 
@@ -141,11 +140,8 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
     super.onUpdate()
 
     setPosition(target.posX, target.posY, target.posZ)
-
-    val distSq = MathUtils.distanceSq(posX, posY, posZ, lastX, lastY, lastZ)
-    if(distSq > safeDistSq) {
+    if (ticksExisted % 5 == 0)
       updateBlocks()
-    }
 
     if(ticksExisted > lifeTime) {
       setDead()
@@ -153,8 +149,11 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
   }
 
   private def updateBlocks() = {
+    // TODO: Do not allocate at runtime
     val set: mutable.Buffer[BlockPos] = WorldUtils.getBlocksWithin(this, range, 1000, blockFilter)
 
+    aliveSims.clear()
+    // FIXME: Doing this calculation at runtime is a heavy burden for CPU
     set.foreach(bp => aliveSims.add(new MineElem(bp.getX, bp.getY, bp.getZ,
       if(isAdvanced) Math.min(3, world.getBlockState(bp).getBlock.getHarvestLevel(world.getBlockState(bp)) + 1) else 0)))
 
