@@ -91,12 +91,14 @@ public class WiWorldData extends WorldSavedData {
         
         return true;
     }
+
+    private final List<BlockPos> _bufferBlockPos = new ArrayList<>();
     
     public Collection<WirelessNet> rangeSearch(int x, int y, int z, double range, int max) {
-        Collection<BlockPos> bps = WorldUtils.getBlocksWithin(world, x, y, z, range, max, filterWirelessBlocks);
+        WorldUtils.getBlocksWithin(_bufferBlockPos, world, x, y, z, range, max, filterWirelessBlocks);
         
         Set<WirelessNet> set = new HashSet<>();
-        for(BlockPos bp : bps) {
+        for(BlockPos bp : _bufferBlockPos) {
             TileEntity te = world.getTileEntity(bp);
             WirelessNet net;
             if(te instanceof IWirelessMatrix) {
