@@ -172,7 +172,7 @@ ac.ability.generic.mind_course.name=思维修养课程
 
 ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的有效持续时间延长。提高最大计算力1000点。
 ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力。提高最大计算力1000点，最大过载100点。
-ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想。计算力恢复速率提高20%。
+ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想。计算力恢复速率提高20%%。
 
 ## 电击使
 ac.ability.electromaster.name=电击使

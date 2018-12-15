@@ -172,7 +172,7 @@ ac.ability.generic.mind_course.name=思維修養課程
 
 ac.ability.generic.brain_course.desc=鍛鍊能力者的大腦，使其能力的有效持續時間延長。提高最大計算力1000點。
 ac.ability.generic.brain_course_advanced.desc=更深入有效的開發大腦的思維能力。提高最大計算力1000點，最大過載100點。
-ac.ability.generic.mind_course.desc=學習如何更好的放鬆自己的思想。計算力恢復速率提高20%。
+ac.ability.generic.mind_course.desc=學習如何更好的放鬆自己的思想。計算力恢復速率提高20%%。
 
 ## 電擊使
 ac.ability.electromaster.name=電擊使

@@ -173,7 +173,7 @@ ac.ability.generic.mind_course.name=Mind Course
 
 ac.ability.generic.brain_course.desc=Undergo training for your brain. Increases Max CP by 1000.
 ac.ability.generic.brain_course_advanced.desc=Develop the thinking ability of your brain deeply. Increases Max CP by 1000 and Max Overload by 100.
-ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%.
+ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%%.
 
 ## Electromaster
 ac.ability.electromaster.name=Electromaster
