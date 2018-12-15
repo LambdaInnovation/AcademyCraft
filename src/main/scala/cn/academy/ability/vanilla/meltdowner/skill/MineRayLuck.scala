@@ -35,7 +35,7 @@ class LuckMRContext(p: EntityPlayer) extends MRContext(p, MineRayLuck) {
     val st = world.getBlockState(pos)
     val snd = block.getSoundType(st, world, pos, p).getBreakSound
     world.playSound(x + 0.5, y + 0.5, z + 0.5, snd, SoundCategory.BLOCKS, .5f, 1f, false)
-    block.dropBlockAsItemWithChance(world, pos, world.getBlockState(pos), 1.0f, 0)
+    block.dropBlockAsItemWithChance(world, pos, world.getBlockState(pos), 1.0f, 3)
     world.setBlockState(pos, Blocks.AIR.getDefaultState)
   }
 
