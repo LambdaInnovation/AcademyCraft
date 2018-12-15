@@ -195,14 +195,14 @@ ac.ability.electromaster.thunder_bolt.name=雷击之枪
 
 ac.ability.electromaster.arc_gen.desc=激发出一道较微弱的电弧，会在落点处扩散来造成伤害，如果直击到易燃方块，可能会将其点燃。
 ac.ability.electromaster.mag_manip.desc=使用电磁力操纵并且移动世界中的可磁化物体，甚至将它们投掷出去杀伤敌人。
-ac.ability.electromaster.mine_detect.desc=闭上眼睛感受周围的磁力线流动，可以让你看到身旁珍惜矿物资源的痕迹。
+ac.ability.electromaster.mine_detect.desc=闭上眼睛感受周围的磁力线流动，可以让你看到身旁珍稀矿物资源的痕迹。
 ac.ability.electromaster.railgun.desc=利用电磁诱导原理，将硬币高速射出，在全力一击的情况下有恐怖的破坏力。
 ac.ability.electromaster.mag_movement.desc=向外界的某个可磁化物体释放电磁力，使自己的身体快速移动。
 ac.ability.electromaster.iron_sand.desc=通过分离和操纵身体周围的铁砂，创造出变化多端而又极其危险的攻击效果。
 ac.ability.electromaster.charging.desc=对手持的物品或世界中的电力方块进行充能。
 ac.ability.electromaster.body_intensify.desc=操纵自身生物电，在短时间内强化身体素质。
 ac.ability.electromaster.thunder_clap.desc=操纵大气中的电磁场氛围，催化出雷云，并牵引其中的电力产生一次破坏性的落雷。
-ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射.击中实体后，猛烈的电流会爆发出去产生第二次伤害。
+ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射。击中实体后，猛烈的电流会爆发出去产生第二次伤害。
 
 ## 传送使
 ac.ability.teleporter.name=传送使
