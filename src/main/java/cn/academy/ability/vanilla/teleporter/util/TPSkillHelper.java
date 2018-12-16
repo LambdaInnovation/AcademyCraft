@@ -27,8 +27,6 @@ public class TPSkillHelper {
 
     public static void incrTPCount(EntityPlayer player) {
         int i = player.getEntityData().getInteger(TPC_ID) + 1;
-        if (i >= 400) {
-        }
         player.getEntityData().setInteger(TPC_ID, i);
     }
 

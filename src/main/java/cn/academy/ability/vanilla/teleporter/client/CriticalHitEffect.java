@@ -2,6 +2,7 @@ package cn.academy.ability.vanilla.teleporter.client;
 
 import cn.academy.client.render.particle.FormulaParticleFactory;
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper.TPCritHitEvent;
+import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
 import net.minecraft.entity.Entity;
@@ -17,12 +18,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class CriticalHitEffect {
+    private CriticalHitEffect() {}
 
+    @RegEventHandler
     private static CriticalHitEffect instance = new CriticalHitEffect();
-
-    private CriticalHitEffect() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
 
     @SubscribeEvent
     public void onTPCritHit(TPCritHitEvent event) {
