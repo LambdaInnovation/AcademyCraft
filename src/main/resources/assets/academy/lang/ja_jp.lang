@@ -55,7 +55,7 @@ tile.ac_imagsil_ore.name=虚能シリコン鉱石
 tile.ac_reso_ore.name=共振リスタル鉱石
 tile.ac_machine_frame.name=マシーンフレーム
 
-tile.ac_imag_liquid.name=虚相位液体
+tile.ac_imag_phase.name=虚相位液体
 
 tile.ac_imag_fusor.name=虚能融合機
 tile.ac_matrix.name=無線虚能マトリックス

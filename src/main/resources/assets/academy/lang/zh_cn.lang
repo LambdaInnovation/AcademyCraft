@@ -55,7 +55,7 @@ tile.ac_imagsil_ore.name=虚像硅矿
 tile.ac_reso_ore.name=谐振水晶矿
 tile.ac_machine_frame.name=机械框架
 
-tile.ac_imag_liquid.name=虚相位液体
+tile.ac_imag_phase.name=虚相位液体
 
 tile.ac_imag_fusor.name=虚能融合机
 tile.ac_matrix.name=无线虚能矩阵
