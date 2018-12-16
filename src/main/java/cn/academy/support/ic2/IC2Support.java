@@ -8,11 +8,14 @@ import cn.academy.support.EnergyItemHelper;
 import cn.academy.support.EnergyItemHelper.EnergyItemManager;
 import cn.lambdalib2.registry.RegistryCallback;
 import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.SideUtils;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -103,10 +106,19 @@ public class IC2Support {
         item_euInput.setRegistryName(euInput.getRegistryName());
         item_euInput.setTranslationKey(euInput.getTranslationKey());
         event.getRegistry().register(item_euInput);
+        if(SideUtils.isClient()){
+            ModelLoader.setCustomModelResourceLocation(item_euInput, 0,
+                    new ModelResourceLocation("academy:eu_input", "inventory"));
+        }
+
 
         item_euOutput.setRegistryName(euOutput.getRegistryName());
         item_euOutput.setTranslationKey(euOutput.getTranslationKey());
         event.getRegistry().register(item_euOutput);
+        if(SideUtils.isClient()){
+            ModelLoader.setCustomModelResourceLocation(item_euOutput, 0,
+                    new ModelResourceLocation("academy:eu_output", "inventory"));
+        }
     }
 
     public static IC2SkillHelper getHelper() {
