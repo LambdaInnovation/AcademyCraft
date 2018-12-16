@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +49,8 @@ public class IC2SkillHelper {
 
     @SideOnly(Side.CLIENT)
     public void spawnArc(EntityPlayer player) {
-        List<BlockPos> blockList = WorldUtils.getBlocksWithin(player, 5, 100, blockSelector);
+        List<BlockPos> blockList = new ArrayList<>();
+        WorldUtils.getBlocksWithin(blockList, player, 5, 100, blockSelector);
         World world = player.world;
         for(BlockPos bp : blockList) {
             world.spawnEntity(new EntitySurroundArc(world, bp.getX(), bp.getY(), bp.getZ(), 1, 1));
