@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 public class CurrentChargingHUD extends AuxGui {
     
     private static final ResourceLocation mask = Resources.getTexture("effects/em_intensify_mask");
-    static final long BLEND_TIME = 500, BLEND_OUT_TIME = 200;
+    static final double BLEND_TIME = 0.5, BLEND_OUT_TIME = 0.2;
     
     SubArcHandler2D arcHandler;
     
@@ -83,10 +83,10 @@ public class CurrentChargingHUD extends AuxGui {
         
         double mAlpha;
         if(isBlendingOut()) {
-            mAlpha = 1 - (double) (GameTimer.getTime() - blendTime) / BLEND_OUT_TIME;
+            mAlpha = 1 - (GameTimer.getTime() - blendTime) / BLEND_OUT_TIME;
             if(mAlpha < 0) mAlpha = 0;
         } else {
-            mAlpha = Math.min((double) this.getTimeActive() / BLEND_TIME, 1.0);
+            mAlpha = Math.min(this.getTimeActive() / BLEND_TIME, 1.0);
         }
         
         /* Black Mask */ {
