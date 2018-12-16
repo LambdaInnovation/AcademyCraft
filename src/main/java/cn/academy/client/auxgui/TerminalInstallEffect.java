@@ -28,9 +28,9 @@ import net.minecraft.util.ResourceLocation;
 @SideOnly(Side.CLIENT)
 public class TerminalInstallEffect extends AuxGui {
     
-    private static final long ANIM_LENGTH = 4000L;
-    private static final long WAIT = 700L;
-    private static final long BLEND_IN = 200L, BLEND_OUT = 200L;
+    private static final double ANIM_LENGTH = 4;
+    private static final double WAIT = 0.7;
+    private static final double BLEND_IN = 0.2, BLEND_OUT = 0.2;
 
     private static WidgetContainer loaded;
     @StateEventCallback
@@ -85,11 +85,11 @@ public class TerminalInstallEffect extends AuxGui {
             @Override
             public void handleEvent(Widget w, FrameEvent event) {
                 double alpha;
-                long dt = (long) (getTimeActive() * 1000);
+                double dt = getTimeActive() ;
                 if(dt < BLEND_IN) {
-                    alpha = (double) (dt) / BLEND_IN;
+                    alpha =  (dt) / BLEND_IN;
                 } else if(dt > ANIM_LENGTH) {
-                    alpha = Math.max(0, 1 - (double) (dt - ANIM_LENGTH) / BLEND_OUT);
+                    alpha = Math.max(0, 1 -  (dt - ANIM_LENGTH) / BLEND_OUT);
                 } else {
                     alpha = 1;
                 }
