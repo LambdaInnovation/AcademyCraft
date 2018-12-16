@@ -84,55 +84,60 @@ public class ArcGen extends Skill
 
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
         private void s_perform(){
-        if(consume()) {
-            World world = player.world;
-            // Perform ray trace
-            RayTraceResult result = Raytrace.traceLiving(player, range, null, blockFilter);
+            if(consume()) {
+                World world = player.world;
+                // Perform ray trace
+                RayTraceResult result = Raytrace.traceLiving(player, range, null, blockFilter);
 
-            sendToClient(MSG_EFFECT, range);
+                sendToClient(MSG_EFFECT, range);
 
-            if (result != null) {
-                float expincr = 0f;
-                if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-                    EMDamageHelper.attack(ctx, result.entityHit, damage);
-                    expincr = getExpIncr(true);
-                }
-                else
+                if (result != null)
                 {
-                    //BLOCK
-                    BlockPos pos = result.getBlockPos();
-                    IBlockState ibs = player.world.getBlockState(pos);
-                    Block block = ibs.getBlock();
-                    if (block == Blocks.WATER) {
-                        if (RandUtils.ranged(0, 1) < fishProb) {
-                            world.spawnEntity(new EntityItem(
-                                    world,
-                                    result.hitVec.x,
-                                    result.hitVec.y,
-                                    result.hitVec.z,
-                                    new ItemStack(Items.COOKED_FISH)));
-                            ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
-                        }
+                    float expincr = 0f;
+                    if (result.typeOfHit == RayTraceResult.Type.ENTITY)
+                    {
+                        EMDamageHelper.attack(ctx, result.entityHit, damage);
+                        expincr = getExpIncr(true);
                     }
                     else
+                    {
+                        //BLOCK
+                        BlockPos pos = result.getBlockPos();
+                        IBlockState ibs = player.world.getBlockState(pos);
+                        Block block = ibs.getBlock();
+                        if (block == Blocks.WATER)
                         {
-                        if (RandUtils.ranged(0, 1) < igniteProb) {
-                            pos = pos.add(0, 1, 0);
-                            if (world.isAirBlock(pos)) {
-                                world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+                            if (RandUtils.ranged(0, 1) < fishProb)
+                            {
+                                world.spawnEntity(new EntityItem(
+                                        world,
+                                        result.hitVec.x,
+                                        result.hitVec.y,
+                                        result.hitVec.z,
+                                        new ItemStack(Items.COOKED_FISH)));
                                 ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
                             }
                         }
+                        else
+                        {
+                            if (RandUtils.ranged(0, 1) < igniteProb)
+                            {
+                                pos = pos.add(0, 1, 0);
+                                if (world.isAirBlock(pos))
+                                {
+                                    world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+                                    ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
+                                }
+                            }
+                        }
+                        expincr = getExpIncr(false);
                     }
-                    expincr = getExpIncr(false);
+                    ctx.addSkillExp(expincr);
                 }
-                ctx.addSkillExp(expincr);
+                ctx.setCooldown((int)lerpf(15, 5, ctx.getSkillExp()));
             }
-
-            ctx.setCooldown((int)lerpf(15, 5, ctx.getSkillExp()));
+            terminate();
         }
-        terminate();
-    }
 
         private float getExpIncr(boolean effectiveHit)
         {
