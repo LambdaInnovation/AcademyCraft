@@ -110,8 +110,13 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
     ctx.addSkillExp(0.001f * balls.size)
   }
 
-  private def newDest: Vec3d = VecUtils.lookingPos(player, RAY_RANGE)
-    .rotatePitch( MathUtils.toRadians( (RandUtils.nextFloat - 0.5F) * 5) )
-    .rotateYaw( MathUtils.toRadians( (RandUtils.nextFloat - 0.5F) * 5 ) )
+  private def newDest: Vec3d = {
+    val begin = VecUtils.lookingPos(player, RAY_RANGE)
+    val look = player.getLookVec
+      .rotatePitch(MathUtils.toRadians((RandUtils.nextFloat - 0.5F) * 25))
+      .rotateYaw(MathUtils.toRadians((RandUtils.nextFloat - 0.5F) * 25))
+
+    begin.add(look.scale(RAY_RANGE))
+  }
 
 }
