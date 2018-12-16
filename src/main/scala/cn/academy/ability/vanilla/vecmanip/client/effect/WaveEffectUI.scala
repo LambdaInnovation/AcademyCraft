@@ -11,6 +11,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.common.MinecraftForge
 import org.apache.commons.lang3.tuple.Pair.of
+import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.{Vector2f, Vector3f}
 
 class WaveEffectUI(val maxAlpha : Float,
@@ -18,7 +19,7 @@ class WaveEffectUI(val maxAlpha : Float,
                    val intensity: Float) {
 
   case class Ripple(life: Float,
-                    pos: (Float, Float),
+                    pos: Vector2f,
                     var timeAlive: Double,
                     var size: Float) {
 
@@ -44,13 +45,6 @@ class WaveEffectUI(val maxAlpha : Float,
 
   private val material = new RenderMaterial(
     ShaderScript.load(Resources.getShader("vm_wave.glsl"))
-//    LayoutMapping.create(
-//      of("vertexPos", LayoutType.VERTEX),
-//      of("uv", LayoutType.VERTEX),
-//      of("offset", LayoutType.INSTANCE),
-//      of("size", LayoutType.INSTANCE),
-//      of("alpha", LayoutType.INSTANCE)
-//    )
   )
 
   private val mesh = new Mesh
@@ -98,8 +92,8 @@ class WaveEffectUI(val maxAlpha : Float,
     // Spawn new ripples
     if (RandUtils.nextFloat < deltaTime * intensity) {
       val r_size = RandUtils.rangef(0.8f, 1.2f) * avgSize
-      val r_life = RandUtils.rangei(2, 3)
-      val pos = (RandUtils.nextFloat() * width,
+      val r_life = RandUtils.rangef(1.5f, 2.5f)
+      val pos = new Vector2f(RandUtils.nextFloat() * width,
         RandUtils.nextFloat() * height)
 
       val ripple = Ripple(r_life, pos, 0, r_size)
@@ -114,15 +108,16 @@ class WaveEffectUI(val maxAlpha : Float,
 
     for (ripple <- rippleList) {
       val instance = new InstanceData
-//      instance.set
-      // TODO support instancing
-//      instance.setVec2(l_offset, ripple.pos._1, ripple.pos._2)
-//      instance.setFloat(l_size, ripple.realSize)
-//      instance.setFloat(l_alpha, maxAlpha * ripple.alpha)
+      instance.setVec2("offset", ripple.pos)
+      instance.setFloat("size", ripple.realSize)
+      instance.setFloat("alpha", maxAlpha * ripple.alpha)
       pass.draw(material, mesh, instance)
     }
 
     pass.dispatch()
+    GL11.glEnable(GL11.GL_ALPHA_TEST);
+    GL11.glDepthMask(true);
+    GL11.glDepthFunc(GL11.GL_LEQUAL);
   }
 
   private def currentTime: Double = GameTimer.getTime

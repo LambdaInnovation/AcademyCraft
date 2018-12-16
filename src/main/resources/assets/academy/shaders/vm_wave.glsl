@@ -15,7 +15,10 @@ Properties {
 }
 
 Settings {
-    
+    DepthTest Always;
+    DepthMask Off;
+    Blend On;
+    BlendFunc SrcAlpha OneMinusSrcAlpha;
 }
 
 Vertex {
