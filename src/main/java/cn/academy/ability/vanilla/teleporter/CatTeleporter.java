@@ -16,8 +16,8 @@ public class CatTeleporter extends Category {
         spaceFluct = SpaceFluctuation.instance,
         markTP = MarkTeleport$.MODULE$,
         locTP = LocationTeleport$.MODULE$,
-        penetrateTP = PenetrateTeleport$.MODULE$,
-        threateningTP = ThreateningTeleport$.MODULE$,
+        penetrateTP = PenetrateTeleport.instance,
+        threateningTP = ThreateningTeleport.instance,
         shiftTP = ShiftTeleport.instance,
         fleshRipping = FleshRipping.instance,
         flashing = Flashing.instance;
