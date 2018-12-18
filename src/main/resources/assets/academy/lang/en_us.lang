@@ -55,7 +55,7 @@ tile.ac_imagsil_ore.name=Imag Silicon Ore
 tile.ac_reso_ore.name=Resonant Crystal Ore
 tile.ac_machine_frame.name=Machine Frame
 
-tile.ac_imag_liquid.name=Imag Phase Liquid
+tile.ac_imag_phase.name=Imag Phase Liquid
 
 tile.ac_imag_fusor.name=Imag Fusor
 tile.ac_matrix.name=Wireless Imag Matrix
@@ -334,9 +334,9 @@ ac.command.aim.nonecathint=You haven't learned any ability!
 
 # Advancement
 advancements.general.root=Academy Craft
-advancements.general.root.desc=The start of everything
-advancements.general.open_tutorial=First Contact
-advancements.general.open_tutorial.desc=Open Misaka Cloud
+advancements.general.root.desc=The start of ti
+advancements.general.open_misaka_cloud=First Contact
+advancements.general.open_misaka_cloud.desc=Open Misaka Cloud
 advancements.general.getting_phase=Mysterious and powerful
 advancements.general.getting_phase.desc=Get a matter unit with imagine phase.
 advancements.general.phase_generator=New energy

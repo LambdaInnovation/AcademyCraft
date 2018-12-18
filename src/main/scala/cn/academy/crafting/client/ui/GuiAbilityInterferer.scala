@@ -125,7 +125,7 @@ object GuiAbilityInterferer {
       button.listens[LeftClickEvent](() => {
         tile.setEnabledClient(!state, () => setState(!state))
       })
-      button.listens[FrameEvent](() => setState(tile.enabled))
+      button.listens[FrameEvent](() => tile.enabled)
     }
 
     {

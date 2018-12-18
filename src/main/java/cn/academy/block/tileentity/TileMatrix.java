@@ -1,6 +1,7 @@
 package cn.academy.block.tileentity;
 
 import cn.academy.ACItems;
+import cn.academy.AcademyCraft;
 import cn.academy.block.tileentity.TileInventory;
 import cn.academy.worldgen.WorldGenInit;
 import cn.academy.energy.api.block.IWirelessMatrix;
@@ -135,7 +136,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     
     public int getCoreLevel() {
         ItemStack stack = getStackInSlot(3);
-        return stack == null ? 0 : stack.getItemDamage() + 1;
+        return stack.isEmpty() ? 0 : stack.getItemDamage() + 1;
     }
     
     @Override
