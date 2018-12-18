@@ -21,8 +21,8 @@ import org.lwjgl.util.Color;
 @RegEntityRender(EntityRippleMark.class)
 public class RippleMarkRender extends Render<EntityRippleMark> {
     
-    final long CYCLE = 3600;
-    final long timeOffsets[] = { 0, -1200, -2400 };
+    final double CYCLE = 3.6;
+    final double timeOffsets[] = { 0, -1.2, -2.4};
     LegacyMesh mesh;
     SimpleMaterial material;
     
@@ -91,12 +91,12 @@ public class RippleMarkRender extends Render<EntityRippleMark> {
         if(mod < BIN)
             return (float) mod / BIN;
         if(mod > CYCLE - BOUT)
-            return 1 - ((float) mod - (CYCLE - BOUT)) / BOUT;
+            return (float) (1 - ((float) mod - (CYCLE - BOUT)) / BOUT);
         return 1.0f;
     }
     
     private float getSize(double mod) {
-        return MathUtils.lerpf(1.9f, 1.4f, (float) mod / CYCLE);
+        return MathUtils.lerpf(1.9f, 1.4f, (float) (mod / CYCLE));
     }
 
     @Override
