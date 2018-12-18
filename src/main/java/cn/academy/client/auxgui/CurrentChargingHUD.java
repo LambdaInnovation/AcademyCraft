@@ -109,7 +109,7 @@ public class CurrentChargingHUD extends AuxGui {
             GL11.glPopMatrix();
         }
         
-        if(isBlendingOut() && GameTimer.getTime() - blendTime > 1000)
+        if(isBlendingOut() && GameTimer.getTime() - blendTime > 1)
             dispose();
     }
     
