@@ -118,9 +118,10 @@ class WaveEffectUI(val maxAlpha : Float,
     }
 
     pass.dispatch()
-    GL11.glEnable(GL11.GL_ALPHA_TEST);
-    GL11.glDepthMask(true);
-    GL11.glDepthFunc(GL11.GL_LEQUAL);
+    GL11.glEnable(GL11.GL_ALPHA_TEST)
+    GL11.glDepthMask(true)
+    GL11.glDepthFunc(GL11.GL_LEQUAL)
+    GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f)
   }
 
   private def currentTime: Double = GameTimer.getTime
