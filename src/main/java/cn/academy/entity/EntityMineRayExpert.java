@@ -26,19 +26,21 @@ public class EntityMineRayExpert extends EntityRayBase {
     
     public EntityMineRayExpert(EntityPlayer _player) {
         super(_player);
-        
+
         this.blendInTime = 200;
         this.blendOutTime = 400;
         this.life = 233333;
         this.length = 15.0;
+
+        updatePos();
     }
     
     @Override
     public void onUpdate() {
         super.onUpdate();
+        updatePos();
+
         EntityPlayer player = getPlayer();
-        Vec3d end = VecUtils.lookingPos(player, 15); //new Motion3D(player, true).move(15).getPosVec();
-        this.setFromTo(player.posX, player.posY + 1.55, player.posZ, end.x, end.y, end.z);
         if(RandUtils.nextDouble() < 0.6) {
             Particle p = MdParticleFactory.INSTANCE.next(world,
 //                    new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
@@ -47,6 +49,12 @@ public class EntityMineRayExpert extends EntityRayBase {
 //            world.spawnEntityInWorld(p);
             world.spawnEntity(p);
         }
+    }
+
+    private void updatePos() {
+        EntityPlayer player = getPlayer();
+        Vec3d end = VecUtils.lookingPos(player, 15); //new Motion3D(player, true).move(15).getPosVec();
+        this.setFromTo(player.posX, player.posY + 1.55, player.posZ, end.x, end.y, end.z);
     }
 
     @RegEntityRender(EntityMineRayExpert.class)

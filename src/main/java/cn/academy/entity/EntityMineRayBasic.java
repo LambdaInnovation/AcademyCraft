@@ -23,19 +23,20 @@ public class EntityMineRayBasic extends EntityRayBase {
 
     public EntityMineRayBasic(EntityPlayer _player) {
         super(_player);
-        
+
         this.blendInTime = 200;
         this.blendOutTime = 400;
         this.life = 233333;
         this.length = 15.0;
+
+        updatePos();
     }
     
     @Override
     public void onUpdate() {
         super.onUpdate();
+        updatePos();
         EntityPlayer player = getPlayer();
-        Vec3d end = VecUtils.lookingPos(player, 15);
-        this.setFromTo(player.posX, player.posY + player.eyeHeight, player.posZ, end.x, end.y, end.z);
         if(RandUtils.nextDouble() < 0.5) {
             Particle p = MdParticleFactory.INSTANCE.next(world,
 //                    new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
@@ -43,6 +44,12 @@ public class EntityMineRayBasic extends EntityRayBase {
                     new Vec3d(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
             world.spawnEntity(p);
         }
+    }
+
+    private void updatePos() {
+        EntityPlayer player = getPlayer();
+        Vec3d end = VecUtils.lookingPos(player, 15);
+        this.setFromTo(player.posX, player.posY + player.eyeHeight, player.posZ, end.x, end.y, end.z);
     }
 
     @RegEntityRender(EntityMineRayBasic.class)
