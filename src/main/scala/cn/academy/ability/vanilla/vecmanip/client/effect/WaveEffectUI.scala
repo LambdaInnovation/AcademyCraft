@@ -6,7 +6,7 @@ import java.util.Random
 import cn.academy.Resources
 import cn.lambdalib2.render.TextureImportSettings.{FilterMode, WrapMode}
 import cn.lambdalib2.render._
-import cn.lambdalib2.util.{GameTimer, RandUtils}
+import cn.lambdalib2.util.{GameTimer, RandUtils, RenderUtils}
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.common.MinecraftForge
@@ -70,7 +70,10 @@ class WaveEffectUI(val maxAlpha : Float,
     val deltaTime = timeStamp - lastFrameTime
 
     update(deltaTime, width, height)
+
+    RenderUtils.pushTextureState()
     render(width, height)
+    RenderUtils.popTextureState()
 
     lastFrameTime = timeStamp
   }
