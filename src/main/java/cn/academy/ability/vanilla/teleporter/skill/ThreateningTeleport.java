@@ -101,7 +101,7 @@ public class ThreateningTeleport extends Skill
                     drop.setCount(1);
                     player.world.spawnEntity(new EntityItem(player.world, result.x, result.y, result.z, drop));
                 }
-                if(exp>0.5) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
+//                if(exp>0.5) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
                 ctx.addSkillExp(getExpIncr(attacked_));
                 ctx.setCooldown((int)lerpf(30, 15, exp));
             }

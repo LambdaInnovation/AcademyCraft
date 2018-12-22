@@ -85,7 +85,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
         knockback(entity)
         ctx.setCooldown(lerpf(60, 20, ctx.getSkillExp).toInt)
         sendToClient(MSG_GENERATE_EFFECT, entity)
-        if (ctx.getSkillExp >= 0.5f) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID)
+//        if (ctx.getSkillExp >= 0.5f) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID)
 
         val delta = multiply(subtract(entity.getPositionVector, player.getPositionVector).normalize(), 0.24)
         entity.motionX += delta.x

@@ -50,7 +50,7 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
   private def s_execute() = {
     if(consume()) {
       val exp: Float = ctx.getSkillExp
-      if (ctx.getSkillExp >= 0.8f) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID)
+//      if (ctx.getSkillExp >= 0.8f) ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID)
       val ball: EntityMdBall = new EntityMdBall(player, if (ctx.getSkillExp >= 0.8f) LIFE_IMPROVED else LIFE,
         new EntityCallback[EntityMdBall]() {
           def execute(ball: EntityMdBall) {

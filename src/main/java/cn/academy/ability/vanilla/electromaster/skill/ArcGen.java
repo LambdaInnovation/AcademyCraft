@@ -115,7 +115,7 @@ public class ArcGen extends Skill
                                         result.hitVec.y,
                                         result.hitVec.z,
                                         new ItemStack(Items.COOKED_FISH)));
-                                ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
+//                                ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
                             }
                         }
                         else
@@ -126,7 +126,7 @@ public class ArcGen extends Skill
                                 if (world.isAirBlock(pos))
                                 {
                                     world.setBlockState(pos, Blocks.FIRE.getDefaultState());
-                                    ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
+//                                    ACAdvancements.trigger(player, ACAdvancements.ac_milestone.ID);
                                 }
                             }
                         }
