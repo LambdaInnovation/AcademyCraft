@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Something unexpected happened in the game and you want it fixed
-title: ''
+title: '[Bug] Bug Title'
 labels: bug
 assignees: ''
 
