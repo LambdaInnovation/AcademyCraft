@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -42,8 +43,8 @@ public class DevelopActionLevel implements IDevelopAction {
         Optional<ItemStack> inductedCategory = DevelopActionReset.getFactor(player);
         if (inductedCategory.isPresent()) {
             ItemStack factor = inductedCategory.get();
-            int factorIdx = Arrays.asList(player.inventory.mainInventory).indexOf(factor);
-            player.inventory.setInventorySlotContents(factorIdx, null);
+            int factorIdx = player.inventory.mainInventory.indexOf(factor);
+            player.inventory.setInventorySlotContents(factorIdx, ItemStack.EMPTY);
             return ItemInductionFactor.getCategory(factor);
         } else {
             CategoryManager man = CategoryManager.INSTANCE;
