@@ -26,7 +26,7 @@ public class CatMeltdowner extends Category {
 
     public CatMeltdowner() {
         super("meltdowner");
-        this.colorStyle.set(126, 255, 132, 80);
+        setColorStyle(126, 255, 132, 80);
 
         electronBomb.setPosition(15, 45);
         radIntensify.setPosition(35, 75);

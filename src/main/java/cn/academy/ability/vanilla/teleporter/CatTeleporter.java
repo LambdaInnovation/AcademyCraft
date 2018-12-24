@@ -24,7 +24,7 @@ public class CatTeleporter extends Category {
 
     public CatTeleporter() {
         super("teleporter");
-        colorStyle.set(164, 164, 164, 145);
+        setColorStyle(164, 164, 164, 145);
 
         threateningTP.setPosition(14, 42);
         dimFolding.setPosition(50, 75);
