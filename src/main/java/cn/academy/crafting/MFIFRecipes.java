@@ -43,10 +43,14 @@ public class MFIFRecipes {
         addOreDictRefineRecipe("oreCoal",new ItemStack(Items.COAL,2));
         addDefaultOreDictRefineRecipe("Copper");
         addDefaultOreDictRefineRecipe("Tin");
-        addDefaultOreDictRefineRecipe("Lead");
-        addDefaultOreDictRefineRecipe("Platinum");
         addDefaultOreDictRefineRecipe("Silver");
+        addDefaultOreDictRefineRecipe("Lead");
+        addDefaultOreDictRefineRecipe("Aluminum");
         addDefaultOreDictRefineRecipe("Nickel");
+        addDefaultOreDictRefineRecipe("Platinum");
+        addDefaultOreDictRefineRecipe("Iridium");
+        addDefaultOreDictRefineRecipe("Mithril");
+
     }
 
     private static void addOreDictRefineRecipe(String orename,ItemStack output)
