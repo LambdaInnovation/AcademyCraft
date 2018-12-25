@@ -16,7 +16,7 @@ public class CatMeltdowner extends Category {
         radIntensify = RadiationIntensify$.MODULE$,
         rayBarrage = RayBarrage$.MODULE$,
         scatterBomb = ScatterBomb$.MODULE$,
-        lightShield = LightShield$.MODULE$,
+        lightShield = LightShield.INSTANCE,
         meltdowner = Meltdowner$.MODULE$,
         jetEngine = JetEngine$.MODULE$,
         mineRayBasic = MineRayBasic$.MODULE$,
