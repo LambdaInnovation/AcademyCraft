@@ -2,6 +2,7 @@ package cn.academy.item;
 
 import cn.academy.ACItems;
 import cn.academy.misc.media.MediaManager;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -10,6 +11,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -51,7 +53,11 @@ public class ACItemAdditionalRegistry {
 
     private static LootPool pool;
 
-    static{
+    @StateEventCallback
+    public static void preInit(FMLPreInitializationEvent evt)
+    {
+        MinecraftForge.EVENT_BUS.register(INSTANCE);
+
         LootFunction func = new LootFunction(DEFAULT_CONDS){
         @Override
         public ItemStack apply(ItemStack stack, Random rand, LootContext context)
@@ -93,12 +99,8 @@ public class ACItemAdditionalRegistry {
             }
             _entries.add(entry);
         }
-        pool = new LootPool((LootEntry[]) _entries.toArray(), DEFAULT_CONDS, new RandomValueRange(minValue, maxValue), new RandomValueRange(0,0), "academy:"+poolName);
-    }
-
-    private ACItemAdditionalRegistry()
-    {
-        MinecraftForge.EVENT_BUS.register(this);
+        LootEntry[] entries1 = new LootEntry[_entries.size()];
+        pool = new LootPool( _entries.toArray(entries1), DEFAULT_CONDS, new RandomValueRange(minValue, maxValue), new RandomValueRange(0,0), "academy:"+poolName);
     }
 
     @SubscribeEvent
