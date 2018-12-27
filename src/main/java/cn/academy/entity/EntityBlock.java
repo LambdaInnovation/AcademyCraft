@@ -141,23 +141,61 @@ public class EntityBlock extends EntityAdvanced {
                             ty = event.result.getBlockPos().getY(),
                             tz = event.result.getBlockPos().getZ();
 
-                    int iter = 10;
-                    while (iter --> 0) {
-                        Block hitblock = world.getBlockState(new BlockPos(tx, ty, tz)).getBlock();
-                        if(!hitblock.isReplaceable(world, new BlockPos(tx, ty, tz))) {
-//                            ForgeDirection dir = ForgeDirection.values()[event.result.sideHit];
-                            tx += event.result.sideHit.getDirectionVec().getX();
-                            ty += event.result.sideHit.getDirectionVec().getY();
-                            tz += event.result.sideHit.getDirectionVec().getZ();
-                        } else {
-                            int metadata = block.getMetaFromState(_blockState);
-                            ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
-                                    new ItemStack(block, 0, metadata), player, world, new BlockPos(tx, ty, tz), event.result.sideHit,
-                                    tx, ty, tz, _blockState);
-                            break;
+                    boolean isPlace = false;
+                    BlockPos originPos = event.result.getBlockPos();
+                    BlockPos placePos = originPos;
+                    Block hitblock = world.getBlockState(originPos).getBlock();
+                    if(hitblock.isReplaceable(world, originPos)) {
+                        isPlace = true;
+                        placePos = originPos;
+                    } else if(hitblock.isReplaceable(world, originPos.add(event.result.sideHit.getDirectionVec()))) {
+                        isPlace = true;
+                        placePos = originPos.add(event.result.sideHit.getDirectionVec());
+                    } else {
+                        for(int x = -1; x <= 1; x++) {
+                            for(int y = -1; y <= 1; y++) {
+                                for(int z = -1; z <= 1; z++) {
+                                    if (x != 0 && y != 0 && z != 0) {
+                                        if (!isPlace) {
+                                            if(hitblock.isReplaceable(world, originPos.add(x, y, z))) {
+                                                isPlace = true;
+                                                placePos = originPos.add(x, y, z);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
+                    if (isPlace) {
+                        int metadata = block.getMetaFromState(_blockState);
+                        ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
+                                new ItemStack(block, 0, metadata), player, world, placePos, event.result.sideHit,
+                                placePos.getX(), placePos.getY(), placePos.getZ(), _blockState);
+                    } else {
+                        int iter = 10;
+                        while (iter --> 0) {
+//                            Block hitblock = world.getBlockState(new BlockPos(tx, ty, tz)).getBlock();
+                            if(!hitblock.isReplaceable(world, new BlockPos(tx, ty, tz))) {
+//                            ForgeDirection dir = ForgeDirection.values()[event.result.sideHit];
+                                tx += event.result.sideHit.getDirectionVec().getX();
+                                ty += event.result.sideHit.getDirectionVec().getY();
+                                tz += event.result.sideHit.getDirectionVec().getZ();
+                            } else {
+                                int metadata = block.getMetaFromState(_blockState);
+                                ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
+                                        new ItemStack(block, 0, metadata), player, world, new BlockPos(tx, ty, tz), event.result.sideHit,
+                                        tx, ty, tz, _blockState);
+                                isPlace = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!isPlace) {
+                        AcademyCraft.log.error("EntityBlock Lost: " + event.result.toString());
+                    }
                     setDead();
                 }
             }
