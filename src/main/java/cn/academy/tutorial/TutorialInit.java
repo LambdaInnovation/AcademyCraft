@@ -22,6 +22,7 @@ import static cn.academy.tutorial.ViewGroups.*;
 
 public class TutorialInit {
 
+    @SideOnly(Side.CLIENT)
     @StateEventCallback
     private static void initConditions(FMLPostInitializationEvent ev) {
         defnTut("welcome");
