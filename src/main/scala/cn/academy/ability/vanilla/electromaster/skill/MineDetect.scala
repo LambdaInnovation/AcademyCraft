@@ -1,34 +1,31 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
+import java.util
+
 import cn.academy.Resources
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.electromaster.CatElectromaster
-import cn.lambdalib2.registry.StateEventCallback
-import cn.lambdalib2.registry.mc.{RegEntity, RegEntityRender}
-import cn.lambdalib2.render.legacy.{LegacyMeshUtils, SimpleMaterial}
+import cn.academy.client.sound.ACSounds
+import cn.lambdalib2.registry.mc.RegEntityRender
+import cn.lambdalib2.render.legacy.{LegacyMeshUtils, RenderStage, SimpleMaterial, Tessellator}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import cn.lambdalib2.util.entityx.EntityAdvanced
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.fml.client.registry.RenderingRegistry
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.Color
 
 import scala.collection.JavaConversions._
-import scala.collection.mutable
 
 /**
   * @author WeAthFolD, KSkun
@@ -49,10 +46,10 @@ object MDContext {
 
 }
 
-import MineDetect._
-import AbilityAPIExt._
+import cn.academy.ability.api.AbilityAPIExt._
+import cn.academy.ability.vanilla.electromaster.skill.MDContext._
+import cn.academy.ability.vanilla.electromaster.skill.MineDetect._
 import cn.lambdalib2.util.MathUtils._
-import MDContext._
 
 class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
 
@@ -124,13 +121,14 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
 
   final val lifeTime: Int = _time
   final val range: Double = Math.min(_range, 28)
-  val safeDistSq = range * 0.2 * range * 0.2
 
   var lastX, lastY, lastZ: Double = 0d
 
   val target: EntityPlayer = _target
 
   final val isAdvanced = _advanced
+
+  private val blockPosBuffer = new util.ArrayList[BlockPos]()
 
   ignoreFrustumCheck = true
   setPosition(target.posX, target.posY, target.posZ)
@@ -141,11 +139,8 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
     super.onUpdate()
 
     setPosition(target.posX, target.posY, target.posZ)
-
-    val distSq = MathUtils.distanceSq(posX, posY, posZ, lastX, lastY, lastZ)
-    if(distSq > safeDistSq) {
+    if (ticksExisted % 5 == 0)
       updateBlocks()
-    }
 
     if(ticksExisted > lifeTime) {
       setDead()
@@ -153,9 +148,11 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
   }
 
   private def updateBlocks() = {
-    val set: mutable.Buffer[BlockPos] = WorldUtils.getBlocksWithin(this, range, 1000, blockFilter)
+    val LIMIT = 8400 // 20^3 = 64000, this would be fairly abundant
+    WorldUtils.getBlocksWithin(blockPosBuffer, this, range, LIMIT, blockFilter)
 
-    set.foreach(bp => aliveSims.add(new MineElem(bp.getX, bp.getY, bp.getZ,
+    aliveSims.clear()
+    blockPosBuffer.foreach(bp => aliveSims.add(new MineElem(bp.getX, bp.getY, bp.getZ,
       if(isAdvanced) Math.min(3, world.getBlockState(bp).getBlock.getHarvestLevel(world.getBlockState(bp)) + 1) else 0)))
 
     lastX = posX
@@ -183,9 +180,34 @@ class HandlerRender(m: RenderManager) extends Render[HandlerEntity](m) {
   )
 
   override def doRender(entity: HandlerEntity, var2 : Double, var3 : Double, var4 : Double, var5 : Float, var6 : Float) = {
-    entity.aliveSims.foreach(me =>
+
+    val t = Tessellator.instance
+    GL11.glDisable(GL11.GL_DEPTH_TEST)
+    GL11.glDisable(GL11.GL_LIGHTING)
+    GL11.glEnable(GL11.GL_BLEND)
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+    GL11.glDisable(GL11.GL_CULL_FACE)
+    GL11.glDisable(GL11.GL_FOG)
+
+    RenderUtils.loadTexture(texture)
+
+    material.onRenderStage(RenderStage.BEFORE_TESSELLATE)
+
+    t.startDrawing(GL11.GL_TRIANGLES)
+    entity.aliveSims.foreach(me => {
+      t.setTranslation(
+        me.x - renderManager.viewerPosX + .5,
+        me.y - renderManager.viewerPosY + .5,
+        me.z - renderManager.viewerPosZ + .5
+      )
       drawSingle(me, calcAlpha(entity.posX - me.x, entity.posY - me.y, entity.posZ - me.z, entity.range))
-    )
+    })
+    t.draw()
+
+    GL11.glEnable(GL11.GL_FOG)
+    GL11.glEnable(GL11.GL_DEPTH_TEST)
+    GL11.glEnable(GL11.GL_CULL_FACE)
+    GL11.glEnable(GL11.GL_LIGHTING)
   }
 
   private def calcAlpha(x: Double, y: Double, z: Double, range: Double): Int = {
@@ -194,29 +216,10 @@ class HandlerRender(m: RenderManager) extends Render[HandlerEntity](m) {
   }
 
   private def drawSingle(me: MineElem, alpha: Int) = {
-    val x = me.x - renderManager.viewerPosX
-    val y = me.y - renderManager.viewerPosY
-    val z = me.z - renderManager.viewerPosZ
-    GL11.glDisable(GL11.GL_DEPTH_TEST)
-    GL11.glDisable(GL11.GL_LIGHTING)
-    GL11.glEnable(GL11.GL_BLEND)
-    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-    GL11.glDisable(GL11.GL_CULL_FACE)
-    GL11.glDisable(GL11.GL_FOG)
-    GL11.glPushMatrix()
-      RenderUtils.loadTexture(texture)
-      GL11.glTranslated(x + .05, y + .05, z + .05)
-      val color = colors.apply(Math.min(colors.length - 1, me.level))
-      color.setAlpha(alpha)
-
-      material.color.setColor(color)
-
-      mesh.draw(material)
-    GL11.glPopMatrix()
-    GL11.glEnable(GL11.GL_FOG)
-    GL11.glEnable(GL11.GL_DEPTH_TEST)
-    GL11.glEnable(GL11.GL_CULL_FACE)
-    GL11.glEnable(GL11.GL_LIGHTING)
+    val color = colors.apply(Math.min(colors.length - 1, me.level))
+    color.setAlpha(alpha)
+    Colors.bindToGL(color)
+    mesh.redrawWithinBatch(material)
   }
 
   override def getEntityTexture(ent: HandlerEntity) = null

@@ -49,13 +49,13 @@ item.ac_induction_factor.name=Ability Induction Factor
 item.ac_tutorial.name=MisakaCloud Terminal
 
 # Block
-tile.ac_constraint_metal_ore.name=Constraint Metal Ore
+tile.ac_constraint_metal.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
-tile.ac_imag_silicon_ore.name=Imag Silicon Ore
-tile.ac_reso_crystal_ore.name=Resonant Crystal Ore
+tile.ac_imagsil_ore.name=Imag Silicon Ore
+tile.ac_reso_ore.name=Resonant Crystal Ore
 tile.ac_machine_frame.name=Machine Frame
 
-tile.ac_phase_liquid.name=Imag Phase Liquid
+tile.ac_imag_phase.name=Imag Phase Liquid
 
 tile.ac_imag_fusor.name=Imag Fusor
 tile.ac_matrix.name=Wireless Imag Matrix
@@ -65,7 +65,7 @@ tile.ac_node_advanced.name=Advanced Wireless Imag Node
 tile.ac_metal_former.name=Metal Former
 tile.ac_solar_gen.name=Solar Generator
 tile.ac_cat_engine.name=Toast and Cat
-tile.ac_phase_generator.name=Phase Generator
+tile.ac_phase_gen.name=Phase Generator
 tile.ac_windgen_base.name=Wind Generator Pillar Base
 tile.ac_windgen_pillar.name=Wind Generator Pillar
 tile.ac_windgen_main.name=Wind Generator
@@ -73,8 +73,8 @@ tile.ac_eu_output.name=Energy Bridge (IC2 EU Out)
 tile.ac_eu_input.name=Energy Bridge (IC2 EU In)
 tile.ac_rf_output.name=Energy Bridge (CoFH RF Out)
 tile.ac_rf_input.name=Energy Bridge (CoFH RF In)
-tile.ac_developer_normal.name=Normal Ability Developer
-tile.ac_developer_advanced.name=Advanced Ability Developer
+tile.ac_dev_normal.name=Normal Ability Developer
+tile.ac_dev_advanced.name=Advanced Ability Developer
 tile.ac_ability_interferer.name=Ability Interferer
 
 # Data Terminal
@@ -173,7 +173,7 @@ ac.ability.generic.mind_course.name=Mind Course
 
 ac.ability.generic.brain_course.desc=Undergo training for your brain. Increases Max CP by 1000.
 ac.ability.generic.brain_course_advanced.desc=Develop the thinking ability of your brain deeply. Increases Max CP by 1000 and Max Overload by 100.
-ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%.
+ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%%.
 
 ## Electromaster
 ac.ability.electromaster.name=Electromaster
@@ -334,39 +334,39 @@ ac.command.aim.nonecathint=You haven't learned any ability!
 
 # Advancement
 advancements.general.root=Academy Craft
-advancements.general.root.desc=The start of everything
-advancements.general.open_tutorial=First Contact
-advancements.general.open_tutorial.desc=Open Misaka Cloud
+advancements.general.root.desc=The beginning of everything
+advancements.general.open_misaka_cloud=First Contact
+advancements.general.open_misaka_cloud.desc=Open Misaka Cloud
 advancements.general.getting_phase=Mysterious and powerful
-advancements.general.getting_phase.desc=Get a matter unit with imagine phase.
-advancements.general.phase_generator=New energy
+advancements.general.getting_phase.desc=Get a matter unit with Imag Phase Liquid
+advancements.general.phase_generator=New Energy
 advancements.general.phase_generator.desc=Craft a Phase Generator
-advancements.general.ac_node=My Poor Conduct
+advancements.general.ac_node=No More Wires!
 advancements.general.ac_node.desc=Craft a Basic Wireless Imag Node
 advancements.general.ac_matrix=WIFI Available Here
 advancements.general.ac_matrix.desc=Craft a Matrix
-advancements.general.terminal_installer=Technology Changes Life
-advancements.general.terminal_installer.desc=Install data terminal
+advancements.general.terminal_installed=Technology Changes Life
+advancements.general.terminal_installed.desc=Install Data Terminal
 advancements.general.getting_factor=Infinite Possibility
 advancements.general.getting_factor.desc=Get an Induction Factor
-advancements.general.ac_developer=人类的能力是有极限的
-advancements.general.ac_developer.desc=制造便携式能力开发机
-advancements.general.dev_category=超越人类
-advancements.general.dev_category.desc=开发能力
-advancements.general.ac_level_3=独当一面
-advancements.general.ac_level_3.desc=升级至level 3
-advancements.general.ac_level_5=你们一起上吧
-advancements.general.ac_level_5.desc=升级至level 5
-advancements.general.convert_category=能力由我不由天
+advancements.general.ac_developer=There is a Limit for Human
+advancements.general.ac_developer.desc=Craft a Portable Ability Developer
+advancements.general.dev_category=Above Human
+advancements.general.dev_category.desc=Develop an Ability
+advancements.general.ac_level_3=On My Own
+advancements.general.ac_level_3.desc=Upgrade to level 3
+advancements.general.ac_level_5=One Man Army
+advancements.general.ac_level_5.desc=Upgrade to level 5
+advancements.general.convert_category=No More Randomized
 advancements.general.convert_category.desc=Transform your category
 advancements.general.ac_learning_skill=Practice Makes Perfect
-advancements.general.ac_learning_skill.desc=Learn any skill.
-advancements.general.ac_milestone=你为什么这么熟练啊
-advancements.general.ac_milestone.desc=达到第一个技能的里程碑
-advancements.general.ac_exp_full=究竟做过多少次了啊
-advancements.general.ac_exp_full.desc=某个技能熟练度达到满值
-advancements.general.ac_overload=超能力者也是有极限的
-advancements.general.ac_overload.desc=使用能力直到过载
+advancements.general.ac_learning_skill.desc=Learn any skill
+advancements.general.ac_milestone=Upgrade Module
+advancements.general.ac_milestone.desc=Reach first skill's milestone
+advancements.general.ac_exp_full=How many times did you do that?
+advancements.general.ac_exp_full.desc=Achieve full EXP for any skill
+advancements.general.ac_overload=There is Still a Limit for ESPers
+advancements.general.ac_overload.desc=Use your ability, until it overloads
 
 # UI Commons
 ac.gui.common.pg_wireless.not_connected=Not Connected
@@ -410,7 +410,7 @@ ac.skill_tree.type_advanced=Advanced Developer
 ac.skill_tree.console.init=Welcome to Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \nUser %s detected, System booting......
 ac.skill_tree.console.invalid_cat=\nFATAL: User's ability category is invalid, booting aborted.\n
 ac.skill_tree.console.learn_hint=Type `learn` to acquire new category.\n
-ac.skill_tree.console.override=\nWARNING: System override! External injection detected.....\n\nABILITY RESET: Use `reset` command to reset player category. Ability level must be at least 3, and an Induction Factor must be in inventory.\n
+ac.skill_tree.console.override=\nWARNING: System override! External injection detected.....\n\nABILITY RESET: Use `reset` command to reset your category. \nAbility level must be at least 3, and an Induction Factor must be in inventory.\n
 ac.skill_tree.console.boot_failed=Boot Failed.\n
 ac.skill_tree.console.invalid_command=Invalid command.\n
 ac.skill_tree.console.progress=Progress: %s%%

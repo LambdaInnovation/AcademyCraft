@@ -743,8 +743,7 @@ object WirelessNetDelegate {
 
     val linked = Option(WirelessHelper.getNodeConn(user))
 
-    val nodes = WirelessHelper.getNodesInRange(user.getWorld,
-      user.getPos.getX, user.getPos.getY, user.getPos.getZ)
+    val nodes = WirelessHelper.getNodesInRange(user.getWorld, user.getPos)
       .map(WirelessHelper.getNodeConn)
       .filter(!linked.contains(_))
 

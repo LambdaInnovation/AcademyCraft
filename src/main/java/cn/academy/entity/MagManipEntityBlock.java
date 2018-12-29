@@ -5,14 +5,11 @@ import cn.academy.ability.vanilla.electromaster.skill.MagManip;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib2.util.EntitySyncer;
-import cn.lambdalib2.util.EntitySyncer.Synchronized;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.entityx.MotionHandler;
 import cn.lambdalib2.util.entityx.event.CollideEvent;
 import cn.lambdalib2.util.entityx.handlers.Rigidbody;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -20,27 +17,20 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.function.Predicate;
-
 @RegEntity(freq = 10)
 public class MagManipEntityBlock extends EntityBlock
 {
     public static final int ActNothing=0, ActMoveTo=1;
-    public EntitySyncer syncer;
     public float damage;
     public boolean placeWhenCollide = false;
     EntityPlayer player2 = null;
     float yawSpeed = RandUtils.rangef(1, 3);
     float pitchSpeed = RandUtils.rangef(1, 3);
+    private int tick =0;
+    private final int MAXTICK = 5;
 
-    @Synchronized
     public int actionType;
-    @Synchronized
-    float tx;
-    @Synchronized
-    float ty;
-    @Synchronized
-    float tz;
+    float tx, ty, tz;
 
     public MagManipEntityBlock(EntityPlayer _player, float damage)
     {
@@ -71,8 +61,6 @@ public class MagManipEntityBlock extends EntityBlock
     public void entityInit()
     {
         super.entityInit();
-        syncer = new EntitySyncer(this);
-        syncer.init();
     }
 
     @Override
@@ -102,15 +90,19 @@ public class MagManipEntityBlock extends EntityBlock
         else
         {
             NetworkMessage.sendToAllAround(new NetworkRegistry.TargetPoint(world.provider.getDimension(), posX, posY, posZ, 40),
-                    this, "MSG_ENT_SYNC", player2.getEntityId());
+                    this, "MSG_ENT_SYNC", player2.getEntityId(), actionType, tx, ty, tz);
         }
     }
 
     @SideOnly(value=Side.CLIENT)
     @Listener(channel = "MSG_ENT_SYNC", side= Side.CLIENT)
-    public void onClientSyncEntity(int id)
+    public void onClientSyncEntity(int id, int actType, float _tx, float _ty, float _tz)
     {
         player2 = (EntityPlayer) world.getEntityByID(id);
+        actionType = actType;
+        tx = _tx;
+        ty = _ty;
+        tz = _tz;
     }
 
     @Override
@@ -118,15 +110,18 @@ public class MagManipEntityBlock extends EntityBlock
     {
         if(!world.isRemote)
         {
-            NetworkMessage.sendToAllAround(new NetworkRegistry.TargetPoint(world.provider.getDimension(), posX, posY, posZ, 40),
-                    this, "MSG_ENT_SYNC", player2.getEntityId());
+            tick++;
+            if(tick>MAXTICK)
+            {
+                tick=0;
+                NetworkMessage.sendToAllAround(new NetworkRegistry.TargetPoint(world.provider.getDimension(), posX, posY, posZ, 40),
+                        this, "MSG_ENT_SYNC", player2.getEntityId(), actionType, tx, ty, tz);
+            }
         }
-        syncer.update();
         super.onUpdate();
 
         yaw+=yawSpeed;
         pitch += pitchSpeed;
-
         switch(actionType)
         {
             case ActMoveTo:

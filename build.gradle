@@ -122,16 +122,18 @@ dependencies {
 
 //sourceSets.main.compileClasspath += [configurations.provided]
 
+sourceSets.main {
+    java.srcDirs = []
+    scala.srcDirs = ['src/main/scala', 'build/tempSourcesJava']
+}
+
 idea {
     module{
         scopes.PROVIDED.plus += [configurations.provided]
+        sourceDirs = [file('src/main/java'), file('src/main/scala')]
     }
 }
 
-sourceSets.main {
-    java.srcDirs = []
-    scala.srcDirs =  ['src/main/scala', 'build/tempSourcesJava']
-}
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version

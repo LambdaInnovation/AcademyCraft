@@ -1,6 +1,7 @@
 package cn.academy.support.jei;
 
 import cn.academy.ACBlocks;
+import cn.academy.AcademyCraft;
 import cn.academy.crafting.ImagFusorRecipes;
 import cn.academy.crafting.ImagFusorRecipes.IFRecipe;
 import cn.lambdalib2.util.RenderUtils;
@@ -40,13 +41,13 @@ public class FusorRecipeCategory extends IACRecipeCategory
     //TODO 物品槽的具体位置还需要调整
     @Override
     public List<SlotPos> getInputs() {
-        return Collections.singletonList(new SlotPos(31, 37));
+        return Collections.singletonList(new SlotPos(5, 36));
     }
 
 
     @Override
     public List<SlotPos> getOutputs() {
-        return Collections.singletonList(new SlotPos(118, 37));
+        return Collections.singletonList(new SlotPos(93, 36));
     }
 
     private static List<IRecipeWrapper> loadCraftingRecipes() {
@@ -63,8 +64,7 @@ public class FusorRecipeCategory extends IACRecipeCategory
 
     @Override
     public IDrawable getBackground() {
-        IDrawable gui = guiHelper.createBlankDrawable(24, 0);
-        RenderUtils.loadTexture(bg);
+        IDrawable gui = guiHelper.createDrawable(bg,  0, 0, 115, 66, 115, 66);
         /*
 
         HudUtils.rect(24.5f, 0, 0, 0, 115, 66, 115, 66);

@@ -3,10 +3,13 @@ package cn.academy.ability;
 import cn.academy.Resources;
 import cn.academy.ACConfig;
 import cn.lambdalib2.util.Colors;
+import cn.lambdalib2.util.SideUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.Color;
 
 import java.util.ArrayList;
@@ -32,16 +35,33 @@ public class Category {
     /**
      * The color style of this category. Used in many various places for rendering, like screen overlay.
      */
-    protected Color colorStyle = Colors.white();
+    @SideOnly(Side.CLIENT)
+    private Color colorStyle;
     
     public Category(String _name) {
         name = _name;
         icon = initIcon();
         overlay = initOverlayIcon();
         developerIcon = initDeveloperIcon();
-
+        if(SideUtils.isClient())
+        {
+            colorStyle = Colors.white();
+        }
     }
-    
+    public void setColorStyle(int r, int g, int b)
+    {
+        setColorStyle(r, g, b, 0);
+    }
+
+    public void setColorStyle(int r ,int g, int b, int a)
+    {
+        if(SideUtils.isClient())
+        {
+            colorStyle.set(r, g, b, a);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
     public Color getColorStyle() {
         return colorStyle;
     }

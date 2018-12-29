@@ -49,13 +49,13 @@ item.ac_induction_factor.name=能力诱导因子
 item.ac_tutorial.name=御坂云终端
 
 # 方块名称
-tile.ac_constraint_metal_ore.name=束能金属矿
+tile.ac_constraint_metal.name=束能金属矿
 tile.ac_crystal_ore.name=虚能水晶矿
-tile.ac_imag_silicon_ore.name=虚像硅矿
-tile.ac_reso_crystal_ore.name=谐振水晶矿
+tile.ac_imagsil_ore.name=虚像硅矿
+tile.ac_reso_ore.name=谐振水晶矿
 tile.ac_machine_frame.name=机械框架
 
-tile.ac_phase_liquid.name=虚相位液体
+tile.ac_imag_phase.name=虚相位液体
 
 tile.ac_imag_fusor.name=虚能融合机
 tile.ac_matrix.name=无线虚能矩阵
@@ -65,7 +65,7 @@ tile.ac_node_advanced.name=高级无线虚能节点
 tile.ac_metal_former.name=金属处理机
 tile.ac_solar_gen.name=太阳能能量发生机
 tile.ac_cat_engine.name=吐司猫
-tile.ac_phase_generator.name=虚相位能量发生机
+tile.ac_phase_gen.name=虚相位能量发生机
 tile.ac_windgen_base.name=风力能量发生器 - 支架底座
 tile.ac_windgen_pillar.name=风力能量发生器 - 支架
 tile.ac_windgen_main.name=风力能量发生器 - 主机
@@ -73,8 +73,8 @@ tile.ac_eu_output.name=能源桥 (IC2 EU输出)
 tile.ac_eu_input.name=能源桥 (IC2 EU输入) 
 tile.ac_rf_output.name=能源桥 (CoFH RF输出)
 tile.ac_rf_input.name=能源桥 (CoFH RF输入)
-tile.ac_developer_normal.name=基础能力开发机
-tile.ac_developer_advanced.name=高级能力开发机
+tile.ac_dev_normal.name=基础能力开发机
+tile.ac_dev_advanced.name=高级能力开发机
 tile.ac_ability_interferer.name=能力干涉方块
 
 # 数据终端
@@ -172,7 +172,7 @@ ac.ability.generic.mind_course.name=思维修养课程
 
 ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的有效持续时间延长。提高最大计算力1000点。
 ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力。提高最大计算力1000点，最大过载100点。
-ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想。计算力恢复速率提高20%。
+ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想。计算力恢复速率提高20%%。
 
 ## 电击使
 ac.ability.electromaster.name=电击使
@@ -195,14 +195,14 @@ ac.ability.electromaster.thunder_bolt.name=雷击之枪
 
 ac.ability.electromaster.arc_gen.desc=激发出一道较微弱的电弧，会在落点处扩散来造成伤害，如果直击到易燃方块，可能会将其点燃。
 ac.ability.electromaster.mag_manip.desc=使用电磁力操纵并且移动世界中的可磁化物体，甚至将它们投掷出去杀伤敌人。
-ac.ability.electromaster.mine_detect.desc=闭上眼睛感受周围的磁力线流动，可以让你看到身旁珍惜矿物资源的痕迹。
+ac.ability.electromaster.mine_detect.desc=闭上眼睛感受周围的磁力线流动，可以让你看到身旁珍稀矿物资源的痕迹。
 ac.ability.electromaster.railgun.desc=利用电磁诱导原理，将硬币高速射出，在全力一击的情况下有恐怖的破坏力。
 ac.ability.electromaster.mag_movement.desc=向外界的某个可磁化物体释放电磁力，使自己的身体快速移动。
 ac.ability.electromaster.iron_sand.desc=通过分离和操纵身体周围的铁砂，创造出变化多端而又极其危险的攻击效果。
 ac.ability.electromaster.charging.desc=对手持的物品或世界中的电力方块进行充能。
 ac.ability.electromaster.body_intensify.desc=操纵自身生物电，在短时间内强化身体素质。
 ac.ability.electromaster.thunder_clap.desc=操纵大气中的电磁场氛围，催化出雷云，并牵引其中的电力产生一次破坏性的落雷。
-ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射.击中实体后，猛烈的电流会爆发出去产生第二次伤害。
+ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射。击中实体后，猛烈的电流会爆发出去产生第二次伤害。
 
 ## 传送使
 ac.ability.teleporter.name=传送使

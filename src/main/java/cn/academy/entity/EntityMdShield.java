@@ -29,11 +29,16 @@ public class EntityMdShield extends EntityAdvanced
         player = _player;
         this.setSize(SIZE, SIZE);
         ignoreFrustumCheck = true;
+        updatePos();
     }
     
     @Override
     public void onUpdate() {
         super.onUpdate();
+        updatePos();
+    }
+
+    private void updatePos() {
         Vec3d pos = VecUtils.add(
             VecUtils.add(player.getPositionVector(), VecUtils.multiply(player.getLookVec(), 1)),
             new Vec3d(0,1.1,0)

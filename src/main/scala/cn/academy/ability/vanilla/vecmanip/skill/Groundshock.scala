@@ -76,7 +76,8 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
     if (player.onGround && consume()) {
       val planeLook = player.getLookVec.normalize()
       
-      val plotter = new Plotter(Math.floor(player.posX).toInt, player.posY.toInt - 1,
+
+      val plotter = new Plotter(Math.floor(player.posX).toInt, Math.floor(player.posY).toInt - 1,
         Math.floor(player.posZ).toInt, planeLook.x, 0, planeLook.z)
 
       var iter = maxIter

@@ -5,9 +5,8 @@ import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegCli
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityBloodSplash
 import cn.academy.ability.vanilla.generic.client.effect.BloodSprayEffect
-import cn.academy.ability.vanilla.teleporter.skill.TraceResult
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{BlockSelectors, EntitySelectors, Raytrace}
+import cn.lambdalib2.util._
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.{RayTraceResult, Vec3d}
@@ -105,19 +104,17 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
     val headPos = targ.getPositionVector.add(0, targ.height * 0.6, 0)
 
     List(0, 30, 45, 60, 80, -30, -45, -60, -80)
-      .map(angle => Vec3d.fromPitchYaw(player.rotationYawHead + rangef(-20, 20), angle))
+      .map(angle => new EntityLook(player.rotationYawHead + rangef(-20, 20), angle).toVec3)
       .map(look => Raytrace.perform(world,
         new Vec3d(headPos.x - look.x * 0.5, headPos.y - look.y * 0.5, headPos.z - look.z * 0.5),
-        new Vec3d(headPos.x + look.x * 0.5, headPos.y + look.y * 0.5, headPos.z + look.z * 0.5),
+        new Vec3d(headPos.x + look.x * 5, headPos.y + look.y * 5, headPos.z + look.z * 5),
         EntitySelectors.nothing, BlockSelectors.filNormal))
-      .filter(_ != null)
+      .filter(r => r != null && r.typeOfHit == RayTraceResult.Type.BLOCK)
       .foreach(r=> {
-        if(r.typeOfHit==RayTraceResult.Type.BLOCK){
-          (0 until rangei(2, 3)).foreach(_ => {
-            val spray = new BloodSprayEffect(world, r.hitVec.x.toInt, r.hitVec.y.toInt, r.hitVec.z.toInt, r.sideHit.getIndex)
-            world.spawnEntity(spray)
-          })
-        }
+        (0 until rangei(2, 3)).foreach(_ => {
+          val spray = new BloodSprayEffect(world, r.getBlockPos, r.sideHit.getIndex)
+          world.spawnEntity(spray)
+        })
       })
     ACSounds.playClient(player, "vecmanip.blood_retro", SoundCategory.AMBIENT,1F)
   }

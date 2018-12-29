@@ -274,6 +274,8 @@ public class EntityMdBall extends EntityAdvanced
                 z = ent.posZ - clientPlayer.posZ;
             }
 
+            GL11.glDepthMask(false);
+
             GL11.glPushMatrix();
             {
                 ShaderSimple.instance().useProgram();

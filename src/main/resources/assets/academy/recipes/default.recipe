@@ -24,9 +24,9 @@ shapeless(academy:calc_chip){
 
 
 shaped(academy:reinforced_iron_plate *2){
-	[academy:constraint_ingot]
-	[academy:constraint_ingot]
-	[academy:constraint_ingot]
+	[iron_ingot]
+	[iron_ingot]
+	[iron_ingot]
 }
 
 shaped(academy:machine_frame) {

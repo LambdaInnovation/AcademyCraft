@@ -16,15 +16,15 @@ public class CatTeleporter extends Category {
         spaceFluct = SpaceFluctuation.instance,
         markTP = MarkTeleport$.MODULE$,
         locTP = LocationTeleport$.MODULE$,
-        penetrateTP = PenetrateTeleport$.MODULE$,
-        threateningTP = ThreateningTeleport$.MODULE$,
+        penetrateTP = PenetrateTeleport.instance,
+        threateningTP = ThreateningTeleport.instance,
         shiftTP = ShiftTeleport.instance,
         fleshRipping = FleshRipping.instance,
         flashing = Flashing.instance;
 
     public CatTeleporter() {
         super("teleporter");
-        colorStyle.set(164, 164, 164, 145);
+        setColorStyle(164, 164, 164, 145);
 
         threateningTP.setPosition(14, 42);
         dimFolding.setPosition(50, 75);

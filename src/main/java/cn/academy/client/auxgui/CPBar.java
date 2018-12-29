@@ -475,7 +475,7 @@ public class CPBar extends Widget {
     
     final Color CRL_P_BACK = new Color(48, 48, 48, 160),
             CRL_P_FORE = new Color(255, 255, 255, 200);
-    final Color temp = new Color();
+    final Color CRL_P_TEXT = new Color(255, 255, 255, 255);
 
     FontOption fo_PresetHint = new FontOption(46, FontAlign.CENTER);
 
@@ -503,12 +503,12 @@ public class CPBar extends Widget {
             Colors.bindToGL(CRL_P_BACK);
             HudUtils.colorRect(x, y, size, size);
             
-            temp.setAlpha(Colors.f2i((float) Math.max(0.05, alpha * 0.8)));
+            CRL_P_TEXT.setAlpha(Colors.f2i((float) Math.max(0.05, alpha * 0.8)));
 
-            fo_PresetHint.color = temp;
+            fo_PresetHint.color = CRL_P_TEXT;
             Resources.fontBold().draw(String.valueOf(i + 1), (float) (x + size / 2), (float) (y + 5), fo_PresetHint);
             
-            Colors.bindToGL(temp);
+            Colors.bindToGL(CRL_P_TEXT);
             if(i == cur) {
                 ACRenderingHelper.drawGlow(x, y, size, size, 5, CRL_P_FORE);
             }

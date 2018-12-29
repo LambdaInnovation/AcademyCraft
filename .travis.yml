@@ -16,6 +16,7 @@ script:
  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
  - ./gradlew clean build
  - ls ./build/libs -ll 
+ - ./gradlew upload
 
 install:
 - true

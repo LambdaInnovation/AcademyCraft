@@ -49,13 +49,13 @@ item.ac_induction_factor.name=能力誘導因子
 item.ac_tutorial.name=御坂ネット端末
 
 # ブロック
-tile.ac_constraint_metal_ore.name=束能メタル鉱石
+tile.ac_constraint_metal.name=束能メタル鉱石
 tile.ac_crystal_ore.name=虚能クリスタル鉱石
-tile.ac_imag_silicon_ore.name=虚能シリコン鉱石
-tile.ac_reso_crystal_ore.name=共振リスタル鉱石
+tile.ac_imagsil_ore.name=虚能シリコン鉱石
+tile.ac_reso_ore.name=共振リスタル鉱石
 tile.ac_machine_frame.name=マシーンフレーム
 
-tile.ac_phase_liquid.name=虚相位液体
+tile.ac_imag_phase.name=虚相位液体
 
 tile.ac_imag_fusor.name=虚能融合機
 tile.ac_matrix.name=無線虚能マトリックス
@@ -65,7 +65,7 @@ tile.ac_node_advanced.name=先進無線虚能ノード
 tile.ac_metal_former.name=金属加工機
 tile.ac_solar_gen.name=太陽光発電機
 tile.ac_cat_engine.name=トースト猫
-tile.ac_phase_generator.name=虚相位発電機
+tile.ac_phase_gen.name=虚相位発電機
 tile.ac_windgen_base.name=風力発電機 - スタンド台座
 tile.ac_windgen_pillar.name=風力発電機 - スタンド
 tile.ac_windgen_main.name=風力発電機 - ホストコンピューター
@@ -73,8 +73,8 @@ tile.ac_eu_output.name=エネルギー変換器 (IC2 EU出力)
 tile.ac_eu_input.name=エネルギー変換器 (IC2 EU入力)
 tile.ac_rf_output.name=エネルギー変換器 (CoFH RF出力)
 tile.ac_rf_input.name=エネルギー変換器 (CoFH RF入力)
-tile.ac_developer_normal.name=基本能力開発機
-tile.ac_developer_advanced.name=先進能力開発機
+tile.ac_dev_normal.name=基本能力開発機
+tile.ac_dev_advanced.name=先進能力開発機
 tile.ac_ability_interferer.name=能力干渉機
 
 # データ端末

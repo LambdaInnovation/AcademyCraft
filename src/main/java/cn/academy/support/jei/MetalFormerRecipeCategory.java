@@ -20,16 +20,15 @@ import java.util.List;
  * @author KSkun
  *
  */
-public class MetalFormerRecipeHandler extends IACRecipeCategory
+public class MetalFormerRecipeCategory extends IACRecipeCategory
 {
-
     public static List<IRecipeWrapper> recipeWrapper = loadCraftingRecipes();
     private static ResourceLocation bg = new ResourceLocation("academy", "textures/guis/nei_metalformer.png");
     private IGuiHelper guiHelper;
 
-    public MetalFormerRecipeHandler(IGuiHelper guiHelper)
+    public MetalFormerRecipeCategory(IGuiHelper guiHelper)
     {
-        super(ACBlocks.imag_fusor);
+        super(ACBlocks.metal_former);
         this.guiHelper = guiHelper;
     }
 
@@ -37,13 +36,13 @@ public class MetalFormerRecipeHandler extends IACRecipeCategory
     //TODO 物品槽的具体位置还需要调整
     @Override
     public List<SlotPos> getInputs() {
-        return Collections.singletonList(new SlotPos(41, 24));
+        return Collections.singletonList(new SlotPos(5, 23));
     }
 
 
     @Override
     public List<SlotPos> getOutputs() {
-        return Collections.singletonList(new SlotPos(107, 24));
+        return Collections.singletonList(new SlotPos(71, 23));
     }
 
     @Override
@@ -66,8 +65,8 @@ public class MetalFormerRecipeHandler extends IACRecipeCategory
 
     @Override
     public IDrawable getBackground() {
-        IDrawable gui = guiHelper.createBlankDrawable(24, 0);
-        RenderUtils.loadTexture(bg);
+        IDrawable gui = guiHelper.createDrawable(bg,  0, 0, 94, 57, 94, 57);
+
         /*
         HudUtils.rect(35, 0, 0, 0, 94, 57, 94, 57);
         GL20.glUseProgram(0);

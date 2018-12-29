@@ -8,7 +8,7 @@ public class CatVecManip extends Category {
 
     public CatVecManip() {
         super("vecmanip");
-        colorStyle.set(0,0,0);
+        setColorStyle(0,0,0);
 
         DirectedShock.setPosition(16, 45);
         Groundshock.setPosition(64, 85);

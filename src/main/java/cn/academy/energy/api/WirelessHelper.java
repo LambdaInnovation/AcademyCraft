@@ -81,18 +81,16 @@ public class WirelessHelper {
         return getNodeConn(gen) != null;
     }
 
-    public static List<IWirelessNode> getNodesInRange(World world, BlockPos pos) {
-        return getNodesInRange(world, pos.getX(), pos.getY(), pos.getZ());
-    }
+    private static List<BlockPos> _blockPosBuffer = new ArrayList<>();
 
     /**
      * Get a list of IWirelessNode that are linkable and can reach the given position.
      *
      * @return nodes in the area, does not guarantee any order
      */
-    public static List<IWirelessNode> getNodesInRange(World world, int x, int y, int z) {
+    public static List<IWirelessNode> getNodesInRange(World world, BlockPos pos) {
         double range = 20.0;
-        List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockSelector() {
+        WorldUtils.getBlocksWithin(_blockPosBuffer, world, pos.getX(), pos.getY(), pos.getZ(), range, 100, new IBlockSelector() {
 
             @Override
             public boolean accepts(World world, int x2, int y2, int z2, Block block) {
@@ -101,7 +99,7 @@ public class WirelessHelper {
                     IWirelessNode node = ((IWirelessNode) te);
                     NodeConn conn = getNodeConn((IWirelessNode) te);
 
-                    double distSq = MathUtils.distanceSq(x, y, z, x2, y2, z2);
+                    double distSq = MathUtils.distanceSq(pos.getX(), pos.getY(), pos.getZ(), x2, y2, z2);
                     double range = node.getRange();
 
                     return range * range >= distSq && conn.getLoad() < conn.getCapacity();
@@ -113,7 +111,7 @@ public class WirelessHelper {
         });
 
         List<IWirelessNode> ret = new ArrayList<>();
-        for (BlockPos bp : list) {
+        for (BlockPos bp : _blockPosBuffer) {
             ret.add((IWirelessNode) world.getTileEntity(bp));
         }
 

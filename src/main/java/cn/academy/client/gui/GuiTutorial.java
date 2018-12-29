@@ -56,6 +56,10 @@ public class GuiTutorial extends CGuiScreen {
 
     @StateEventCallback
     private static void __init(FMLInitializationEvent ev) {
+        Resources.preloadMipmapTexture("guis/tutorial/logo0");
+        Resources.preloadMipmapTexture("guis/tutorial/logo1");
+        Resources.preloadMipmapTexture("guis/tutorial/logo2");
+        Resources.preloadMipmapTexture("guis/tutorial/logo3");
         loaded = CGUIDocument.read(new ResourceLocation("academy:guis/tutorial.xml"));
         font = Resources.font();
         fontBold = Resources.fontBold();

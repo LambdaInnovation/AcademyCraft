@@ -12,6 +12,7 @@ import java.util.Collection;
 @JEIPlugin
 public class SubModule implements IModPlugin {
     public FusorRecipeCategory fusorRecipeCategory;
+    public MetalFormerRecipeCategory mfRecipeCategory;
 
     public SubModule() {
     }
@@ -20,6 +21,7 @@ public class SubModule implements IModPlugin {
     public void register(IModRegistry registry)
     {
         addMachineRecipes(registry, FusorRecipeCategory.recipeWrapper, fusorRecipeCategory);
+        addMachineRecipes(registry, MetalFormerRecipeCategory.recipeWrapper, mfRecipeCategory);
     }
 
     @Override
@@ -27,9 +29,12 @@ public class SubModule implements IModPlugin {
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
         fusorRecipeCategory = new FusorRecipeCategory(guiHelper);
         registry.addRecipeCategories(fusorRecipeCategory);
+
+        mfRecipeCategory = new MetalFormerRecipeCategory(guiHelper);
+        registry.addRecipeCategories(mfRecipeCategory);
     }
 
-    private void addMachineRecipes(IModRegistry registry, Collection<IRecipeWrapper> wrappers, FusorRecipeCategory category) {
+    private void addMachineRecipes(IModRegistry registry, Collection<IRecipeWrapper> wrappers, IACRecipeCategory category) {
         registry.addRecipes(wrappers, category.getUid());
         registry.addRecipeCatalyst(category.getBlockStack(), category.getUid());
     }

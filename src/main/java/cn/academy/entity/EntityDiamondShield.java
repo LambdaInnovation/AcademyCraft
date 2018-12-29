@@ -25,15 +25,22 @@ public class EntityDiamondShield extends EntityAdvanced
         super(_player.getEntityWorld());
         player = _player;
         this.setSize(SIZE, SIZE);
+
+        setPosition(player.posX, player.posY, player.posZ);
+        ignoreFrustumCheck = true;
+        updatePos();
     }
     
     @Override
     public void onUpdate() {
         super.onUpdate();
+        updatePos();
+    }
 
-        Vec3d pos = VecUtils.subtract(VecUtils.add(
-                player.getPositionVector(), VecUtils.multiply(player.getLookVec(),1)),
-                new Vec3d(0,0.5,0));
+    private void updatePos() {
+        Vec3d pos =
+            VecUtils.add(player.getPositionVector().add(0, 1.1, 0), VecUtils.multiply(player.getLookVec(), 1));
+
         this.posX = pos.x;
         this.posY = pos.y;
         this.posZ = pos.z;

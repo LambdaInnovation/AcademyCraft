@@ -99,7 +99,11 @@ public class ShiftTeleport extends Skill
             ItemStack stack = player.getHeldItemMainhand();
             Block block = Block.getBlockFromItem(stack.getItem());
             attacked = (stack.getItem() != Items.AIR && (stack.getItem() instanceof ItemBlock ) && block != Blocks.AIR);
-            if(!attacked) return ;
+            if(!attacked)
+            {
+                terminate();
+                return ;
+            }
             sendToClient(MSG_EXECUTE, attacked);
 
             ItemBlock item = (ItemBlock) stack.getItem();
