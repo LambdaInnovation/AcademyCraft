@@ -1,7 +1,6 @@
 package cn.academy.ability;
 
 import cn.academy.ACConfig;
-import cn.academy.analyticUtil.AnalyticEvent;
 import cn.academy.datapart.AbilityData;
 import cn.academy.datapart.CPData;
 import cn.academy.datapart.CooldownData;
@@ -39,7 +38,6 @@ public class AbilityContext {
     private AbilityContext(EntityPlayer p, Skill s) {
         player = p;
         skill = s;
-        MinecraftForge.EVENT_BUS.post(new AnalyticEvent(player,skill));
         aData = AbilityData.get(player);
         cpData = CPData.get(player);
         cdData = CooldownData.of(player);
