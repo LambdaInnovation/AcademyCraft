@@ -54,8 +54,12 @@ public class BlockMatrix extends ACBlockMulti {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player,
                                     EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        // There is a small delay before tileEntity is set after placement
+        BlockPos center = this.getOrigin(world, pos);
+        if (center == null)
+            return false;
+
         if(!player.isSneaking()) {
-            BlockPos center = this.getOrigin(world, pos);
             guiHandler.openGuiContainer(player, world, center.getX(), center.getY(), center.getZ());
             return true;
         }
