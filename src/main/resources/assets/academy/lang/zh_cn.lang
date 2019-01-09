@@ -305,7 +305,7 @@ ac.command.knowledge.discover=/knowledge discover [知识名称]: 发现指定�
 
 ac.command.aim.usage=/aim <command>|<help> [参数...]
 ac.command.aim.help=/aim help: 显示帮助信息。
-ac.command.aim.cat=/aim cat [能力名称]: 改变指定玩家的能力或是显示当前能力。
+ac.command.aim.cat=/aim cat [能力名称]: 改变能力或是显示当前能力。
 ac.command.aim.catlist=/aim catlist: 列出所有可用能力。
 ac.command.aim.learn=/aim learn <id>|<技能名称>: 无视所有要求学习指定技能。
 ac.command.aim.unlearn=/aim unlearn <id>|<技能名>: 取消学习某个技能。
@@ -330,6 +330,34 @@ ac.command.aim.warning=§c警告：使用/aim指令会破坏游戏平衡并且�
 ac.command.aim.outofrange=§c输入不合法：§f必须是%s和%s之间的一个值。
 ac.command.aim.maxout=/aim maxout: 将当前等级升级进度设置为100%%。
 ac.command.aim.nonecathint=你还未学习能力！
+
+ac.command.aimp.usage=/aimp <player name> <command>|<help> [参数...]
+ac.command.aimp.help=/aimp help: 显示帮助信息。
+ac.command.aimp.cat=/aimp <player name> cat [能力名称]: 改变指定玩家的能力或是显示当前能力。
+ac.command.aimp.catlist=/aimp <player name> catlist: 列出所有可用能力。
+ac.command.aimp.learn=/aimp <player name> learn <id>|<技能名称>: 无视所有要求学习指定技能。
+ac.command.aimp.unlearn=/aimp <player name> unlearn <id>|<技能名>: 取消学习某个技能。
+ac.command.aimp.learn_all=/aimp <player name> learn_all: 学习所有技能。
+ac.command.aimp.reset=/aimp <player name> reset: 清空你的能力信息。
+ac.command.aimp.learned=/aimp <player name> learned: 显示已学习的技能。
+ac.command.aimp.skills=/aimp <player name> skills: 显示玩家当前能力的所有技能。
+ac.command.aimp.fullcp=/aimp <player name> fullcp: 将当前玩家CP恢复至满。
+ac.command.aimp.level=/aimp <player name> level: 设置当前玩家的能力等级。
+ac.command.aimp.exp=/aimp <player name> exp <id>|<技能名> [值]: 设置或者修改某技能的经验。
+ac.command.aimp.cd_clear=/aimp <player name> cd_clear: 清除所有技能的冷却。
+ac.command.aimp.nocat=该能力不存在。使用 /aimp catlist 以列出所有能力。
+ac.command.aimp.cats=当前可用能力:
+ac.command.aimp.curcat=玩家当前能力: %s
+ac.command.aimp.nonecat=无能力
+ac.command.aimp.noskill=该技能不存在。使用 /aimp <player name> skills 以列出当前能力系的所有技能。
+ac.command.aimp.learned.format=已习得技能: %s
+ac.command.aimp.curexp=技能 %s的当前经验: %.0f%%.
+ac.command.aimp.nocomm=该指令不存在。使用 /aimp help 以列出当前可用的所有指令。
+ac.command.aimp.notactive=/aimp指令当前未被开启。使用/aimp cheats_on或/aimp cheats_off来改变开启状态。
+ac.command.aimp.warning=§c警告：使用/aimp指令会破坏游戏平衡并且影响你对mod内容的体验。请谨慎使用！
+ac.command.aimp.outofrange=§c输入不合法：§f必须是%s和%s之间的一个值。
+ac.command.aimp.maxout=/aimp <player name> maxout: 将当前等级升级进度设置为100%%。
+ac.command.aimp.nonecathint=你还未学习能力！
 
 # 进度
 advancements.general.root=Academy Craft

@@ -134,7 +134,11 @@ public abstract class CommandAIMBase extends ACCommand {
                     Category cat = catList.get(i);
                     sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
                 }
-            } else{
+            } else if (pars[0].equals("help") || pars[0].equals("?")) {
+                for(String c : commands) {
+                    sendChat(ics, getLoc(c));
+                }
+            }else{
                 sendChat(ics, locNoPlayer());
             }
         }
@@ -150,20 +154,12 @@ public abstract class CommandAIMBase extends ACCommand {
 
     public CommandAIMBase(String name) {
         super(name);
-        localName = "aim";
     }
     
     protected void matchCommands(ICommandSender ics, EntityPlayer player, String[] pars) {
         AbilityData aData = AbilityData.get(player);
         switch(pars[0]) {
-        case "?":
-        case "help": {
-            for(String c : commands) {
-                sendChat(ics, getLoc(c));
-            }
-            return;
-        }
-        
+
         case "cat": {
             if(pars.length == 1) {
                 sendChat(ics, getLoc("curcat"), aData.hasCategory() ?
