@@ -1,5 +1,6 @@
 package cn.academy.command;
 
+import cn.academy.AcademyCraft;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import cn.academy.ability.Skill;
@@ -49,9 +50,10 @@ public abstract class CommandAIMBase extends ACCommand {
         public void execute(MinecraftServer svr, ICommandSender commandSender, String[] pars) {
             EntityPlayer player = null;
             try {
-                player = super.getCommandSenderAsPlayer(commandSender);
+                player = getCommandSenderAsPlayer(commandSender);
             } catch (PlayerNotFoundException e) {
-                throw new RuntimeException(e);
+                AcademyCraft.log.warn("Attempt to use command \"aim\" in the console.");
+                return;
             }
 
             if(!isActive(player) && player.getEntityWorld().getWorldInfo().areCommandsAllowed()) {
@@ -125,7 +127,14 @@ public abstract class CommandAIMBase extends ACCommand {
                 }
                 
                 matchCommands(ics, player, newPars);
-            } else {
+            } else if (pars[0].equals("catlist")) {
+                sendChat(ics, getLoc("cats"));
+                List<Category> catList = CategoryManager.INSTANCE.getCategories();
+                for(int i = 0; i < catList.size(); ++i) {
+                    Category cat = catList.get(i);
+                    sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
+                }
+            } else{
                 sendChat(ics, locNoPlayer());
             }
         }
@@ -173,16 +182,6 @@ public abstract class CommandAIMBase extends ACCommand {
                 return;
             }
             break;    
-        }
-        
-        case "catlist": {
-            sendChat(ics, getLoc("cats"));
-            List<Category> catList = CategoryManager.INSTANCE.getCategories();
-            for(int i = 0; i < catList.size(); ++i) {
-                Category cat = catList.get(i);
-                sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
-            }
-            return;
         }
         
         case "learn": {
