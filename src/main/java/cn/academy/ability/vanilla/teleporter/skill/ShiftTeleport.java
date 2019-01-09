@@ -75,16 +75,16 @@ public class ShiftTeleport extends Skill
 
         @Listener(channel=MSG_MADEALIVE, side= Side.SERVER)
         private void s_madeAlive(){
-            ItemStack stack  = player.getHeldItemMainhand();
-            Block block  = null;
-            if(!(stack.getItem() != Items.AIR && (stack.getItem() instanceof ItemBlock) &&
-                    Block.getBlockFromItem(stack.getItem()) != Blocks.AIR))
-            terminate();
+            if(!isHandValid())
+                terminate();
         }
 
         @Listener(channel=MSG_KEYUP, side=Side.CLIENT)
         private void l_onKeyUp(){
-            sendToServer(MSG_EXECUTE);
+            if(isHandValid())
+                sendToServer(MSG_EXECUTE);
+            else
+                terminate();
         }
 
         @Listener(channel=MSG_KEYABORT, side=Side.CLIENT)
@@ -135,6 +135,13 @@ public class ShiftTeleport extends Skill
                 ctx.setCooldown((int)lerpf(100, 60, exp));
             }
             terminate();
+        }
+
+        private boolean isHandValid()
+        {
+            ItemStack stack  = player.getHeldItemMainhand();
+            return stack.getItem() != Items.AIR && (stack.getItem() instanceof ItemBlock) &&
+                    Block.getBlockFromItem(stack.getItem()) != Blocks.AIR;
         }
 
         private float getExpIncr(int attackEntities)
