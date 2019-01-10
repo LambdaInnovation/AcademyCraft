@@ -9,6 +9,7 @@ public class AnalyticDto {
     private String city;
     private boolean isClient;
     private boolean isSended;
+    private Integer skillTimes;
 
     public void initNaNIPInfo(){
         ip="";
@@ -70,5 +71,13 @@ public class AnalyticDto {
 
     public void setClient(boolean client) {
         isClient = client;
+    }
+
+    public Integer getSkillTimes() {
+        return skillTimes;
+    }
+
+    public void setSkillTimes(Integer skillTimes) {
+        this.skillTimes = skillTimes;
     }
 }

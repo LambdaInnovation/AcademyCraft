@@ -1,6 +1,8 @@
 package cn.academy.analyticUtil;
 
 import cn.academy.AcademyCraft;
+import cn.academy.event.ability.LevelChangeEvent;
+import cn.academy.event.ability.SkillLearnEvent;
 import cn.lambdalib2.util.SideUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,6 +18,8 @@ public class AnalyticDataListener {
     private AnalyticDto dataSource;
     public static final AnalyticDataListener instence = new AnalyticDataListener();
     private boolean isClinet;
+    private String ACversion;
+    private static AnalyticInfoSender sender = new AnalyticInfoSender(300);
 
     private AnalyticDataListener(){
         dataSource = new AnalyticDto();
@@ -24,6 +28,7 @@ public class AnalyticDataListener {
 
     @SubscribeEvent
     public void loginListener(PlayerEvent.PlayerLoggedInEvent event){
+        dataSource.setSkillTimes(0);
         dataSource.setClient(SideUtils.isClient());
         EntityPlayer p = event.player;
         p.getGameProfile().getId();
@@ -37,25 +42,26 @@ public class AnalyticDataListener {
             dataSource.setProvince(ipArray[4]);
             dataSource.setCity(ipArray[5]);
         }
-//        AcademyCraft.log.info(dataSource.getCountry()+dataSource.getIp());
-//        try {
-//            AnalyticInfoSender analyticInfoSender = new AnalyticInfoSender();
-//            analyticInfoSender.postSender(dataSource);
-//        }catch (Exception e){
-//            AcademyCraft.log.error(e);
-//        }
+        sender.linkStart(dataSource);
     }
 
     @SubscribeEvent
-    public void damageSkillListener(AnalyticEvent event){
-
-//        String skillName = event.skill.getFullName();
-//        Entity target = event.target;
-//        String targetName = target.getName();
+    public void skillListener(AnalyticEvent event){
+        Integer times = dataSource.getSkillTimes()+1;
+        dataSource.setSkillTimes(times);
         AcademyCraft.log.info(event.getUserName()+"EEEEEEEEE");
         AcademyCraft.log.info(event.getSkillName()+"EEEEEEEEE");
     }
 
+    @SubscribeEvent
+    public void levelChangeListener(LevelChangeEvent event){
+
+    }
+
+    @SubscribeEvent
+    public void skillLearnListener(SkillLearnEvent event){
+
+    }
     /**
      * 获取ip信息/IP归属地
      * @return
@@ -74,4 +80,11 @@ public class AnalyticDataListener {
     }
 
 
+    public String getACversion() {
+        return ACversion;
+    }
+
+    public void setACversion(String ACversion) {
+        this.ACversion = ACversion;
+    }
 }
