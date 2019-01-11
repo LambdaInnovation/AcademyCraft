@@ -47,7 +47,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onKeyAbort() = {
-    sendToClient(MSG_MARK_END)
+    sendToSelf(MSG_MARK_END)
     terminate()
   }
 
