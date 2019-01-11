@@ -180,7 +180,7 @@ public class CatElectromaster extends Category {
         for (String entityName : cfgEntities) {
             Class<? extends Entity> c = EntityList.getClass(new ResourceLocation(entityName));
             if (c == null)
-                AcademyCraft.log.warn("Invalid entity name: " + entityName + " at academy.cfg.");
+                throw new RuntimeException("Invalid entity name: " + entityName + " at academy.cfg.");
 
             metalEntities.add(c);
         }
