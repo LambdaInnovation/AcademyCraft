@@ -60,18 +60,26 @@ public abstract class CommandAIMBase extends ACCommand {
                 setActive(player, true);
             }
 
+            for(int i=0;i<pars.length;i++){pars[i]=pars[i].toLowerCase();}
             if(pars.length == 1) {
                 switch(pars[0]) {
-                case "cheats_on":
-                    setActive(player, true);
-                    sendChat(commandSender, locSuccessful());
-                    sendChat(commandSender, getLoc("warning"));
-                    return;
-                case "cheats_off":
-                    setActive(player, false);
-                    sendChat(commandSender, locSuccessful());
-                    return;
+                    case "cheats_on":
+                        setActive(player, true);
+                        sendChat(commandSender, locSuccessful());
+                        sendChat(commandSender, getLoc("warning"));
+                        return;
+                    case "cheats_off":
+                        setActive(player, false);
+                        sendChat(commandSender, locSuccessful());
+                        return;
+                    case "?":
+                    case "help":
+                        for(String c : commands)
+                        {
+                            sendChat(commandSender, getLoc(c));
+                        }
                 }
+
             }
             
             if(!isActive(player) && !player.capabilities.isCreativeMode) {
@@ -109,6 +117,7 @@ public abstract class CommandAIMBase extends ACCommand {
         
         @Override
         public void execute(MinecraftServer svr, ICommandSender ics, String[] pars) {
+            for(int i=0;i<pars.length;i++){pars[i]=pars[i].toLowerCase();}
             if(pars.length == 0) {
                 sendChat(ics, getLoc("help"));
                 return;
