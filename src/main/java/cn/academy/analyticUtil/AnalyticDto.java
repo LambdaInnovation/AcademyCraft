@@ -3,13 +3,13 @@ package cn.academy.analyticUtil;
 public class AnalyticDto {
 
     private String uuidName;
+    private String version;
     private String ip;
     private String country;
     private String province;
     private String city;
     private boolean isClient;
     private boolean isSended;
-    private Integer skillTimes;
 
     public void initNaNIPInfo(){
         ip="";
@@ -73,11 +73,11 @@ public class AnalyticDto {
         isClient = client;
     }
 
-    public Integer getSkillTimes() {
-        return skillTimes;
+    public String getVersion() {
+        return version;
     }
 
-    public void setSkillTimes(Integer skillTimes) {
-        this.skillTimes = skillTimes;
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

@@ -1,7 +1,6 @@
 package cn.academy.analyticUtil;
 
-import cn.academy.AcademyCraft;
-
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,27 +23,21 @@ public class AnalyticInfoSender {
     public AnalyticInfoSender(int second){
         this.second = second;
     }
-    public void linkStart(AnalyticDto dataSource){
-        TimerTask task = new AnalysisTask(dataSource);
+    public void linkStart(Map<String,AnalyticDto> sourceMap){
+        TimerTask task = new AnalysisTask(sourceMap);
         Timer timer = new Timer();
         timer.schedule(task,0,second*1000);
     }
 }
 
 class AnalysisTask extends TimerTask{
-    private AnalyticDto dataSource;
-    AnalysisTask(AnalyticDto dataSource){
-        this.dataSource=dataSource;
+    private Map<String,AnalyticDto> sourceMap;
+    AnalysisTask(Map<String,AnalyticDto> sourceMap){
+        this.sourceMap=sourceMap;
     }
 
     @Override
     public void run() {
-        if(dataSource.isSended()) {
-            AcademyCraft.log.info("nekoChan");
-        }else {
-            AcademyCraft.log.info("tsumetaiRaito");
-            dataSource.setSended(true);
-        }
-        AcademyCraft.log.info(dataSource.getSkillTimes());
+
     }
 }

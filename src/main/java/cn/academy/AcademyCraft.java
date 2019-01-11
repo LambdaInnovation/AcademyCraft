@@ -58,7 +58,7 @@ public class AcademyCraft {
 
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
-    public static AnalyticDataListener analyticDataListener = AnalyticDataListener.instence;
+    public static AnalyticDataListener analyticDataListener = AnalyticDataListener.instance;
 
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
         @Override

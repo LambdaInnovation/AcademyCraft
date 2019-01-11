@@ -1,14 +1,14 @@
-package cn.academy.analyticUtil;
+package cn.academy.analyticUtil.events;
 
 import cn.academy.ability.Skill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class AnalyticEvent extends Event {
+public class AnalyticSkillEvent extends Event {
     private String skillName;
     private String userName;
 
-    public AnalyticEvent(EntityPlayer p, Skill s){
+    public AnalyticSkillEvent(EntityPlayer p, Skill s){
         userName = p.getName();
         skillName = s.getName();
     }

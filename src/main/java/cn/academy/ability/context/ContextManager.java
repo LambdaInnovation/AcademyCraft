@@ -1,7 +1,7 @@
 package cn.academy.ability.context;
 
 import cn.academy.ability.context.Context.Status;
-import cn.academy.analyticUtil.AnalyticEvent;
+import cn.academy.analyticUtil.events.AnalyticSkillEvent;
 import cn.academy.event.ability.CategoryChangeEvent;
 import cn.academy.event.ability.OverloadEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage;
@@ -254,7 +254,6 @@ public enum ContextManager {
 
                 alive.add(data);
                 NetworkMessage.sendToSelf(data.ctx, Context.MSG_MADEALIVE);
-                MinecraftForge.EVENT_BUS.post(new AnalyticEvent(data.ctx.player,data.ctx.skill));
                 for (Call call : data.calls) {
                     mToServer(data.ctx, call.msg, call.args);
                 }
@@ -424,7 +423,7 @@ public enum ContextManager {
                 NetworkMessage.sendTo(player, LocalManager.instance, M_ESTABLISH_LINK, clientID, nextServerID);
                 NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_MAKEALIVE,
                         writeContextType(ctx.getClass()), player, nextServerID);
-
+                MinecraftForge.EVENT_BUS.post(new AnalyticSkillEvent(data.ctx.player,data.ctx.skill));
                 nextServerID += 1;
 
                 log("[SVR] BeginLink");
