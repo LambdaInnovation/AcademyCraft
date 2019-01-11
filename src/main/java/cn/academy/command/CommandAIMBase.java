@@ -78,6 +78,7 @@ public abstract class CommandAIMBase extends ACCommand {
                         {
                             sendChat(commandSender, getLoc(c));
                         }
+                        return;
                 }
 
             }
