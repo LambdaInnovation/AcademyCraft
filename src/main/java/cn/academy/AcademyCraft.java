@@ -35,7 +35,7 @@ import java.util.Map.Entry;
  *
  */
 @Mod(modid = "academy", name = "AcademyCraft", version = AcademyCraft.VERSION,
-     dependencies = "required-after:lambdalib2@@LAMBDA_LIB_VERSION@") // LambdaLib is currently unstable. Supports only one version.
+     dependencies = "required-after:lambdalib2@[@LAMBDA_LIB_VERSION@]")
 @RegistryMod(rootPackage = "cn.academy.", resourceDomain = "academy")
 public class AcademyCraft {
 
