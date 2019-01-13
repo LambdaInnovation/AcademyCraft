@@ -100,7 +100,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     }
 
     private boolean shouldGenerate() {
-        return completeness == Completeness.COMPLETE && mainTile.complete && mainTile.isFanInstalled();
+        return completeness == Completeness.COMPLETE && mainTile.noObstacle && mainTile.isFanInstalled();
     }
     
     @Override
