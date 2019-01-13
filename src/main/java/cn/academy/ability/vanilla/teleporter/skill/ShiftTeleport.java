@@ -16,6 +16,7 @@ import cn.lambdalib2.util.EntitySelectors;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -108,22 +109,30 @@ public class ShiftTeleport extends Skill
 
             ItemBlock item = (ItemBlock) stack.getItem();
             RayTraceResult position = getTracePosition();
-            if(item.getBlock().canPlaceBlockAt(player.world, position.getBlockPos().add(position.sideHit.getDirectionVec()))
-                    && ctx.canBreakBlock(player.world, position.getBlockPos()) &&
-                    ctx.consume(getOverload(exp), getConsumption(exp))) {
-
-                IBlockState state = block.getStateForPlacement(world(), position.getBlockPos()
-                        , position.sideHit, (float)position.hitVec.x, (float)position.hitVec.y,
-                        (float)position.hitVec.z, stack.getItemDamage(), player, EnumHand.MAIN_HAND);
-                item.placeBlockAt(stack, player, player.world, position.getBlockPos().add(position.sideHit.getDirectionVec())
-                        , position.sideHit, (float)position.hitVec.x, (float)position.hitVec.y, (float)position.hitVec.z,
-                        state);
-                if(!player.capabilities.isCreativeMode)
-                    if(stack.getCount()<=1)
-                        player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
-                    else
-                        stack.setCount(stack.getCount()-1);
-
+            if(ctx.consume(getOverload(exp), getConsumption(exp)))
+            {
+                if(item.getBlock().canPlaceBlockAt(player.world, position.getBlockPos().add(position.sideHit.getDirectionVec()))
+                        && ctx.canBreakBlock(player.world, position.getBlockPos())
+                )//Can place
+                {
+                    IBlockState state = block.getStateForPlacement(world(), position.getBlockPos()
+                            , position.sideHit, (float)position.hitVec.x, (float)position.hitVec.y,
+                            (float)position.hitVec.z, stack.getItemDamage(), player, EnumHand.MAIN_HAND);
+                    item.placeBlockAt(stack, player, player.world, position.getBlockPos().add(position.sideHit.getDirectionVec())
+                            , position.sideHit, (float)position.hitVec.x, (float)position.hitVec.y, (float)position.hitVec.z,
+                            state);
+                    if(!player.capabilities.isCreativeMode)
+                        if(stack.getCount()<=1)
+                            player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                        else
+                            stack.setCount(stack.getCount()-1);
+                }
+                else//Drop as item
+                {
+                    ItemStack drop = stack.copy();
+                    drop.setCount(1);
+                    player.world.spawnEntity(new EntityItem(player.world, position.hitVec.x, position.hitVec.y, position.hitVec.z, drop));
+                }
                 List<Entity> list = getTargetsInLine();
                 for(Entity target :list) {
                     TPSkillHelper.attack(ctx, target, getDamage(exp));
