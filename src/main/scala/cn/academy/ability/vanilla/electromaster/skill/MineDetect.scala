@@ -168,7 +168,7 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
 class HandlerRender(m: RenderManager) extends Render[HandlerEntity](m) {
 
   final val texture = Resources.getTexture("effects/mineview")
-  final val mesh = LegacyMeshUtils.createBoxWithUV(null, 0, 0, 0, .9, .9, .9)
+  final val mesh = LegacyMeshUtils.createBoxWithUV(null, .05, .05, .05, .9, .9, .9)
   final val material = new SimpleMaterial(texture).setIgnoreLight()
 
   final val colors = Array( //alpha will be reset each time rendering
@@ -196,9 +196,9 @@ class HandlerRender(m: RenderManager) extends Render[HandlerEntity](m) {
     t.startDrawing(GL11.GL_TRIANGLES)
     entity.aliveSims.foreach(me => {
       t.setTranslation(
-        me.x - renderManager.viewerPosX + .5,
-        me.y - renderManager.viewerPosY + .5,
-        me.z - renderManager.viewerPosZ + .5
+        me.x - renderManager.viewerPosX,
+        me.y - renderManager.viewerPosY,
+        me.z - renderManager.viewerPosZ
       )
       drawSingle(me, calcAlpha(entity.posX - me.x, entity.posY - me.y, entity.posZ - me.z, entity.range))
     })
