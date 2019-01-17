@@ -1,6 +1,7 @@
 package cn.academy.client.render.entity.ray;
 
 import cn.academy.entity.IRay;
+import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.ViewOptimize;
@@ -31,7 +32,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 
     @Override
     public void doRender(Entity entity, double x, double y, double z, 
-            float a, float b) {
+            float yaw, float partialTicks) {
         T ray = (T) entity;
         
         Minecraft mc = Minecraft.getMinecraft();
@@ -47,7 +48,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         
         //Calculate the most appropriate 'billboard-up' direction.
         //The ray viewing direction.
-        Vec3d dir = VecUtils.toDirVector(entity);
+        Vec3d dir = VecUtils.toDirVector(entity, partialTicks);
         //Pick two far enough start and end point.
         Vec3d start = VecUtils.multiply(dir, ray.getStartFix()),
             end = VecUtils.add(start, VecUtils.multiply(dir, ray.getLength() - ray.getStartFix()));
@@ -85,8 +86,9 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         //DEBUG END
         
         if(ray.needsViewOptimize()) {
+            yaw = MathUtils.lerpDegree(entity.prevRotationYaw, entity.rotationYaw, partialTicks);
             Vec3d vec = ViewOptimize.getFixVector(ray);
-            vec.rotateYaw((float) ((270 - entity.rotationYaw) / 180 * Math.PI));
+            vec = vec.rotateYaw((float) ((270 - yaw) / 180 * Math.PI));
             start = VecUtils.add(start, vec);
             
             // Don't fix end to get accurate pointing direction
