@@ -171,7 +171,7 @@ task mySourcesJava(type: Copy) {
     into 'build/tempSourcesJava'
     filteringCharset = 'UTF-8'
     filter(ReplaceTokens, tokens: [VERSION: config.mod_ver])
-    filter(ReplaceTokens, tokens: [LAMBDA_LIB_VERSION: config.lambdalib_ver])
+    filter(ReplaceTokens, tokens: [LAMBDA_LIB_VERSION: "[" + config.lambdalib_ver + "]"])
     filter(ReplaceTokens, tokens: [MC_VERSION: config.mc_ver])
 }
 
