@@ -1,6 +1,5 @@
 package cn.academy.analyticUtil;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ public class AnalyticDto {
     private String province;
     private String city;
     private Integer sent=0;
-    private Date startTime;
+    private String startTime;
     private String level;
     private Map<String,Integer> countMap=new HashMap<>();
 
@@ -105,13 +104,6 @@ public class AnalyticDto {
         this.sent = sent;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
 
     public String getLevel() {
         return level;
@@ -119,5 +111,13 @@ public class AnalyticDto {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 }

@@ -18,6 +18,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class AnalyticDataListener {
     private Map<String,AnalyticDto> sourceMap;
     public static final AnalyticDataListener instance = new AnalyticDataListener();
     private static AnalyticInfoSender sender;
-
+    private DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private AnalyticDataListener(){
         serverSource = null;
         sourceMap = new HashMap<>();
@@ -44,7 +46,7 @@ public class AnalyticDataListener {
             serverSource = new AnalyticDto();
             serverSource.setVersion(AcademyCraft.VERSION);
             serverSource.setUuidName("server");
-            serverSource.setStartTime(new Date());
+            serverSource.setStartTime(df.format(new Date()));
             String[] ipArray = getCurrentIPinfo().split(" ");
             if (ipArray.length == 0) {
                 serverSource.initNaNIPInfo();
@@ -80,7 +82,7 @@ public class AnalyticDataListener {
         playerData.setVersion(AcademyCraft.VERSION);
         playerData.setName(player.getName());
         playerData.setUuidName(player.getUniqueID()+player.getName());
-        playerData.setStartTime(new Date());
+        playerData.setStartTime(df.format(new Date()));
         String[] ipArray = ipInfo.split(" ");
         if (ipArray.length == 0) {
             playerData.initNaNIPInfo();
