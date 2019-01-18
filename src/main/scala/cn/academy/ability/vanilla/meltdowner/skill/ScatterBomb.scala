@@ -6,10 +6,13 @@ import java.util.function.Predicate
 import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientRuntime, Context}
 import cn.academy.client.render.util.ACRenderingHelper
-import cn.academy.entity.EntityMdBall
+import cn.academy.entity.{EntityMdBall, EntityMdRaySmall}
 import cn.academy.network.NetworkManager
+import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.{NetworkMessage, NetworkS11n, NetworkS11nType, TargetPoints}
 import cn.lambdalib2.util._
+import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
@@ -104,7 +107,13 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
         traceResult.entityHit.hurtResistantTime = -1
         MDDamageHelper.attack(ctx, traceResult.entityHit, getDamage(exp))
       }
-      NetworkManager.sendSBEffectToClient(player, new Vec3d(ball.posX, ball.posY, ball.posZ), new Vec3d(dest.x,dest.y,dest.z))
+      NetworkMessage.sendToAllAround(
+        TargetPoints.convert(player, 25),
+        SBNetDelegate.INSTANCE,
+        SBNetDelegate.MSG_EFFECT,
+        ball.getPositionVector,
+        dest
+      )
       ball.setDead()
     }
     ctx.addSkillExp(0.001f * balls.size)

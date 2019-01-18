@@ -30,7 +30,6 @@ public class NetworkManager
     public static void init(FMLPreInitializationEvent event)
     {
         registerMessage(MessageConfig.Handler.class, MessageConfig.class, Side.CLIENT);
-        registerMessage(MessageSBEffect.Handler.class, MessageSBEffect.class, Side.CLIENT);
     }
 
     private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(
@@ -50,18 +49,4 @@ public class NetworkManager
         }
     }
 
-    public static void sendSBEffectToClient(EntityPlayer speller, Vec3d str, Vec3d end)
-    {
-        List<Entity> list= WorldUtils.getEntities(speller, 25, EntitySelectors.player());
-        for(Entity e:list)
-        {
-            if(!speller.getEntityWorld().isRemote)
-            {
-                MessageSBEffect msg = new MessageSBEffect(str,end);
-                instance.sendTo(msg, (EntityPlayerMP)speller);
-            }
-            else
-                throw new IllegalStateException("Wrong context side!");
-        }
-    }
 }
