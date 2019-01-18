@@ -6,11 +6,11 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class AnalyticSkillEvent extends Event {
     private String skillName;
-    private String userName;
+    private EntityPlayer player;
 
     public AnalyticSkillEvent(EntityPlayer p, Skill s){
-        userName = p.getName();
         skillName = s.getName();
+        player = p;
     }
 
 
@@ -22,11 +22,11 @@ public class AnalyticSkillEvent extends Event {
         this.skillName = skillName;
     }
 
-    public String getUserName() {
-        return userName;
+    public EntityPlayer getPlayer() {
+        return player;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setPlayer(EntityPlayer player) {
+        this.player = player;
     }
 }

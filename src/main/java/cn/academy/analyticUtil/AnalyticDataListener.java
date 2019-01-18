@@ -3,10 +3,11 @@ package cn.academy.analyticUtil;
 import cn.academy.AcademyCraft;
 import cn.academy.analyticUtil.events.AnalyticLevelUpEvent;
 import cn.academy.analyticUtil.events.AnalyticSkillEvent;
+import cn.academy.datapart.AbilityData;
+import cn.academy.event.ability.LevelChangeEvent;
 import cn.academy.event.ability.SkillLearnEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkS11n;
-import cn.lambdalib2.util.SideUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,6 +18,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,13 +27,15 @@ public class AnalyticDataListener {
     private static final String CHANNEL="analysisChannel";
     private Map<String,AnalyticDto> sourceMap;
     public static final AnalyticDataListener instance = new AnalyticDataListener();
-    private static AnalyticInfoSender sender = new AnalyticInfoSender(300);
+    private static AnalyticInfoSender sender;
 
     private AnalyticDataListener(){
         serverSource = null;
         sourceMap = new HashMap<>();
         NetworkS11n.addDirectInstance(this);
         MinecraftForge.EVENT_BUS.register(this);
+        sender = new AnalyticInfoSender(20);
+        sender.linkStart(sourceMap);
     }
 
     @SubscribeEvent
@@ -39,8 +43,8 @@ public class AnalyticDataListener {
         if(null==serverSource) {
             serverSource = new AnalyticDto();
             serverSource.setVersion(AcademyCraft.VERSION);
-            serverSource.setClient(SideUtils.isClient());
             serverSource.setUuidName("server");
+            serverSource.setStartTime(new Date());
             String[] ipArray = getCurrentIPinfo().split(" ");
             if (ipArray.length == 0) {
                 serverSource.initNaNIPInfo();
@@ -50,50 +54,95 @@ public class AnalyticDataListener {
                 serverSource.setProvince(ipArray[4]);
                 serverSource.setCity(ipArray[5]);
             }
-            sourceMap.put("server",serverSource);
-            sender.linkStart(sourceMap);
         }
         NetworkMessage.sendTo(event.player,this,CHANNEL,event.player);
     }
 
+    //on Client
     @NetworkMessage.Listener(channel=CHANNEL,side=Side.CLIENT)
     public void clientInfoInitializer(EntityPlayer player){
-        AcademyCraft.log.info(player.getName());
+        Boolean isServer = false;
+        if(serverSource==null){
+            isServer = true;
+        }
+        NetworkMessage.sendToServer(this,CHANNEL,getCurrentIPinfo(),player,isServer);
     }
 
+    //receive the ip info from the client
     @NetworkMessage.Listener(channel = CHANNEL,side = Side.SERVER)
-    public void testA(){
-        AcademyCraft.log.info("serverGet");
-    }
-
-    @NetworkMessage.Listener(channel = CHANNEL,side = Side.CLIENT)
-    public void testB(){
-        AcademyCraft.log.info("clientGet");
+    public void serverIpCollector(String ipInfo,EntityPlayer player,Boolean isServer){
+        if(isServer){
+            if(!sourceMap.containsKey("server")){
+                sourceMap.put("server",serverSource);
+            }
+        }
+        AnalyticDto playerData = new AnalyticDto();
+        playerData.setVersion(AcademyCraft.VERSION);
+        playerData.setName(player.getName());
+        playerData.setUuidName(player.getUniqueID()+player.getName());
+        playerData.setStartTime(new Date());
+        String[] ipArray = ipInfo.split(" ");
+        if (ipArray.length == 0) {
+            playerData.initNaNIPInfo();
+        } else {
+            playerData.setIp(ipArray[1].split("：")[1]);
+            playerData.setCountry(ipArray[3].split("：")[1]);
+            playerData.setProvince(ipArray[4]);
+            playerData.setCity(ipArray[5]);
+        }
+        playerData.setLevel(String.valueOf(AbilityData.get(player).getLevel()));
+        sourceMap.put(playerData.getUuidName(),playerData);
     }
 
     //on Server
     @SubscribeEvent
     public void skillListener(AnalyticSkillEvent event){
-        AcademyCraft.log.info(event.getUserName()+"EEEEEEEE");
-        AcademyCraft.log.info(event.getSkillName()+"EEEEEEEEE");
-
+        EntityPlayer targetPlayer = event.getPlayer();
+        String uuid = targetPlayer.getUniqueID()+targetPlayer.getName();
+        if(sourceMap.containsKey(uuid)){
+            Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
+            if(countMap.containsKey(event.getSkillName())){
+                countMap.replace(event.getSkillName(), (countMap.get(event.getSkillName()) + 1));
+            }else {
+                countMap.put(event.getSkillName(),1);
+            }
+            sourceMap.get(uuid).sentReset();
+        }
     }
-    //on Server
+
     @SubscribeEvent
     public void levelUpListener(AnalyticLevelUpEvent event){
-        AcademyCraft.log.info(event.getEntityPlayer().getUniqueID() + event.getEntityPlayer().getName());
+        String uuid = event.getEntityPlayer().getUniqueID() + event.getEntityPlayer().getName();
+        if(sourceMap.containsKey(uuid)){
+            Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
+            if(countMap.containsKey("levelUp")){
+                countMap.replace("levelUp",(countMap.get("levelUp")+1));
+            }else {
+                countMap.put("levelUp",1);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void levelChangeListener(LevelChangeEvent event){
+        String uuid = event.player.getUniqueID() + event.player.getName();
+        sourceMap.get(uuid).setLevel(String.valueOf(event.getAbilityData().getLevel()));
     }
 
     @SubscribeEvent
     public void skillLearnListener(SkillLearnEvent event){
-        event.player.getName();
-        event.player.getUniqueID();
-        AcademyCraft.log.info(event.player.getName()+event.skill.getName());
+        String uuid = event.player.getUniqueID() + event.player.getName();
+        if(sourceMap.containsKey(uuid)){
+            Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
+            if(countMap.containsKey("skillLearn")){
+                countMap.replace("skillLearn",(countMap.get("skillLearn")+1));
+            }else {
+                countMap.put("skillLearn",1);
+            }
+        }
     }
-    /**
-     * 获取ip信息/IP归属地
-     * @return
-     */
+
+    //get ip info
     private String getCurrentIPinfo(){
         String ipInfo = "";
         Runtime run = Runtime.getRuntime();

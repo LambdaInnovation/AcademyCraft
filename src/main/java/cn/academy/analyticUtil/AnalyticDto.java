@@ -1,15 +1,22 @@
 package cn.academy.analyticUtil;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class AnalyticDto {
 
     private String uuidName;
+    private String name;
     private String version;
     private String ip;
     private String country;
     private String province;
     private String city;
-    private boolean isClient;
-    private boolean isSended;
+    private Integer sent=0;
+    private Date startTime;
+    private String level;
+    private Map<String,Integer> countMap=new HashMap<>();
 
     public void initNaNIPInfo(){
         ip="";
@@ -17,12 +24,13 @@ public class AnalyticDto {
         province="";
         city="";
     }
-    public boolean isSended() {
-        return isSended;
+
+    public void sentReset(){
+        sent=0;
     }
 
-    public void setSended(boolean sended) {
-        isSended = sended;
+    public void sentPlus(){
+        sent++;
     }
 
     public String getIp() {
@@ -65,19 +73,51 @@ public class AnalyticDto {
         this.uuidName = uuidName;
     }
 
-    public boolean isClient() {
-        return isClient;
-    }
-
-    public void setClient(boolean client) {
-        isClient = client;
-    }
-
     public String getVersion() {
         return version;
     }
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<String, Integer> getCountMap() {
+        return countMap;
+    }
+
+    public void setCountMap(Map<String, Integer> countMap) {
+        this.countMap = countMap;
+    }
+
+    public Integer getSent() {
+        return sent;
+    }
+
+    public void setSent(Integer sent) {
+        this.sent = sent;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }
