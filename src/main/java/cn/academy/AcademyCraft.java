@@ -1,5 +1,6 @@
 package cn.academy;
 
+import cn.academy.analyticUtil.AnalyticDataListener;
 import cn.lambdalib2.crafting.CustomMappingHelper;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
@@ -56,6 +57,8 @@ public class AcademyCraft {
     public static RecipeRegistry recipes;
 
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
+
+    public static AnalyticDataListener analyticDataListener = AnalyticDataListener.instance;
 
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
         @Override
