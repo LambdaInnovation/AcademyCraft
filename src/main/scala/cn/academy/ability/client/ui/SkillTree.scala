@@ -395,10 +395,13 @@ private object Common {
               RenderUtils.loadTexture(texSkillOutline)
 
               glActiveTexture(GL_TEXTURE1)
+              val texture1Binding = glGetInteger(GL_TEXTURE_BINDING_2D)
               RenderUtils.loadTexture(texSkillMask)
 
-              glActiveTexture(GL_TEXTURE0)
               HudUtils.rect(ProgAlign, ProgAlign, ProgSize, ProgSize)
+
+              glBindTexture(GL_TEXTURE_2D, texture1Binding)
+              glActiveTexture(GL_TEXTURE0)
 
               glUseProgram(0)
               glEnable(GL_DEPTH_TEST)
@@ -796,6 +799,7 @@ private object Common {
     glUseProgram(shaderProg.getProgramID)
 
     glActiveTexture(GL_TEXTURE1)
+    val texture1Binding = glGetInteger(GL_TEXTURE_BINDING_2D)
     RenderUtils.loadTexture(texSkillMask)
 
     glActiveTexture(GL_TEXTURE0)
@@ -803,6 +807,10 @@ private object Common {
 
     glUniform1f(posProgress, progress.toFloat)
     HudUtils.rect(0, 0, BackSize, BackSize)
+
+    glActiveTexture(GL_TEXTURE1)
+    glBindTexture(GL_TEXTURE_2D, texture1Binding)
+    glActiveTexture(GL_TEXTURE0)
 
     glUseProgram(0)
 
