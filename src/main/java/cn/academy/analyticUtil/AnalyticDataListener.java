@@ -18,8 +18,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +28,6 @@ public class AnalyticDataListener {
     private Map<String,AnalyticDto> sourceMap;
     public static final AnalyticDataListener instance = new AnalyticDataListener();
     private static AnalyticInfoSender sender;
-    private DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private AnalyticDataListener(){
         serverSource = null;
         sourceMap = new HashMap<>();
@@ -46,7 +43,7 @@ public class AnalyticDataListener {
             serverSource = new AnalyticDto();
             serverSource.setVersion(AcademyCraft.VERSION);
             serverSource.setUuidName("server");
-            serverSource.setStartTime(df.format(new Date()));
+            serverSource.setStartTime(new Date().getTime());
             String[] ipArray = getCurrentIPinfo().split(" ");
             if (ipArray.length == 0) {
                 serverSource.initNaNIPInfo();
@@ -82,7 +79,7 @@ public class AnalyticDataListener {
         playerData.setVersion(AcademyCraft.VERSION);
         playerData.setName(player.getName());
         playerData.setUuidName(player.getUniqueID()+player.getName());
-        playerData.setStartTime(df.format(new Date()));
+        playerData.setStartTime(new Date().getTime());
         String[] ipArray = ipInfo.split(" ");
         if (ipArray.length == 0) {
             playerData.initNaNIPInfo();
@@ -92,7 +89,7 @@ public class AnalyticDataListener {
             playerData.setProvince(ipArray[4]);
             playerData.setCity(ipArray[5]);
         }
-        playerData.setLevel(String.valueOf(AbilityData.get(player).getLevel()));
+        playerData.setLevel(AbilityData.get(player).getLevel());
         sourceMap.put(playerData.getUuidName(),playerData);
     }
 
@@ -128,7 +125,7 @@ public class AnalyticDataListener {
     @SubscribeEvent
     public void levelChangeListener(LevelChangeEvent event){
         String uuid = event.player.getUniqueID() + event.player.getName();
-        sourceMap.get(uuid).setLevel(String.valueOf(event.getAbilityData().getLevel()));
+        sourceMap.get(uuid).setLevel(event.getAbilityData().getLevel());
     }
 
     @SubscribeEvent

@@ -13,8 +13,8 @@ public class AnalyticDto {
     private String province;
     private String city;
     private Integer sent=0;
-    private String startTime;
-    private String level;
+    private long startTime;
+    private Integer level;
     private Map<String,Integer> countMap=new HashMap<>();
 
     public void initNaNIPInfo(){
@@ -105,19 +105,19 @@ public class AnalyticDto {
     }
 
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
-    public String getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 }
