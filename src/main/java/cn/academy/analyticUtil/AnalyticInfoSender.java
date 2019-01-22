@@ -59,7 +59,7 @@ class AnalysisTask extends TimerTask{
             post.setEntity(requestEntity);
             if(params.size()!=0) {
                 client.execute(post);
-                AcademyCraft.log.info(paramsJson);
+//                AcademyCraft.log.info(paramsJson);
             }
         }
     }
