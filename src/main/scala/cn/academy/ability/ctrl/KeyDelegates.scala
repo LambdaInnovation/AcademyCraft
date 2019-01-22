@@ -1,8 +1,7 @@
 package cn.academy.ability.ctrl
 
 import cn.academy.ability.Skill
-import cn.academy.ability.context.KeyDelegate.DelegateState
-import cn.academy.ability.context.{Context, ContextManager, KeyDelegate}
+import cn.academy.ability.context.{Context, ContextManager, DelegateState, KeyDelegate}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 

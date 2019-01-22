@@ -2,7 +2,6 @@ package cn.academy.ability;
 
 import cn.academy.ability.context.*;
 import cn.academy.ability.context.Context.Status;
-import cn.academy.advancements.ACAdvancements;
 import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.condition.DevConditionDep;
@@ -395,7 +394,7 @@ public abstract class Skill extends Controllable {
         }
 
         @Override
-        public KeyDelegate.DelegateState getState() {
+        public DelegateState getState() {
             if (context == null) {
                 return DelegateState.IDLE;
             } else if (context instanceof IStateProvider) {

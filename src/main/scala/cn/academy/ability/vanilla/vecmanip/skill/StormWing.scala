@@ -1,8 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.context.ClientRuntime.IActivateHandler
-import cn.academy.ability.context.KeyDelegate.DelegateState
-import cn.academy.ability.context._
+import cn.academy.ability.context.{DelegateState, _}
 import cn.academy.ability.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
