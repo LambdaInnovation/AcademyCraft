@@ -1,5 +1,6 @@
 package cn.academy.ability.context;
 
+import cn.academy.AcademyCraft;
 import cn.academy.ability.context.Context.Status;
 import cn.academy.analyticUtil.events.AnalyticSkillEvent;
 import cn.academy.event.ability.CategoryChangeEvent;
@@ -35,6 +36,8 @@ import java.util.stream.Stream;
  */
 public enum ContextManager {
     instance;
+
+    private static final boolean DEBUG_LOG = false;
 
     private static final double
             T_KA_TOL = 1.5, // Tile tolerance of receiving keepAlive packets
@@ -152,8 +155,8 @@ public enum ContextManager {
     }
 
     private static void log(Object msg) {
-//        if (AcademyCraft.DEBUG_MODE)
-//             AcademyCraft.log.info("CM: " + msg);
+        if (AcademyCraft.DEBUG_MODE && DEBUG_LOG)
+             AcademyCraft.log.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")
@@ -585,7 +588,7 @@ public enum ContextManager {
         private class ContextData {
             Context ctx;
             int serverID;
-            long lastKeepAlive = time();
+            double lastKeepAlive = time();
             boolean disposed = false;
         }
 
@@ -593,10 +596,11 @@ public enum ContextManager {
         @SideOnly(Side.CLIENT)
         public void __onClientTick(ClientTickEvent evt) {
             if (evt.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
-                long time = time();
+                double time = time();
 
                 for (ContextData data : alive) {
                     if (data.disposed || time - data.lastKeepAlive > T_KA_TOL) {
+                        log("[CLI] Timeout!!");
                         data.disposed = true;
                     } else {
                         NetworkMessage.sendToSelf(data.ctx, Context.MSG_TICK);
@@ -621,8 +625,8 @@ public enum ContextManager {
             alive.clear();
         }
 
-        private long time() {
-            return (long)(GameTimer.getTime()*1000);
+        private double time() {
+            return GameTimer.getTime();
         }
     }
 
