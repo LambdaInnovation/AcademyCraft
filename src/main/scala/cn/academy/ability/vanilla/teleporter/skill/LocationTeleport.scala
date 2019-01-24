@@ -154,8 +154,9 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       e.setPositionAndUpdate(dest.x + dx, dest.y + dy, dest.z + dz)
     })
 
-    ACSounds.playClient(player.getEntityWorld, player.posX, player.posY, player.posZ,"academy:tp.tp", SoundCategory.AMBIENT, 0.5f, 1.0f)
-
+    if(player.world.isRemote) {
+      ACSounds.playClient(player.getEntityWorld, player.posX, player.posY, player.posZ,"academy:tp.tp", SoundCategory.AMBIENT, 0.5f, 1.0f)
+    }
 
     val dist = player.getDistance(dest.x, dest.y, dest.z)
     val expincr = if (dist >= 200) 0.03f else 0.015f
