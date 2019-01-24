@@ -33,7 +33,7 @@ public class AnalyticDataListener {
         sourceMap = new HashMap<>();
         NetworkS11n.addDirectInstance(this);
         MinecraftForge.EVENT_BUS.register(this);
-        sender = new AnalyticInfoSender(20);
+        sender = new AnalyticInfoSender(600);
         sender.linkStart(sourceMap);
     }
 
