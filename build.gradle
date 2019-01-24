@@ -30,7 +30,7 @@ archivesBaseName = config.mod_name
 if(System.getenv()['BRANCH']!=null && System.getenv()['BRANCH']!='master')
 {
     archivesBaseName+=("-"+System.getenv()['BRANCH'])
-    ext.subver=System.getenv()['TRAVIS_COMMIT'][-6..-1]
+    ext.subver=System.getenv()['TRAVIS_COMMIT'][0..6]
     version+=('-'+ext.subver)
 }
 ext.usr = "$System.env.USR"
