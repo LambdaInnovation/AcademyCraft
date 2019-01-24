@@ -61,6 +61,7 @@ minecraft {
 	replace "@VERSION@", config.mod_ver
     replace "@LAMBDA_LIB_VERSION@", config.lambdalib_ver
     replace "@MC_VERSION@", config.mc_ver
+
 }
 
 repositories {
@@ -97,6 +98,8 @@ repositories {
 
 configurations {
     provided
+    shade
+    compile.extendsFrom shade
 }
 
 // sourceSets.main.compileClasspath += [configurations.provided]
@@ -118,6 +121,9 @@ dependencies {
     deobfCompile "CraftTweaker2:CraftTweaker2-API:4.1.9.6"
     deobfCompile "CraftTweaker2:ZenScript:4.1.9.6"
     deobfCompile "net.industrial-craft:industrialcraft-2:2.8.90-ex112"
+
+    shade "org.apache.httpcomponents:httpcore:4.3.2"
+    shade "org.apache.httpcomponents:httpclient:4.3.3"
 }
 
 //sourceSets.main.compileClasspath += [configurations.provided]
@@ -159,6 +165,22 @@ compileScala.options.encoding = "UTF-8"
 task deobfJar(type: Jar, dependsOn: 'jar') {
     classifier 'dev'
     from sourceSets.main.output
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+
+// http://www.minecraftforge.net/forum/topic/36791-trying-to-shade-dependencies-into-jar/
+reobf {
+    jar {
+        extraLines "PK: org/apache/commons/codec cn/academy/shade/org/apache/commons/codec"
+        extraLines "PK: org/apache/http cn/academy/shade/org/apache/http"
+    }
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
