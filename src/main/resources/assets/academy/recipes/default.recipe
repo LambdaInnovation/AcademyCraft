@@ -6,7 +6,7 @@ shapeless(academy:imag_silicon_piece*2){
 
 shaped(academy:data_chip){
 	[redstone,redstone,redstone]
-	[nil,         academy:reinforced_iron_plate,   nil]
+	[nil,         plateIron,   nil]
 }
 
 shaped(academy:data_chip){
@@ -30,9 +30,9 @@ shaped(academy:reinforced_iron_plate *2){
 }
 
 shaped(academy:machine_frame) {
-    [nil,       academy:reinforced_iron_plate,    nil]
-    [academy:reinforced_iron_plate, redstone, academy:reinforced_iron_plate]
-    [nil,       academy:reinforced_iron_plate,    nil]
+    [nil,       plateIron,    nil]
+    [plateIron, redstone, plateIron]
+    [nil,       plateIron,    nil]
 }
 
 shaped(academy:phase_gen) {
@@ -65,9 +65,9 @@ shaped(academy:windgen_main) {
 }
 
 shaped(academy:windgen_fan) {
-    [nil,       academy:reinforced_iron_plate, nil]
-    [academy:reinforced_iron_plate, iron_bars, academy:reinforced_iron_plate]
-    [nil,       academy:reinforced_iron_plate, nil]
+    [nil,       plateIron, nil]
+    [plateIron, iron_bars, plateIron]
+    [nil,       plateIron, nil]
 }
 
 shaped(academy:node_basic) { 
@@ -118,7 +118,7 @@ shaped(academy:constraint_plate*2) {
 
 shaped(academy:terminal_installer) {
     [academy:data_chip, glass_pane, academy:data_chip]
-    [academy:reinforced_iron_plate, academy:brain_component, academy:reinforced_iron_plate]
+    [plateIron, academy:brain_component, plateIron]
     [academy:info_component, redstone_block, academy:info_component]
 }
 
@@ -223,9 +223,9 @@ shaped(academy:app_freq_transmitter) {
 }
 
 shaped(academy:mag_hook*3) {
-    [nil,       academy:reinforced_iron_plate, nil]
-    [academy:reinforced_iron_plate, academy:reinforced_iron_plate, academy:reinforced_iron_plate]
-    [nil,       academy:reinforced_iron_plate, nil]
+    [nil,       plateIron, nil]
+    [plateIron, plateIron, plateIron]
+    [nil,       plateIron, nil]
 }
 
 shaped(academy:developer_portable) {
@@ -273,5 +273,5 @@ shapeless(academy:tutorial) {
 shaped(academy:magnetic_coil) {
     [academy:constraint_plate, academy:reso_crystal, academy:constraint_plate]
     [academy:constraint_plate, academy:reso_crystal, academy:constraint_plate]
-    [academy:reinforced_iron_plate , diamond     , academy:reinforced_iron_plate ]
+    [plateIron , diamond     , plateIron ]
 }
