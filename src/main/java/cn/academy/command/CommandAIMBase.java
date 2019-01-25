@@ -240,7 +240,7 @@ public abstract class CommandAIMBase extends ACCommand {
             
             boolean begin = true;
             for(Skill s : aData.getLearnedSkillList()) {
-                sb.append(begin ? "" : ", " + s.getName());
+                sb.append(begin ? "" : ", ").append(s.getName());
                 begin = false;
             }
             
