@@ -170,6 +170,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     if (evt.getEntityLiving.equals(player)) {
       val (performed, _) = handleAttack(evt.getSource, evt.getAmount, passby = true)
       if (performed) {
+        handleAttack(evt.getSource, evt.getAmount, passby = false)
         evt.setCanceled(true)
       }
     }
@@ -180,6 +181,9 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     if (evt.getEntityLiving.equals(player)  && evt.getAmount <=9999) {
       val (_, dmg) = handleAttack(evt.getSource, evt.getAmount, passby = false)
       evt.setAmount(dmg)
+      if(dmg<=0){
+        evt.setCanceled(true)
+      }
     }
   }
 
@@ -201,7 +205,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
       (true, dmg - reflectDamage)
     } else {
-      (false, dmg - reflectDamage)
+      (reflectDamage>=1, dmg - reflectDamage)
     }
   }
 
