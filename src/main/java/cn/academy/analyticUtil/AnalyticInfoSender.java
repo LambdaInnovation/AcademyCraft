@@ -37,7 +37,7 @@ class AnalysisTask extends TimerTask{
         try {
             postSender(sourceMap);
         }catch (Exception e){
-            AcademyCraft.log.error(e.getMessage());
+            AcademyCraft.log.error(e);
         }
     }
 
@@ -58,8 +58,12 @@ class AnalysisTask extends TimerTask{
             StringEntity requestEntity = new StringEntity(paramsJson, ContentType.APPLICATION_JSON);
             post.setEntity(requestEntity);
             if(params.size()!=0) {
-                client.execute(post);
-//                AcademyCraft.log.info(paramsJson);
+                try {
+                    client.execute(post);
+                }catch (Exception e){
+                    AcademyCraft.log.info("offLine mode");
+                }
+                //AcademyCraft.log.info(paramsJson);
             }
         }
     }

@@ -6,7 +6,6 @@ import java.util.Map;
 public class AnalyticDto {
 
     private String uuidName;
-    private String name;
     private String version;
     private String ip;
     private String country;
@@ -78,14 +77,6 @@ public class AnalyticDto {
 
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Map<String, Integer> getCountMap() {

@@ -18,6 +18,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,19 +35,20 @@ public class AnalyticDataListener {
         sourceMap = new HashMap<>();
         NetworkS11n.addDirectInstance(this);
         MinecraftForge.EVENT_BUS.register(this);
-        sender = new AnalyticInfoSender(600);
+        sender = new AnalyticInfoSender(20);
         sender.linkStart(sourceMap);
     }
 
     @SubscribeEvent
     public void loginListener(PlayerEvent.PlayerLoggedInEvent event){
+        String serverIp = getCurrentIPinfo();
         if(null==serverSource) {
             serverSource = new AnalyticDto();
             serverSource.setVersion(AcademyCraft.VERSION);
             serverSource.setUuidName("server");
             serverSource.setStartTime(new Date().getTime());
-            String[] ipArray = getCurrentIPinfo().split(" ");
-            if (ipArray.length == 0) {
+            String[] ipArray =serverIp.split(" ");
+            if (ipArray.length < 6) {
                 serverSource.initNaNIPInfo();
             } else {
                 serverSource.setIp(ipArray[1].split("：")[1]);
@@ -54,17 +57,18 @@ public class AnalyticDataListener {
                 serverSource.setCity(ipArray[5]);
             }
         }
-        NetworkMessage.sendTo(event.player,this,CHANNEL,event.player);
+        NetworkMessage.sendTo(event.player,this,CHANNEL,event.player,serverIp);
     }
 
     //on Client
     @NetworkMessage.Listener(channel=CHANNEL,side=Side.CLIENT)
-    public void clientInfoInitializer(EntityPlayer player){
+    public void clientInfoInitializer(EntityPlayer player , String serverIp){
         Boolean isServer = false;
-        if(serverSource==null){
+        String tempIp = getCurrentIPinfo();
+        if(serverSource==null||(!serverIp.equals(tempIp))){
             isServer = true;
         }
-        NetworkMessage.sendToServer(this,CHANNEL,getCurrentIPinfo(),player,isServer);
+        NetworkMessage.sendToServer(this,CHANNEL,tempIp,player,isServer);
     }
 
     //receive the ip info from the client
@@ -77,11 +81,10 @@ public class AnalyticDataListener {
         }
         AnalyticDto playerData = new AnalyticDto();
         playerData.setVersion(AcademyCraft.VERSION);
-        playerData.setName(player.getName());
-        playerData.setUuidName(player.getUniqueID()+player.getName());
+        playerData.setUuidName(SHA(player.getUniqueID()+player.getName()));
         playerData.setStartTime(new Date().getTime());
         String[] ipArray = ipInfo.split(" ");
-        if (ipArray.length == 0) {
+        if (ipArray.length < 6) {
             playerData.initNaNIPInfo();
         } else {
             playerData.setIp(ipArray[1].split("：")[1]);
@@ -97,7 +100,7 @@ public class AnalyticDataListener {
     @SubscribeEvent
     public void skillListener(AnalyticSkillEvent event){
         EntityPlayer targetPlayer = event.getPlayer();
-        String uuid = targetPlayer.getUniqueID()+targetPlayer.getName();
+        String uuid = SHA(targetPlayer.getUniqueID()+targetPlayer.getName());
         if(sourceMap.containsKey(uuid)){
             Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
             if(countMap.containsKey(event.getSkillName())){
@@ -111,7 +114,7 @@ public class AnalyticDataListener {
 
     @SubscribeEvent
     public void levelUpListener(AnalyticLevelUpEvent event){
-        String uuid = event.getEntityPlayer().getUniqueID() + event.getEntityPlayer().getName();
+        String uuid = SHA(event.getEntityPlayer().getUniqueID() + event.getEntityPlayer().getName());
         if(sourceMap.containsKey(uuid)){
             Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
             if(countMap.containsKey("levelUp")){
@@ -124,13 +127,13 @@ public class AnalyticDataListener {
 
     @SubscribeEvent
     public void levelChangeListener(LevelChangeEvent event){
-        String uuid = event.player.getUniqueID() + event.player.getName();
+        String uuid = SHA(event.player.getUniqueID() + event.player.getName());
         sourceMap.get(uuid).setLevel(event.getAbilityData().getLevel());
     }
 
     @SubscribeEvent
     public void skillLearnListener(SkillLearnEvent event){
-        String uuid = event.player.getUniqueID() + event.player.getName();
+        String uuid = SHA(event.player.getUniqueID() + event.player.getName());
         if(sourceMap.containsKey(uuid)){
             Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
             if(countMap.containsKey("skillLearn")){
@@ -152,7 +155,34 @@ public class AnalyticDataListener {
         }catch (Exception e){
             AcademyCraft.log.error(e);
         }
+        if (ipInfo == null){
+            ipInfo = "";
+        }
         return ipInfo;
+    }
+
+    private String SHA(final String strText){
+        String strResult="";
+        String strType = "SHA-256";
+        if(strText != null && strText.length()>0){
+            try {
+                MessageDigest messageDigest = MessageDigest.getInstance(strType);
+                messageDigest.update(strText.getBytes());
+                byte[] byteBuffer = messageDigest.digest();
+                StringBuilder strHexString = new StringBuilder();
+                for (byte aByteBuffer : byteBuffer){
+                    String hex = Integer.toHexString(0xff & aByteBuffer);
+                    if(hex.length() == 1){
+                        strHexString.append('0');
+                    }
+                    strHexString.append(hex);
+                }
+                strResult = strHexString.toString();
+            }catch (NoSuchAlgorithmException e){
+                AcademyCraft.log.error(e);
+            }
+        }
+        return strResult;
     }
 
 }
