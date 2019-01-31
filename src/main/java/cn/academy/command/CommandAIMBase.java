@@ -189,6 +189,16 @@ public abstract class CommandAIMBase extends ACCommand {
             }
             break;    
         }
+
+        case "catlist": {
+            sendChat(ics, getLoc("cats"));
+            List<Category> catList = CategoryManager.INSTANCE.getCategories();
+            for(int i = 0; i < catList.size(); ++i) {
+                Category cat = catList.get(i);
+                sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
+            }
+            break;
+        }
         
         case "learn": {
             if (aData.hasCategory()) {
