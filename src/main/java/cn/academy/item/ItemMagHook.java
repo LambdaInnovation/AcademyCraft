@@ -85,7 +85,7 @@ public class ItemMagHook extends Item {
         bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
 
         bakedModel.mapTransform(TransformType.GROUND,
-            new TransformChain().rotate(0, 90, 180).translate(-.4f, .5f, .7f).build());
+            new TransformChain().rotate(0, 90, 180).translate(-.4f, .9f, .7f).scale(.5f).build());
 
         ev.getModelRegistry().putObject(_modelLocation, bakedModel);
     }
