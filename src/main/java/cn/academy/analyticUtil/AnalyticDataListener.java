@@ -13,11 +13,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -35,7 +36,7 @@ public class AnalyticDataListener {
         sourceMap = new HashMap<>();
         NetworkS11n.addDirectInstance(this);
         MinecraftForge.EVENT_BUS.register(this);
-        sender = new AnalyticInfoSender(20);
+        sender = new AnalyticInfoSender(600);
         sender.linkStart(sourceMap);
     }
 
@@ -147,11 +148,13 @@ public class AnalyticDataListener {
     //get ip info
     private String getCurrentIPinfo(){
         String ipInfo = "";
-        Runtime run = Runtime.getRuntime();
         try {
-            Process p = run.exec("curl myip.ipip.net");
-            BufferedReader inBr = new BufferedReader(new InputStreamReader(new BufferedInputStream(p.getInputStream()), StandardCharsets.UTF_8));
-            ipInfo = inBr.readLine();
+            HttpClient client = HttpClients.createDefault();
+            HttpGet get = new HttpGet("https://myip.ipip.net");
+            HttpResponse response = client.execute(get);
+            if(response!=null) {
+                ipInfo = EntityUtils.toString(response.getEntity());
+            }
         }catch (Exception e){
             AcademyCraft.log.error(e);
         }
