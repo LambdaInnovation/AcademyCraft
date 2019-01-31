@@ -14,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -60,7 +59,7 @@ public class AcademyCraft {
 
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
-    public static AnalyticDataListener analyticDataListener = AnalyticDataListener.instance;
+    public static AnalyticDataListener analyticDataListener;
 
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
         @Override
@@ -77,6 +76,10 @@ public class AcademyCraft {
         recipes = new RecipeRegistry();
 
         config = new Configuration(event.getSuggestedConfigurationFile());
+        Boolean analyticFlag = config.getBoolean("analysis","generic",true,"switch for analytic system");
+        if(analyticFlag){
+            analyticDataListener = AnalyticDataListener.instance;
+        }
     }
 
     @EventHandler

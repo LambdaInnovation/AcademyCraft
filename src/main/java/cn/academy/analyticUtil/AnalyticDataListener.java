@@ -129,7 +129,9 @@ public class AnalyticDataListener {
     @SubscribeEvent
     public void levelChangeListener(LevelChangeEvent event){
         String uuid = SHA(event.player.getUniqueID() + event.player.getName());
-        sourceMap.get(uuid).setLevel(event.getAbilityData().getLevel());
+        if(sourceMap.containsKey(uuid)) {
+            sourceMap.get(uuid).setLevel(event.getAbilityData().getLevel());
+        }
     }
 
     @SubscribeEvent
