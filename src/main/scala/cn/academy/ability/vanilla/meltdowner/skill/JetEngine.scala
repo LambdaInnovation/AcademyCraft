@@ -90,7 +90,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       isTriggering = true
       target = _target
 
-      start = new Vec3d(player.posX, player.posY, player.posZ)
+      start = player.getPositionEyes(1f)
       velocity = VecUtils.multiply(VecUtils.subtract(target, start), 1.0 / TIME)
     }
   }
