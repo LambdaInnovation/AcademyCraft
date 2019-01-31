@@ -356,6 +356,7 @@ ac.command.aimp.nocomm=该指令不存在。使用 /aimp help 以列出当前可
 ac.command.aimp.notactive=/aimp指令当前未被开启。使用/aimp cheats_on或/aimp cheats_off来改变开启状态。
 ac.command.aimp.warning=§c警告：使用/aimp指令会破坏游戏平衡并且影响你对mod内容的体验。请谨慎使用！
 ac.command.aimp.outofrange=§c输入不合法：§f必须是%s和%s之间的一个值。
+ac.command.aim.invalidnum=§c无效的数字: %s.
 ac.command.aimp.maxout=/aimp <player name> maxout: 将当前等级升级进度设置为100%%。
 ac.command.aimp.nonecathint=你还未学习能力！
 

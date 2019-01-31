@@ -265,13 +265,21 @@ public abstract class CommandAIMBase extends ACCommand {
             if(pars.length == 1) {
                 sendChat(ics, "" + aData.getLevel());
             } else {
-                int lv = Integer.valueOf(pars[1]);
-                if(lv > 0 && lv <= 5) {
-                    aData.setLevel(lv);
-                    sendChat(ics, locSuccessful());
-                } else {
-                    sendChat(ics, this.getLoc("outofrange"), 1, 5);
+                try
+                {
+                    int lv = Integer.valueOf(pars[1]);
+                    if(lv > 0 && lv <= 5) {
+                        aData.setLevel(lv);
+                        sendChat(ics, locSuccessful());
+                    } else {
+                        sendChat(ics, this.getLoc("outofrange"), 1, 5);
+                    }
                 }
+                catch(NumberFormatException e)
+                {
+                    sendChat(ics, this.getLoc("invalidnum"), pars[1]);
+                }
+
             }
             
             return;
