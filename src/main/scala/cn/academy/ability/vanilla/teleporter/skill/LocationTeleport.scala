@@ -41,6 +41,7 @@ private object LTNetDelegate {
   final val MSG_REMOVE = "remove"
   final val MSG_QUERY = "query"
   final val MSG_PERFORM = "perform"
+  final val MSG_SOUND = "playsound"
 
   import scala.collection.JavaConversions._
   import LocationTeleport._
@@ -147,6 +148,8 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       entitiesToTeleport.foreach(_.changeDimension(dest.dim))
     }
 
+    val dist = player.getDistance(dest.x, dest.y, dest.z)
+    val expincr = if (dist >= 200) 0.03f else 0.015f
     val (px, py, pz) = (player.posX, player.posY, player.posZ)
     entitiesToTeleport.foreach(e => {
       val (dx, dy, dz) = (e.posX - px, e.posY - py, e.posZ - pz)
@@ -154,12 +157,6 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       e.setPositionAndUpdate(dest.x + dx, dest.y + dy, dest.z + dz)
     })
 
-    if(player.world.isRemote) {
-      ACSounds.playClient(player.getEntityWorld, player.posX, player.posY, player.posZ,"academy:tp.tp", SoundCategory.AMBIENT, 0.5f, 1.0f)
-    }
-
-    val dist = player.getDistance(dest.x, dest.y, dest.z)
-    val expincr = if (dist >= 200) 0.03f else 0.015f
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
@@ -390,6 +387,8 @@ object LocationTeleport extends Skill("location_teleport", 3) {
         wrapButton(ret.child("btn_teleport"), count, 0.03,
           () => {
             mc.displayGuiScreen(null)
+
+            ACSounds.playClient(player, "tp.tp", SoundCategory.AMBIENT, .5f)
             send(MSG_PERFORM, player, location)
           })
       } else {
