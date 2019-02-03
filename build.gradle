@@ -122,8 +122,11 @@ dependencies {
     deobfCompile "CraftTweaker2:ZenScript:4.1.9.6"
     deobfCompile "net.industrial-craft:industrialcraft-2:2.8.90-ex112"
 
-    shade "org.apache.httpcomponents:httpcore:4.3.2"
     shade "org.apache.httpcomponents:httpclient:4.3.3"
+    shade "org.apache.httpcomponents:httpcore:4.3.2" // dependency of httpclient
+    shade "commons-logging:commons-logging:1.1.3" // dependency of httpclient
+    shade "commons-codec:commons-codec:1.6" // dependency of commons-logging
+
 }
 
 //sourceSets.main.compileClasspath += [configurations.provided]
@@ -180,6 +183,7 @@ reobf {
     jar {
         extraLines "PK: org/apache/commons/codec cn/academy/shade/org/apache/commons/codec"
         extraLines "PK: org/apache/http cn/academy/shade/org/apache/http"
+        extraLines "PK: org/apache/commons/logging cn/academy/shade/org/apache/commons/logging"
     }
 }
 
