@@ -11,7 +11,7 @@
       "translate": "advancements.general.ac_exp_full.desc"
     }
   },
-  "parent": "academy:ac_milestone",
+  "parent": "academy:ac_learning_skill",
   "criteria":{
     "ac_exp_full": {
       "trigger": "academy:ac_exp_full"
