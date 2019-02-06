@@ -130,6 +130,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     @Override
     public void wake() {
         ctrlDirty = true;
+        requireFlush = true;
     }
 
     /**
@@ -368,7 +369,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
         @SubscribeEvent
         public void flushControl(FlushControlEvent evt) {
-            ClientRuntime.instance().requireFlush = true;
+            if (ClientRuntime.available())
+                ClientRuntime.instance().requireFlush = true;
         }
 
 
