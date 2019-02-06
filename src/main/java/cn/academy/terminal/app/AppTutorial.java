@@ -17,6 +17,7 @@ public class AppTutorial extends App {
 
     public AppTutorial() {
         super("tutorial");
+        setPreInstalled();
     }
 
     @Override

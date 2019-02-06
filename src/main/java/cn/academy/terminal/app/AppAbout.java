@@ -7,7 +7,7 @@ import cn.lambdalib2.util.Debug;
 
 public class AppAbout extends App {
 
-    @RegApp(priority = -2)
+//    @RegApp(priority = -2)
     private static final AppAbout instance = new AppAbout();
 
     public AppAbout() {
