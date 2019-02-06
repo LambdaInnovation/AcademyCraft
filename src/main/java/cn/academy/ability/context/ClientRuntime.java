@@ -63,10 +63,73 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
     private final LinkedList<IActivateHandler> activateHandlers = new LinkedList<>();
 
-    private boolean ctrlDirty = true;
+    private boolean ctrlDirty = false;
+    private boolean requireFlush = false;
 
     {
         setTick(true);
+    }
+
+    @Override
+    public void tick() {
+        final CPData cpData = CPData.get(getEntity());
+        final CooldownData cdData = CooldownData.of(getEntity());
+
+        for (DelegateNode node : delegates.values()) {
+            final KeyState state = getKeyState(node.keyID);
+            final boolean keyDown = KeyManager.getKeyDown(node.keyID);
+
+            boolean shouldAbort =
+                !ClientUtils.isPlayerInGame() ||
+                    cdData.isInCooldown(node.delegate.getSkill(), node.delegate.getIdentifier()) ||
+                    !cpData.canUseAbility() ||
+                    AuxGuiHandler.active().stream().anyMatch(a -> a instanceof TerminalUI);
+            final KeyDelegate delegate = node.delegate;
+
+            if (keyDown && state.state && !shouldAbort) {
+                delegate.onKeyTick();
+            }
+            if (keyDown && !state.state && !state.realState && !shouldAbort) {
+                delegate.onKeyDown();
+                state.state = true;
+            }
+            if (!keyDown && state.state && !shouldAbort) {
+                delegate.onKeyUp();
+                state.state = false;
+            }
+            if (state.state && shouldAbort) {
+                delegate.onKeyAbort();
+                state.state = false;
+            }
+
+            state.realState = keyDown;
+        }
+
+        // Remove dead keys
+        {
+            Iterator<Entry<Integer, KeyState>> iter = keyStates.entrySet().iterator();
+            while (iter.hasNext()) {
+                Entry<Integer, KeyState> ent = iter.next();
+                if (!ent.getValue().realState && !delegates.containsKey(ent.getKey())) {
+                    iter.remove();
+                }
+            }
+        }
+
+        // Update override
+        if (ctrlDirty) {
+            rebuildOverrides();
+        }
+
+        if (requireFlush) {
+            requireFlush = false;
+            updateDefaultGroup();
+        }
+    }
+
+    @Override
+    public void wake() {
+        ctrlDirty = true;
     }
 
     /**
@@ -221,6 +284,19 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         });
     }
 
+    private void updateDefaultGroup() {
+        clearKeys(DEFAULT_GROUP);
+
+        Preset preset = PresetData.get(getEntity()).getCurrentPreset();
+
+        for (int i = 0; i < PresetData.MAX_PRESETS; ++i) {
+            if (preset.hasMapping(i)) {
+                Controllable c = preset.getControllable(i);
+                c.activate(this, ClientHandler.getKeyMapping(i));
+            }
+        }
+    }
+
     private void rebuildOverrides() {
         AcademyCraft.debug("RebuildOverrides");
         CPData cpData = CPData.get(getEntity());
@@ -264,86 +340,22 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         @RegEventHandler()
         instance;
 
-        boolean requireFlush = false;
-
-        @SubscribeEvent
-        public void onClientTick(ClientTickEvent evt) {
-            if (evt.phase == Phase.END) return;
-
-            if (ClientRuntime.available()) {
-                final ClientRuntime rt = ClientRuntime.instance();
-                final CPData cpData = CPData.get(rt.getEntity());
-                final CooldownData cdData = CooldownData.of(rt.getEntity());
-
-                for (DelegateNode node : rt.delegates.values()) {
-                    final KeyState state = rt.getKeyState(node.keyID);
-                    final boolean keyDown = KeyManager.getKeyDown(node.keyID);
-
-                    boolean shouldAbort =
-                            !ClientUtils.isPlayerInGame() ||
-                                    cdData.isInCooldown(node.delegate.getSkill(), node.delegate.getIdentifier()) ||
-                                    !cpData.canUseAbility() ||
-                                    AuxGuiHandler.active().stream().anyMatch(a -> a instanceof TerminalUI);
-                    final KeyDelegate delegate = node.delegate;
-
-                    if (keyDown && state.state && !shouldAbort) {
-                        delegate.onKeyTick();
-                    }
-                    if (keyDown && !state.state && !state.realState && !shouldAbort) {
-                        delegate.onKeyDown();
-                        state.state = true;
-                    }
-                    if (!keyDown && state.state && !shouldAbort) {
-                        delegate.onKeyUp();
-                        state.state = false;
-                    }
-                    if (state.state && shouldAbort) {
-                        delegate.onKeyAbort();
-                        state.state = false;
-                    }
-
-                    state.realState = keyDown;
-                }
-
-                // Remove dead keys
-                {
-                    Iterator<Entry<Integer, KeyState>> iter = rt.keyStates.entrySet().iterator();
-                    while (iter.hasNext()) {
-                        Entry<Integer, KeyState> ent = iter.next();
-                        if (!ent.getValue().realState && !rt.delegates.containsKey(ent.getKey())) {
-                            iter.remove();
-                        }
-                    }
-                }
-
-                // Update override
-                if (rt.ctrlDirty) {
-                    rt.rebuildOverrides();
-                }
-
-                if (requireFlush) {
-                    requireFlush = false;
-                    updateDefaultGroup();
-                }
-            }
-        }
-
         @SubscribeEvent
         public void presetSwitch(PresetSwitchEvent evt) {
-            updateDefaultGroup();
+            ClientRuntime.instance().updateDefaultGroup();
         }
 
         @SubscribeEvent
         public void presetEdit(PresetUpdateEvent evt) {
             if (SideUtils.isClient()) {
-                updateDefaultGroup();
+                ClientRuntime.instance().updateDefaultGroup();
             }
         }
 
         @SubscribeEvent
         public void activateAbility(AbilityActivateEvent evt) {
             if (SideUtils.isClient()) {
-                updateDefaultGroup();
+                ClientRuntime.instance().updateDefaultGroup();
             }
         }
 
@@ -356,23 +368,9 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
         @SubscribeEvent
         public void flushControl(FlushControlEvent evt) {
-            requireFlush = true;
+            ClientRuntime.instance().requireFlush = true;
         }
 
-        private void updateDefaultGroup() {
-            ClientRuntime rt = ClientRuntime.instance();
-
-            rt.clearKeys(DEFAULT_GROUP);
-
-            Preset preset = PresetData.get(rt.getEntity()).getCurrentPreset();
-
-            for (int i = 0; i < PresetData.MAX_PRESETS; ++i) {
-                if (preset.hasMapping(i)) {
-                    Controllable c = preset.getControllable(i);
-                    c.activate(rt, ClientHandler.getKeyMapping(i));
-                }
-            }
-        }
 
     }
 
