@@ -5,6 +5,7 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
 import cn.lambdalib2.registry.RegistryCallback;
+import cn.lambdalib2.util.Debug;
 import cn.lambdalib2.util.SideUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,57 +29,39 @@ import java.util.Map;
 
 /**
  * ItemInstaller app
- * TODO: Automate json stuff for this item?
  * @author WeAthFolD
  */
 public class ItemApp extends Item {
     
-    private static Map<App, ItemApp> items = new HashMap<>();
+    private static final Map<String, ItemApp> items = new HashMap<>();
 
-    @RegistryCallback
-    @SuppressWarnings("sideonly")
-    private static void regItem(RegistryEvent.Register<Item> event) {
-        for(App app : AppRegistry.enumeration()) {
-            if(!app.isPreInstalled()) {
-                ItemApp item = new ItemApp(app);
-                item.setTranslationKey("ac_apps");
-                item.setRegistryName("academy:app_" + app.getName());
-
-                event.getRegistry().register(item);
-                AcademyCraft.recipes.map("app_" + app.getName(), item);
-                items.put(app, item);
-            }
-        }
-
-        if (SideUtils.isClient())
-            registerItemModels();
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static void registerItemModels() {
-        for (App app : AppRegistry.enumeration()) {
-            if (!app.isPreInstalled()) {
-                ItemApp item = items.get(app);
-                ModelLoader.setCustomModelResourceLocation(item, 0,
-                    new ModelResourceLocation(item.getRegistryName(), "inventory"));
-            }
-        }
-    }
-    
     public static ItemApp getItemForApp(App app) {
-        return items.get(app);
+        return items.get(app.getName());
     }
-    
-    public final App app;
 
-    private ItemApp(App _app) {
-        app = _app;
-        setCreativeTab(AcademyCraft.cct);
-    }
+    private final String _appName;
     
+    private App _app;
+
+    public ItemApp(String name) { // Ctor is called during class construction, so we can't get app at that time.
+        _appName = name;
+
+        items.put(_appName, this);
+        setCreativeTab(AcademyCraft.cct);
+
+    }
+
+    private App getApp() {
+        if (_app == null) {
+            _app = Debug.assertNotNull(AppRegistry.getByName(_appName), () -> "App not found: " + _appName);
+        }
+        return _app;
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
+        App app = getApp();
         if(!world.isRemote) {
             TerminalData terminalData = TerminalData.get(player);
             if(!terminalData.isTerminalInstalled()) {
@@ -98,7 +81,7 @@ public class ItemApp extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
-        list.add(app.getDisplayName());
+        list.add(getApp().getDisplayName());
     }
     
 }

@@ -94,6 +94,7 @@ ac.app.knowledge_record.name=人生记录
 ac.app.settings.name=设置
 ac.app.media_player.name=媒体播放器
 ac.app.tutorial.name=御坂云终端
+ac.app.about.name=关于
 
 ac.app.freq_transmitter.name=频率变送器
 ac.app.freq_transmitter.s0_0=请右击一个无线矩阵或节点以建立连接.

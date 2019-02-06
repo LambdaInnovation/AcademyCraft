@@ -18,6 +18,14 @@ public class AppRegistry {
         return appList.get(id);
     }
 
+    public static App getByName(String name) {
+        for (App app : appList) {
+            if (app.getName().equals(name))
+                return app;
+        }
+        return null;
+    }
+
     public static int size() {
         return appList.size();
     }
