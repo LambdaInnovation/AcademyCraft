@@ -25,8 +25,12 @@ public abstract class App {
         return Resources.getTexture("guis/apps/" + name + "/" + texname);
     }
 
+    private String localKey(String key) {
+        return "ac.app." + name + "." + key;
+    }
+
     protected String local(String key) {
-        return I18n.format("ac.app." + name + "." + key);
+        return I18n.format(localKey(key));
     }
 
     @SideOnly(Side.CLIENT)
@@ -49,6 +53,10 @@ public abstract class App {
 
     public String getDisplayName() {
         return local("name");
+    }
+
+    public String getDisplayKey() {
+        return localKey("name");
     }
 
     public final boolean isPreInstalled() {

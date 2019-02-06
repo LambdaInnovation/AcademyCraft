@@ -67,12 +67,16 @@ public class ItemApp extends Item {
             if(!terminalData.isTerminalInstalled()) {
                 player.sendMessage(new TextComponentTranslation("ac.terminal.notinstalled"));
             } else if(terminalData.isInstalled(app)) {
-                player.sendMessage(new TextComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
+                player.sendMessage(
+                    new TextComponentTranslation("ac.terminal.app_alrdy_installed", new TextComponentTranslation(app.getDisplayKey()))
+                );
             } else {
                 if(!player.capabilities.isCreativeMode)
-                    stack.setCount(stack.getCount()-1);
+                    stack.shrink(1);
                 terminalData.installApp(app);
-                player.sendMessage(new TextComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
+                player.sendMessage(
+                    new TextComponentTranslation("ac.terminal.app_installed", new TextComponentTranslation(app.getDisplayKey()))
+                );
             }
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
