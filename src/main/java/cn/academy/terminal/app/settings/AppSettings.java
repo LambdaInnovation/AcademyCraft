@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
  */
 public class AppSettings extends App {
 
-    @RegApp
+    @RegApp(priority = -1)
     public static AppSettings instance = new AppSettings();
     
     private AppSettings() {

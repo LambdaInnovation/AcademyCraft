@@ -76,6 +76,13 @@ public class ItemCoin extends Item {
         bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
         bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
 
+        bakedModel.mapTransform(TransformType.GROUND,
+            new TransformChain()
+                .scale(-0.3f, -0.3f, 0.3f)
+                .translate(0f, 0.1f, 0f)
+                .build()
+        );
+
         ev.getModelRegistry().putObject(_modelLocation, bakedModel);
     }
 

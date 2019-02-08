@@ -14,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.BitSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +29,7 @@ public class TerminalData extends DataPart<EntityPlayer> {
     }
 
     @SerializeIncluded
-    private BitSet installedList = new BitSet();
+    private List<Integer> installedNameHashes = new ArrayList<>();
     @SerializeIncluded
     private boolean isInstalled;
 
@@ -43,7 +43,7 @@ public class TerminalData extends DataPart<EntityPlayer> {
     }
 
     public boolean isInstalled(App app) {
-        return app.isPreInstalled() || installedList.get(app.getID());
+        return app.isPreInstalled() || installedNameHashes.contains(app.getName().hashCode());
     }
 
     public boolean isTerminalInstalled() {
@@ -73,14 +73,12 @@ public class TerminalData extends DataPart<EntityPlayer> {
         checkSide(Side.SERVER);
 
         if (!isInstalled(app)) {
-            int id = app.getID();
-
-            installedList.set(id, true);
+            installedNameHashes.add(app.getName().hashCode());
 
             sync();
 
-            informAppInstall(id);
-            NetworkMessage.sendTo(getEntity(), this, "app_inst", id);
+            informAppInstall(app.getName());
+            NetworkMessage.sendTo(getEntity(), this, "app_inst", app.getName());
         }
     }
 
@@ -100,8 +98,8 @@ public class TerminalData extends DataPart<EntityPlayer> {
     }
 
     @Listener(channel="app_inst", side=Side.CLIENT)
-    private void informAppInstall(int appid) {
-        MinecraftForge.EVENT_BUS.post(new AppInstalledEvent(getEntity(), AppRegistry.enumeration().get(appid)));
+    private void informAppInstall(String appName) {
+        MinecraftForge.EVENT_BUS.post(new AppInstalledEvent(getEntity(), AppRegistry.getByName(appName)));
     }
 
 }
