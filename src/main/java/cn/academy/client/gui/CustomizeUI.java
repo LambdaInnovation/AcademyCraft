@@ -48,7 +48,7 @@ public class CustomizeUI extends CGuiScreen {
             double[] pos = n.getPosition();
             n.getPreview().pos((float) pos[0], (float) pos[1]);
             gui.addWidget(n.getPreview());
-            n.getPreview().removeComponent("Outline");
+            n.getPreview().removeComponent(Outline.class);
 
             Widget elem = body.getWidget("template").copy();
             elem.transform.doesDraw = true;
@@ -75,7 +75,7 @@ public class CustomizeUI extends CGuiScreen {
         }
 
         if (prevFocus != null) {
-            prevFocus.getPreview().removeComponent("Outline");
+            prevFocus.getPreview().removeComponent(Outline.class);
             edit.dispose();
         }
 

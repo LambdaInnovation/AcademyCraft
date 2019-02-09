@@ -44,7 +44,7 @@ object GuiAbilityInterferer {
       listArea :+ area
 
       def update(whitelist: Iterable[String]) = {
-        listArea.removeComponent("ElementList")
+        listArea.removeComponent(classOf[ElementList])
         area.focus = None
 
         val elist = new ElementList
