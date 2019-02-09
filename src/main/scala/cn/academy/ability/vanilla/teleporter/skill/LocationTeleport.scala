@@ -12,7 +12,7 @@ import cn.academy.advancements.ACAdvancements
 import cn.academy.datapart.AbilityData
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.{CGuiScreen, Widget}
-import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
+import cn.lambdalib2.cgui.component._
 import cn.lambdalib2.cgui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent}
 import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
@@ -292,7 +292,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     getGui.addWidget(root)
 
     def wrapBack(ret: Widget, n: Int, msg: => List[String]) = {
-      ret.removeComponent("Tint")
+      ret.removeComponent(classOf[Tint])
 
       val blend = new Blend(n * ElemTimeStep, 0.2)
 
@@ -347,7 +347,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     }
 
     private def updateList(locations: List[Location]): Unit = {
-      list.removeComponent("ElementList")
+      list.removeComponent(classOf[ElementList])
 
       val compList = new ElementList
       compList.spacing = 2
