@@ -155,7 +155,7 @@ public class PresetEditUI extends GuiScreen {
         Widget ret = template.copy();
         for(Widget w : ret.getDrawList()) {
             for(Widget w2 : w.getDrawList())
-                w2.listen(FrameEvent.class, -1, new AlphaAssign());
+                w2.listen(FrameEvent.class, 1, new AlphaAssign());
         }
         return ret;
     }
