@@ -18,6 +18,7 @@ import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.Debug;
+import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.ResourceUtils;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -26,10 +27,15 @@ import com.typesafe.config.ConfigValue;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
+import java.awt.*;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -70,7 +76,6 @@ public class AppAbout extends App {
         private static float creditsMaxY;
 
         static {
-            Resources.preloadMipmapTexture("guis/about/credits");
             Resources.preloadMipmapTexture("guis/about/bg");
 
             Config cfg = ConfigFactory.parseReader(
@@ -113,6 +118,12 @@ public class AppAbout extends App {
                     if (i % 2 != 0) y += FontSize;
                 }
 
+                y += FontSize;
+                l.add(
+                    new TextItem(0, y, "Thank you for playing!", FontAlign.CENTER).setBold()
+                );
+                y += FontSize;
+
                 creditsMaxY = y + 30;
             }
 
@@ -124,19 +135,26 @@ public class AppAbout extends App {
                     lang = "en_us";
 
                 List<String> l = root.getStringList(lang);
+
+                float y = 100;
                 for (int i = 0; i < l.size(); ++i) {
                     String s = l.get(i);
                     if (s.startsWith("!!")) {
                         int ix = s.indexOf('|');
                         String url = s.substring(ix + 1);
                         String text = s.substring(2, ix);
+
+                        y += 10;
                         DonateTexts.add(
-                            new LinkItem(0, 100 + i * 30, text, url, FontAlign.CENTER)
+                            new LinkItem(0, y, text, url, FontAlign.CENTER)
+                                .setFontSize(40)
                         );
+                        y += 50;
                     } else {
                         DonateTexts.add(
-                            new TextItem(0, 100 + i * 30, l.get(i), FontAlign.CENTER)
+                            new TextItem(0, y, l.get(i), FontAlign.CENTER)
                         );
+                        y += 30;
                     }
                 }
             }
@@ -154,6 +172,7 @@ public class AppAbout extends App {
             public String text;
             public FontAlign align;
             public boolean bold;
+            public float fontSize = FontSize;
 
             public TextItem(float x, float y, String text, FontAlign align) {
                 this.x = x;
@@ -164,6 +183,11 @@ public class AppAbout extends App {
 
             public TextItem setBold() {
                 this.bold = true;
+                return this;
+            }
+
+            public TextItem setFontSize(float sz) {
+                fontSize = sz;
                 return this;
             }
         }
@@ -187,6 +211,8 @@ public class AppAbout extends App {
 
         Widget _scrollArea;
 
+        String _hoveringURL;
+
         AboutUI() {
             Widget root = Prefab.getWidget("main").copy();
             gui.addWidget("main", root);
@@ -205,12 +231,34 @@ public class AppAbout extends App {
             _scrollArea = root.getWidget("area/scroll_area");
 
             FontOption option = new FontOption(30, FontAlign.LEFT, Colors.white());
+
+            Color
+                textColor = Colors.white(),
+                linkColor = Colors.fromRGB32(0x54a1f0),
+                linkColorHighlight = Colors.fromRGB32(0x9fbfe0);
+
+            _scrollArea.listen(LeftClickEvent.class, (w, e) -> {
+                // This is somewhat hack, using manual position judgement.
+                //  but it would otherwise be much more of a fuss,
+                //  using widgets for every single line.
+                Debug.log("Left click" + _hoveringURL);
+                if (_hoveringURL != null) {
+                    try {
+                        // https://stackoverflow.com/questions/5226212/how-to-open-the-default-webbrowser-using-java
+                        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                            Desktop.getDesktop().browse(new URI(_hoveringURL));
+                        }
+                    } catch (URISyntaxException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    _hoveringURL = null;
+                }
+            });
+
             _scrollArea.listen(FrameEvent.class, -1, (w, e) -> {
                 float yOffset = _tabType == TabType.Credits ?
                     _dragBar.getProgress() * (creditsMaxY - w.transform.height + 50) :
                     0;
-                float fontSize = _tabType == TabType.Credits ? FontSize : 25f;
-
                 List<TextItem> list = _tabType == TabType.Credits ? CreditTexts : DonateTexts;
 
                 GL11.glPushMatrix();
@@ -219,15 +267,36 @@ public class AppAbout extends App {
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                 GL11.glDepthFunc(GL11.GL_EQUAL);
 
+                String hoveringURL = null;
                 for (TextItem item : list) {
-                    IFont font = item.bold ? Resources.fontBold() : Resources.font();
                     float y = item.y - yOffset;
-                    option.fontSize = fontSize;
                     if (y > -50 && y < w.transform.height + 50) {
+                        boolean hovering = false;
+
+                        IFont font = item.bold ? Resources.fontBold() : Resources.font();
+                        if (item instanceof LinkItem) {
+                            float width = font.getTextWidth(item.text, option);
+                            float minX = w.transform.width / 2 - width / 2,
+                                maxX = w.transform.width / 2 + width / 2;
+                            float minY = y, maxY = y + item.fontSize;
+
+                            if (minX <= e.mx && e.mx <= maxX &&
+                                minY <= e.my && e.my <= maxY) {
+                                hoveringURL = ((LinkItem) item).url;
+                                hovering = true;
+                            }
+                        }
+
+                        option.fontSize = item.fontSize;
+                        option.color = item instanceof LinkItem ?
+                            (hovering ? linkColorHighlight : linkColor) :
+                                textColor;
                         option.align = item.align;
                         font.draw(item.text, item.x, y, option);
                     }
                 }
+
+                _hoveringURL = hoveringURL;
 
                 GL11.glDepthFunc(GL11.GL_LEQUAL);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -236,6 +305,17 @@ public class AppAbout extends App {
             });
 
             onTabTypeChanged(TabType.Credits);
+        }
+
+        @Override
+        public void handleMouseInput() throws IOException {
+            super.handleMouseInput();
+
+            int dwheel = Mouse.getEventDWheel();
+            if (dwheel != 0) {
+                float progress = _dragBar.getProgress() - dwheel * 0.001f * 0.2f;
+                _dragBar.setProgress(MathUtils.clamp01(progress));
+            }
         }
 
         private void onTabTypeChanged(TabType type) {
