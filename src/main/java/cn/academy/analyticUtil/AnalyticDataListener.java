@@ -13,12 +13,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -36,7 +36,7 @@ public class AnalyticDataListener {
         sourceMap = new HashMap<>();
         NetworkS11n.addDirectInstance(this);
         MinecraftForge.EVENT_BUS.register(this);
-        sender = new AnalyticInfoSender(600);
+        sender = new AnalyticInfoSender(20);
         sender.linkStart(sourceMap);
     }
 
@@ -151,12 +151,16 @@ public class AnalyticDataListener {
     private String getCurrentIPinfo(){
         String ipInfo = "";
         try {
-            HttpClient client = HttpClients.createDefault();
-            HttpGet get = new HttpGet("https://myip.ipip.net");
-            HttpResponse response = client.execute(get);
-            if(response!=null) {
-                ipInfo = EntityUtils.toString(response.getEntity());
+            URL object = new URL("https://myip.ipip.net");
+            HttpURLConnection con = (HttpURLConnection)object.openConnection();
+            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine())!=null){
+                sb.append(line);
             }
+            ipInfo = sb.toString();
+
         }catch (Exception e){
             AcademyCraft.log.error(e);
         }
