@@ -25,6 +25,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+// Collects some **anonymous** analytics data
+//  What we collect: a unique hash of user, location, in-mod action (Level-up, use ability, etc.)
+//  The data is used to solely help us better understand player behaviour and improve the mod.
+//  The data is not associated to each player, has nothing personal, so it can only be used for large-scale statistics,
+//      and certainly compliants to contemporary data protection regulations (GDPR, etc.)
 public class AnalyticDataListener {
     private AnalyticDto serverSource;
     private static final String CHANNEL="analysisChannel";
@@ -36,7 +41,7 @@ public class AnalyticDataListener {
         sourceMap = new HashMap<>();
         NetworkS11n.addDirectInstance(this);
         MinecraftForge.EVENT_BUS.register(this);
-        sender = new AnalyticInfoSender(20);
+        sender = new AnalyticInfoSender(600);
         sender.linkStart(sourceMap);
     }
 
