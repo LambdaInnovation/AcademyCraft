@@ -2,12 +2,11 @@ package cn.academy.analyticUtil;
 
 import cn.academy.AcademyCraft;
 import com.google.gson.Gson;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClients;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -27,7 +26,7 @@ public class AnalyticInfoSender {
 
 class AnalysisTask extends TimerTask{
     private Map<String,AnalyticDto> sourceMap;
-    String voidclRBQ="http://144.34.208.247:8080/lambda/data/listener";
+    private String voidclRBQ="http://144.34.208.247:8080/lambda/data/listener";
     AnalysisTask(Map<String,AnalyticDto> sourceMap){
         this.sourceMap=sourceMap;
     }
@@ -42,6 +41,13 @@ class AnalysisTask extends TimerTask{
     }
 
     private void postSender(Map<String,AnalyticDto> sourceMap) throws Exception{
+        URL object = new URL(voidclRBQ);
+        HttpURLConnection con = (HttpURLConnection)object.openConnection();
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setRequestProperty("Content-Type","application/json");
+        con.setRequestProperty("Accept","application/json");
+        OutputStream wr = con.getOutputStream();
         Map<String,AnalyticDto> params=new HashMap<>();
         if(sourceMap.size()!=0) {
             for(String key:sourceMap.keySet()){//if a data is sent 6 times(an hour) without update , it will be removed
@@ -53,13 +59,12 @@ class AnalysisTask extends TimerTask{
             }
             Gson gson = new Gson();
             String paramsJson = gson.toJson(params);
-            HttpClient client = HttpClients.createDefault();
-            HttpPost post = new HttpPost(voidclRBQ);
-            StringEntity requestEntity = new StringEntity(paramsJson, ContentType.APPLICATION_JSON);
-            post.setEntity(requestEntity);
             if(params.size()!=0) {
                 try {
-                    client.execute(post);
+                    wr.write(paramsJson.getBytes(StandardCharsets.UTF_8));
+                    wr.flush();
+                    con.getResponseCode();
+                    con.getResponseMessage();
                 }catch (Exception e){
                     AcademyCraft.log.info("offLine mode");
                 }
