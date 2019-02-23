@@ -34,6 +34,7 @@ import org.lwjgl.util.Color;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -78,9 +79,14 @@ public class AppAbout extends App {
         static {
             Resources.preloadMipmapTexture("guis/about/bg");
 
-            Config cfg = ConfigFactory.parseReader(
-                new InputStreamReader(ResourceUtils.getResourceStream(Resources.res("config/about.conf")))
-            );
+            Config cfg;
+            try {
+                cfg = ConfigFactory.parseReader(
+                    new InputStreamReader(ResourceUtils.getResourceStream(Resources.res("config/about.conf")), "UTF-8")
+                );
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
 
             {
                 Config root = cfg.getConfig("credits");
