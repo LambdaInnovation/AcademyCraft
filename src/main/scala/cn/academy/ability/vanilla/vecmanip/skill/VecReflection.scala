@@ -12,7 +12,7 @@ import cn.academy.ability.vanilla.vecmanip.skill.EntityAffection.{Affected, Excl
 import cn.academy.event.ability.ReflectEvent
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
-import cn.lambdalib2.util.{Raytrace, WorldUtils}
+import cn.lambdalib2.util.{Raytrace, SideUtils, WorldUtils}
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -200,7 +200,9 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
       val sourceEntity = dmgSource.getImmediateSource
       if (sourceEntity != null && sourceEntity != player) {
         ctx.attack(sourceEntity, reflectDamage)
-        sendToClient(MSG_EFFECT, sourceEntity.getPositionVector)
+
+        if (!SideUtils.isClient)
+          sendToClient(MSG_EFFECT, sourceEntity.getPositionVector)
       }
 
       (true, dmg - reflectDamage)

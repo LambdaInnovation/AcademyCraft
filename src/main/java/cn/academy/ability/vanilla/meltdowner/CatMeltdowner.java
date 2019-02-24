@@ -12,7 +12,7 @@ import cn.academy.ability.vanilla.meltdowner.skill.*;
 public class CatMeltdowner extends Category {
 
     public static final Skill
-        electronBomb = ElectronBomb$.MODULE$,
+        electronBomb = ElectronBomb.Instance,
         radIntensify = RadiationIntensify$.MODULE$,
         rayBarrage = RayBarrage$.MODULE$,
         scatterBomb = ScatterBomb$.MODULE$,

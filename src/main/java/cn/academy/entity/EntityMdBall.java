@@ -149,7 +149,7 @@ public class EntityMdBall extends EntityAdvanced
         }
     }
     
-    protected EntityPlayer getSpawner() {
+    public EntityPlayer getSpawner() {
         return spawner;
     }
     
