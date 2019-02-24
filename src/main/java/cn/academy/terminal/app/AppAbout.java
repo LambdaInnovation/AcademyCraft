@@ -52,6 +52,7 @@ public class AppAbout extends App {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public AppEnvironment createEnvironment() {
         return new AppEnvironment() {
             @Override
