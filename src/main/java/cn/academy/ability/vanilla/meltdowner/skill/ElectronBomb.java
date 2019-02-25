@@ -64,12 +64,12 @@ public class ElectronBomb extends Skill {
                         MsgEffect,
                         target
                     );
-                    terminate();
                 });
             player.world.spawnEntity(ball);
 
             ctx.addSkillExp(.005f);
             ctx.setCooldown((int) MathUtils.lerpf(20, 10, exp));
+            terminate();
         }
 
         private float getDamage(float exp) {
