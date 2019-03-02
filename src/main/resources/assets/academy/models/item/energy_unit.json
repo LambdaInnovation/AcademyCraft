@@ -1,0 +1,1 @@
+{"overrides":[{"model":"academy:item/energy_unit_half","predicate":{"energy":0.5}},{"model":"academy:item/energy_unit_full","predicate":{"energy":1}}],"parent":"item/generated","textures":{"layer0":"academy:items/energy_unit_empty"},"__xconfgen":true}

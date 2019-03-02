@@ -1,24 +1,24 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.Resources
+import cn.academy.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.energy.api.WirelessHelper
-import cn.academy.energy.block.BlockNode.NodeType
-import cn.academy.energy.block.{ContainerNode, TileNode}
+import cn.academy.block.block.BlockNode.NodeType
+import cn.academy.block.container.ContainerNode
+import cn.academy.block.tileentity.TileNode
 import cn.academy.core.client.ui._
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.ScalaCGUI._
-import cn.lambdalib.cgui.gui.Widget
-import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.client.{HudUtils, RenderUtils}
-import cn.lambdalib.util.helper.{Color, GameTimer}
-import cpw.mods.fml.relauncher.Side
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.Widget
+import cn.lambdalib2.cgui.event.FrameEvent
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.util.{GameTimer, HudUtils, RenderUtils}
+import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.opengl.GL11
 
 object GuiNode {
@@ -35,7 +35,7 @@ object GuiNode {
 
   def apply(container: ContainerNode) = {
     val tile = container.tile
-    val thePlayer = Minecraft.getMinecraft.thePlayer
+    val thePlayer = Minecraft.getMinecraft.player
 
     var state = STATE_UNLINKED
     def getState = states(state)
@@ -43,7 +43,7 @@ object GuiNode {
     val invPage = InventoryPage("node")
 
     {
-      val animArea = new Widget().pos(42, 35.5).size(186, 75).scale(0.5)
+      val animArea = new Widget().pos(42, 35.5f).size(186, 75).scale(0.5f)
       var stateContext = StateContext(getState, 0)
 
       animArea.listens[FrameEvent](() => {
@@ -65,7 +65,7 @@ object GuiNode {
     {
       var load = 1
 
-      send(MSG_INIT, tile, Future.create((cap: Int) => load = cap))
+      send(MSG_INIT, tile, Future.create2((cap: Int) => load = cap))
 
       ret.infoPage
         .histogram(
@@ -75,7 +75,7 @@ object GuiNode {
           .property("range", tile.getRange)
           .property("owner", tile.getPlacerName)
 
-      if (tile.getPlacerName == thePlayer.getCommandSenderName) {
+      if (tile.getPlacerName == thePlayer.getName) {
         ret.infoPage
           .property("node_name", tile.getNodeName, newName => send(MSG_RENAME, thePlayer, tile, newName))
           .property("password", tile.getPassword, newPass => send(MSG_CHANGE_PASS, thePlayer, tile, newPass), password=true)
@@ -86,11 +86,11 @@ object GuiNode {
     }
 
     { // Update node status listener
-      var time = GameTimer.getTime - 2000
+      var time = GameTimer.getTime - 2
       ret.main.listens[FrameEvent](() => {
         val dt = GameTimer.getTime - time
-        if (dt > 2000) {
-          send(MSG_QUERY_LINK, tile, Future.create((res: Boolean) => state = if (res) STATE_LINKED else STATE_UNLINKED))
+        if (dt > 2) {
+          send(MSG_QUERY_LINK, tile, Future.create2((res: Boolean) => state = if (res) STATE_LINKED else STATE_UNLINKED))
           time = GameTimer.getTime
         }
       })
@@ -103,11 +103,11 @@ object GuiNode {
     NetworkMessage.sendToServer(NodeNetworkProxy, channel, pars.map(_.asInstanceOf[AnyRef]): _*)
 
   case class StateContext(state: State, var frame: Int) {
-    var lastChange: Long = GameTimer.getTime
+    var lastChange: Double = GameTimer.getTime
 
     def updateAndDraw(w: Double, h: Double) = {
       val time = GameTimer.getTime
-      val dt = time - lastChange
+      val dt: Long = ((time - lastChange) * 1000).toLong
 
       if (dt >= state.frameTime) {
         lastChange = time
@@ -128,7 +128,6 @@ object GuiNode {
 
 }
 
-@Registrant
 @NetworkS11nType
 object NodeNetworkProxy {
   final val MSG_RENAME = "rename"
@@ -136,21 +135,21 @@ object NodeNetworkProxy {
   final val MSG_INIT   = "init"
   final val MSG_QUERY_LINK = "query_link"
 
-  @RegInitCallback
-  def __init() = {
+  @StateEventCallback
+  def __init(ev: FMLInitializationEvent) = {
     NetworkS11n.addDirectInstance(NodeNetworkProxy)
   }
 
   @Listener(channel=MSG_RENAME, side=Array(Side.SERVER))
   def rename(player: EntityPlayer, node: TileNode, name: String) = {
-    if (player.getCommandSenderName == node.getPlacerName) {
+    if (player.getName == node.getPlacerName) {
       node.setNodeName(name)
     }
   }
 
   @Listener(channel=MSG_CHANGE_PASS, side=Array(Side.SERVER))
   def changePassword(player: EntityPlayer, node: TileNode, name: String) = {
-    if (player.getCommandSenderName == node.getPlacerName) {
+    if (player.getName == node.getPlacerName) {
       node.setPassword(name)
     }
   }

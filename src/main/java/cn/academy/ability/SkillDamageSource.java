@@ -1,11 +1,10 @@
 package cn.academy.ability;
 
-import cn.academy.ability.api.Skill;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class SkillDamageSource extends EntityDamageSource {
 
@@ -18,10 +17,10 @@ public class SkillDamageSource extends EntityDamageSource {
 
     // Chat display
     @Override
-    public IChatComponent func_151519_b(EntityLivingBase target) {
-        return new ChatComponentTranslation("death.attack.ac_skill",
-                target.getCommandSenderName(),
-                this.damageSourceEntity.getCommandSenderName(),
+    public ITextComponent getDeathMessage(EntityLivingBase target) {
+        return new TextComponentTranslation("death.attack.ac_skill",
+                target.getName(),
+                this.damageSourceEntity.getName(),
                 skill.getDisplayName());
     }
 

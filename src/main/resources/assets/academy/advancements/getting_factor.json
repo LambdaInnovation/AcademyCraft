@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:induction_factor"
+    },
+    "title": {
+      "translate": "advancements.general.getting_factor"
+    },
+    "description": {
+      "translate": "advancements.general.getting_factor.desc"
+    }
+  },
+  "parent": "academy:root",
+  "criteria":{
+    "getting_factor": {
+      "trigger": "academy:getting_factor"
+    }
+  }
+}

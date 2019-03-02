@@ -1,19 +1,17 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support;
 
-import cn.academy.core.block.ACBlockContainer;
-import cn.academy.core.client.ui.TechUI;
+import cn.academy.block.block.ACBlockContainer;
 import cn.academy.core.client.ui.WirelessPage;
 import cn.academy.energy.api.block.IWirelessUser;
-import cn.lambdalib.cgui.gui.CGuiScreen;
-import cn.lambdalib.util.mc.WorldUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.CGuiScreen;
+import cn.lambdalib2.util.WorldUtils;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -21,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -42,7 +39,7 @@ public abstract class BlockConverterBase extends ACBlockContainer {
 
         @SideOnly(Side.CLIENT)
         public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean idk) {
-            list.add(StatCollector.translateToLocalFormatted("ac.converter.desc_template", converter.from,
+            list.add(I18n.format("ac.converter.desc_template", converter.from,
                     converter.to));
         }
 
@@ -51,8 +48,8 @@ public abstract class BlockConverterBase extends ACBlockContainer {
     public final Class<? extends TileEntity> tileType;
     public final String from, to;
 
-    public BlockConverterBase(String name, String _from, String _to, Class<? extends TileEntity> _tileType) {
-        super(name, Material.rock);
+    public BlockConverterBase(String _from, String _to, Class<? extends TileEntity> _tileType) {
+        super(Material.ROCK);
         from = _from;
         to = _to;
         tileType = _tileType;
@@ -61,9 +58,10 @@ public abstract class BlockConverterBase extends ACBlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float tx, float ty,
-            float tz) {
-        TileEntity te = world.getTileEntity(x, y, z);
+    @SuppressWarnings("sideonly")
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
+                                    EnumFacing facing, float hitX, float hitY, float hitZ) {
+        TileEntity te = world.getTileEntity(pos);
         if (te != null && tileType.isInstance(te)) {
             if (te instanceof IWirelessUser && !player.isSneaking()) {
                 if (world.isRemote) {

@@ -2,10 +2,9 @@ package cn.academy.misc.media
 
 import java.util
 
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.SerializeIncluded
-import cn.lambdalib.util.datapart.{DataPart, EntityData, RegDataPart}
-import cpw.mods.fml.relauncher.Side
+import cn.lambdalib2.s11n.SerializeIncluded
+import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
+import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList, NBTTagString}
 
@@ -14,7 +13,6 @@ object MediaAcquireData {
 }
 
 
-@Registrant
 @RegDataPart(value=classOf[EntityPlayer])
 class MediaAcquireData extends DataPart[EntityPlayer] {
 

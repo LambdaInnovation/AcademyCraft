@@ -1,0 +1,1 @@
+{"overrides":[{"model":"academy:item/developer_portable_half","predicate":{"energy":0.5}},{"model":"academy:item/developer_portable_full","predicate":{"energy":1}}],"parent":"item/generated","textures":{"layer0":"academy:items/developer_portable_empty"},"__xconfgen":true}

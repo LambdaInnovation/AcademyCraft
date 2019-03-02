@@ -1,17 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.develop;
 
-import cn.academy.ability.ModuleAbility;
+import cn.academy.ACItems;
 import cn.academy.energy.api.IFItemManager;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.EntityData;
-import cn.lambdalib.util.datapart.RegDataPart;
+import cn.lambdalib2.datapart.DataPart;
+import cn.lambdalib2.datapart.EntityData;
+import cn.lambdalib2.datapart.RegDataPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
  * The Developer instance for portable developer attached one per player.
  * @author WeAthFolD
  */
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class PortableDevData extends DataPart<EntityPlayer> implements IDeveloper {
     
@@ -29,8 +21,8 @@ public class PortableDevData extends DataPart<EntityPlayer> implements IDevelope
     }
 
     private ItemStack stack() {
-        ItemStack stack = getEntity().getCurrentEquippedItem();
-        return stack != null && stack.getItem() == ModuleAbility.developerPortable ? stack : null;
+        ItemStack stack = getEntity().getHeldItemMainhand();
+        return stack != null && stack.getItem() == ACItems.developer_portable ? stack : null;
     }
 
     @Override

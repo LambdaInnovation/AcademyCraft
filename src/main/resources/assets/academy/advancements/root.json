@@ -1,0 +1,23 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:logo"
+    },
+    "title": {
+      "translate": "advancements.general.root"
+    },
+    "description": {
+      "translate": "advancements.general.root.desc"
+    }
+    ,
+    "background": "academy:textures/blocks/reso_ore.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria":{
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:developer_portable"
+    },
+    "title": {
+      "translate": "advancements.general.ac_developer"
+    },
+    "description": {
+      "translate": "advancements.general.ac_developer.desc"
+    }
+  },
+  "parent": "academy:open_misaka_cloud",
+  "criteria":{
+    "ac_developer": {
+      "trigger": "academy:ac_developer"
+    }
+  }
+}

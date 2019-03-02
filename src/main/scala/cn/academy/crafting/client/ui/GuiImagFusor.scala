@@ -1,18 +1,18 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.core.{LocalHelper, Resources}
+import cn.academy.block.container.ContainerImagFusor
+import cn.academy.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
-import cn.academy.crafting.block.ContainerImagFusor
-import cn.lambdalib.cgui.ScalaCGUI._
-import cn.lambdalib.cgui.gui.component.{ProgressBar, TextBox}
-import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.util.helper.Color
+import cn.academy.util.LocalHelper
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.component.{ProgressBar, TextBox}
+import cn.lambdalib2.cgui.event.FrameEvent
+import cn.lambdalib2.cgui.loader.CGUIDocument
 
 object GuiImagFusor {
 
-  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_imagfusor")).getWidget("main")
+  private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_imagfusor")).getWidget("main")
   private val local = LocalHelper.at("ac.imag_fusor")
 
   def apply(container: ContainerImagFusor) = {

@@ -1,18 +1,14 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.ic2;
 
-import cn.academy.core.block.TileReceiverBase;
+import cn.academy.block.tileentity.TileReceiverBase;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergySource;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.Optional;
 
 import static cn.academy.support.ic2.IC2Support.eu2if;
 import static cn.academy.support.ic2.IC2Support.if2eu;
@@ -21,6 +17,8 @@ import static cn.academy.support.ic2.IC2Support.if2eu;
  * 
  * @author KSkun
  */
+@RegTileEntity
+@Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)
 public class TileEUOutput extends TileReceiverBase implements IEnergySource {
     
     private boolean isRegistered = false;
@@ -30,7 +28,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
+    public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing direction) {
         return true;
     }
 
@@ -49,18 +47,18 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
     public int getSourceTier() {
         return 2;
     }
-    
+
     @Override
-    public void updateEntity() {
-        if(!isRegistered && !getWorldObj().isRemote) {
-            isRegistered = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-        }
-        super.updateEntity();
+    public void onLoad()
+    {
+        if(!getWorld().isRemote)
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+        super.onLoad();
     }
     
     @Override
     public void onChunkUnload() {
-        if(!isRegistered && !getWorldObj().isRemote) {
+        if(!getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.onChunkUnload();
@@ -68,7 +66,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
     
     @Override
     public void invalidate() {
-        if(!isRegistered && !getWorldObj().isRemote) {
+        if(!getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.invalidate();

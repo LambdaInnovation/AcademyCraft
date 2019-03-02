@@ -1,13 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal.app.settings;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class UIProperty {
 
     public static class Config extends UIProperty {
@@ -41,9 +38,10 @@ public class UIProperty {
         id = _id;
         singlePlayer = _singlePlayer;
     }
-    
+
+    @SideOnly(Side.CLIENT)
     public String getDisplayID() {
-        return StatCollector.translateToLocal("ac.settings.prop." + id);
+        return I18n.format("ac.settings.prop." + id);
     }
     
 }

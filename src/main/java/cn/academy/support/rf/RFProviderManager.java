@@ -1,22 +1,15 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.rf;
 
 import cn.academy.support.EnergyBlockHelper.IEnergyBlockManager;
-import cofh.api.energy.IEnergyProvider;
+import cofh.redstoneflux.api.IEnergyProvider;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-
+import net.minecraft.util.EnumFacing;
 /**
  * @author WeAthFolD
  */
 public class RFProviderManager implements IEnergyBlockManager {
     
-    static final ForgeDirection dir = ForgeDirection.UP;
+    static final EnumFacing dir = EnumFacing.UP;
 
     @Override
     public boolean isSupported(TileEntity tile) {

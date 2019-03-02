@@ -1,18 +1,15 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.ic2;
 
-import cn.academy.core.block.TileGeneratorBase;
+import cn.academy.AcademyCraft;
+import cn.academy.block.tileentity.TileGeneratorBase;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.Optional;
 
 import static cn.academy.support.ic2.IC2Support.eu2if;
 import static cn.academy.support.ic2.IC2Support.if2eu;
@@ -21,6 +18,8 @@ import static cn.academy.support.ic2.IC2Support.if2eu;
  * 
  * @author KSkun
  */
+@RegTileEntity
+@Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     private boolean isRegistered  = false;
@@ -35,11 +34,6 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     }
 
     @Override
-    public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-        return true;
-    }
-
-    @Override
     public double getDemandedEnergy() {
         return bufferSize - getEnergy();
     }
@@ -50,21 +44,21 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     }
 
     @Override
-    public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
+    public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
         return if2eu(addEnergy(eu2if(amount)));
     }
-    
+
     @Override
-    public void updateEntity() {
-        if(!isRegistered && !getWorldObj().isRemote) {
-            isRegistered = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-        }
-        super.updateEntity();
+    public void onLoad()
+    {
+        if(!getWorld().isRemote)
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+        super.onLoad();
     }
     
     @Override
     public void onChunkUnload() {
-        if(!isRegistered && !getWorldObj().isRemote) {
+        if(!getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.onChunkUnload();
@@ -72,10 +66,15 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     @Override
     public void invalidate() {
-        if(!isRegistered && !getWorldObj().isRemote) {
+        if(!getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.invalidate();
     }
 
+    @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing enumFacing)
+    {
+        return true;
+    }
 }

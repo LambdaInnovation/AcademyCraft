@@ -1,0 +1,493 @@
+# AcademyCraft 日本語言語ファイル
+# このファイルには、主に用途によって分類されています（マインクラフトの特殊ルルに限るのを除いて）。
+
+# 一般
+itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] カスタム設定ファイルの読み込みに失敗しました。エラー情報：
+
+# アイテム
+item.ac_crystal_low.name=低純度虚能クリスタル
+item.ac_crystal_normal.name=中純度虚能クリスタル
+item.ac_crystal_pure.name=高純度虚能クリスタル
+item.ac_constraint_ingot.name=束能メタルインゴット
+item.ac_constraint_plate.name=束能メタルプレート
+item.ac_imag_silicon_ingot.name=虚能シリコンインゴット
+item.ac_wafer.name=虚能シリコンウェイファー
+item.ac_imag_silicon_piece.name=虚能シリコンピース
+item.ac_reso_crystal.name=共振クリスタル
+
+item.ac_brain_component.name=脳波分析装置
+item.ac_info_component.name=情報処理装置
+item.ac_reinforced_iron_plate.name=強化鉄板
+item.ac_resonance_component.name=共振器
+item.ac_energy_convert_component.name=エネルギーコンバータ
+item.ac_calc_chip.name=演算チップ
+item.ac_data_chip.name=データチップ
+
+item.ac_matter_unit.name=マターユニット
+item.ac_matter_unit_phase_liquid.name=虚相位液体ユニット
+item.ac_matter_unit_none.name=エンプティユニット
+item.ac_matrix_core.name=マトリックスコア
+item.ac_mat_core_0.name=基本マトリックスコア
+item.ac_mat_core_1.name=改良マトリックスコア
+item.ac_mat_core_2.name=先進マトリックスコア
+item.ac_energy_unit.name=エネルギーユニット
+item.ac_windgen_fan.name=風力発電機 - ファン
+
+item.ac_coin.name=コイン
+item.ac_silbarn.name=拡散支援半導体
+item.ac_needle.name=金属矢
+item.ac_mag_hook.name=磁気フック
+
+item.ac_terminal_installer.name=データ端末
+item.ac_apps.name=アプリケーションインストーラ
+
+item.ac_developer_portable.name=携行性能力開発機
+item.ac_magnetic_coil.desc=開発機を過負荷なら個人現実をリセットする。
+item.ac_magnetic_coil.name=高压磁気增幅コイル
+item.ac_induction_factor.name=能力誘導因子
+item.ac_tutorial.name=御坂ネット端末
+
+# ブロック
+tile.ac_constraint_metal.name=束能メタル鉱石
+tile.ac_crystal_ore.name=虚能クリスタル鉱石
+tile.ac_imagsil_ore.name=虚能シリコン鉱石
+tile.ac_reso_ore.name=共振リスタル鉱石
+tile.ac_machine_frame.name=マシーンフレーム
+
+tile.ac_imag_phase.name=虚相位液体
+
+tile.ac_imag_fusor.name=虚能融合機
+tile.ac_matrix.name=無線虚能マトリックス
+tile.ac_node_basic.name=基本無線虚能ノード
+tile.ac_node_standard.name=改良無線虚能ノード
+tile.ac_node_advanced.name=先進無線虚能ノード
+tile.ac_metal_former.name=金属加工機
+tile.ac_solar_gen.name=太陽光発電機
+tile.ac_cat_engine.name=トースト猫
+tile.ac_phase_gen.name=虚相位発電機
+tile.ac_windgen_base.name=風力発電機 - スタンド台座
+tile.ac_windgen_pillar.name=風力発電機 - スタンド
+tile.ac_windgen_main.name=風力発電機 - ホストコンピューター
+tile.ac_eu_output.name=エネルギー変換器 (IC2 EU出力)
+tile.ac_eu_input.name=エネルギー変換器 (IC2 EU入力)
+tile.ac_rf_output.name=エネルギー変換器 (CoFH RF出力)
+tile.ac_rf_input.name=エネルギー変換器 (CoFH RF入力)
+tile.ac_dev_normal.name=基本能力開発機
+tile.ac_dev_advanced.name=先進能力開発機
+tile.ac_ability_interferer.name=能力干渉機
+
+# データ端末
+ac.terminal.notinstalled=データ端末がインストールされていません。
+ac.terminal.alrdy_installed=データ端末が既にインストールされています。
+ac.terminal.key_hint=データ端末がインストールされました。端末を起動／終了する際は「%s」キーを押してください。
+
+ac.gui.terminal.installing=インストール中…
+ac.gui.terminal.appcount=%dアプリケーション
+
+ac.terminal.app_alrdy_installed=アプリ「%s」が既にインストールされています。
+ac.terminal.app_installed=アプリ「%s」が正常にインストールされました。
+
+# アプリ
+ac.app.skill_tree.name=スキルツリー
+ac.app.knowledge_record.name=ライフレコード
+ac.app.settings.name=設定
+ac.app.media_player.name=メディアプレイヤー
+ac.app.tutorial.name=御坂ネット端末
+
+ac.app.freq_transmitter.name=周波数送信機
+ac.app.freq_transmitter.s0_0=接続を開始するため、無線虚能マトリックスか無線虚能ノードを右クリックしてください。
+ac.app.freq_transmitter.s1_0=確認のために「Enter」を押してください。
+ac.app.freq_transmitter.s1_1=認証中…
+ac.app.freq_transmitter.s2_0=接続を確立するため、近くにある任意の無線虚能ノードを右クリックしてください。終了する場合は他のブロックを右クリックしてください。
+ac.app.freq_transmitter.s3_0=接続を確立するため、近くにある任意の無線受信機や発電機を右クリックしてください。終了する場合は他のブロックを右クリックしてください。
+ac.app.freq_transmitter.st=操作がタイムアウト.
+
+ac.app.freq_transmitter.e0=この無線虚能マトリックスは初期化されていません。
+ac.app.freq_transmitter.e1=認証に失敗しました。
+ac.app.freq_transmitter.e2=認証に失敗しました。無線虚能マトリックスの接続数が限界に達しているか、信号の到達範囲外の可能性があります。
+ac.app.freq_transmitter.e3=認証に失敗しました。無線虚能ノードの接続数が限界に達しているか、信号の到達範囲外の可能性があります。
+ac.app.freq_transmitter.e4=操作をキャンセルしました。
+ac.app.freq_transmitter.e5=送信中…
+ac.app.freq_transmitter.e6=接続に成功しました.
+
+## 設定アプリ
+ac.settings.cat.generic=一般設定
+ac.settings.prop.attackPlayer=PvPを許可
+ac.settings.prop.destroyBlocks=ブロックを破壊する
+ac.settings.prop.headsOrTails=コイン推測をオポンする。
+ac.settings.prop.useMouseWheel=スクロールでテレポートの距離を調節する
+
+ac.settings.cat.keys=キー
+ac.settings.prop.ability_activation=能力の起動
+ac.settings.prop.edit_preset=プリセットの編集
+ac.settings.prop.switch_preset=プリセットの切り替え
+ac.settings.prop.open_data_terminal=データ端末の起動／終了
+ac.settings.prop.ability_0=スキル #1
+ac.settings.prop.ability_1=スキル #2
+ac.settings.prop.ability_2=スキル #3
+ac.settings.prop.ability_3=スキル #4
+ac.settings.prop.debug_console=デバッグ情報の表示／非表示
+
+ac.settings.cat.misc=Misc
+ac.settings.prop.edit_ui=UIのカスタマイズ
+
+## メディアアプリ
+## -> ac.app.media.*
+ac.media.acquired=「%s」がインストールされました。
+ac.media.haveone=「%s」が既にインストールされています。
+ac.media.notinstalled=メディアプレイヤーアプリがインストールされていません。
+
+### メディア
+ac.media.only_my_railgun.name=only my railgun
+ac.media.only_my_railgun.desc=とある科学の超電磁砲 OP1
+ac.media.level5_judgelight.name=LEVEL5-judgelight-
+ac.media.level5_judgelight.desc=とある科学の超電磁砲 OP2
+ac.media.sisters_noise.name=sister's noise
+ac.media.sisters_noise.desc=とある科学の超電磁砲Ｓ OP1
+
+# 能力
+ac.ability.level0=無能力者
+ac.ability.level1=低能力者
+ac.ability.level2=異能力者
+ac.ability.level3=強能力者
+ac.ability.level4=大能力者
+ac.ability.level5=超能力者
+
+death.attack.ac_skill=%1$s は %2$s に %3$s で殺されました
+
+ac.activate_key.deactivate.desc=能力を削除
+ac.activate_key.endspecial.desc=特殊スキルモードを終了
+ac.activate_key.endskill.desc=スキルを停止
+
+ac.gui.preset_edit.name=プリセット編集
+ac.gui.preset_edit.tag=プリセット #
+ac.gui.preset_edit.skill_remove=現在のプリセットを削除
+ac.gui.preset_edit.skill_select=スキルを選択
+
+## ジェネリックスキル
+ac.ability.generic.brain_course.name=ブレイン・コース
+ac.ability.generic.brain_course_advanced.name=ブレイン・コース・アドバンスド
+ac.ability.generic.mind_course.name=マインド・コース
+
+ac.ability.generic.brain_course.desc=脳のための訓練を開始し、スキルをより長く使用できるようにします。
+ac.ability.generic.brain_course_advanced.desc=さらに深く、効率的に思考能力を開発します。これにより、スキル保持時間と忍耐力を向上させます。
+ac.ability.generic.mind_course.desc=脳をよりリラックスさせる方法を学び、CPの回復速度を向上させます。
+
+## 電撃使い
+ac.ability.electromaster.name=電撃使い
+
+### 電撃使いスキル
+ac.ability.electromaster.arc_gen.name=アーク・ジェネレーション
+ac.ability.electromaster.mag_manip.name=マグネット・マニピュレーション
+ac.ability.electromaster.mine_detect.name=マイン・ディテクション
+ac.ability.electromaster.railgun.name=レールガン
+ac.ability.electromaster.mag_movement.name=マグネット・ムーブメント
+ac.ability.electromaster.iron_sand.name=アイアン・サンド・コントロール
+ac.ability.electromaster.iron_sand.sword.name=アイアン・サンド・ソード
+ac.ability.electromaster.iron_sand.whip.name=アイアン・サンド・ウィップ
+ac.ability.electromaster.iron_sand.storm.name=アイアン・サンド・ストーム
+ac.ability.electromaster.iron_sand.cone.name=アイアン・サンド・コーン
+ac.ability.electromaster.charging.name=カレント・チャージング
+ac.ability.electromaster.body_intensify.name=ボディ・インテンサファイ
+ac.ability.electromaster.thunder_clap.name=サンダークラップ
+ac.ability.electromaster.thunder_bolt.name=サンダー・ボルト
+
+ac.ability.electromaster.arc_gen.desc=ヒットしたエリアに軽いダメージを発生させる弱い電弧放電を起こします。可燃性ブロックに直撃した場合、発火する可能性があります。
+ac.ability.electromaster.mag_manip.desc=磁力により、着磁性を持つブロックを投擲します。投擲したブロックは当たった地点に設置される他、敵に直接投げつけることでダメージを与えられます。
+ac.ability.electromaster.mine_detect.desc=目を閉じ、磁力線の流れを感じ取ることで、周りにある貴重な鉱物資源を壁越しであっても見つけることができます。
+ac.ability.electromaster.railgun.desc=電磁誘導によりコインを高速で撃ち出し、命中した箇所に破壊的なダメージを与えます。
+ac.ability.electromaster.mag_movement.desc=強力な磁場を生み出し、狙った磁性体に向けて自身を引きつけます。移動や逃走の際に役立ちます。
+ac.ability.electromaster.iron_sand.desc=砂鉄を分離、操作することで、可変性の危険な攻撃効果を生み出します。
+ac.ability.electromaster.charging.desc=電流を発生させ、手に持った物やワールドに設置されたブロックに電力をチャージします。
+ac.ability.electromaster.body_intensify.desc=自身の生体電気を微調整することで、短時間だけ身体能力を向上させます。
+ac.ability.electromaster.thunder_clap.desc=大気中の磁場を操作して雷雲を作り出し、狙った地点に破壊的な落雷を引き起こします。
+ac.ability.electromaster.thunder_bolt.desc=大量の電気を集め、非常に強力な槍へと圧縮します。解放された電流は命中した敵を中心にその周囲の敵にも伝播し、すべてにダメージを与えます。
+
+## 空間移動
+ac.ability.teleporter.name=空間移動
+
+### 空間移動スキル
+ac.ability.teleporter.threatening_teleport.name=スレットニング・テレポート
+ac.ability.teleporter.dim_folding_theorem.name=折畳空間概論
+ac.ability.teleporter.penetrate_teleport.name=ペネトレイト・テレポート
+ac.ability.teleporter.mark_teleport.name=マーク・テレポート
+ac.ability.teleporter.flesh_ripping.name=フレッシュ・リッピング
+ac.ability.teleporter.location_teleport.name=ロケーション・テレポート
+ac.ability.teleporter.shift_tp.name=シフト・テレポート
+ac.ability.teleporter.space_fluct.name=スペース・フラクチュエーション
+ac.ability.teleporter.flashing.name=フラッシング
+
+ac.ability.teleporter.threatening_teleport.desc=手に持った物を離れた所に転送します。敵に重ねるように転送することで攻撃することもできます。
+ac.ability.teleporter.dim_folding_theorem.desc=テレポートの時は、不安定な空間折り畳み現象が発生します。自分のスキルでランダム空間分割にこの現象を利用して、もっと高いダメージを引き起ができる。
+ac.ability.teleporter.penetrate_teleport.desc=目の前にある障害物の厚さを導出し、障害物を超えてテレポートします。
+ac.ability.teleporter.mark_teleport.desc=視界に映るマークを目的地として、そこにテレポートします。
+ac.ability.teleporter.flesh_ripping.desc=敵の内側を引き裂き、致命的な損傷を与えます。ただし、過剰な出血エフェクトを不快に感じるかもしれません。
+ac.ability.teleporter.location_teleport.desc=現在地を記録し、その後でどこからでもその地点にテレポートして戻ることができます。
+ac.ability.teleporter.shift_tp.desc=手に持ったブロックを転送し、転送先の座標に設置します。空間折り畳み現象が転送先の存在にダメージを与えます。
+ac.ability.teleporter.space_fluct.desc=空間折り畳み能力を強化し、より深刻で致命的なダメージを引き起こします。
+ac.ability.teleporter.flashing.desc=短い時間にテレポートを繰り返し、空中を移動します。
+ac.ability.teleporter.crithit=%fxクリティカルヒット！
+
+ac.gui.loctele.err_exp=EXPが足りませんので、ディメンションクロスはできません
+ac.gui.loctele.err_cp=CPが足りませんので、テレポートはできません
+
+## 原子崩し
+ac.ability.meltdowner.name=原子崩し
+
+## 原子崩しスキル
+ac.ability.meltdowner.electron_bomb.name=エレクトロン・ボム
+ac.ability.meltdowner.rad_intensify.name=βレディエーション・インテンサファイ
+ac.ability.meltdowner.ray_barrage.name=レイ・バラージュ
+ac.ability.meltdowner.scatter_bomb.name=スカッタリング・ボム
+ac.ability.meltdowner.meltdowner.name=メルトダウナー
+ac.ability.meltdowner.light_shield.name=ライト・シールド
+ac.ability.meltdowner.jet_engine.name=ジェット・エンジン
+ac.ability.meltdowner.mine_ray_basic.name=ベーシック・マイニング・レイ
+ac.ability.meltdowner.mine_ray_expert.name=エキスパート・マイニング・レイ
+ac.ability.meltdowner.mine_ray_luck.name=ラック・マイニング・レイ
+ac.ability.meltdowner.electron_missile.name=エレクトロン・ミサイル
+
+ac.ability.meltdowner.electron_bomb.desc=少量の電子を集め、危険な光線を発生させます。
+ac.ability.meltdowner.rad_intensify.desc=高速で電子β線を発射することにより、多くの生物などが損傷します。
+ac.ability.meltdowner.ray_barrage.desc=拡散支援半導体に高エネルギーの光線を当てることで、すべてを破壊することのできる光線の弾幕を目の前に発生させます。
+ac.ability.meltdowner.scatter_bomb.desc=複数の電子を操って攻撃しますが、正確な制御はできません。
+ac.ability.meltdowner.meltdowner.desc=壁や金属を融かすほどの極端な高エネルギー電子光線を発生させます。
+ac.ability.meltdowner.light_shield.desc=多くの電子を盾とします。高速運動する電子は物理攻撃のすべてを防ぎ、触れるすべてにダメージを与えます。    
+ac.ability.meltdowner.jet_engine.desc=電子の推進力を利用して空気中に飛び出します。推進中、ライトシールドを発生させて自身を保護します。
+ac.ability.meltdowner.mine_ray_basic.desc=長い修練によって電子の流れを適切なものとし、鉱石を破壊することなく収集できます。
+ac.ability.meltdowner.mine_ray_expert.desc=電子強度の操作方法をより深く理解し、より効率的に鉱物を集めることができます。
+ac.ability.meltdowner.mine_ray_luck.desc=長い修練を経て、鉱石中の有用な資源をほとんど完璧に集めることができます。
+ac.ability.meltdowner.electron_missile.desc=膨大な電子の雲を集めて保持し、毎回その一部分を使用して攻撃します。
+
+## 一方通行
+ac.ability.vecmanip.name=一方通行
+
+### 一方通行スキル
+ac.ability.vecmanip.dir_shock.name=指向衝力
+ac.ability.vecmanip.ground_shock.name=导向踏撃
+ac.ability.vecmanip.vec_accel.name=ベクトル加速
+ac.ability.vecmanip.vec_deviation.name=ベクトルオフセット
+ac.ability.vecmanip.dir_blast.name=集束衝撃
+ac.ability.vecmanip.storm_wing.name=風の翼
+ac.ability.vecmanip.blood_retro.name=血源逆行
+ac.ability.vecmanip.vec_reflection.name=ベクトル反射
+ac.ability.vecmanip.plasma_cannon.name=プラズマ砲
+
+ac.ability.vecmanip.vec_reflection.desc=敵が苦しむように、視線方向のあなたのラインに危険な攻撃は、逆転されます。
+ac.ability.vecmanip.dir_shock.desc=衝撃力に反衝力を追加し、破壊的で拳を作り。
+ac.ability.vecmanip.ground_shock.desc=地面を踏み、地面に発生するエネルギーを収集し、前方に発射します。活動目標を創傷形成することができます。
+ac.ability.vecmanip.vec_accel.desc=ベクトル演算は、すべての前方に調整し、独自のゲイン大きな加速度を作る地面が発生する力の方向をペダリング作ります。
+ac.ability.vecmanip.vec_deviation.desc=あなたに向かって飛んで発射は対気速度を失います。そしていくつかの近接ダメージをオフセットしました。
+ac.ability.vecmanip.dir_blast.desc=衝撃力に二重の反衝力を追加し、強力な破壊的で拳を作り、ブロックは直接破壊することができます。
+ac.ability.vecmanip.storm_wing.desc=空気ベクトルを操作し、小型の竜巻の後ろに4を立ち上げ、それらは高速飛行で推力産生します。
+ac.ability.vecmanip.blood_retro.desc=敵の血流を操作、大動脈破裂と致命的な損傷を引き起こします。
+ac.ability.vecmanip.plasma_cannon.desc=空気の流れの非常に広い範囲を操作し、それを混合圧縮する。巨大なプラズマ体になる時投げます。
+
+# コマンド
+ac.command.invalid=§c無効な入力です。やり直してください。
+ac.command.successful=§2コマンドが正常に実行されました。
+ac.command.notlearned=§6プレーヤーはまだどの能力も習得していません。
+
+ac.command.knowledge.usage=/knowledge <command>|<help> [parameters...]
+ac.command.knowledge.help=/knowledge help: ヘルプメッセージを表示します。
+ac.command.knowledge.stat=/knowledge stat: プレイヤーのac.knowledgeの統計情報を表示します。
+ac.command.knowledge.clear=/knowledge clear: すべての知識を消去し、もう一度やり直します。
+ac.command.knowledge.getall=/knowledge getall: すべての知識を直ちに習得します。
+ac.command.knowledge.list=/knowledge list: 習得可能なすべての知識を一覧表示します。
+ac.command.knowledge.learn=/knowledge learn [knowledge_name]: 指定したac.knowledgeを習得します。 
+ac.command.knowledge.unlearn=/knowledge unlearn [knowledge_name]: 指定したac.knowledgeを消去します。
+ac.command.knowledge.stat2=習得した知識: %s
+ac.command.knowledge.stat3=発見した知識: %s
+ac.command.knowledge.notfound=「%s」という知識は存在しません。
+ac.command.knowledge.all=全知識:
+ac.command.knowledge.discover=/knowledge discover [knowledge_name]: 指定したac.knowledgeを発見します。
+
+ac.command.aim.usage=/aim <command>|<help> [parameters...]
+ac.command.aim.help=/aim help: ヘルプメッセージを表示します。
+ac.command.aim.cat=/aim cat [catName]: 指定したプレイヤーのカテゴリを変更したり、現在のカテゴリを表示します。
+ac.command.aim.catlist=/aim catlist: すべての利用可能なカテゴリの名前を一覧表示します。
+ac.command.aim.learn=/aim learn <id>|<skillName>: 指定したスキルをその前提スキルの習得状況に関係なく習得します。
+ac.command.aim.unlearn=/aim unlearn <id>|<skillName>: 指定したスキルを消去します。
+ac.command.aim.learn_all=/aim learn_all: すべてのスキルを習得します。
+ac.command.aim.reset=/aim reset: 自身の能力情報を消去します。
+ac.command.aim.learned=/aim learned: 現在習得しているスキルを表示します。
+ac.command.aim.skills=/aim skills: プレイヤーの現在のカテゴリにおけるすべてのスキルを表示します。
+ac.command.aim.fullcp=/aim fullcp: プレイヤーのCPを最大値まで回復します。
+ac.command.aim.level=/aim level: プレイヤーの能力レベルを設定します。
+ac.command.aim.exp=/aim exp <id>|<skillName> [exp]: スキルの熟練度を設定または表示します。
+ac.command.aim.cd_clear=/aim cd_clear: 冷却のクリアすべてのスキル。
+ac.command.aim.nocat=指定されたカテゴリが見つかりません。/aim catlistを使用してすべてのカテゴリの一覧を表示してください。
+ac.command.aim.cats=現在習得可能なカテゴリ: 
+ac.command.aim.curcat=プレイヤーの現在のカテゴリ: %s
+ac.command.aim.nonecat=能力がありません。
+ac.command.aim.noskill=そのようなスキルが見つかりませんでした。/aim skillsを使用して現在のカテゴリにおけるすべてのスキルの一覧を表示してください。
+ac.command.aim.learned.format=習得したスキル: %s
+ac.command.aim.curexp=スキル「%s」の熟練度: %.0f%%.
+ac.command.aim.nocomm=このコマンドがありません。/aim help ですべでの使用可能のコマンドを一覧表示します。
+ac.command.aim.notactive=/aimコマンドは現在無効です。/aim cheats_onや/aim cheats_offを使用して有効無効を切り替えられます。
+ac.command.aim.warning=§c警告: /aimコマンドの使用はゲームバランスを崩壊させ、これからのあなたの経験に甚大な影響を与える恐れがあります！
+ac.command.aim.outofrange=§c範囲外の入力: §f入力する値は%sと%sの間でなければなりません。
+ac.command.aim.maxout=現在のレベルのアップグレード進度を100%%に設定します。
+ac.command.aim.nonecathint=能力は習得されていません！
+
+ac.command.aimp.usage=/aimp <player name> <command>|<help> [parameters...]
+ac.command.aimp.help=/aimp help: ヘルプメッセージを表示します。
+ac.command.aimp.cat=/aimp <player name> cat [catName]: 指定したプレイヤーのカテゴリを変更したり、現在のカテゴリを表示します。
+ac.command.aimp.catlist=/aimp catlist: すべての利用可能なカテゴリの名前を一覧表示します。
+ac.command.aimp.learn=/aimp <player name> learn <id>|<skillName>: 指定したスキルをその前提スキルの習得状況に関係なく習得します。
+ac.command.aimp.unlearn=/aimp <player name> unlearn <id>|<skillName>: 指定したスキルを消去します。
+ac.command.aimp.learn_all=/aimp <player name> learn_all: すべてのスキルを習得します。
+ac.command.aimp.reset=/aimp <player name> reset: 自身の能力情報を消去します。
+ac.command.aimp.learned=/aimp <player name> learned: 現在習得しているスキルを表示します。
+ac.command.aimp.skills=/aimp <player name> skills: プレイヤーの現在のカテゴリにおけるすべてのスキルを表示します。
+ac.command.aimp.fullcp=/aimp <player name> fullcp: プレイヤーのCPを最大値まで回復します。
+ac.command.aimp.level=/aimp <player name> level: プレイヤーの能力レベルを設定します。
+ac.command.aimp.exp=/aimp <player name> exp <id>|<skillName> [exp]: スキルの熟練度を設定または表示します。
+ac.command.aimp.cd_clear=/aimp <player name> cd_clear: 冷却のクリアすべてのスキル。
+ac.command.aimp.nocat=指定されたカテゴリが見つかりません。/aimp catlistを使用してすべてのカテゴリの一覧を表示してください。
+ac.command.aimp.cats=現在習得可能なカテゴリ: 
+ac.command.aimp.curcat=プレイヤーの現在のカテゴリ: %s
+ac.command.aimp.nonecat=能力がありません。
+ac.command.aimp.noskill=そのようなスキルが見つかりませんでした。/aimp <player name> skillsを使用して現在のカテゴリにおけるすべてのスキルの一覧を表示してください。
+ac.command.aimp.learned.format=習得したスキル: %s
+ac.command.aimp.curexp=スキル「%s」の熟練度: %.0f%%.
+ac.command.aimp.nocomm=このコマンドがありません。/aimp help ですべでの使用可能のコマンドを一覧表示します。
+ac.command.aimp.notactive=/aimpコマンドは現在無効です。/aimp cheats_onや/aimp cheats_offを使用して有効無効を切り替えられます。
+ac.command.aimp.warning=§c警告: /aimpコマンドの使用はゲームバランスを崩壊させ、これからのあなたの経験に甚大な影響を与える恐れがあります！
+ac.command.aimp.outofrange=§c範囲外の入力: §f入力する値は%sと%sの間でなければなりません。
+ac.command.aimp.maxout=/aimp <player name> maxout:現在のレベルのアップグレード進度を100%%に設定します。
+ac.command.aimp.nonecathint=能力は習得されていません！
+
+# Advancement
+advancements.general.root=Academy Craft
+advancements.general.root.desc=全ての源
+advancements.general.open_misaka_cloud=初心者
+advancements.general.open_misaka_cloud.desc=御坂クラウドにアクセス
+advancements.general.getting_phase=ミステリアスで強い
+advancements.general.getting_phase.desc=イマジナリー位相液体の含みユニットを獲得
+advancements.general.phase_generator=新たなエネルギー
+advancements.general.phase_generator.desc=イマジナリー位相エネルギージェネレーターを造る
+advancements.general.ac_node=震える導線
+advancements.general.ac_node.desc=初級エネルギーノードを造る
+advancements.general.ac_matrix=WiFi フルカバー
+advancements.general.ac_matrix.desc=マトリックスを造る
+advancements.general.terminal_installed=テクノロジーによって変革される日常
+advancements.general.terminal_installed.desc=データターミナルをインストールした
+advancements.general.getting_factor=可能性はインフィニティ性
+advancements.general.getting_factor.desc=いずれの能力誘導因子を獲得
+advancements.general.ac_developer=人間の能力は限られている
+advancements.general.ac_developer.desc=ポータブル能力開発機を造る
+advancements.general.dev_category=人間を超えた
+advancements.general.dev_category.desc=能力開発
+advancements.general.ac_level_3=一人前
+advancements.general.ac_level_3.desc=レベル3になる
+advancements.general.ac_level_5=全員まとめて来てもいいぜ
+advancements.general.ac_level_5.desc=レベル5になる
+advancements.general.convert_category=能力は自分で決める
+advancements.general.convert_category.desc=能力系転換
+advancements.general.ac_learning_skill=ベテラン
+advancements.general.ac_learning_skill.desc=能力習得
+advancements.general.ac_milestone=なんでそんなに慣れてんだよっ
+advancements.general.ac_milestone.desc=ファースト・マイルストーン
+advancements.general.ac_exp_full=何回もしたんだよぉ
+advancements.general.ac_exp_full.desc=いずれの能力は最大レベルになる	
+advancements.general.ac_overload=超能力者でも限界はある
+advancements.general.ac_overload.desc=オーバードライブまで能力を使う
+
+# 一般ＵＩ
+ac.gui.common.pg_wireless.not_connected=接続されていません
+ac.gui.common.sep.info=情報
+ac.gui.common.sep.wireless_info=無線ネットワーク情報
+ac.gui.common.sep.wireless_init=無線ネットワーク初期化
+ac.gui.common.sep.wireless_noinit=無線ネットワークが初期化されていません。
+ac.gui.common.sep.change_pass=パスワードを変更
+ac.gui.common.hist.energy=エネルギー
+ac.gui.common.hist.buffer=エネルギーバッファ
+ac.gui.common.hist.liquid=虚相液体
+ac.gui.common.hist.capacity=負荷
+ac.gui.common.prop.range=伝送距離
+ac.gui.common.prop.owner=所有者
+ac.gui.common.prop.node_name=ノード名
+ac.gui.common.prop.password=パスワード
+ac.gui.common.prop.bandwidth=帯域幅
+ac.gui.common.prop.ssid=SSID
+ac.gui.common.prop.gen_speed=発電速率
+ac.gui.common.prop.altitude=標高
+
+# スキルトリー
+ac.skill_tree.dev_developing=開発中...
+ac.skill_tree.dev_successful=開発成功。
+ac.skill_tree.dev_failed=開発失敗。
+ac.skill_tree.progress=進捗
+ac.skill_tree.noenergy=機械のエネルギー不足。
+ac.skill_tree.condition_fail=必要な条件が満たされていない、スキルを開発しません。
+ac.skill_tree.learn_question=学習する？ (消費予期：%s IF)
+ac.skill_tree.req=需要
+ac.skill_tree.skill_not_learned=スキルを習得ではない。
+ac.skill_tree.skill_exp=スキル経験：
+ac.skill_tree.uplevel=%s にアップグレード
+ac.skill_tree.anyskill=%d レベルに任意のスキル
+ac.skill_tree.level_fail=%d レベルまでこのスキルを開発することはできません
+
+ac.skill_tree.type_portable=携行性能力開発機
+ac.skill_tree.type_normal=基本能力開発機
+ac.skill_tree.type_advanced=先進能力開発機
+
+ac.skill_tree.console.init=Welcome to Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \nユーザー %s 検出しました、システム起動中......
+ac.skill_tree.console.invalid_cat=\nFATAL ERROR: ユーザーの能力が検出されません、起動中止します。\n
+ac.skill_tree.console.learn_hint=コマンド`learn`で能力を開発します。\n
+ac.skill_tree.console.override=\nWARNING: システム過負荷! 外部から注入を検出しました。.....\n\n能力リセット: コマンド`reset`で能力をリセットします。能力レベルは３以上または能力誘導因子を持っていることは必要です。\n
+ac.skill_tree.console.boot_failed=起動失敗しました.\n
+ac.skill_tree.console.invalid_command=無効なコマンド.\n
+ac.skill_tree.console.progress=進度: %s%%
+ac.skill_tree.console.reset_begin=能力のリセットは始まります...
+ac.skill_tree.console.reset_succ=個人現実のリセットは成功しました。\n
+ac.skill_tree.console.reset_fail=個人現実のリセットは失敗しました。\n
+ac.skill_tree.console.reset_fail_dev=能力のリセットはできません -- 先進能力開発機は必要です。\n
+ac.skill_tree.console.reset_fail_other=能力のリセットはできません -- 能力レベルは３以上または能力誘導因子を持っていることは必要です。\n
+ac.skill_tree.console.dev_begin=能力開発を始まります......\n
+ac.skill_tree.console.dev_succ=開発成功しました。\n
+ac.skill_tree.console.dev_fail=開発失敗しました。\n
+
+# Phase Generator
+
+# Imag Fusor
+
+# Metal Former
+ac.gui.metal_former.mode.etch=エッチング
+ac.gui.metal_former.mode.plate=プレート破砕
+ac.gui.metal_former.mode.incise=切開
+ac.gui.metal_former.mode.refine=精錬
+
+# Ability Interferer
+ac.gui.ability_interf.switch=スイッチ
+ac.ability_interf.cantuse=この能力干渉機は使用できません。
+
+# UI Editing
+ac.gui.uiedit.elements=要素
+
+ac.gui.uiedit.elm.cpbar=CP指針
+ac.gui.uiedit.elm.keyhint=操作ヒント
+ac.gui.uiedit.elm.notification=通知
+ac.gui.uiedit.elm.media=メディアプレイヤー
+
+# Cat Engine
+ac.cat_engine.unlink=無線虚能ノードからの接続が解除されたにゃ～
+ac.cat_engine.notfound=近くに無線虚能ノードが見つからないにゃ～
+ac.cat_engine.linked=名称「%s」の無線虚能ノードに接続されたにゃ～
+
+# Tutorials
+ac.gui.crafttype.shaped=定形のレシピ
+ac.gui.crafttype.shapeless=不定形のレシピ
+ac.tutorial.misaka=ミサカ%d号
+ac.tutorial.update=端末アップデート
+ac.tutorial.crafting=クラフト: %s
+
+# Coin guess
+
+ac.headsOrTails.0=コイン正面表示
+ac.headsOrTails.1=コイン負面表示
+
+# Energy converter block
+ac.converter.desc_template=%sを%sに変換

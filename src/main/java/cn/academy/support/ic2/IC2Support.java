@@ -1,23 +1,25 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.ic2;
 
-import cn.academy.core.AcademyCraft;
-import cn.academy.crafting.ModuleCrafting;
-import cn.academy.energy.ModuleEnergy;
-import cn.academy.support.BlockConverterBase;
+import cn.academy.ACBlocks;
+import cn.academy.ACItems;
+import cn.academy.AcademyCraft;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyItemHelper;
 import cn.academy.support.EnergyItemHelper.EnergyItemManager;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib2.registry.RegistryCallback;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.SideUtils;
 import com.google.common.base.Preconditions;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
@@ -28,15 +30,25 @@ import net.minecraft.item.ItemStack;
  * 
  * @author KSkun
  */
-@Registrant
 public class IC2Support {
-    
+    static final String IC2_MODID = "ic2";
+
+    // A placeholder interface to express @Optional.Interface dependency
+    static final String IC2_IFACE = "ic2.api.energy.tile.IEnergySource";
+
     /**
      * The convert rate from EU to IF(1IF = <CONV_RATE>EU).
      */
     public static final double CONV_RATE = 1;
 
-    private static final String MODID = "IC2";
+    private static IC2SkillHelper helper;
+
+    public static final BlockEUInput euInput = new BlockEUInput();
+    public static final BlockEUOutput euOutput = new BlockEUOutput();
+
+
+    public static final ItemBlock item_euInput = new ItemBlock(euInput);
+    public static final ItemBlock item_euOutput = new ItemBlock(euOutput);
     
     public static double eu2if(double euEnergy) {
         return euEnergy / CONV_RATE;
@@ -46,35 +58,73 @@ public class IC2Support {
         return ifEnergy * CONV_RATE;
     }
 
-    @Optional.Method(modid=MODID)
-    @RegInitCallback
-    public static void init() {
-        BlockEUInput euInput = new BlockEUInput();
-        BlockEUOutput euOutput = new BlockEUOutput();
-        
-        GameRegistry.registerBlock(euInput, BlockConverterBase.Item.class, "eu_input");
-        GameRegistry.registerBlock(euOutput, BlockConverterBase.Item.class, "eu_output");
-        
-        GameRegistry.registerTileEntity(TileEUInput.class, "eu_input");
-        GameRegistry.registerTileEntity(TileEUOutput.class, "eu_output");
-        
+    @Optional.Method(modid= IC2_MODID)
+    @StateEventCallback
+    public static void init(FMLInitializationEvent event){
         EnergyBlockHelper.register(new EUSinkManager());
         EnergyBlockHelper.register(new EUSourceManager());
-        
-        GameRegistry.addRecipe(new ItemStack(euInput), "abc", " d ",
-                'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
-        GameRegistry.addRecipe(new ItemStack(euOutput), "abc", " d ",
-                'a', IC2Items.getItem("batBox"), 'b', ModuleCrafting.machineFrame,
-                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
-        
-        GameRegistry.addRecipe(new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
-        GameRegistry.addRecipe(new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
+
+        // https://github.com/TinyModularThings/IC2Classic/blob/master/src/main/java/ic2/api/item/IC2Items.java
+        GameRegistry.addShapedRecipe(new ResourceLocation("academy","eu_input"), null,
+                new ItemStack(euInput), "abc", " d ",
+                'a', ACItems.energy_unit, 'b', ACBlocks.machine_frame,
+                'c', IC2Items.getItem("cable", "type:copper,insulation:1"), 'd', ACItems.energy_convert_component);
+        GameRegistry.addShapedRecipe(new ResourceLocation("academy","eu_output"), null,
+                new ItemStack(euOutput), "abc", " d ",
+                'a', IC2Items.getItemAPI().getItemStack("te", "batbox"), 'b', ACBlocks.machine_frame,
+                'c', IC2Items.getItem("cable", "type:copper,insulation:1"), 'd', ACItems.energy_convert_component);
+
+        GameRegistry.addShapedRecipe(new ResourceLocation("academy","eu_input_output"), null,
+                new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
+        GameRegistry.addShapedRecipe(new ResourceLocation("academy","eu_output_input"), null,
+                new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
 
         EnergyItemHelper.register(new IC2EnergyItemManager());
 
         AcademyCraft.log.info("IC2 API Support has been loaded.");
     }
+
+
+    @Optional.Method(modid= IC2_MODID)
+    @RegistryCallback
+    private static void registerBlocks(RegistryEvent.Register<Block> event) {
+        helper = new IC2SkillHelper();
+        helper.init();
+
+        euInput.setRegistryName("academy:eu_input");
+        euInput.setTranslationKey("ac_eu_input");
+        event.getRegistry().register(euInput);
+
+        euOutput.setRegistryName("academy:eu_output");
+        euOutput.setTranslationKey("ac_eu_output");
+        event.getRegistry().register(euOutput);
+    }
+
+    @Optional.Method(modid= IC2_MODID)
+    @RegistryCallback
+    private static void registerItems(RegistryEvent.Register<Item> event){
+        item_euInput.setRegistryName(euInput.getRegistryName());
+        item_euInput.setTranslationKey(euInput.getTranslationKey());
+        event.getRegistry().register(item_euInput);
+        if(SideUtils.isClient()){
+            ModelLoader.setCustomModelResourceLocation(item_euInput, 0,
+                    new ModelResourceLocation("academy:eu_input", "inventory"));
+        }
+
+
+        item_euOutput.setRegistryName(euOutput.getRegistryName());
+        item_euOutput.setTranslationKey(euOutput.getTranslationKey());
+        event.getRegistry().register(item_euOutput);
+        if(SideUtils.isClient()){
+            ModelLoader.setCustomModelResourceLocation(item_euOutput, 0,
+                    new ModelResourceLocation("academy:eu_output", "inventory"));
+        }
+    }
+
+    public static IC2SkillHelper getHelper() {
+        return helper;
+    }
+
 }
 
 class IC2EnergyItemManager implements EnergyItemManager {

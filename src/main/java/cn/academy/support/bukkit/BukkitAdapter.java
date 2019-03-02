@@ -1,17 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.bukkit;
 
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.event.BlockDestroyEvent;
-import cn.lambdalib.annoreg.core.Registrant;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.academy.AcademyCraft;
+import cn.academy.event.BlockDestroyEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,7 +18,6 @@ import java.util.UUID;
  * @author EAirPeter
  */
 @SideOnly(Side.SERVER)
-@Registrant
 public final class BukkitAdapter {
 
     public static final BukkitAdapter INSTANCE = new BukkitAdapter();
@@ -59,7 +51,7 @@ public final class BukkitAdapter {
                     player == null ? dummy : event.player.getUniqueID());
             }
             event.setCanceled((boolean) checkBlockDestroy_.invoke(null,
-                event.x, event.y, event.z));
+                event.pos.getX(), event.pos.getY(), event.pos.getZ()));
         }
         catch (Throwable e) {
             AcademyCraft.log.error("Failed to handle BlockDestroyEvent", e);

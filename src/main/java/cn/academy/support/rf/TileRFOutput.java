@@ -1,46 +1,38 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.rf;
 
-import cn.academy.core.block.TileReceiverBase;
-import cn.lambdalib.annoreg.core.RegWithName;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import cn.academy.block.tileentity.TileReceiverBase;
+import cn.lambdalib2.registry.mc.RegTileEntity;
+import cofh.redstoneflux.api.IEnergyProvider;
+import cofh.redstoneflux.api.IEnergyReceiver;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.Optional;
 
 import static cn.academy.support.rf.RFSupport.if2rf;
 import static cn.academy.support.rf.RFSupport.rf2if;
 
-@Registrant
 @RegTileEntity
-@RegWithName("rf_output")
-public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
+@Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyProvider")
+public class TileRFOutput extends TileReceiverBase implements IEnergyProvider
+{
 
     public TileRFOutput() {
         super("ac_rf_output", 0, 2000, 100);
     }
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
-        World world = getWorldObj();
+    public void update() {
+        super.update();
+        World world = getWorld();
         if(!world.isRemote) {
-            for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                int x = xCoord + dir.offsetX,
-                    y = yCoord + dir.offsetY,
-                    z = zCoord + dir.offsetZ;
-                TileEntity te = world.getTileEntity(x, y, z);
+            for(EnumFacing dir : EnumFacing.VALUES) {
+                BlockPos pos = this.pos.add(dir.getDirectionVec());
+                TileEntity te = world.getTileEntity(pos);
                 if(te instanceof IEnergyReceiver && energy > 0) {
                     IEnergyReceiver receiver = (IEnergyReceiver) te;
-                    ForgeDirection rev = dir.getOpposite();
+                    EnumFacing rev = dir.getOpposite();
                     if(receiver.canConnectEnergy(rev)) {
                         int req = receiver.getMaxEnergyStored(rev) - receiver.getEnergyStored(rev);
                         req = Math.min(if2rf(energy), req);
@@ -52,12 +44,12 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
+    public boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         int e = (int) energy;
         if(!simulate) {
             energy -= rf2if(maxExtract);
@@ -67,12 +59,12 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return if2rf(energy);
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return if2rf(2000);
     }
 

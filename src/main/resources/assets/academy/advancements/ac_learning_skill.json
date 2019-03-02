@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:needle"
+    },
+    "title": {
+      "translate": "advancements.general.ac_learning_skill"
+    },
+    "description": {
+      "translate": "advancements.general.ac_learning_skill.desc"
+    }
+  },
+  "parent": "academy:dev_category",
+  "criteria":{
+    "ac_learning_skill": {
+      "trigger": "academy:ac_learning_skill"
+    }
+  }
+}

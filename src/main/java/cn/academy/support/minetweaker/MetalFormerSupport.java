@@ -1,67 +1,58 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.minetweaker;
 
-import cn.academy.crafting.block.TileMetalFormer.Mode;
-import minetweaker.MineTweakerAPI;
-import minetweaker.OneWayAction;
-import minetweaker.api.item.IItemStack;
+import cn.academy.block.tileentity.TileMetalFormer.Mode;
+import cn.academy.crafting.MetalFormerRecipes;
+import crafttweaker.CraftTweakerAPI;
+import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import static cn.academy.crafting.api.MetalFormerRecipes.INSTANCE;
-import static cn.academy.support.minetweaker.MTSupport.toStack;
 /**
  * 
  * @author 3TUSK
  */
 @ZenClass("mods.academycraft.MetalFormer")
+@ZenRegister
 public class MetalFormerSupport {
     
     @ZenMethod
     public static void addEtchRecipe(IItemStack output, IItemStack input) {
-        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.ETCH));
+        CraftTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.ETCH));
     }
     
     @ZenMethod
     public static void addInciseRecipe(IItemStack output, IItemStack input) {
-        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.INCISE));
+        CraftTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.INCISE));
     }
     
     @ZenMethod
     public static void addPlateRecipe(IItemStack output, IItemStack input) {
-        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.PLATE));
+        CraftTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.PLATE));
     }
     
-    private static class AddMetalFormerRecipe extends OneWayAction {
+    private static class AddMetalFormerRecipe implements IAction
+    {
 
         ItemStack input, output;
         Mode mode;
         
         public AddMetalFormerRecipe(IItemStack input, IItemStack output, Mode mode) {
-            this.input = toStack(input);
-            this.output = toStack(output);
+            this.input = MTSupport.toStack(input);
+            this.output = MTSupport.toStack(output);
             this.mode = mode;
         }
         
         @Override
         public void apply() {
-            INSTANCE.add(input, output, mode);
+            MetalFormerRecipes.INSTANCE.add(input, output, mode);
         }
 
         @Override
         public String describe() {
-            return "Add extra metal former etching recipe for " + input.getUnlocalizedName();
-        }
-
-        @Override
-        public Object getOverrideKey() {
-            return null;
+            return "Add extra metal former etching recipe for " + input.getTranslationKey();
         }
         
     }

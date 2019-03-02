@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:tutorial"
+    },
+    "title": {
+      "translate": "advancements.general.open_misaka_cloud"
+    },
+    "description": {
+      "translate": "advancements.general.open_misaka_cloud.desc"
+    }
+  },
+  "parent": "academy:root",
+  "criteria":{
+    "open_misaka_cloud": {
+      "trigger": "academy:open_misaka_cloud"
+    }
+  }
+}

@@ -1,14 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal;
 
-import cn.academy.core.Resources;
+import cn.academy.Resources;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  */
@@ -29,10 +25,15 @@ public abstract class App {
         return Resources.getTexture("guis/apps/" + name + "/" + texname);
     }
 
-    protected String local(String key) {
-        return StatCollector.translateToLocal("ac.app." + name + "." + key);
+    private String localKey(String key) {
+        return "ac.app." + name + "." + key;
     }
 
+    protected String local(String key) {
+        return I18n.format(localKey(key));
+    }
+
+    @SideOnly(Side.CLIENT)
     public ResourceLocation getIcon() {
         return icon;
     }
@@ -54,15 +55,15 @@ public abstract class App {
         return local("name");
     }
 
+    public String getDisplayKey() {
+        return localKey("name");
+    }
+
     public final boolean isPreInstalled() {
         return preInstalled;
     }
 
-    void getEnvironment() {
-        AppEnvironment env = createEnvironment();
-        env.app = this;
-    }
-
+    @SideOnly(Side.CLIENT)
     public abstract AppEnvironment createEnvironment();
 
 }

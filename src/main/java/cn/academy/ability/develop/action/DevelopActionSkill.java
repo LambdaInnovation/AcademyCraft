@@ -1,18 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.develop.action;
 
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.AbilityLocalization;
+import cn.academy.ability.Skill;
+import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * Learn a specific kind of skill.

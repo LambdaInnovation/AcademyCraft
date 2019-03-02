@@ -1,18 +1,15 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal.app.settings;
 
-import cn.academy.core.AcademyCraft;
-import cn.lambdalib.cgui.gui.Widget;
+import cn.academy.AcademyCraft;
+import cn.lambdalib2.cgui.Widget;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public abstract class IPropertyElement<T extends UIProperty> {
     
     public abstract Widget getWidget(T prop);

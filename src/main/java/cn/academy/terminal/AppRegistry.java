@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal;
 
 import com.google.common.collect.ImmutableList;
@@ -22,6 +16,14 @@ public class AppRegistry {
 
     public static App get(int id) {
         return appList.get(id);
+    }
+
+    public static App getByName(String name) {
+        for (App app : appList) {
+            if (app.getName().equals(name))
+                return app;
+        }
+        return null;
     }
 
     public static int size() {

@@ -1,55 +1,46 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.minetweaker;
 
-import minetweaker.MineTweakerAPI;
-import minetweaker.OneWayAction;
-import minetweaker.api.item.IItemStack;
+import cn.academy.crafting.ImagFusorRecipes;
+import crafttweaker.CraftTweakerAPI;
+import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import static cn.academy.crafting.api.ImagFusorRecipes.INSTANCE;
-import static cn.academy.support.minetweaker.MTSupport.toStack;
 /**
  * 
  * @author 3TUSK
  */
 @ZenClass("mods.academycraft.ImagFusor")
+@ZenRegister
 public class ImagFusorSupport {
 
     @ZenMethod
     public static void addRecipe(IItemStack output, IItemStack input, int liquidAmount) {
-        MineTweakerAPI.apply(new AddImagFusorRecipe(input, output, liquidAmount));
+        CraftTweakerAPI.apply(new AddImagFusorRecipe(input, output, liquidAmount));
     }
     
-    private static class AddImagFusorRecipe extends OneWayAction {
+    private static class AddImagFusorRecipe implements IAction
+    {
         ItemStack input, output;
         int liquidAmount;
         
         public AddImagFusorRecipe(IItemStack input, IItemStack output, int liquidAmount) {
-            this.input = toStack(input);
-            this.output = toStack(output);
+            this.input = MTSupport.toStack(input);
+            this.output = MTSupport.toStack(output);
             this.liquidAmount = liquidAmount;
         }
 
         @Override
         public void apply() {
-            INSTANCE.addRecipe(input, liquidAmount, output);
+            ImagFusorRecipes.INSTANCE.addRecipe(input, liquidAmount, output);
         }
 
         @Override
         public String describe() {
-            return "Add extra ImagFusor recipe for " + input.getUnlocalizedName();
-        }
-
-        @Override
-        public Object getOverrideKey() {
-            return null;
+            return "Add extra ImagFusor recipe for " + input.getTranslationKey();
         }
         
     }

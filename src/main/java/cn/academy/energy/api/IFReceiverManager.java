@@ -1,27 +1,25 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.api;
 
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyBlockHelper.IEnergyBlockManager;
-import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 /**
  * @author WeAthFolD
  */
-@Registrant
 public class IFReceiverManager implements IEnergyBlockManager {
-    
+
     public static IFReceiverManager instance = new IFReceiverManager();
-    
+
+    @StateEventCallback
+    private static void init(FMLInitializationEvent ev) {
+        EnergyBlockHelper.register(instance);
+    }
+
     private IFReceiverManager() {
-        EnergyBlockHelper.register(this);
     }
 
     @Override

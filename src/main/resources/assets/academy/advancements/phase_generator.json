@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:phase_gen"
+    },
+    "title": {
+      "translate": "advancements.general.phase_generator"
+    },
+    "description": {
+      "translate": "advancements.general.phase_generator.desc"
+    }
+  },
+  "parent": "academy:getting_phase",
+  "criteria":{
+    "phase_generator": {
+      "trigger": "academy:phase_generator"
+    }
+  }
+}

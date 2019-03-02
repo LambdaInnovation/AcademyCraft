@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:crystal_pure"
+    },
+    "title": {
+      "translate": "advancements.general.ac_level_5"
+    },
+    "description": {
+      "translate": "advancements.general.ac_level_5.desc"
+    }
+  },
+  "parent": "academy:ac_level_3",
+  "criteria":{
+    "ac_level_5": {
+      "trigger": "academy:ac_level_5"
+    }
+  }
+}

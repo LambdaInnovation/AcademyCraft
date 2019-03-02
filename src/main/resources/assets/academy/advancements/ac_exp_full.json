@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:coin"
+    },
+    "title": {
+      "translate": "advancements.general.ac_exp_full"
+    },
+    "description": {
+      "translate": "advancements.general.ac_exp_full.desc"
+    }
+  },
+  "parent": "academy:ac_learning_skill",
+  "criteria":{
+    "ac_exp_full": {
+      "trigger": "academy:ac_exp_full"
+    }
+  }
+}

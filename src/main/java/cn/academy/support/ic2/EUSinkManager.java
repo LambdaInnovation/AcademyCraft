@@ -1,15 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.ic2;
 
 import cn.academy.support.EnergyBlockHelper.IEnergyBlockManager;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * @author WeAthFolD
@@ -41,7 +35,7 @@ public class EUSinkManager implements IEnergyBlockManager {
     public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
         IEnergySink sink = asSink(tile);
         if(sink != null) {
-            return IC2Support.CONV_RATE * sink.injectEnergy(ForgeDirection.UP, amt / IC2Support.CONV_RATE, ignoreBandwidth ? 233333 : 1024);
+            return IC2Support.CONV_RATE * sink.injectEnergy(EnumFacing.UP, amt / IC2Support.CONV_RATE, ignoreBandwidth ? 233333 : 1024);
         }
         return amt;
     }

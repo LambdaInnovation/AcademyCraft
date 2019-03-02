@@ -1,13 +1,12 @@
 package cn.academy.misc.media
 
-import cn.academy.core.AcademyCraft
+import cn.academy.AcademyCraft
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.util.datapart.{DataPart, EntityData, RegDataPart}
-import cn.lambdalib.util.generic.RegistryUtils
-import cn.lambdalib.util.helper.TickScheduler
+import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
+import cn.lambdalib2.util.ReflectionUtils
+import cn.lambdalib2.util.TickScheduler
 import com.google.common.base.Preconditions
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.audio.{ISound, MusicTicker, SoundHandler, SoundManager}
 import net.minecraft.entity.player.EntityPlayer
@@ -35,7 +34,7 @@ object MediaBackend {
 
   def apply(player: EntityPlayer): MediaBackend = EntityData.get(player).getPart(classOf[MediaBackend])
 
-  def apply(): MediaBackend = apply(Minecraft.getMinecraft.thePlayer)
+  def apply(): MediaBackend = apply(Minecraft.getMinecraft.player)
 
 }
 
@@ -50,10 +49,10 @@ private object MediaBackendHelper {
     if (!init) {
       volumeProperty_ = AcademyCraft.config.get("media_player", "volume", 1.0, "Media Player's volume")
 
-      val fSndManager = RegistryUtils.getObfField(classOf[SoundHandler], "sndManager", "field_147694_f")
+      val fSndManager = ReflectionUtils.getObfField(classOf[SoundHandler], "sndManager", "field_147694_f")
       val sndMgr = fSndManager.get(Minecraft.getMinecraft.getSoundHandler)
 
-      val fSndSystem = RegistryUtils.getObfField(classOf[SoundManager], "sndSystem", "field_148620_e")
+      val fSndSystem = ReflectionUtils.getObfField(classOf[SoundManager], "sndSystem", "field_148620_e")
       fSndSystem.setAccessible(true)
       sndSystem_ = fSndSystem.get(sndMgr).asInstanceOf[SoundSystem]
 
@@ -70,9 +69,9 @@ private object MediaBackendHelper {
   def sndSystem = { checkInit(); sndSystem_ }
 
   def stopVanillaSound() = {
-    val musicTicker: MusicTicker = RegistryUtils.getFieldInstance(classOf[Minecraft],
-      Minecraft.getMinecraft, "mcMusicTicker", "field_147126_aw")
-    val playing: ISound = RegistryUtils.getFieldInstance(classOf[MusicTicker], musicTicker, "field_147678_c")
+    val musicTicker: MusicTicker = Minecraft.getMinecraft.getMusicTicker
+    val field = ReflectionUtils.getObfField(classOf[MusicTicker], "currentMusic", "field_147678_c") // TODO check if this is the right field id
+    val playing: ISound = field.get(musicTicker).asInstanceOf[ISound]
     if (playing != null) {
       Minecraft.getMinecraft.getSoundHandler.stopSound(playing)
     }
@@ -80,11 +79,11 @@ private object MediaBackendHelper {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegDataPart(value=classOf[EntityPlayer], side=Array(Side.CLIENT))
 class MediaBackend extends DataPart[EntityPlayer] {
   import MediaBackendHelper._
+  import scala.collection.JavaConversions._
 
   final val MEDIA_ID = "AC_MediaPlayer"
 
@@ -96,21 +95,25 @@ class MediaBackend extends DataPart[EntityPlayer] {
 
   val scheduler = new TickScheduler
 
-  scheduler.every(5).run(() => {
-    currentPlaying match {
-      case Some(PlayInfo(_, false, _)) => stopVanillaSound()
-      case _ =>
+  scheduler.every(5).run(new Runnable() {
+    override def run(): Unit = {
+      currentPlaying match {
+        case Some(PlayInfo(_, false, _)) => stopVanillaSound()
+        case _ =>
+      }
     }
   })
 
-  scheduler.every(5).run(() => {
-    // Synchronize play state
-    playState match {
-      case Some(state) =>
-        if (!sndSystem.playing(MEDIA_ID)) {
-          playState = None
-        }
-      case _ =>
+  scheduler.every(5).run(new Runnable{
+    override def run() = {
+      // Synchronize play state
+      playState match {
+        case Some(state) =>
+          if (!sndSystem.playing(MEDIA_ID)) {
+            playState = None
+          }
+        case _ =>
+      }
     }
   })
 
