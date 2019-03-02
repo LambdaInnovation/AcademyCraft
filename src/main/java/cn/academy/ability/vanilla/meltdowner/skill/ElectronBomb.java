@@ -53,7 +53,7 @@ public class ElectronBomb extends Skill {
                 player,
                 ctx.getSkillExp() > 0.8f ? LifeImproved : Life,
                 target -> {
-                    RayTraceResult trace = Raytrace.perform(player.world, new Vec3d(target.posX, target.posY, target.posZ),
+                    RayTraceResult trace = Raytrace.perform(player.world, new Vec3d(target.posX, target.posY + player.eyeHeight, target.posZ),
                         getDest(player), EntitySelectors.exclude(player).and(EntitySelectors.of(EntityMdBall.class).negate()));
                     if (trace != null && trace.entityHit != null)
                         MDDamageHelper.attack(ctx, trace.entityHit, getDamage(exp));

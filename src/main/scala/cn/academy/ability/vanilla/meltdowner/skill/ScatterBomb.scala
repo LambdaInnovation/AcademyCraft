@@ -101,7 +101,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
         autoCount -= 1
       }
 
-      val traceResult: RayTraceResult = Raytrace.perform(world, new Vec3d(ball.posX, ball.posY, ball.posZ),
+      val traceResult: RayTraceResult = Raytrace.perform(world, new Vec3d(ball.posX, ball.posY+ball.getEyeHeight, ball.posZ),
         dest, basicSelector.and(EntitySelectors.exclude(player)))
       if (traceResult != null && traceResult.entityHit != null) {
         traceResult.entityHit.hurtResistantTime = -1
@@ -111,7 +111,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
         TargetPoints.convert(player, 25),
         SBNetDelegate.INSTANCE,
         SBNetDelegate.MSG_EFFECT,
-        ball.getPositionVector,
+        ball.getPositionEyes(1F),
         dest
       )
       ball.setDead()
