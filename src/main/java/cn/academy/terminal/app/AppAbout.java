@@ -37,6 +37,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -71,7 +72,7 @@ public class AppAbout extends App {
 
         private static final float FontSize = 30;
 
-        private static final List<TextItem>
+        private final List<TextItem>
             CreditTexts = new ArrayList<>(),
             DonateTexts = new ArrayList<>();
 
@@ -79,93 +80,6 @@ public class AppAbout extends App {
 
         static {
             Resources.preloadMipmapTexture("guis/about/bg");
-
-            Config cfg;
-            try {
-                cfg = ConfigFactory.parseReader(
-                    new InputStreamReader(ResourceUtils.getResourceStream(Resources.res("config/about.conf")), "UTF-8")
-                );
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
-
-            {
-                Config root = cfg.getConfig("credits");
-                List<TextItem> l = CreditTexts;
-
-                float y = 2 * FontSize;
-                for (String s : root.getStringList("header")) {
-                    l.add(new TextItem(0, y, s, FontAlign.CENTER).setBold());
-                    y += FontSize;
-                }
-
-                y += 2 * FontSize;
-                for (ConfigValue e : root.getList("staff")) {
-                    ConfigList el = (ConfigList) e;
-                    String job = (String) el.get(0).unwrapped();
-                    l.add(new TextItem(-30, y, job, FontAlign.RIGHT).setBold());
-
-                    for (int i = 1; i < el.size(); ++i) {
-                        String name = ((String) el.get(i).unwrapped());
-                        l.add(new TextItem(30, y, name, FontAlign.LEFT));
-                        y += FontSize;
-                    }
-                    y += 0.5f * FontSize;
-                }
-
-                y += FontSize;
-                l.add(new TextItem(0, y, "Donators", FontAlign.CENTER).setBold());
-                y += 1.5f * FontSize;
-
-                List<String> donators = root.getStringList("donators");
-                for (int i = 0; i < donators.size(); ++i) {
-                    float x = (i % 2 == 0 ? 1 : -1) * (620 / 4.0f);
-                    l.add(new TextItem(x, y, donators.get(i), FontAlign.CENTER));
-
-                    if (i % 2 != 0) y += FontSize;
-                }
-
-                y += FontSize;
-                l.add(
-                    new TextItem(0, y, "Thank you for playing!", FontAlign.CENTER).setBold()
-                );
-                y += FontSize;
-
-                creditsMaxY = y + 30;
-            }
-
-            {
-                Config root = cfg.getConfig("donation");
-
-                String lang = Minecraft.getMinecraft().gameSettings.language;
-                if (!root.hasPath(lang))
-                    lang = "en_us";
-
-                List<String> l = root.getStringList(lang);
-
-                float y = 100;
-                for (int i = 0; i < l.size(); ++i) {
-                    String s = l.get(i);
-                    if (s.startsWith("!!")) {
-                        int ix = s.indexOf('|');
-                        String url = s.substring(ix + 1);
-                        String text = s.substring(2, ix);
-
-                        y += 10;
-                        DonateTexts.add(
-                            new LinkItem(0, y, text, url, FontAlign.CENTER)
-                                .setFontSize(40)
-                        );
-                        y += 50;
-                    } else {
-                        DonateTexts.add(
-                            new TextItem(0, y, l.get(i), FontAlign.CENTER)
-                        );
-                        y += 30;
-                    }
-                }
-            }
-
         }
 
         private static final Color
@@ -221,6 +135,8 @@ public class AppAbout extends App {
         String _hoveringURL;
 
         AboutUI() {
+            initTexts();
+
             Widget root = Prefab.getWidget("main").copy();
             gui.addWidget("main", root);
 
@@ -241,13 +157,12 @@ public class AppAbout extends App {
 
             Color
                 textColor = Colors.white(),
-                linkColor = Colors.fromRGB32(0x54a1f0),
-                linkColorHighlight = Colors.fromRGB32(0x9fbfe0);
+                linkColor = Colors.fromRGBA32(0x5bb4ffff),
+                linkColorHighlight = Colors.fromRGBA32(0x8ecbffff);
 
             _scrollArea.listen(LeftClickEvent.class, (w, e) -> {
-                // This is somewhat hack, using manual position judgement.
-                //  but it would otherwise be much more of a fuss,
-                //  using widgets for every single line.
+                // Manually calculating position is quite tricky,
+                // But if we use widget-based approach things will be even more complex
                 Debug.log("Left click" + _hoveringURL);
                 if (_hoveringURL != null) {
                     try {
@@ -283,8 +198,8 @@ public class AppAbout extends App {
                         IFont font = item.bold ? Resources.fontBold() : Resources.font();
                         if (item instanceof LinkItem) {
                             float width = font.getTextWidth(item.text, option);
-                            float minX = w.transform.width / 2 - width / 2,
-                                maxX = w.transform.width / 2 + width / 2;
+                            float minX = w.transform.width / 2 + item.x,
+                                maxX = w.transform.width / 2 + item.x + width;
                             float minY = y, maxY = y + item.fontSize;
 
                             if (minX <= e.mx && e.mx <= maxX &&
@@ -312,6 +227,103 @@ public class AppAbout extends App {
             });
 
             onTabTypeChanged(TabType.Credits);
+        }
+
+        private void initTexts() {
+            Config cfg;
+            cfg = ConfigFactory.parseReader(
+                new InputStreamReader(
+                    ResourceUtils.getResourceStream(Resources.res("config/about.conf")),
+                    StandardCharsets.UTF_8
+                )
+            );
+
+            {
+                Config root = cfg.getConfig("credits");
+                List<TextItem> l = CreditTexts;
+
+                float y = 2 * FontSize;
+                for (String s : root.getStringList("header")) {
+                    l.add(new TextItem(0, y, s, FontAlign.CENTER).setBold());
+                    y += FontSize;
+                }
+
+                y += 2 * FontSize;
+                for (ConfigValue e : root.getList("staff")) {
+                    ConfigList el = (ConfigList) e;
+                    String job = (String) el.get(0).unwrapped();
+                    l.add(new TextItem(-30, y, job, FontAlign.RIGHT).setBold());
+
+                    for (int i = 1; i < el.size(); ++i) {
+                        String name = ((String) el.get(i).unwrapped());
+                        l.add(new TextItem(30, y, name, FontAlign.LEFT));
+                        y += FontSize;
+                    }
+                    y += 0.5f * FontSize;
+                }
+
+                y += FontSize;
+                l.add(new TextItem(0, y, "Donators", FontAlign.CENTER).setBold());
+                y += 1.5f * FontSize;
+
+                List<String> donators = root.getStringList("donators");
+                for (int i = 0; i < donators.size(); ++i) {
+                    float tw = 150, margin = 30;
+                    float x = margin + (i % 3) * (620 - 2 * margin - tw) / 2 - 310;
+                    l.add(new TextItem(x, y, donators.get(i), FontAlign.LEFT).setFontSize(FontSize * 0.8f));
+
+                    if (i % 3 == 2) y += FontSize * 0.8f;
+                }
+
+                y += FontSize;
+                y += FontSize;
+                l.add(
+                    new TextItem(0, y, "Thank you for playing!", FontAlign.CENTER).setBold()
+                );
+                y += FontSize;
+
+                creditsMaxY = y + 30;
+            }
+
+            {
+                Config root = cfg.getConfig("donation");
+
+                String lang = Minecraft.getMinecraft().gameSettings.language;
+                if (!root.hasPath(lang))
+                    lang = "en_us";
+
+                List<String> l = root.getStringList(lang);
+
+                float y = 100;
+                float x = -280;
+                for (int i = 0; i < l.size(); ++i) {
+                    String s = l.get(i);
+                    if (s.startsWith("!!")) {
+                        int ix = s.indexOf('|');
+                        String url = s.substring(ix + 1);
+                        String text = s.substring(2, ix);
+
+                        y += 10;
+                        DonateTexts.add(
+                            new LinkItem(x, y, text, url, FontAlign.LEFT)
+                                .setFontSize(40)
+                        );
+                        y += 50;
+                    } else {
+                        boolean rightAlign = false;
+                        if (s.startsWith("]")) {
+                            rightAlign = true;
+                            s = s.substring(1);
+                        }
+                        DonateTexts.add(
+                            rightAlign ?
+                                new TextItem(-x, y, s, FontAlign.RIGHT) :
+                                new TextItem(x, y, s, FontAlign.LEFT)
+                        );
+                        y += 30;
+                    }
+                }
+            }
         }
 
         @Override
