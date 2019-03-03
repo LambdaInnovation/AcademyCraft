@@ -331,6 +331,34 @@ ac.command.aim.outofrange=§c輸入不合法：§f必須是%s和%s之間的一�
 ac.command.aim.maxout=/aim maxout:將當前等級陞級進度設定為100%%。
 ac.command.aim.nonecathint=你還未學習能力！
 
+ac.command.aimp.usage=/aimp <player name> <command>|<help> [參數…]
+ac.command.aimp.help=/aimp help: 顯示幫助資訊。
+ac.command.aimp.cat=/aimp <player name> cat [能力名稱]：改變指定玩家的能力或是顯示當前能力。
+ac.command.aimp.catlist=/aimp <player name> catlist:列出所有可用能力。
+ac.command.aimp.learn=/aimp <player name> learn <id>|<技能名稱>：無視所有要求學習指定技能。
+ac.command.aimp.unlearn=/aimp <player name> unlearn <id>|<技能名>：取消學習某個技能。
+ac.command.aimp.learn_all=/aimp <player name> learn_all: 學習所有技能。
+ac.command.aimp.reset=/aimp <player name> reset: 清空你的能力資訊。
+ac.command.aimp.learned=/aimp <player name> learned: 顯示已學習的技能。
+ac.command.aimp.skills=/aimp <player name> skills: 顯示玩家當前能力的所有技能。
+ac.command.aimp.fullcp=/aimp <player name> fullcp: 將當前玩家CP恢復至滿。
+ac.command.aimp.level=/aimp <player name> level: 設定當前玩家的能力等級。
+ac.command.aimp.exp=/aimp <player name> exp <id>|<技能名> [值]：設定或者修改某技能的經驗。
+ac.command.aimp.cd_clear=/aimp <player name> cd_clear: 清除所有技能的冷卻。
+ac.command.aimp.nocat=該能力不存在。使用/aimp catlist以列出所有能力。
+ac.command.aimp.cats=當前可用能力：
+ac.command.aimp.curcat=玩家當前能力：%s
+ac.command.aimp.nonecat=無能力
+ac.command.aimp.noskill=該技能不存在。使用/aimp <player name> skills以列出當前能力系的所有技能。
+ac.command.aimp.learned.format=已習得技能：%s
+ac.command.aimp.curexp=技能%s的當前經驗：%.0f%%.
+ac.command.aimp.nocomm=該指令不存在。使用/aimp help以列出當前可用的所有指令。
+ac.command.aimp.notactive=/aimp指令當前未被開啟。使用/aimp cheats_on或/aimp cheats_off來改變開啟狀態。
+ac.command.aimp.warning=§c警告：使用/aimp指令會破壞遊戲平衡並且影響你對mod內容的體驗。請謹慎使用！
+ac.command.aimp.outofrange=§c輸入不合法：§f必須是%s和%s之間的一個值。
+ac.command.aimp.maxout=/aimp <player name> maxout: 將當前等級陞級進度設定為100%%。
+ac.command.aimp.nonecathint=你還未學習能力！
+
 # 進度
 advancements.general.root=Academy Craft
 advancements.general.root.desc=一切的起點

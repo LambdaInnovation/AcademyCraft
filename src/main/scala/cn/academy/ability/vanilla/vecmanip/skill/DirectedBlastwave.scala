@@ -86,8 +86,10 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     if (tryConsume()) {
       val trace: RayTraceResult = Raytrace.traceLiving(player, 4, EntitySelectors.living)
       val position = {
-        if (trace == null || trace.typeOfHit == RayTraceResult.Type.BLOCK) {
+        if (trace == null) {
           add(player.getPositionVector, multiply(player.getLookVec, 4))
+        } else if (trace.typeOfHit == RayTraceResult.Type.BLOCK) {
+            new Vec3d(trace.getBlockPos.getX, trace.getBlockPos.getY, trace.getBlockPos.getZ)
         } else if (trace.typeOfHit == RayTraceResult.Type.ENTITY) {
           entityHeadPos(trace.entityHit)
         } else {

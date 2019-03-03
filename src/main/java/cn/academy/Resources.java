@@ -36,7 +36,7 @@ public class Resources {
      * @return A resources with path `loc` located in `academy` namespace.
      */
     public static ResourceLocation res(String loc) {
-        return new ResourceLocation("academy:" + loc);
+        return new ResourceLocation("academy", loc);
     }
 
     public static SoundEvent soundExternal(String loc) {

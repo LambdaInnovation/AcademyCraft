@@ -18,7 +18,7 @@ public class ClientContext extends Context {
     static final Multimap<Class<? extends Context>, Function<Context, ClientContext>>
             clientTypes = HashMultimap.create();
 
-    private final Context parent;
+    public final Context parent;
 
     /**
      * This constructor must be kept in subclasses in order for reflection to work.

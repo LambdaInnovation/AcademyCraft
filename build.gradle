@@ -30,7 +30,7 @@ archivesBaseName = config.mod_name
 if(System.getenv()['BRANCH']!=null && System.getenv()['BRANCH']!='master')
 {
     archivesBaseName+=("-"+System.getenv()['BRANCH'])
-    ext.subver=System.getenv()['TRAVIS_COMMIT'][-6..-1]
+    ext.subver=System.getenv()['TRAVIS_COMMIT'][0..6]
     version+=('-'+ext.subver)
 }
 ext.usr = "$System.env.USR"
@@ -61,6 +61,7 @@ minecraft {
 	replace "@VERSION@", config.mod_ver
     replace "@LAMBDA_LIB_VERSION@", config.lambdalib_ver
     replace "@MC_VERSION@", config.mc_ver
+
 }
 
 repositories {
@@ -97,6 +98,8 @@ repositories {
 
 configurations {
     provided
+    shade
+    compile.extendsFrom shade
 }
 
 // sourceSets.main.compileClasspath += [configurations.provided]
@@ -118,6 +121,11 @@ dependencies {
     deobfCompile "CraftTweaker2:CraftTweaker2-API:4.1.9.6"
     deobfCompile "CraftTweaker2:ZenScript:4.1.9.6"
     deobfCompile "net.industrial-craft:industrialcraft-2:2.8.90-ex112"
+
+    // shade "org.apache.httpcomponents:httpclient:4.3.3"
+    // shade "org.apache.httpcomponents:httpcore:4.3.2" // dependency of httpclient
+    // shade "commons-logging:commons-logging:1.1.3" // dependency of httpclient
+    // shade "commons-codec:commons-codec:1.6" // dependency of commons-logging
 }
 
 //sourceSets.main.compileClasspath += [configurations.provided]
@@ -161,6 +169,27 @@ task deobfJar(type: Jar, dependsOn: 'jar') {
     from sourceSets.main.output
 }
 
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+
+// http://www.minecraftforge.net/forum/topic/36791-trying-to-shade-dependencies-into-jar/
+reobf {
+    jar {
+        // WARN: You can't shade apache httplib for several reasons
+        // 1. it introduces some transitive dependencies, including logging, which is no good
+        // 2. logging exploits a bug for srg (all .class calls' package names aren't transformed at all)
+
+        // extraLines "PK: org/apache/commons/codec cn/academy/shade/org/apache/commons/codec"
+        // extraLines "PK: org/apache/http cn/academy/shade/org/apache/http"
+        // extraLines "PK: org/apache/commons/logging cn/academy/shade/org/apache/commons/logging"
+    }
+}
+
 import org.apache.tools.ant.filters.ReplaceTokens
 
 // see: https://stackoverflow.com/questions/30038540/replace-token-in-file-before-building-but-keep-token-in-sources
@@ -171,7 +200,7 @@ task mySourcesJava(type: Copy) {
     into 'build/tempSourcesJava'
     filteringCharset = 'UTF-8'
     filter(ReplaceTokens, tokens: [VERSION: config.mod_ver])
-    filter(ReplaceTokens, tokens: [LAMBDA_LIB_VERSION: config.lambdalib_ver])
+    filter(ReplaceTokens, tokens: [LAMBDA_LIB_VERSION: "[" + config.lambdalib_ver + "]"])
     filter(ReplaceTokens, tokens: [MC_VERSION: config.mc_ver])
 }
 

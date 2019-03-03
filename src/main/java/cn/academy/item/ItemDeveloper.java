@@ -70,6 +70,9 @@ public class ItemDeveloper extends ItemEnergyBase {
         bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
         bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
 
+        bakedModel.mapTransform(TransformType.GROUND,
+            new TransformChain().scale(-.15f, -.15f, .15f).translate(0, 0.1f, 0).build());
+
         IBakedModel original = ev.getModelRegistry().getObject(_modelLocation);
         bakedModel.mapModel(TransformType.GUI, original);
 

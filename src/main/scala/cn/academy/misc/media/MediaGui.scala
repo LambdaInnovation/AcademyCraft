@@ -72,7 +72,7 @@ class MediaGui extends CGuiScreen {
     var lastTest = GameTimer.getTime
     pageMain.listens[FrameEvent](() => {
       val time = GameTimer.getTime
-      if (time - lastTest > 500) {
+      if (time - lastTest > 0.5) {
         lastTest = time
         updatePlayDisplay()
       }
@@ -207,7 +207,7 @@ private object MediaAuxGui {
     var lastTest = GameTimer.getTime
     base.listens[FrameEvent](() => {
       val time = GameTimer.getTime
-      if (time - lastTest > 500) {
+      if (time - lastTest > 0.5) {
         lastTest = time
 
         val backend = MediaBackend()

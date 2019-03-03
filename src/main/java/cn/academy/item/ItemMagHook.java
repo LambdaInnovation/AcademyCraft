@@ -72,20 +72,28 @@ public class ItemMagHook extends Item {
             .translate(0f, .5f, 0.4f)
             .build();
 
+        Matrix4f fpTransLeft = new TransformChain(fpTrans)
+            .translate(1.4f, 0f, 0f)
+            .build();
+
         Matrix4f tpTrans = new TransformChain()
             .rotate(0, 90, 180)
             .scale(.8f)
             .translate(-.4f, .5f, .7f)
             .build();
 
-        bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTrans);
+        Matrix4f tpTransLeft = new TransformChain(tpTrans)
+            .translate(0.9f, 0f, 0f)
+            .build();
+
+        bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTransLeft);
         bakedModel.mapTransform(TransformType.FIRST_PERSON_RIGHT_HAND, fpTrans);
 
-        bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
+        bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTransLeft);
         bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
 
         bakedModel.mapTransform(TransformType.GROUND,
-            new TransformChain().rotate(0, 90, 180).translate(-.4f, .5f, .7f).build());
+            new TransformChain().rotate(0, 90, 180).translate(-.4f, .9f, .7f).scale(.5f).build());
 
         ev.getModelRegistry().putObject(_modelLocation, bakedModel);
     }

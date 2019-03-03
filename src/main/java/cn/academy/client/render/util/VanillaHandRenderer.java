@@ -63,6 +63,7 @@ public class VanillaHandRenderer {
         @RegEventHandler
         instance;
 
+        @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public void onRenderHand(RenderHandEvent ev) {
             EntityPlayer player = Minecraft.getMinecraft().player;

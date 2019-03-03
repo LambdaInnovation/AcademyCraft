@@ -149,7 +149,7 @@ public class EntityMdBall extends EntityAdvanced
         }
     }
     
-    protected EntityPlayer getSpawner() {
+    public EntityPlayer getSpawner() {
         return spawner;
     }
     
@@ -235,9 +235,11 @@ public class EntityMdBall extends EntityAdvanced
     }
     
     private void updatePosition() {
-        posX = spawner.posX + subX;
-        posY = spawner.posY + subY + (world.isRemote ? 0 : 1.6); //Fix for different sides
-        posZ = spawner.posZ + subZ;
+        setPosition(
+            spawner.posX + subX,
+            spawner.posY + subY,
+            spawner.posZ + subZ
+        );
     }
 
     @RegEntityRender(EntityMdBall.class)

@@ -432,7 +432,7 @@ public class GuiTutorial extends CGuiScreen {
     }
 
     private void rebuildList() {
-        listArea.removeComponent("ElementList");
+        listArea.removeComponent(ElementList.class);
         ElementList el = new ElementList();
         _build(el, learned, true);
         _build(el, unlearned, false);

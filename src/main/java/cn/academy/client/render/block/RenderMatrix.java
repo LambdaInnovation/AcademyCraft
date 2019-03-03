@@ -47,7 +47,7 @@ public class RenderMatrix extends RenderBlockMulti {
     }
     
     private void drawShields(TileMatrix mat) {
-        int plateCount = mat.plateCount == 3 ? 3 : 0;
+        int plateCount = mat.plateCount == 3 && mat.getCoreLevel() > 0 ? 3 : 0;
 
         double time = GameTimer.getTime();
         double dtheta = 360.0 / plateCount, phase = (time * 50.0) % 360;

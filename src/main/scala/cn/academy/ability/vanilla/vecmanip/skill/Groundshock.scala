@@ -1,8 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
-import cn.academy.ability.context.KeyDelegate.DelegateState
-import cn.academy.ability.context._
+import cn.academy.ability.context.{DelegateState, _}
 import cn.academy.ability.vanilla.generic.client.effect.SmokeEffect
 import cn.academy.ability.vanilla.util.HandlerLifePeroidEvent
 import cn.academy.client.sound.ACSounds

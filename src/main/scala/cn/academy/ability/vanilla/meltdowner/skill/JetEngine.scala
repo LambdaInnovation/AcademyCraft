@@ -47,7 +47,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onKeyAbort() = {
-    sendToClient(MSG_MARK_END)
+    sendToSelf(MSG_MARK_END)
     terminate()
   }
 
@@ -55,7 +55,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
   private def s_onEnd() = {
     if(ctx.consume(consumption, overload)) {
       sendToClient(MSG_MARK_END)
-      sendToSelf(MSG_TRIGGER, getDest.add(0, 1.65, 0))
+      sendToSelf(MSG_TRIGGER, getDest)
       ctx.addSkillExp(.004f)
       ctx.setCooldown(lerpf(60, 30, exp).toInt)
     } else {
@@ -90,7 +90,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       isTriggering = true
       target = _target
 
-      start = new Vec3d(player.posX, player.posY, player.posZ)
+      start = player.getPositionVector
       velocity = VecUtils.multiply(VecUtils.subtract(target, start), 1.0 / TIME)
     }
   }

@@ -94,6 +94,7 @@ ac.app.knowledge_record.name=Life Record
 ac.app.settings.name=Settings
 ac.app.media_player.name=Media Player
 ac.app.tutorial.name=MisakaCloud
+ac.app.about.name=About
 
 ac.app.freq_transmitter.name=Frequency Transmitter
 ac.app.freq_transmitter.s0_0=Please right-click a wireless matrix or node to start establish link from.
@@ -328,9 +329,38 @@ ac.command.aim.curexp=Skill %s's current exp: %.0f%%.
 ac.command.aim.notactive=The /aim command is currently inactive. Use /aim cheats_on or /aim cheats_off to change the active state.
 ac.command.aim.warning=§cWARNING: Using /aim command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
 ac.command.aim.outofrange=§cInput out of range: §fMust be a value between %s and %s.
+ac.command.aim.invalidnum=§cInvalid number: %s.
 ac.command.aim.maxout=Set current level's upgrade progress to 100%%.
 ac.command.aim.nocomm=No such command was found. Use /aim help to list all commands available.
 ac.command.aim.nonecathint=You haven't learned any ability!
+
+ac.command.aimp.usage=/aimp <player name> <command>|<help> [parameters...]
+ac.command.aimp.help=/aimp help: Display the help message.
+ac.command.aimp.cat=/aimp <player name> cat [catName]: Change the specified player's categories or display the current category.
+ac.command.aimp.catlist=/aimp catlist: List all available categories' names.
+ac.command.aimp.learn=/aimp <player name> learn <id>|<skillName>: Learn the specified skill, regardless of its learning condition requirements.
+ac.command.aimp.unlearn=/aimp <player name> unlearn <id>|<skillName>: Unlearn the specified skill.
+ac.command.aimp.learn_all=/aimp <player name> learn_all: Learn all the skills.
+ac.command.aimp.reset=/aimp <player name> reset: Clear your ability information.
+ac.command.aimp.learned=/aimp <player name> learned: Display all currently learned skills.
+ac.command.aimp.skills=/aimp <player name> skills: Display all skills in player's current category.
+ac.command.aimp.fullcp=/aimp <player name> fullcp: Restore full cp of the player.
+ac.command.aimp.level=/aimp <player name> level: Set the player's ability level.
+ac.command.aimp.exp=/aimp <player name> exp <id>|<skillName> [exp]: Set or view the skill's experience level.
+ac.command.aimp.cd_clear=/aimp <player name> cd_clear: Clear all skill cooldown.
+ac.command.aimp.nocat=Specified category not found. Use /aimp catlist to list all categories.
+ac.command.aimp.cats=Currently available categories: 
+ac.command.aimp.curcat=Player current category: %s
+ac.command.aimp.nonecat=No ability
+ac.command.aimp.noskill=No such skill was found. Use /aimp <player name> skills to list all skills in current category.
+ac.command.aimp.learned.format=Learned skills: %s
+ac.command.aimp.curexp=Skill %s's current exp: %.0f%%.
+ac.command.aimp.notactive=The /aimp command is currently inactive. Use /aimp cheats_on or /aimp cheats_off to change the active state.
+ac.command.aimp.warning=§cWARNING: Using /aimp command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
+ac.command.aimp.outofrange=§cInput out of range: §fMust be a value between %s and %s.
+ac.command.aimp.maxout=/aimp <player name> maxout:Set current level's upgrade progress to 100%%.
+ac.command.aimp.nocomm=No such command was found. Use /aimp help to list all commands available.
+ac.command.aimp.nonecathint=You haven't learned any ability!
 
 # Advancement
 advancements.general.root=Academy Craft

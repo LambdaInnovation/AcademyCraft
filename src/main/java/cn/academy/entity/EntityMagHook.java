@@ -50,7 +50,7 @@ public class EntityMagHook extends EntityAdvanced
     }
 
     public boolean isHit;
-    public EnumFacing hitSide;
+    public EnumFacing hitSide = EnumFacing.DOWN;
     public int hookX, hookY, hookZ;
     
     boolean doesSetStill;

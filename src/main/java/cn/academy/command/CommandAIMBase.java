@@ -1,5 +1,6 @@
 package cn.academy.command;
 
+import cn.academy.AcademyCraft;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import cn.academy.ability.Skill;
@@ -49,27 +50,37 @@ public abstract class CommandAIMBase extends ACCommand {
         public void execute(MinecraftServer svr, ICommandSender commandSender, String[] pars) {
             EntityPlayer player = null;
             try {
-                player = super.getCommandSenderAsPlayer(commandSender);
+                player = getCommandSenderAsPlayer(commandSender);
             } catch (PlayerNotFoundException e) {
-                throw new RuntimeException(e);
+                AcademyCraft.log.warn("Attempt to use command \"aim\" in the console.");
+                return;
             }
 
             if(!isActive(player) && player.getEntityWorld().getWorldInfo().areCommandsAllowed()) {
                 setActive(player, true);
             }
 
+            for(int i=0;i<pars.length;i++){pars[i]=pars[i].toLowerCase();}
             if(pars.length == 1) {
                 switch(pars[0]) {
-                case "cheats_on":
-                    setActive(player, true);
-                    sendChat(commandSender, locSuccessful());
-                    sendChat(commandSender, getLoc("warning"));
-                    return;
-                case "cheats_off":
-                    setActive(player, false);
-                    sendChat(commandSender, locSuccessful());
-                    return;
+                    case "cheats_on":
+                        setActive(player, true);
+                        sendChat(commandSender, locSuccessful());
+                        sendChat(commandSender, getLoc("warning"));
+                        return;
+                    case "cheats_off":
+                        setActive(player, false);
+                        sendChat(commandSender, locSuccessful());
+                        return;
+                    case "?":
+                    case "help":
+                        for(String c : commands)
+                        {
+                            sendChat(commandSender, getLoc(c));
+                        }
+                        return;
                 }
+
             }
             
             if(!isActive(player) && !player.capabilities.isCreativeMode) {
@@ -107,6 +118,7 @@ public abstract class CommandAIMBase extends ACCommand {
         
         @Override
         public void execute(MinecraftServer svr, ICommandSender ics, String[] pars) {
+            for(int i=0;i<pars.length;i++){pars[i]=pars[i].toLowerCase();}
             if(pars.length == 0) {
                 sendChat(ics, getLoc("help"));
                 return;
@@ -125,7 +137,18 @@ public abstract class CommandAIMBase extends ACCommand {
                 }
                 
                 matchCommands(ics, player, newPars);
-            } else {
+            } else if (pars[0].equals("catlist")) {
+                sendChat(ics, getLoc("cats"));
+                List<Category> catList = CategoryManager.INSTANCE.getCategories();
+                for(int i = 0; i < catList.size(); ++i) {
+                    Category cat = catList.get(i);
+                    sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
+                }
+            } else if (pars[0].equals("help") || pars[0].equals("?")) {
+                for(String c : commands) {
+                    sendChat(ics, getLoc(c));
+                }
+            }else{
                 sendChat(ics, locNoPlayer());
             }
         }
@@ -141,20 +164,12 @@ public abstract class CommandAIMBase extends ACCommand {
 
     public CommandAIMBase(String name) {
         super(name);
-        localName = "aim";
     }
     
     protected void matchCommands(ICommandSender ics, EntityPlayer player, String[] pars) {
         AbilityData aData = AbilityData.get(player);
         switch(pars[0]) {
-        case "?":
-        case "help": {
-            for(String c : commands) {
-                sendChat(ics, getLoc(c));
-            }
-            return;
-        }
-        
+
         case "cat": {
             if(pars.length == 1) {
                 sendChat(ics, getLoc("curcat"), aData.hasCategory() ?
@@ -174,7 +189,7 @@ public abstract class CommandAIMBase extends ACCommand {
             }
             break;    
         }
-        
+
         case "catlist": {
             sendChat(ics, getLoc("cats"));
             List<Category> catList = CategoryManager.INSTANCE.getCategories();
@@ -182,7 +197,7 @@ public abstract class CommandAIMBase extends ACCommand {
                 Category cat = catList.get(i);
                 sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
             }
-            return;
+            break;
         }
         
         case "learn": {
@@ -235,7 +250,7 @@ public abstract class CommandAIMBase extends ACCommand {
             
             boolean begin = true;
             for(Skill s : aData.getLearnedSkillList()) {
-                sb.append(begin ? "" : ", " + s.getName());
+                sb.append(begin ? "" : ", ").append(s.getName());
                 begin = false;
             }
             
@@ -260,13 +275,21 @@ public abstract class CommandAIMBase extends ACCommand {
             if(pars.length == 1) {
                 sendChat(ics, "" + aData.getLevel());
             } else {
-                int lv = Integer.valueOf(pars[1]);
-                if(lv > 0 && lv <= 5) {
-                    aData.setLevel(lv);
-                    sendChat(ics, locSuccessful());
-                } else {
-                    sendChat(ics, this.getLoc("outofrange"), 1, 5);
+                try
+                {
+                    int lv = Integer.valueOf(pars[1]);
+                    if(lv > 0 && lv <= 5) {
+                        aData.setLevel(lv);
+                        sendChat(ics, locSuccessful());
+                    } else {
+                        sendChat(ics, this.getLoc("outofrange"), 1, 5);
+                    }
                 }
+                catch(NumberFormatException e)
+                {
+                    sendChat(ics, this.getLoc("invalidnum"), pars[1]);
+                }
+
             }
             
             return;

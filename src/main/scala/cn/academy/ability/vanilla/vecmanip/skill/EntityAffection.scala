@@ -1,7 +1,9 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ACConfig
-import net.minecraft.entity.{Entity, EntityList}
+import net.minecraft.entity.monster.EntityMob
+import net.minecraft.entity.{Entity, EntityList, EntityLivingBase}
+import net.minecraft.util.ResourceLocation
 
 /**
   * Handles entity affection of VecDeviation and VecReflection.
@@ -22,13 +24,22 @@ object EntityAffection {
     val entityData = {
       cfg.getConfigList("difficulties")
         .map(elem => (elem.getString("name"), elem.getDouble("difficulty").toFloat))
-        .map { case (name, difficulty) => (EntityList.getClassFromName(name), difficulty) }
-        .toList
+        .map { case (name, difficulty) => (EntityList.getClass(new ResourceLocation(name)), difficulty) }
+        .find{case (klass, _)=>klass!=null}.toList
     }
 
     val excluded = cfg.getStringList("excluded")
 
-    (entityData, excluded.toSet.map(EntityList.getClassFromName).filter(_ != null))
+    (entityData, excluded.toSet.map((key:String)=>{
+      if(key.equalsIgnoreCase("living")){
+        classOf[EntityLivingBase]
+      }
+      else if (key.equalsIgnoreCase("mob")){
+        classOf[EntityMob]
+      }
+      else
+        EntityList.getClass(new ResourceLocation(key))
+    }).filter(_ != null))
   }
 
   def getAffectInfo(entity: Entity): AffectInfo = {

@@ -15,6 +15,7 @@ import cn.lambdalib2.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -70,6 +71,11 @@ public class MagManip extends Skill
         }
 
         final static String MSG_PERFORM = "perform";
+
+        final static String MSG_SYNC_ENTITY_REQ = "req_sync_ent";
+        final static String MSG_SYNC_ENTITY_RSP = "rsp_sync_ent";
+
+
         private float consumption = MathUtils.lerpf(140, 270, ctx.getSkillExp());
         private float overload = MathUtils.lerpf(35, 20, ctx.getSkillExp());
         private int cooldown = (int) MathUtils.lerpf(60, 40, ctx.getSkillExp());
@@ -79,6 +85,8 @@ public class MagManip extends Skill
         public State state = State.StateMoving;
         MagManipEntityBlock entity = null;
         boolean performed = false;
+
+        int _entityId = -1;
 
         @Listener(channel = MSG_KEYUP, side = Side.CLIENT)
         public void l_keyUp()
@@ -140,10 +148,42 @@ public class MagManip extends Skill
             }
         }
 
+        @Listener(channel = MSG_MADEALIVE, side = Side.CLIENT)
+        private void c_madeAlive() {
+            // FIXME: If we currently sync entity in madeAlive(), the message will be ignored
+            //  because at that time client is not yet alive.
+            //  To make that work we need some kind of message queue, to save msgs from server and flushes after the context becomes alive.
+            sendToServer(MSG_SYNC_ENTITY_REQ);
+        }
+
+        @Listener(channel = MSG_SYNC_ENTITY_REQ, side = Side.SERVER)
+        private void s_onSyncEntityReq() {
+            sendToClient(MSG_SYNC_ENTITY_RSP, entity.getEntityId());
+        }
+
+        @Listener(channel=MSG_SYNC_ENTITY_RSP, side=Side.CLIENT)
+        private void c_syncEntity(int id) {
+            _entityId = id;
+        }
+
         @Listener(channel=MSG_TICK, side=Side.SERVER)
-        public void s_tick()
-        {
+        private void s_tick() {
             updateMoveTo();
+        }
+
+        @Listener(channel=MSG_TICK, side=Side.CLIENT)
+        private void c_tick() {
+            if (entity == null) {
+                Entity e = world().getEntityByID(_entityId);
+                if (e instanceof MagManipEntityBlock) {
+                    entity = ((MagManipEntityBlock) e);
+                    _entityId = 0;
+                }
+            }
+
+            if (entity != null) {
+                updateMoveTo();
+            }
         }
 
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
@@ -158,12 +198,13 @@ public class MagManip extends Skill
             {
                 Vec3d pos = Raytrace.getLookingPos(player, 20).getLeft();
                 Vec3d delta = subtract(pos, entity.getPositionVector());
-                setMotion(entity, multiply(delta.normalize(), speed));
+                Vec3d velocity = multiply(delta.normalize(), speed);
+                setMotion(entity, velocity);
 
                 ctx.setCooldown(cooldown);
                 ctx.addSkillExp(0.005F);
 
-                sendToClient(MSG_PERFORM);
+                sendToClient(MSG_PERFORM, entity, velocity);
             }
 
             terminate();
@@ -222,8 +263,14 @@ public class MagManip extends Skill
         }
 
         @Listener(channel=MagManipContext.MSG_PERFORM, side=Side.CLIENT)
-        public void c_perform()
+        public void c_perform(MagManipEntityBlock entity, Vec3d velocity)
         {
+            entity.actionType = MagManipEntityBlock.ActNothing;
+            entity.placeWhenCollide = true;
+            VecUtils.setMotion(entity, velocity);
+
+            ((MagManipContext) this.parent).entity = null;
+
             ACSounds.playClient(player, "em.mag_manip",  SoundCategory.AMBIENT, 1.0f);
         }
     }

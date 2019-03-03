@@ -2,8 +2,7 @@ package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
 import cn.academy.ability.context.Context.Status
-import cn.academy.ability.context.KeyDelegate.DelegateState
-import cn.academy.ability.context._
+import cn.academy.ability.context.{DelegateState, _}
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
