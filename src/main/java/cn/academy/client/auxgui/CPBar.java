@@ -370,6 +370,8 @@ public class CPBar extends Widget {
             shaderOverloaded.useProgram();
             shaderOverloaded.updateTexOffset(((float) GameTimer.getTime() % 10L) / 10000.0f);
         }
+
+        int texture4Binding = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -382,7 +384,8 @@ public class CPBar extends Widget {
         HudUtils.rect(x0, 0, 0, 0, width2, HEIGHT, width2, HEIGHT);
         
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture4Binding);
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         
         GL20.glUseProgram(0);
