@@ -63,7 +63,7 @@ public class ACTutorial {
         final String unknown = "![title]\nUNKNOWN \n![brief]\n![content]\n ";
         try {
             String lang = Minecraft.getMinecraft().gameSettings.language;
-            InputStream stream = ResourceUtils.getResourceStream(location(lang));
+            InputStream stream = ResourceUtils.getResourceStreamNullable(location(lang));
             if (stream == null) { // Make en_us the default fallback
                 stream = ResourceUtils.getResourceStream(location("en_us"));
             }
