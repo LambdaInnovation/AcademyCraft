@@ -425,6 +425,7 @@ ac.skill_tree.progress=进度
 ac.skill_tree.noenergy=机器能量不足。
 ac.skill_tree.condition_fail=开发技能所需条件没有满足。
 ac.skill_tree.learn_question=是否学习？ (预计消耗：%s IF)
+ac.skill_tree.level_question=要继续吗？
 ac.skill_tree.req=需求
 ac.skill_tree.skill_not_learned=技能未学习。
 ac.skill_tree.skill_exp=技能经验：
@@ -493,3 +494,6 @@ ac.headsOrTails.1=硬币反面朝上
 
 # 转换器方块
 ac.converter.desc_template=转换%s到%s
+
+# About App
+ac.about.donators_info=排名不分先后\n名单每个版本更新一次

@@ -25,6 +25,7 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigList;
 import com.typesafe.config.ConfigValue;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
@@ -39,6 +40,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -264,9 +266,18 @@ public class AppAbout extends App {
 
                 y += FontSize;
                 l.add(new TextItem(0, y, "Donators", FontAlign.CENTER).setBold());
+                y += 1.1f * FontSize;
+
+                String[] hintTexts = I18n.format("ac.about.donators_info").split("\\\\n");
+                for (String text : hintTexts) {
+                    l.add(new TextItem(0, y, text, FontAlign.CENTER).setFontSize(FontSize * .7f));
+                    y += FontSize * .7f;
+                }
+
                 y += 1.5f * FontSize;
 
                 List<String> donators = root.getStringList("donators");
+                Collections.shuffle(donators); // Randomize the list
                 for (int i = 0; i < donators.size(); ++i) {
                     float tw = 150, margin = 30;
                     float x = margin + (i % 3) * (620 - 2 * margin - tw) / 2 - 310;

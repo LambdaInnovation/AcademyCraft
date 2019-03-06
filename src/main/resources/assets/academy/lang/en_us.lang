@@ -494,7 +494,7 @@ ac.headsOrTails.1=The result is HEADS!
 
 # Converter Block
 ac.converter.desc_template=Converts %s to %s
-# Added by Minecraft Language File Parser
 ac.skill_tree.dev_developing=Developing...
-achievement.ac_electromaster.iron_sand.desc=Don't get close to me, you will be hurt!
-achievement.ac_electromaster.iron_sand=Dancing In Sand
+
+# About App
+ac.about.donators_info=In no particular order\nThe list will be updated once a version

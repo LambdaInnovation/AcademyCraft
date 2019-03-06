@@ -328,6 +328,7 @@ ac.command.aim.nocomm=該指令不存在。使用/aim help以列出當前可用�
 ac.command.aim.notactive=/aim指令當前未被開啟。使用/aim cheats_on或/aim cheats_off來改變開啟狀態。
 ac.command.aim.warning=§c警告：使用/aim指令會破壞遊戲平衡並且影響你對mod內容的體驗。請謹慎使用！
 ac.command.aim.outofrange=§c輸入不合法：§f必須是%s和%s之間的一個值。
+ac.command.aim.invalidnum=§c非法數字：%s.
 ac.command.aim.maxout=/aim maxout:將當前等級陞級進度設定為100%%。
 ac.command.aim.nonecathint=你還未學習能力！
 
@@ -423,6 +424,7 @@ ac.skill_tree.progress=進度
 ac.skill_tree.noenergy=機器能量不足。
 ac.skill_tree.condition_fail=開發技能所需條件沒有滿足。
 ac.skill_tree.learn_question=是否學習？ (預計消耗：%s IF)
+ac.skill_tree.level_question=要繼續嗎？
 ac.skill_tree.req=需求
 ac.skill_tree.skill_not_learned=技能未學習。
 ac.skill_tree.skill_exp=技能經驗：
@@ -491,7 +493,7 @@ ac.headsOrTails.1=硬幣反面朝上
 
 # 轉換器方塊
 ac.converter.desc_template=轉換%s到%s
-# Added by Minecraft Language File Parser
 
-ac.command.aim.nonecathint=你還未學習能力！
-ac.command.aim.nocomm=該指令不存在。使用 /aim help 以列出當前可用的所有指令。
+# About App
+ac.app.about.name=關於
+ac.about.donators_info=排名不分先後\n名單每個版本更新壹次
