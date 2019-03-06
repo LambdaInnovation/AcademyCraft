@@ -21,9 +21,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 // Collects some **anonymous** analytics data
 //  What we collect: a unique hash of user, location, in-mod action (Level-up, use ability, etc.)
@@ -52,7 +55,7 @@ public class AnalyticDataListener {
             serverSource = new AnalyticDto();
             serverSource.setVersion(AcademyCraft.VERSION);
             serverSource.setUuidName("server");
-            serverSource.setStartTime(new Date().getTime());
+            serverSource.setStartTime(UTCZeroTime());
             String[] ipArray =serverIp.split(" ");
             if (ipArray.length < 6) {
                 serverSource.initNaNIPInfo();
@@ -63,7 +66,13 @@ public class AnalyticDataListener {
                 serverSource.setCity(ipArray[5]);
             }
         }
-        NetworkMessage.sendTo(event.player,this,CHANNEL,event.player,serverIp);
+        Thread delaySender = new DelaySender(event.player,serverIp);
+        delaySender.start();//avoid sending message to the client thread before it hasn't been initialized
+    }
+
+    @NetworkMessage.Listener(channel = "delay",side = Side.SERVER)
+    public void serverGetter(EntityPlayer player,String serverIp){
+        NetworkMessage.sendTo(player,this,CHANNEL,player,serverIp);
     }
 
     //on Client
@@ -88,7 +97,7 @@ public class AnalyticDataListener {
         AnalyticDto playerData = new AnalyticDto();
         playerData.setVersion(AcademyCraft.VERSION);
         playerData.setUuidName(SHA(player.getUniqueID()+player.getName()));
-        playerData.setStartTime(new Date().getTime());
+        playerData.setStartTime(UTCZeroTime());
         String[] ipArray = ipInfo.split(" ");
         if (ipArray.length < 6) {
             playerData.initNaNIPInfo();
@@ -107,6 +116,9 @@ public class AnalyticDataListener {
     public void skillListener(AnalyticSkillEvent event){
         EntityPlayer targetPlayer = event.getPlayer();
         String uuid = SHA(targetPlayer.getUniqueID()+targetPlayer.getName());
+        for(String temp:sourceMap.keySet()){
+            System.out.println(temp);
+        }
         if(sourceMap.containsKey(uuid)){
             Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
             if(countMap.containsKey(event.getSkillName())){
@@ -158,6 +170,7 @@ public class AnalyticDataListener {
         try {
             URL object = new URL("https://myip.ipip.net");
             HttpURLConnection con = (HttpURLConnection)object.openConnection();
+            con.setRequestProperty("User-Agent","");
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
             String line = null;
             StringBuilder sb = new StringBuilder();
@@ -199,4 +212,31 @@ public class AnalyticDataListener {
         return strResult;
     }
 
+    private long UTCZeroTime(){
+        SimpleDateFormat df =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
+        String currDate = df.format(new Date());
+        Timestamp timestamp = Timestamp.valueOf(currDate);
+        return timestamp.getTime();
+    }
+
+}
+
+class DelaySender extends Thread{
+    private EntityPlayer player;
+    private String serverIp;
+    DelaySender(EntityPlayer player,String serverIp){
+        this.player=player;
+        this.serverIp=serverIp;
+    }
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(10000);
+            NetworkS11n.addDirectInstance(AcademyCraft.analyticDataListener);
+            NetworkMessage.sendToServer(AcademyCraft.analyticDataListener,"delay",player,serverIp);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
