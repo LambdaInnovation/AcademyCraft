@@ -64,16 +64,24 @@ public class ItemSilbarn extends Item {
             .translate(1f, 0.5f, 0.2f)
             .build();
 
+        Matrix4f fpTransLeft = new TransformChain(fpTrans)
+            .translate(0f, -1f, 0f)
+            .build();
+
         Matrix4f tpTrans = new TransformChain()
             .rotate(90, 0, 90)
             .scale(.6f)
             .translate(-.3f,  .3f, -.3f)
             .build();
 
-        bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTrans);
+        Matrix4f tpTransLeft = new TransformChain(tpTrans)
+            .translate(0, 0, 0.5f)
+            .build();
+
+        bakedModel.mapTransform(TransformType.FIRST_PERSON_LEFT_HAND, fpTransLeft);
         bakedModel.mapTransform(TransformType.FIRST_PERSON_RIGHT_HAND, fpTrans);
 
-        bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTrans);
+        bakedModel.mapTransform(TransformType.THIRD_PERSON_LEFT_HAND, tpTransLeft);
         bakedModel.mapTransform(TransformType.THIRD_PERSON_RIGHT_HAND, tpTrans);
         bakedModel.mapTransform(TransformType.GROUND, tpTrans);
 

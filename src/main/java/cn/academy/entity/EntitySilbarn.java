@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 @RegEntity
 public class EntitySilbarn extends EntityAdvanced
 {
-    private static final DataParameter<Byte> HIT_SYNC = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> HIT_SYNC = EntityDataManager.createKey(EntitySilbarn.class, DataSerializers.BYTE);
 
 
     @SideOnly(Side.CLIENT)

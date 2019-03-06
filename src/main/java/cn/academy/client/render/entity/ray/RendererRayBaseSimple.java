@@ -28,7 +28,7 @@ public abstract class RendererRayBaseSimple<T extends Entity> extends Render<T> 
 
     @Override
     public void doRender(T ent,
-        double x, double y, double z, float a, float b) {
+        double x, double y, double z, float yaw, float partialTicks) {
         IRay ray = (IRay) ent;
         
         GL11.glPushMatrix();
@@ -42,10 +42,11 @@ public abstract class RendererRayBaseSimple<T extends Entity> extends Render<T> 
         else
             vo = new Vec3d(0, 0, 0);
         // Rotate fix vector to world coordinate
-        vo.rotateYaw(MathUtils.toRadians(270 - ent.rotationYaw));
-        
+        yaw = MathUtils.lerpDegree(ent.prevRotationYaw, ent.rotationYaw, partialTicks);
+        vo = vo.rotateYaw(MathUtils.toRadians(270 - yaw));
+
         Vec3d start = new Vec3d(0, 0, 0),
-            end = VecUtils.add(start, VecUtils.multiply(VecUtils.toDirVector(ent), length));
+            end = VecUtils.add(start, VecUtils.multiply(VecUtils.toDirVector(ent, partialTicks), length));
         start = VecUtils.add(start, vo);
 
         x += start.x;

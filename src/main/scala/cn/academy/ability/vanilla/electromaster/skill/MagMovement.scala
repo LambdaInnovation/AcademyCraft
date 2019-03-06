@@ -1,5 +1,6 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
+import cn.academy.AcademyCraft
 import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.util.{ACRenderingHelper, ArcPatterns}
@@ -88,7 +89,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     overloadKeep = ctx.cpData.getOverload
     val aData = AbilityData.get(player)
     val result = Raytrace.traceLiving(player, getMaxDistance(aData))
-    if(result != null) {
+    if(result.typeOfHit != RayTraceResult.Type.MISS) {
       target = toTarget(aData, player.world, result)
       if(target == null) {
         terminate()

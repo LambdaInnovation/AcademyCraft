@@ -14,8 +14,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.{DynamicTexture, SimpleTexture}
-import net.minecraft.client.resources.I18n
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.common.config.Property
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
@@ -135,8 +135,8 @@ private object MediaManagerInit {
   })
 
   def newInternal(id: String, url: URL): Media = new Media(false, id, url, calculateLength(url).get) {
-    override def name: String = I18n.format("ac.media."+id+".name")
-    override def desc: String = I18n.format("ac.media."+id+".desc")
+    override def name: String = I18n.translateToLocal("ac.media."+id+".name")
+    override def desc: String = I18n.translateToLocal("ac.media."+id+".desc")
   }
 
   def rootFolder: File = runSide match {

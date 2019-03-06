@@ -1,22 +1,22 @@
 package cn.academy.datapart;
 
+import cn.academy.ACConfig;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import cn.academy.ability.Skill;
-import cn.academy.ACConfig;
+import cn.academy.analyticUtil.events.AnalyticLevelUpEvent;
 import cn.academy.event.ability.*;
-import cn.lambdalib2.s11n.SerializeIncluded;
-import cn.lambdalib2.s11n.nbt.NBTS11n;
-import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
+import cn.lambdalib2.s11n.SerializeIncluded;
+import cn.lambdalib2.s11n.nbt.NBTS11n;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import com.google.common.base.Preconditions;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.BitSet;
 import java.util.Collections;
@@ -127,6 +127,9 @@ public class AbilityData extends DataPart<EntityPlayer> {
         checkLearned();
 
         if(level != lv) {
+            if(level<lv){
+                MinecraftForge.EVENT_BUS.post(new AnalyticLevelUpEvent(getEntity()));
+            }
             level = lv;
             expAddedThisLevel = 0;
             MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getEntity()));

@@ -23,7 +23,7 @@ public class EntityMDRay extends EntityRayBase {
     public EntityMDRay(EntityPlayer spawner, double length) {
         super(spawner);
 
-        Vec3d start = spawner.getPositionVector(),
+        Vec3d start = VecUtils.add(spawner.getPositionEyes(1F), spawner.getLookVec()),
                 end = VecUtils.add(spawner.getPositionVector(), VecUtils.multiply(spawner.getLookVec(),length));
         this.setFromTo(start, end);
         this.blendInTime = 200;

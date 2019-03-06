@@ -6,8 +6,8 @@ import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.SideUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.Color;
@@ -165,7 +165,7 @@ public class Category {
     }
     
     public String getDisplayName() {
-        return I18n.format("ac.ability." + name + ".name");
+        return I18n.translateToLocal("ac.ability." + name + ".name");
     }
     
     // Path init

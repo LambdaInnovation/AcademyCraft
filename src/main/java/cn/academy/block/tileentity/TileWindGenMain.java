@@ -38,8 +38,8 @@ public class TileWindGenMain extends TileInventory implements IMultiTile, ITicka
     static List<SubBlockPos>[] checkAreas = new ArrayList[6];
     static {
         List<SubBlockPos> checkArea = new ArrayList();
-        for(int i = -6; i <= 6; ++i) {
-            for(int j = -6; j <= 6; ++j) {
+        for(int i = -7; i <= 7; ++i) {
+            for(int j = -7; j <= 7; ++j) {
                 if(i != 0 || j != 0)
                     checkArea.add(new SubBlockPos(i, j, -1));
             }

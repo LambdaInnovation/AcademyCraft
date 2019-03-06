@@ -1,5 +1,6 @@
 package cn.academy.block.tileentity;
 
+import cn.academy.block.block.BlockNode;
 import cn.academy.client.render.block.RenderDynamicBlock;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.WirelessHelper;
@@ -10,7 +11,10 @@ import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,11 +32,6 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     static IFItemManager itemManager = IFItemManager.instance;
 
     static final String MSG_SYNC = "sync";
-
-    // TODO
-//    @SideOnly(Side.CLIENT)
-//    @RegTileEntity.Render
-//    public static RenderDynamicBlock renderer;
 
     protected double energy;
     
@@ -77,6 +76,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
                 NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20),
                         this, MSG_SYNC,
                         enabled, chargingIn, chargingOut, energy, name, password, placerName);
+                rebuildBlockState();
             }
             
             updateChargeIn();
@@ -118,6 +118,21 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         }
     }
 
+    private void rebuildBlockState() {
+        IBlockState curState = world.getBlockState(pos);
+        boolean lastConnected = curState.getValue(BlockNode.CONNECTED);
+        int lastPct = curState.getValue(BlockNode.ENERGY);
+
+        int pct = (int) Math.min(4, Math.round((4 * getEnergy() / getMaxEnergy())));
+        if (pct != lastPct || lastConnected != enabled) {
+            world.setBlockState(pos,
+                curState
+                    .withProperty(BlockNode.CONNECTED, enabled)
+                    .withProperty(BlockNode.ENERGY, pct),
+                0);
+        }
+    }
+
     @Override
     public double getMaxEnergy() {
         return getType().maxEnergy;
@@ -131,6 +146,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     @Override
     public void setEnergy(double value) {
         energy = value;
+        rebuildBlockState();
     }
 
     @Override
@@ -192,6 +208,11 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         this.name = name;
         this.password = pass;
         this.placerName = placerName;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock();
     }
 
     @Override

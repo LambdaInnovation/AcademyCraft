@@ -30,7 +30,7 @@ import java.util.function.Function;
  * @see ContextManager
  * @author WeAthFolD
  */
-public class Context implements IMessageDelegate {
+public class Context<TSkill extends Skill> implements IMessageDelegate {
 
     // Turn this on if you want to debug context message detail
     public static final boolean DEBUG_MSG = false;
@@ -54,7 +54,7 @@ public class Context implements IMessageDelegate {
     List<ClientContext> clientContexts;
 
     public final EntityPlayer player;
-    public final Skill skill;
+    public final TSkill skill;
     public final AbilityContext ctx;
 
     Status status = Status.CONSTRUCTED;
@@ -65,7 +65,7 @@ public class Context implements IMessageDelegate {
      * Default ctor, must be kept for reflection creation
      */
     @SuppressWarnings("sideonly")
-    public Context(EntityPlayer _player, Skill _skill) {
+    public Context(EntityPlayer _player, TSkill _skill) {
         player = _player;
         skill = _skill;
 
@@ -85,7 +85,7 @@ public class Context implements IMessageDelegate {
     }
 
     @SideOnly(Side.CLIENT)
-    public Context(Skill _skill) {
+    public Context(TSkill _skill) {
         this(Minecraft.getMinecraft().player, _skill);
     }
 

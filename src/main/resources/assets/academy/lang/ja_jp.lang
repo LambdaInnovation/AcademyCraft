@@ -331,6 +331,34 @@ ac.command.aim.outofrange=§c範囲外の入力: §f入力する値は%sと%sの
 ac.command.aim.maxout=現在のレベルのアップグレード進度を100%%に設定します。
 ac.command.aim.nonecathint=能力は習得されていません！
 
+ac.command.aimp.usage=/aimp <player name> <command>|<help> [parameters...]
+ac.command.aimp.help=/aimp help: ヘルプメッセージを表示します。
+ac.command.aimp.cat=/aimp <player name> cat [catName]: 指定したプレイヤーのカテゴリを変更したり、現在のカテゴリを表示します。
+ac.command.aimp.catlist=/aimp catlist: すべての利用可能なカテゴリの名前を一覧表示します。
+ac.command.aimp.learn=/aimp <player name> learn <id>|<skillName>: 指定したスキルをその前提スキルの習得状況に関係なく習得します。
+ac.command.aimp.unlearn=/aimp <player name> unlearn <id>|<skillName>: 指定したスキルを消去します。
+ac.command.aimp.learn_all=/aimp <player name> learn_all: すべてのスキルを習得します。
+ac.command.aimp.reset=/aimp <player name> reset: 自身の能力情報を消去します。
+ac.command.aimp.learned=/aimp <player name> learned: 現在習得しているスキルを表示します。
+ac.command.aimp.skills=/aimp <player name> skills: プレイヤーの現在のカテゴリにおけるすべてのスキルを表示します。
+ac.command.aimp.fullcp=/aimp <player name> fullcp: プレイヤーのCPを最大値まで回復します。
+ac.command.aimp.level=/aimp <player name> level: プレイヤーの能力レベルを設定します。
+ac.command.aimp.exp=/aimp <player name> exp <id>|<skillName> [exp]: スキルの熟練度を設定または表示します。
+ac.command.aimp.cd_clear=/aimp <player name> cd_clear: 冷却のクリアすべてのスキル。
+ac.command.aimp.nocat=指定されたカテゴリが見つかりません。/aimp catlistを使用してすべてのカテゴリの一覧を表示してください。
+ac.command.aimp.cats=現在習得可能なカテゴリ: 
+ac.command.aimp.curcat=プレイヤーの現在のカテゴリ: %s
+ac.command.aimp.nonecat=能力がありません。
+ac.command.aimp.noskill=そのようなスキルが見つかりませんでした。/aimp <player name> skillsを使用して現在のカテゴリにおけるすべてのスキルの一覧を表示してください。
+ac.command.aimp.learned.format=習得したスキル: %s
+ac.command.aimp.curexp=スキル「%s」の熟練度: %.0f%%.
+ac.command.aimp.nocomm=このコマンドがありません。/aimp help ですべでの使用可能のコマンドを一覧表示します。
+ac.command.aimp.notactive=/aimpコマンドは現在無効です。/aimp cheats_onや/aimp cheats_offを使用して有効無効を切り替えられます。
+ac.command.aimp.warning=§c警告: /aimpコマンドの使用はゲームバランスを崩壊させ、これからのあなたの経験に甚大な影響を与える恐れがあります！
+ac.command.aimp.outofrange=§c範囲外の入力: §f入力する値は%sと%sの間でなければなりません。
+ac.command.aimp.maxout=/aimp <player name> maxout:現在のレベルのアップグレード進度を100%%に設定します。
+ac.command.aimp.nonecathint=能力は習得されていません！
+
 # Advancement
 advancements.general.root=Academy Craft
 advancements.general.root.desc=全ての源

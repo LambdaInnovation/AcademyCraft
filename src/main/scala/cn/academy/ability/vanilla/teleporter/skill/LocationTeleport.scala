@@ -12,7 +12,7 @@ import cn.academy.advancements.ACAdvancements
 import cn.academy.datapart.AbilityData
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.{CGuiScreen, Widget}
-import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
+import cn.lambdalib2.cgui.component._
 import cn.lambdalib2.cgui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent}
 import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
@@ -41,6 +41,7 @@ private object LTNetDelegate {
   final val MSG_REMOVE = "remove"
   final val MSG_QUERY = "query"
   final val MSG_PERFORM = "perform"
+  final val MSG_SOUND = "playsound"
 
   import scala.collection.JavaConversions._
   import LocationTeleport._
@@ -147,6 +148,8 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       entitiesToTeleport.foreach(_.changeDimension(dest.dim))
     }
 
+    val dist = player.getDistance(dest.x, dest.y, dest.z)
+    val expincr = if (dist >= 200) 0.03f else 0.015f
     val (px, py, pz) = (player.posX, player.posY, player.posZ)
     entitiesToTeleport.foreach(e => {
       val (dx, dy, dz) = (e.posX - px, e.posY - py, e.posZ - pz)
@@ -154,11 +157,6 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       e.setPositionAndUpdate(dest.x + dx, dest.y + dy, dest.z + dz)
     })
 
-    ACSounds.playClient(player.getEntityWorld, player.posX, player.posY, player.posZ,"academy:tp.tp", SoundCategory.AMBIENT, 0.5f, 1.0f)
-
-
-    val dist = player.getDistance(dest.x, dest.y, dest.z)
-    val expincr = if (dist >= 200) 0.03f else 0.015f
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
@@ -294,7 +292,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     getGui.addWidget(root)
 
     def wrapBack(ret: Widget, n: Int, msg: => List[String]) = {
-      ret.removeComponent("Tint")
+      ret.removeComponent(classOf[Tint])
 
       val blend = new Blend(n * ElemTimeStep, 0.2)
 
@@ -349,7 +347,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     }
 
     private def updateList(locations: List[Location]): Unit = {
-      list.removeComponent("ElementList")
+      list.removeComponent(classOf[ElementList])
 
       val compList = new ElementList
       compList.spacing = 2
@@ -389,6 +387,8 @@ object LocationTeleport extends Skill("location_teleport", 3) {
         wrapButton(ret.child("btn_teleport"), count, 0.03,
           () => {
             mc.displayGuiScreen(null)
+
+            ACSounds.playClient(player, "tp.tp", SoundCategory.AMBIENT, .5f)
             send(MSG_PERFORM, player, location)
           })
       } else {

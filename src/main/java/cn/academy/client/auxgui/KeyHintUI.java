@@ -3,7 +3,7 @@ package cn.academy.client.auxgui;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.ClientRuntime.DelegateNode;
 import cn.academy.ability.context.KeyDelegate;
-import cn.academy.ability.context.KeyDelegate.DelegateState;
+import cn.academy.ability.context.DelegateState;
 import cn.academy.datapart.CooldownData;
 import cn.academy.datapart.CooldownData.SkillCooldown;
 import cn.academy.datapart.CPData;

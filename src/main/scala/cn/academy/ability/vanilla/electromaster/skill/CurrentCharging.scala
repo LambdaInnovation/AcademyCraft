@@ -44,7 +44,7 @@ import cn.lambdalib2.util.MathUtils._
 
 class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
-  def getChargingSpeed(exp: Float): Float = lerpf(15, 35, exp)
+  def getChargingSpeed(exp: Float): Float = lerpf(15, 35, exp).floor
   def getExpIncr(effective: Boolean): Float = if(effective) 0.0001f else 0.00003f
   def getConsumption(exp: Float): Float = lerpf(3, 7, exp)
   def getOverload(exp: Float): Float = lerpf(65, 48, exp)

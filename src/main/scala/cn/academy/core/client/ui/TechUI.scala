@@ -559,7 +559,7 @@ object WirelessPage {
 
   private def rebuildPage(window: Widget, linked: Option[LinkedTarget], avail: Seq[AvailTarget]) = {
     val wlist = window.getWidget("panel_wireless/zone_elementlist")
-    wlist.removeComponent("ElementList")
+    wlist.removeComponent(classOf[ElementList])
 
     val elist = new ElementList
     wlist.getWidget("element").transform.doesDraw = false

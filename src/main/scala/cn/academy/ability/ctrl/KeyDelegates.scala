@@ -1,8 +1,7 @@
 package cn.academy.ability.ctrl
 
 import cn.academy.ability.Skill
-import cn.academy.ability.context.KeyDelegate.DelegateState
-import cn.academy.ability.context.{Context, ContextManager, KeyDelegate}
+import cn.academy.ability.context.{Context, ContextManager, DelegateState, KeyDelegate}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 
@@ -15,7 +14,7 @@ object KeyDelegates {
     * @param skill Skill that this context belongs to
     * @tparam T type of context
     */
-  def contextActivate[T<:Context](skill: Skill, contextProvider: EntityPlayer => T)
+  def contextActivate[S <: Skill, T <: Context[S]](skill: S, contextProvider: EntityPlayer => T)
                                    (implicit tag: ClassTag[T]): KeyDelegate = {
     val klass = tag.runtimeClass.asInstanceOf[Class[T]]
     new KeyDelegate {

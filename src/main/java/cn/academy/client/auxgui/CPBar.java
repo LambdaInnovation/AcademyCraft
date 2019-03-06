@@ -207,7 +207,7 @@ public class CPBar extends Widget {
     }
     
     private void initEvents() {
-        listen(FrameEvent.class, (w, e) -> 
+        listen(FrameEvent.class, (w, e) ->
         {
             EntityPlayer player = Minecraft.getMinecraft().player;
             CPData cpData = CPData.get(player);
@@ -370,23 +370,25 @@ public class CPBar extends Widget {
             shaderOverloaded.useProgram();
             shaderOverloaded.updateTexOffset(((float) GameTimer.getTime() % 10L) / 10000.0f);
         }
-        
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+        int texture4Binding = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         RenderUtils.loadTexture(TEX_MASK);
-        
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
-        
+
         final double x0 = 30, width2 = WIDTH - x0 - 20;
         HudUtils.rect(x0, 0, 0, 0, width2, HEIGHT, width2, HEIGHT);
-        
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture4Binding);
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        
+
         GL20.glUseProgram(0);
-        
+
         // Highlight
         color4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
         RenderUtils.loadTexture(TEX_OVERLOAD_HIGHLIGHT);
@@ -446,6 +448,8 @@ public class CPBar extends Widget {
         checkGLError("DrawCPBar 1");
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+        int texture4Binding = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         RenderUtils.loadTexture(overlayTexture);
         
@@ -467,12 +471,13 @@ public class CPBar extends Widget {
         checkGLError("DrawCPBar Post");
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture4Binding);
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
 
         mAlpha = pre_mAlpha;
     }
-    
+
     final Color CRL_P_BACK = new Color(48, 48, 48, 160),
             CRL_P_FORE = new Color(255, 255, 255, 200);
     final Color CRL_P_TEXT = new Color(255, 255, 255, 255);

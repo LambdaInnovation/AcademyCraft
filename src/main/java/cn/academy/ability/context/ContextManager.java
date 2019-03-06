@@ -2,21 +2,23 @@ package cn.academy.ability.context;
 
 import cn.academy.AcademyCraft;
 import cn.academy.ability.context.Context.Status;
+import cn.academy.analyticUtil.events.AnalyticSkillEvent;
 import cn.academy.event.ability.CategoryChangeEvent;
 import cn.academy.event.ability.OverloadEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage;
-import cn.lambdalib2.s11n.network.NetworkMessage.*;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
-import cn.lambdalib2.util.ClientUtils;
-import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.util.EntitySelectors;
-import cn.lambdalib2.util.SideUtils;
-import cn.lambdalib2.util.WorldUtils;
+import cn.lambdalib2.util.*;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -25,11 +27,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -39,6 +36,8 @@ import java.util.stream.Stream;
  */
 public enum ContextManager {
     instance;
+
+    private static final boolean DEBUG_LOG = false;
 
     private static final double
             T_KA_TOL = 1.5, // Tile tolerance of receiving keepAlive packets
@@ -156,8 +155,8 @@ public enum ContextManager {
     }
 
     private static void log(Object msg) {
-//        if (AcademyCraft.DEBUG_MODE)
-//             AcademyCraft.log.info("CM: " + msg);
+        if (AcademyCraft.DEBUG_MODE && DEBUG_LOG)
+             AcademyCraft.log.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")
@@ -258,7 +257,6 @@ public enum ContextManager {
 
                 alive.add(data);
                 NetworkMessage.sendToSelf(data.ctx, Context.MSG_MADEALIVE);
-
                 for (Call call : data.calls) {
                     mToServer(data.ctx, call.msg, call.args);
                 }
@@ -428,7 +426,7 @@ public enum ContextManager {
                 NetworkMessage.sendTo(player, LocalManager.instance, M_ESTABLISH_LINK, clientID, nextServerID);
                 NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_MAKEALIVE,
                         writeContextType(ctx.getClass()), player, nextServerID);
-
+                MinecraftForge.EVENT_BUS.post(new AnalyticSkillEvent(data.ctx.player,data.ctx.skill));
                 nextServerID += 1;
 
                 log("[SVR] BeginLink");
@@ -590,7 +588,7 @@ public enum ContextManager {
         private class ContextData {
             Context ctx;
             int serverID;
-            long lastKeepAlive = time();
+            double lastKeepAlive = time();
             boolean disposed = false;
         }
 
@@ -598,10 +596,11 @@ public enum ContextManager {
         @SideOnly(Side.CLIENT)
         public void __onClientTick(ClientTickEvent evt) {
             if (evt.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
-                long time = time();
+                double time = time();
 
                 for (ContextData data : alive) {
                     if (data.disposed || time - data.lastKeepAlive > T_KA_TOL) {
+                        log("[CLI] Timeout!!");
                         data.disposed = true;
                     } else {
                         NetworkMessage.sendToSelf(data.ctx, Context.MSG_TICK);
@@ -626,8 +625,8 @@ public enum ContextManager {
             alive.clear();
         }
 
-        private long time() {
-            return (long)(GameTimer.getTime()*1000);
+        private double time() {
+            return GameTimer.getTime();
         }
     }
 

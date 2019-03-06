@@ -1,5 +1,6 @@
 package cn.academy;
 
+import cn.academy.analyticUtil.AnalyticDataListener;
 import cn.lambdalib2.crafting.CustomMappingHelper;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
@@ -11,8 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +37,7 @@ import java.util.Map.Entry;
  *
  */
 @Mod(modid = "academy", name = "AcademyCraft", version = AcademyCraft.VERSION,
-     dependencies = "required-after:lambdalib2@@LAMBDA_LIB_VERSION@") // LambdaLib is currently unstable. Supports only one version.
+     dependencies = "required-after:lambdalib2@@LAMBDA_LIB_VERSION@")
 @RegistryMod(rootPackage = "cn.academy.", resourceDomain = "academy")
 public class AcademyCraft {
 
@@ -57,6 +59,8 @@ public class AcademyCraft {
 
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
+    public static AnalyticDataListener analyticDataListener;
+
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
         @Override
         public ItemStack createIcon() {
@@ -72,11 +76,16 @@ public class AcademyCraft {
         recipes = new RecipeRegistry();
 
         config = new Configuration(event.getSuggestedConfigurationFile());
+        Boolean analyticFlag = config.getBoolean("analysis","generic",true,"switch for analytic system");
+        if(analyticFlag){
+            analyticDataListener = AnalyticDataListener.instance;
+        }
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        FMLCommonHandler.instance().bus().register(this);
+        MinecraftForge.EVENT_BUS.register(this);
+        OreDictionary.registerOre("plateIron", ACItems.reinforced_iron_plate);
     }
 
     @EventHandler

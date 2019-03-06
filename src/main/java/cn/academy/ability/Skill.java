@@ -2,7 +2,6 @@ package cn.academy.ability;
 
 import cn.academy.ability.context.*;
 import cn.academy.ability.context.Context.Status;
-import cn.academy.advancements.ACAdvancements;
 import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.condition.DevConditionDep;
@@ -14,7 +13,7 @@ import cn.academy.ACConfig;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.typesafe.config.Config;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -226,7 +225,7 @@ public abstract class Skill extends Controllable {
     }
     
     protected String getLocalized(String key) {
-        return I18n.format("ac.ability." + getFullName() + "." + key);
+        return I18n.translateToLocal("ac.ability." + getFullName() + "." + key);
     }
     
     //--- Path init
@@ -395,7 +394,7 @@ public abstract class Skill extends Controllable {
         }
 
         @Override
-        public KeyDelegate.DelegateState getState() {
+        public DelegateState getState() {
             if (context == null) {
                 return DelegateState.IDLE;
             } else if (context instanceof IStateProvider) {

@@ -56,8 +56,7 @@ public class PenetrateTeleport extends Skill
         private float curDist = maxDist;
 
         @SideOnly(Side.CLIENT)
-        private EntityTPMarking mark = null;
-        @SideOnly(Side.CLIENT)
+        private EntityTPMarking mark;
         private float mwSpd=1;
 
         @Listener(channel=MSG_EXECUTE, side=Side.SERVER)
