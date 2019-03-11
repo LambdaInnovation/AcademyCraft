@@ -99,7 +99,7 @@ repositories {
 configurations {
     provided
     shade
-    compile.extendsFrom shade
+    deobfCompile.extendsFrom shade
 }
 
 // sourceSets.main.compileClasspath += [configurations.provided]
@@ -112,7 +112,10 @@ idea {
 
 
 dependencies {
-    deobfCompile "cn.lambdalib2:LambdaLib2:${config.lambdalib_ver}"
+    // Shade dependencies
+    shade "cn.lambdalib2:LambdaLib2:${config.lambdalib_ver}"
+
+    // Optional dependencies
     deobfCompile "codechicken:CodeChickenLib:1.12.2-${config.ccl_ver}:universal"
     deobfCompile "mezz.jei:jei_1.12.2:4.8.0.119"
     //deobfCompile "codechicken:NotEnoughItems:1.12.2-${config.nei_ver}:universal"
@@ -167,13 +170,23 @@ compileScala.options.encoding = "UTF-8"
 task deobfJar(type: Jar, dependsOn: 'jar') {
     classifier 'dev'
     from sourceSets.main.output
+    manifest {
+        attributes 'FMLCorePluginContainsFMLMod' : 'true'
+        attributes 'FMLCorePlugin' : 'cn.lambdalib2.CorePlugin'
+    }
 }
 
 jar {
     configurations.shade.each { dep ->
         from(project.zipTree(dep)){
             exclude 'META-INF', 'META-INF/**'
+            exclude 'mcmod.info'
+            exclude 'pack.mcmeta'
         }
+    }
+    manifest {
+        attributes 'FMLCorePluginContainsFMLMod' : 'true'
+        attributes 'FMLCorePlugin' : 'cn.lambdalib2.CorePlugin'
     }
 }
 
