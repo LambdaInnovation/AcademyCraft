@@ -496,4 +496,4 @@ ac.headsOrTails.1=硬币反面朝上
 ac.converter.desc_template=转换%s到%s
 
 # About App
-ac.about.donators_info=排名不分先后\n名单每个版本更新一次
+ac.about.donators_info=排名不分先后
