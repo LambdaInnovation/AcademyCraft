@@ -1,4 +1,4 @@
-package cn.academy.analyticUtil.events;
+package cn.academy.analytic.events;
 
 import cn.academy.ability.Skill;
 import net.minecraft.entity.player.EntityPlayer;

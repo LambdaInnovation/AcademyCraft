@@ -1,8 +1,8 @@
-package cn.academy.analyticUtil;
+package cn.academy.analytic;
 
 import cn.academy.AcademyCraft;
-import cn.academy.analyticUtil.events.AnalyticLevelUpEvent;
-import cn.academy.analyticUtil.events.AnalyticSkillEvent;
+import cn.academy.analytic.events.AnalyticLevelUpEvent;
+import cn.academy.analytic.events.AnalyticSkillEvent;
 import cn.academy.datapart.AbilityData;
 import cn.academy.event.ability.LevelChangeEvent;
 import cn.academy.event.ability.SkillLearnEvent;

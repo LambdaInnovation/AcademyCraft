@@ -1,4 +1,4 @@
-package cn.academy.analyticUtil;
+package cn.academy.analytic;
 
 import cn.academy.AcademyCraft;
 import com.google.gson.Gson;

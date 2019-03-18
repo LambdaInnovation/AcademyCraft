@@ -2,7 +2,7 @@ package cn.academy.ability.context;
 
 import cn.academy.AcademyCraft;
 import cn.academy.ability.context.Context.Status;
-import cn.academy.analyticUtil.events.AnalyticSkillEvent;
+import cn.academy.analytic.events.AnalyticSkillEvent;
 import cn.academy.event.ability.CategoryChangeEvent;
 import cn.academy.event.ability.OverloadEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage;

@@ -1,6 +1,6 @@
 package cn.academy;
 
-import cn.academy.analyticUtil.AnalyticDataListener;
+import cn.academy.analytic.AnalyticDataListener;
 import cn.lambdalib2.crafting.CustomMappingHelper;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
