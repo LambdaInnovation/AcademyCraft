@@ -50,7 +50,11 @@ public class AnalyticDataListener {
 
     @SubscribeEvent
     public void loginListener(PlayerEvent.PlayerLoggedInEvent event){
-        String serverIp = getCurrentIPinfo();
+        Thread delaySender = new DelaySender(event.player);
+        delaySender.start();//avoid sending message to the client thread before it hasn't been initialized
+    }
+
+    public void serverGetter(EntityPlayer player,String serverIp){
         if(null==serverSource) {
             serverSource = new AnalyticDto();
             serverSource.setVersion(AcademyCraft.VERSION);
@@ -66,12 +70,6 @@ public class AnalyticDataListener {
                 serverSource.setCity(ipArray[5]);
             }
         }
-        Thread delaySender = new DelaySender(event.player,serverIp);
-        delaySender.start();//avoid sending message to the client thread before it hasn't been initialized
-    }
-
-    @NetworkMessage.Listener(channel = "delay",side = Side.SERVER)
-    public void serverGetter(EntityPlayer player,String serverIp){
         NetworkMessage.sendTo(player,this,CHANNEL,player,serverIp);
     }
 
@@ -165,7 +163,7 @@ public class AnalyticDataListener {
     }
 
     //get ip info
-    private String getCurrentIPinfo(){
+    public String getCurrentIPinfo(){
         String ipInfo = "";
         try {
             URL object = new URL("https://myip.ipip.net");
@@ -225,7 +223,7 @@ public class AnalyticDataListener {
 class DelaySender extends Thread{
     private EntityPlayer player;
     private String serverIp;
-    DelaySender(EntityPlayer player,String serverIp){
+    DelaySender(EntityPlayer player){
         this.player=player;
         this.serverIp=serverIp;
     }
@@ -233,8 +231,8 @@ class DelaySender extends Thread{
     public void run() {
         try {
             Thread.sleep(10000);
-            NetworkS11n.addDirectInstance(AcademyCraft.analyticDataListener);
-            NetworkMessage.sendToServer(AcademyCraft.analyticDataListener,"delay",player,serverIp);
+            serverIp = AcademyCraft.analyticDataListener.getCurrentIPinfo();
+            AcademyCraft.analyticDataListener.serverGetter(player,serverIp);
         }catch (Exception e){
             e.printStackTrace();
         }
