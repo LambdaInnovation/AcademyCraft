@@ -45,7 +45,7 @@ public enum DonatorList {
             _requesting = true;
             new Thread(() -> {
                 try {
-                    String url = "http://144.34.208.247:8080/lambda/donation/sponsor";
+                    String url = "https://ac.li-dev.cn/donators";
                     URLConnection con = new URL(url).openConnection();
                     con.setDoInput(true);
 
