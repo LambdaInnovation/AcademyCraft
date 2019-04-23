@@ -29,7 +29,7 @@ object VecReflection extends Skill("vec_reflection", 4) {
   MinecraftForge.EVENT_BUS.register(this)
 
   @SideOnly(Side.CLIENT)
-  override def activate(rt: ClientRuntime, keyid: Int) = {
+  override def activate(rt: ClientRuntime, keyid: Int): Unit = {
     rt.addKey(keyid, KeyDelegates.contextActivate(this, new VecReflectionContext(_)))
   }
 
@@ -63,19 +63,19 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
   import scala.collection.JavaConversions._
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
-  def s_makeAlive() = {
+  def s_makeAlive(): Unit = {
     MinecraftForge.EVENT_BUS.register(this)
     ctx.consume(overloadToKeep, 0)
     overloadKeep = ctx.cpData.getOverload
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER, Side.CLIENT))
-  def g_terminate() = {
+  def g_terminate(): Unit = {
     MinecraftForge.EVENT_BUS.unregister(this)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
-  def s_tick() = {
+  def s_tick(): Unit = {
     if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     val range = 4
     val entities = WorldUtils.getEntities(player, range, new Predicate[Entity] {
@@ -111,10 +111,10 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     visited ++= entities
 
     if(!consumeNormal)
-      terminate
+      terminate()
   }
 
-  private def createNewFireball(source : EntityFireball) = {
+  private def createNewFireball(source : EntityFireball): Boolean = {
     source.setDead()
 
     val shootingEntity = source.shootingEntity
@@ -146,13 +146,13 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  def c_tick() = {
+  def c_tick(): Unit = {
     if(!consumeNormal)
-      terminate
+      terminate()
   }
 
   @SubscribeEvent
-  def onReflect(evt: ReflectEvent) = {
+  def onReflect(evt: ReflectEvent): Unit = {
     if (evt.target.equals(player)) {
       evt.setCanceled(true)
 
@@ -166,7 +166,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     *  to be one more pre testing.
     */
   @SubscribeEvent
-  def onLivingAttack(evt: LivingAttackEvent) = {
+  def onLivingAttack(evt: LivingAttackEvent): Unit = {
     if (evt.getEntityLiving.equals(player)) {
       val (performed, _) = handleAttack(evt.getSource, evt.getAmount, passby = true)
       if (performed) {
@@ -177,7 +177,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
   }
 
   @SubscribeEvent
-  def onLivingHurt(evt: LivingHurtEvent) = {
+  def onLivingHurt(evt: LivingHurtEvent): Unit = {
     if (evt.getEntityLiving.equals(player)  && evt.getAmount <=9999) {
       val (_, dmg) = handleAttack(evt.getSource, evt.getAmount, passby = false)
       evt.setAmount(dmg)
@@ -187,6 +187,12 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     }
   }
 
+  // Sometimes reflection will cause reentrant, e.g. when Guardian
+  //   gives thorns damage to any of its attacks, or
+  //   two players vector-reflect against each other.
+  // Under these situation, we don't allow recursion of reflection.
+  private var _isAttacking = false
+
   /**
     * @param passby If passby=true, and this isn't a complete absorb, the action will not perform. Else it will.
     * @return (Whether action had been really performed, processed damage)
@@ -194,16 +200,22 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
   private def handleAttack(dmgSource: DamageSource, dmg: Float, passby: Boolean): (Boolean, Float) = {
     val reflectDamage = lerpf(0.6f, 1.2f, ctx.getSkillExp) * dmg
     if (!passby) { // Perform the action.
-      consumeDamage(dmg)
-      ctx.addSkillExp(dmg * 0.0004f)
+      _isAttacking = true
 
-      val sourceEntity = dmgSource.getImmediateSource
-      if (sourceEntity != null && sourceEntity != player) {
-        ctx.attack(sourceEntity, reflectDamage)
+      if (!_isAttacking) {
+        consumeDamage(dmg)
+        ctx.addSkillExp(dmg * 0.0004f)
 
-        if (!SideUtils.isClient)
-          sendToClient(MSG_EFFECT, sourceEntity.getPositionVector)
+        val sourceEntity = dmgSource.getImmediateSource
+        if (sourceEntity != null && sourceEntity != player) {
+          ctx.attack(sourceEntity, reflectDamage)
+
+          if (!SideUtils.isClient)
+            sendToClient(MSG_EFFECT, sourceEntity.getPositionVector)
+        }
       }
+
+      _isAttacking = false
 
       (true, dmg - reflectDamage)
     } else {
@@ -215,9 +227,9 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     ctx.consume(0, difficulty * lerpf(300, 160, ctx.getSkillExp))
   }
 
-  private def consumeDamage(damage: Float) = ctx.consumeWithForce(0, lerpf(20, 15, ctx.getSkillExp) * damage)
+  private def consumeDamage(damage: Float): Unit = ctx.consumeWithForce(0, lerpf(20, 15, ctx.getSkillExp) * damage)
 
-  private def consumeNormal():(Boolean) = {
+  private def consumeNormal(): Boolean = {
     ctx.consume(0,  lerpf(15, 11, ctx.getSkillExp))
   }
 
@@ -234,26 +246,26 @@ class VecReflectionContextC(par: VecReflectionContext) extends ClientContext(par
   private val ui = new WaveEffectUI(0.4f, 110, 1.6f)
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  private def l_alive() = if (isLocal) {
+  private def l_alive(): Unit = if (isLocal) {
     activateHandler = ActivateHandlers.terminatesContext(par)
     ClientRuntime.instance.addActivateHandler(activateHandler)
     MinecraftForge.EVENT_BUS.register(this)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  private def l_terminate() = if (isLocal) {
+  private def l_terminate(): Unit = if (isLocal) {
     ClientRuntime.instance.removeActiveHandler(activateHandler)
     MinecraftForge.EVENT_BUS.unregister(this)
   }
 
   @Listener(channel=MSG_REFLECT_ENTITY, side=Array(Side.CLIENT))
-  private def c_reflectEntity(ent: Entity) = {
+  private def c_reflectEntity(ent: Entity): Unit = {
     reflect(ent, player)
     reflectEffect(entityHeadPos(ent))
   }
 
   @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
-  private def reflectEffect(point: Vec3d) = {
+  private def reflectEffect(point: Vec3d): Unit = {
     val eff = new WaveEffect(world, 2, 1.1)
     eff.setPosition(point.x, point.y, point.z)
     eff.rotationYaw = player.rotationYawHead
@@ -264,12 +276,12 @@ class VecReflectionContextC(par: VecReflectionContext) extends ClientContext(par
     playSound(point)
   }
 
-  private def playSound(pos: net.minecraft.util.math.Vec3d) = {
+  private def playSound(pos: net.minecraft.util.math.Vec3d): Unit = {
     ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_reflection", SoundCategory.AMBIENT, 0.5f, 1.0f)
   }
 
   @SubscribeEvent
-  def onRenderOverlay(evt: RenderGameOverlayEvent) = {
+  def onRenderOverlay(evt: RenderGameOverlayEvent): Unit = {
     if (evt.getType == ElementType.CROSSHAIRS) {
       val r = evt.getResolution
       ui.onFrame(r.getScaledWidth, r.getScaledHeight)
