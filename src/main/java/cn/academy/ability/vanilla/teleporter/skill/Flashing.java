@@ -19,6 +19,8 @@ import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.Raytrace;
 import cn.lambdalib2.util.VecUtils;
 import com.google.common.base.Preconditions;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -28,7 +30,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 
 import java.util.Optional;
 
@@ -136,7 +137,15 @@ public class Flashing extends Skill {
                 clientRuntime().addActivateHandler(activateHandler);
 
                 final String[] strs = new String[] { null, "a", "d", "w", "s"};
-                final int[] keys = new int[] { -1, Keyboard.KEY_A, Keyboard.KEY_D, Keyboard.KEY_W, Keyboard.KEY_S };
+                Minecraft mc = Minecraft.getMinecraft();
+                GameSettings settings = mc.gameSettings;
+                final int[] keys = new int[] {
+                    -1,
+                    settings.keyBindLeft.getKeyCode(),
+                    settings.keyBindRight.getKeyCode(),
+                    settings.keyBindForward.getKeyCode(),
+                    settings.keyBindBack.getKeyCode()
+                };
                 for (int i = 0; i < 4; ++i) {
                     final int localid = i + 1;
                     clientRuntime().addKey(KEY_GROUP, keys[localid], new KeyDelegate() {
