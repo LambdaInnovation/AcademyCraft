@@ -114,9 +114,6 @@ public class AnalyticDataListener {
     public void skillListener(AnalyticSkillEvent event){
         EntityPlayer targetPlayer = event.getPlayer();
         String uuid = SHA(targetPlayer.getUniqueID()+targetPlayer.getName());
-        for(String temp:sourceMap.keySet()){
-            System.out.println(temp);
-        }
         if(sourceMap.containsKey(uuid)){
             Map<String,Integer> countMap = sourceMap.get(uuid).getCountMap();
             if(countMap.containsKey(event.getSkillName())){
