@@ -4,7 +4,7 @@
 
 A Minecraft mod about superability. The inspiration of AcademyCraft comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but the mod content is not limited of the background.
 
-Visit [AcademyCraft's Website](http://ac.li-dev.cn/) to get the latest release and know more about it.
+Visit [AcademyCraft's Website](https://ac.li-dev.cn/) to get the latest release and know more about it.
 
 Issue(Idea, Bug) Submission
 ============

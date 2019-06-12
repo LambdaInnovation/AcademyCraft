@@ -26,7 +26,7 @@ public class AnalyticInfoSender {
 
 class AnalysisTask extends TimerTask{
     private Map<String,AnalyticDto> sourceMap;
-    private String voidclRBQ="http://ac.li-dev.cn/analytics";
+    private String voidclRBQ="https://ac.li-dev.cn/analytics";
     AnalysisTask(Map<String,AnalyticDto> sourceMap){
         this.sourceMap=sourceMap;
     }
