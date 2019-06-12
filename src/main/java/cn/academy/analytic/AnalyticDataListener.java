@@ -1,8 +1,8 @@
-package cn.academy.analyticUtil;
+package cn.academy.analytic;
 
 import cn.academy.AcademyCraft;
-import cn.academy.analyticUtil.events.AnalyticLevelUpEvent;
-import cn.academy.analyticUtil.events.AnalyticSkillEvent;
+import cn.academy.analytic.events.AnalyticLevelUpEvent;
+import cn.academy.analytic.events.AnalyticSkillEvent;
 import cn.academy.datapart.AbilityData;
 import cn.academy.event.ability.LevelChangeEvent;
 import cn.academy.event.ability.SkillLearnEvent;
@@ -21,9 +21,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 // Collects some **anonymous** analytics data
 //  What we collect: a unique hash of user, location, in-mod action (Level-up, use ability, etc.)
@@ -47,12 +50,16 @@ public class AnalyticDataListener {
 
     @SubscribeEvent
     public void loginListener(PlayerEvent.PlayerLoggedInEvent event){
-        String serverIp = getCurrentIPinfo();
+        Thread delaySender = new DelaySender(event.player);
+        delaySender.start();//avoid sending message to the client thread before it hasn't been initialized
+    }
+
+    public void serverGetter(EntityPlayer player,String serverIp){
         if(null==serverSource) {
             serverSource = new AnalyticDto();
             serverSource.setVersion(AcademyCraft.VERSION);
             serverSource.setUuidName("server");
-            serverSource.setStartTime(new Date().getTime());
+            serverSource.setStartTime(UTCZeroTime());
             String[] ipArray =serverIp.split(" ");
             if (ipArray.length < 6) {
                 serverSource.initNaNIPInfo();
@@ -63,7 +70,7 @@ public class AnalyticDataListener {
                 serverSource.setCity(ipArray[5]);
             }
         }
-        NetworkMessage.sendTo(event.player,this,CHANNEL,event.player,serverIp);
+        NetworkMessage.sendTo(player,this,CHANNEL,player,serverIp);
     }
 
     //on Client
@@ -88,7 +95,7 @@ public class AnalyticDataListener {
         AnalyticDto playerData = new AnalyticDto();
         playerData.setVersion(AcademyCraft.VERSION);
         playerData.setUuidName(SHA(player.getUniqueID()+player.getName()));
-        playerData.setStartTime(new Date().getTime());
+        playerData.setStartTime(UTCZeroTime());
         String[] ipArray = ipInfo.split(" ");
         if (ipArray.length < 6) {
             playerData.initNaNIPInfo();
@@ -153,11 +160,12 @@ public class AnalyticDataListener {
     }
 
     //get ip info
-    private String getCurrentIPinfo(){
+    public String getCurrentIPinfo(){
         String ipInfo = "";
         try {
             URL object = new URL("https://myip.ipip.net");
             HttpURLConnection con = (HttpURLConnection)object.openConnection();
+            con.setRequestProperty("User-Agent","");
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
             String line = null;
             StringBuilder sb = new StringBuilder();
@@ -199,4 +207,31 @@ public class AnalyticDataListener {
         return strResult;
     }
 
+    private long UTCZeroTime(){
+        SimpleDateFormat df =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
+        String currDate = df.format(new Date());
+        Timestamp timestamp = Timestamp.valueOf(currDate);
+        return timestamp.getTime();
+    }
+
+}
+
+class DelaySender extends Thread{
+    private EntityPlayer player;
+    private String serverIp;
+    DelaySender(EntityPlayer player){
+        this.player=player;
+        this.serverIp=serverIp;
+    }
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(10000);
+            serverIp = AcademyCraft.analyticDataListener.getCurrentIPinfo();
+            AcademyCraft.analyticDataListener.serverGetter(player,serverIp);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

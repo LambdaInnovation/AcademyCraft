@@ -225,10 +225,11 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
       })
     }
 
-    defkey(1, Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
-    defkey(2, Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
-    defkey(3, Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
-    defkey(4, Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
+    val settings = Minecraft.getMinecraft.gameSettings
+    defkey(1, settings.keyBindForward.getKeyCode, () => worldSpace(0, 0, 1))
+    defkey(2, settings.keyBindBack.getKeyCode, () => worldSpace(0, 0, -1))
+    defkey(3, settings.keyBindLeft.getKeyCode, () => worldSpace(1, 0, 0))
+    defkey(4, settings.keyBindRight.getKeyCode, () => worldSpace(-1, 0, 0))
   }
 
   @SideOnly(Side.CLIENT)

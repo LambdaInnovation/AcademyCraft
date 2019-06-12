@@ -3,6 +3,8 @@ package cn.academy.terminal.app;
 import cn.academy.Resources;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
+import cn.academy.terminal.DonatorList;
+import cn.academy.terminal.DonatorList.DonatorListRefreshEvent;
 import cn.academy.terminal.RegApp;
 import cn.lambdalib2.cgui.CGuiScreen;
 import cn.lambdalib2.cgui.Widget;
@@ -26,6 +28,8 @@ import com.typesafe.config.ConfigList;
 import com.typesafe.config.ConfigValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
@@ -229,6 +233,14 @@ public class AppAbout extends App {
             });
 
             onTabTypeChanged(TabType.Credits);
+            DonatorList.Instance.tryRequest();
+            MinecraftForge.EVENT_BUS.register(this);
+        }
+
+        @Override
+        public void onGuiClosed() {
+            super.onGuiClosed();
+            MinecraftForge.EVENT_BUS.unregister(this);
         }
 
         private void initTexts() {
@@ -276,7 +288,8 @@ public class AppAbout extends App {
 
                 y += 1.5f * FontSize;
 
-                List<String> donators = root.getStringList("donators");
+                List<String> donators = DonatorList.Instance.isLoaded() ?
+                    DonatorList.Instance.getList() : root.getStringList("donators");
                 Collections.shuffle(donators); // Randomize the list
                 for (int i = 0; i < donators.size(); ++i) {
                     float tw = 150, margin = 30;
@@ -346,6 +359,11 @@ public class AppAbout extends App {
                 float progress = _dragBar.getProgress() - dwheel * 0.001f * 0.2f;
                 _dragBar.setProgress(MathUtils.clamp01(progress));
             }
+        }
+
+        @SubscribeEvent
+        public void onDonatorListRefresh(DonatorListRefreshEvent e) {
+            initTexts();
         }
 
         private void onTabTypeChanged(TabType type) {

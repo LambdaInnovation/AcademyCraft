@@ -1,4 +1,4 @@
-package cn.academy.analyticUtil.events;
+package cn.academy.analytic.events;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.Event;

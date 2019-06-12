@@ -1,4 +1,4 @@
-package cn.academy.analyticUtil;
+package cn.academy.analytic;
 
 import java.util.HashMap;
 import java.util.Map;

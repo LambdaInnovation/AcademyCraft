@@ -1,6 +1,6 @@
 package cn.academy;
 
-import cn.academy.analyticUtil.AnalyticDataListener;
+import cn.academy.analytic.AnalyticDataListener;
 import cn.lambdalib2.crafting.CustomMappingHelper;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
@@ -72,7 +72,7 @@ public class AcademyCraft {
     private static void preInit(FMLPreInitializationEvent event) {
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2018");
-        log.info("http://ac.li-dev.cn/");
+        log.info("https://ac.li-dev.cn/");
         recipes = new RecipeRegistry();
 
         config = new Configuration(event.getSuggestedConfigurationFile());

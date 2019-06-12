@@ -1,4 +1,4 @@
-package cn.academy.analyticUtil;
+package cn.academy.analytic;
 
 import cn.academy.AcademyCraft;
 import com.google.gson.Gson;
@@ -26,7 +26,7 @@ public class AnalyticInfoSender {
 
 class AnalysisTask extends TimerTask{
     private Map<String,AnalyticDto> sourceMap;
-    private String voidclRBQ="http://144.34.208.247:8080/lambda/data/listener";
+    private String voidclRBQ="https://ac.li-dev.cn/analytics";
     AnalysisTask(Map<String,AnalyticDto> sourceMap){
         this.sourceMap=sourceMap;
     }

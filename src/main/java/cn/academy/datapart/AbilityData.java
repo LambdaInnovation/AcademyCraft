@@ -4,7 +4,7 @@ import cn.academy.ACConfig;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import cn.academy.ability.Skill;
-import cn.academy.analyticUtil.events.AnalyticLevelUpEvent;
+import cn.academy.analytic.events.AnalyticLevelUpEvent;
 import cn.academy.event.ability.*;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
