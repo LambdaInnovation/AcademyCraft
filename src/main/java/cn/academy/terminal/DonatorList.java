@@ -72,7 +72,7 @@ public enum DonatorList {
                         Debug.error(e);
                 }
                 _requesting = false;
-            }).run();
+            }).start();
         }
     }
 
