@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityTPMarking extends EntityAdvanced {
 
-    static TPParticleFactory particleFac = TPParticleFactory.instance;
+//    static TPParticleFactory particleFac = TPParticleFactory.instance;
 
     final AbilityData data;
     protected final EntityPlayer player;
@@ -41,12 +41,12 @@ public class EntityTPMarking extends EntityAdvanced {
         rotationYaw = player.rotationYaw;
 
         if (available && rand.nextDouble() < 0.4) {
-            particleFac.setPosition(posX + RandUtils.ranged(-1, 1), posY + RandUtils.ranged(0.2, 1.6) - 1.6,
+            TPParticleFactory.instance.setPosition(posX + RandUtils.ranged(-1, 1), posY + RandUtils.ranged(0.2, 1.6) - 1.6,
                     posZ + RandUtils.ranged(-1, 1));
-            particleFac.setVelocity(RandUtils.ranged(-.03, .03), RandUtils.ranged(0, 0.05),
+            TPParticleFactory.instance.setVelocity(RandUtils.ranged(-.03, .03), RandUtils.ranged(0, 0.05),
                     RandUtils.ranged(-.03, .03));
 
-            world.spawnEntity(particleFac.next(world));
+            world.spawnEntity(TPParticleFactory.instance.next(world));
         }
     }
 
