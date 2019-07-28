@@ -121,11 +121,7 @@ public class ShiftTeleport extends Skill
                     item.placeBlockAt(stack, player, player.world, position.getBlockPos().add(position.sideHit.getDirectionVec())
                             , position.sideHit, (float)position.hitVec.x, (float)position.hitVec.y, (float)position.hitVec.z,
                             state);
-                    if(!player.capabilities.isCreativeMode)
-                        if(stack.getCount()<=1)
-                            player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
-                        else
-                            stack.setCount(stack.getCount()-1);
+
                 }
                 else//Drop as item
                 {
@@ -133,6 +129,15 @@ public class ShiftTeleport extends Skill
                     drop.setCount(1);
                     player.world.spawnEntity(new EntityItem(player.world, position.hitVec.x, position.hitVec.y, position.hitVec.z, drop));
                 }
+
+                if(!player.capabilities.isCreativeMode) {
+                    if (stack.getCount() <= 1) {
+                        player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                    } else {
+                        stack.setCount(stack.getCount() - 1);
+                    }
+                }
+
                 List<Entity> list = getTargetsInLine();
                 for(Entity target :list) {
                     TPSkillHelper.attack(ctx, target, getDamage(exp));
