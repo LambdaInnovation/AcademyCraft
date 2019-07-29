@@ -11,6 +11,7 @@ import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -120,17 +121,22 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 
     private void rebuildBlockState() {
         IBlockState curState = world.getBlockState(pos);
-        boolean lastConnected = curState.getValue(BlockNode.CONNECTED);
-        int lastPct = curState.getValue(BlockNode.ENERGY);
+        Block block = curState.getBlock();
+        // sometime block and tileentity are mismatch
+        if (block instanceof BlockNode) {
+            boolean lastConnected = curState.getValue(BlockNode.CONNECTED);
+            int lastPct = curState.getValue(BlockNode.ENERGY);
 
-        int pct = (int) Math.min(4, Math.round((4 * getEnergy() / getMaxEnergy())));
-        if (pct != lastPct || lastConnected != enabled) {
-            world.setBlockState(pos,
-                curState
-                    .withProperty(BlockNode.CONNECTED, enabled)
-                    .withProperty(BlockNode.ENERGY, pct),
-                0);
+            int pct = (int) Math.min(4, Math.round((4 * getEnergy() / getMaxEnergy())));
+            if (pct != lastPct || lastConnected != enabled) {
+                world.setBlockState(pos,
+                        curState
+                                .withProperty(BlockNode.CONNECTED, enabled)
+                                .withProperty(BlockNode.ENERGY, pct),
+                        0);
+            }
         }
+
     }
 
     @Override
