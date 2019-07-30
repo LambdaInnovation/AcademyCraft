@@ -136,20 +136,22 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
             val hardness = block.getBlockHardness(state, world, null)
             if (0 <= hardness && hardness <= breakHardness && ctx.getSkillExp==1f)
             {
-              val itemStack=new ItemStack(block)
-              world.spawnEntity(new EntityItem(world,i,j,k,itemStack))
-              world.setBlockToAir(bPos)
+              if (ctx.canBreakBlock(player.world, bPos)) { //Can place
+                val itemStack=new ItemStack(block)
+                world.spawnEntity(new EntityItem(world,i,j,k,itemStack))
+                world.setBlockToAir(bPos)
+              }
             }
             else if (0 <= hardness && hardness <= breakHardness && ctx.canBreakBlock(world, i, j, k)) {
               // This line causes the sound effect unable to be heard.
               // So strange...
               //> world.playSoundEffect(i + 0.5, j + 0.5, k + 0.5, block.stepSound.getBreakSound, .5f, 1f)
 
-              if (RNG.nextFloat() < dropRate) {
-                block.dropBlockAsItemWithChance(world, bPos, world.getBlockState(bPos), 1.0f, 0)
-              }
+              if (ctx.canBreakBlock(player.world, bPos)) { //Can place
+                if (RNG.nextFloat() < dropRate) block.dropBlockAsItemWithChance(world, bPos, world.getBlockState(bPos), 1.0f, 0)
 
-              world.setBlockToAir(bPos)
+                world.setBlockToAir(bPos)
+              }
             }
           }
         }
