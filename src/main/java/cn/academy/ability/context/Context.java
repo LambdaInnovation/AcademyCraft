@@ -110,7 +110,9 @@ public class Context<TSkill extends Skill> implements IMessageDelegate {
 
     //
     public final boolean isRemote() {
-        return FMLCommonHandler.instance().getEffectiveSide().isClient();
+        // use world.isRemote
+        return player.world.isRemote;
+//        return FMLCommonHandler.instance().getEffectiveSide().isClient();
     }
 
     @SuppressWarnings("sideonly")
