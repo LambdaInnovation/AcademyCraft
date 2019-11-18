@@ -134,21 +134,26 @@ public class EntityBlock extends EntityAdvanced {
     public void onFirstUpdate() {
         this.regEventHandler(new CollideEvent.CollideHandler() {
 
+            private boolean canReplace (BlockPos pos) {
+                Block block = world.getBlockState(pos).getBlock();
+                return block.isReplaceable(world, pos);
+            }
+
             @Override
             public void onEvent(CollideEvent event) {
                 if(placeWhenCollide && !world.isRemote && event.result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    int tx = event.result.getBlockPos().getX(),
-                            ty = event.result.getBlockPos().getY(),
-                            tz = event.result.getBlockPos().getZ();
+                    int tx = event.result.getBlockPos().getX();
+                    int ty = event.result.getBlockPos().getY();
+                    int tz = event.result.getBlockPos().getZ();
 
                     boolean isPlace = false;
                     BlockPos originPos = event.result.getBlockPos();
                     BlockPos placePos = originPos;
-                    Block hitblock = world.getBlockState(originPos).getBlock();
-                    if(hitblock.isReplaceable(world, originPos)) {
+//                    Block hitblock = world.getBlockState(originPos).getBlock();
+                    if(canReplace(originPos)) {
                         isPlace = true;
                         placePos = originPos;
-                    } else if(hitblock.isReplaceable(world, originPos.add(event.result.sideHit.getDirectionVec()))) {
+                    } else if(canReplace(originPos.add(event.result.sideHit.getDirectionVec()))) {
                         isPlace = true;
                         placePos = originPos.add(event.result.sideHit.getDirectionVec());
                     } else {
@@ -157,7 +162,7 @@ public class EntityBlock extends EntityAdvanced {
                                 for(int z = -1; z <= 1; z++) {
                                     if (x != 0 && y != 0 && z != 0) {
                                         if (!isPlace) {
-                                            if(hitblock.isReplaceable(world, originPos.add(x, y, z))) {
+                                            if(canReplace(originPos.add(x, y, z))) {
                                                 isPlace = true;
                                                 placePos = originPos.add(x, y, z);
                                             }
@@ -177,7 +182,7 @@ public class EntityBlock extends EntityAdvanced {
                         int iter = 10;
                         while (iter --> 0) {
 //                            Block hitblock = world.getBlockState(new BlockPos(tx, ty, tz)).getBlock();
-                            if(!hitblock.isReplaceable(world, new BlockPos(tx, ty, tz))) {
+                            if(!canReplace(new BlockPos(tx, ty, tz))) {
 //                            ForgeDirection dir = ForgeDirection.values()[event.result.sideHit];
                                 tx += event.result.sideHit.getDirectionVec().getX();
                                 ty += event.result.sideHit.getDirectionVec().getY();
@@ -192,7 +197,6 @@ public class EntityBlock extends EntityAdvanced {
                             }
                         }
                     }
-
                     if (!isPlace) {
                         AcademyCraft.log.error("EntityBlock Lost: " + event.result.toString());
                     }
