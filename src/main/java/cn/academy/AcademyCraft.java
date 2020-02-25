@@ -76,6 +76,7 @@ public class AcademyCraft {
         recipes = new RecipeRegistry();
 
         config = new Configuration(event.getSuggestedConfigurationFile());
+        config.load();
         Boolean analyticFlag = config.getBoolean("analysis","generic",true,"switch for analytic system");
         if(analyticFlag){
             analyticDataListener = AnalyticDataListener.instance;
