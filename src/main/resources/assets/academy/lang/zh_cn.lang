@@ -36,7 +36,7 @@ item.ac_windgen_fan.name=风力能量发生机 - 扇叶
 
 item.ac_coin.name=硬币
 item.ac_silbarn.name=扩散性支援半导体
-item.ac_needle.name=钢针
+item.ac_needle.name=金属箭
 item.ac_mag_hook.name=磁力钩
 
 item.ac_terminal_installer.name=数据终端
