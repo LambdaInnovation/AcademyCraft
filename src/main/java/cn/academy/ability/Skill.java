@@ -197,12 +197,12 @@ public abstract class Skill extends Controllable {
     }
 
     public float getExpIncrSpeed() {
-        return getOptionalFloat("overload_incr_speed", 1.0f);
+        return getOptionalFloat("exp_incr_speed", 1.0f);
     }
 
     private float getOptionalFloat(String path, float fallback) {
         Config cfg = getConfig();
-        return cfg.hasPath(path) ? (float) cfg.getDouble("damage_scale") : fallback;
+        return cfg.hasPath(path) ? (float) cfg.getDouble(path) : fallback;
     }
 
     private boolean getOptionalBool(String path, boolean fallback) {
