@@ -54,11 +54,14 @@ public class RailgunHandEffect extends PlayerRenderHook {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         ShaderSimple.instance().useProgram();
         glPushMatrix();
+        EntityPlayer player = Minecraft.getMinecraft().player;
         if(firstPerson) {
-            glTranslated(.26, 1.48, -.24);
+            double pitchRad = Math.toRadians(player.rotationPitch);
+            double eyeHeight = player.getEyeHeight();
+            glTranslated(0, Math.cos(pitchRad) * eyeHeight, Math.sin(pitchRad) * eyeHeight);
+            glTranslated(.26, -.15, -.24);
             glScalef(.4f, .4f, 1f);
         } else {
-            EntityPlayer player = Minecraft.getMinecraft().player;
             glTranslated(0, 1.8, -1);
             glRotated(-player.rotationPitch, 1, 0, 0);
         }
