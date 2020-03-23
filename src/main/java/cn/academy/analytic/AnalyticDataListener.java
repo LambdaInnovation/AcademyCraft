@@ -166,6 +166,7 @@ public class AnalyticDataListener {
             URL object = new URL("https://myip.ipip.net");
             HttpURLConnection con = (HttpURLConnection)object.openConnection();
             con.setRequestProperty("User-Agent","");
+            con.setConnectTimeout(5000);
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
             String line = null;
             StringBuilder sb = new StringBuilder();
