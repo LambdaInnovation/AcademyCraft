@@ -218,12 +218,12 @@ ac.ability.teleporter.shift_tp.name=Телепортационный сдвиг
 ac.ability.teleporter.space_fluct.name=Флуктуация пространства
 ac.ability.teleporter.flashing.name=Мигание
 
-ac.ability.teleporter.threatening_teleport.desc=Телепортируйте предметы прямо во врага. Иногда даже маленький предмет способен убить врага.
-ac.ability.teleporter.dim_folding_theorem.desc=Увеличьте свой урон против врагов, благодаря нестабильному феномену свертывания слабого пространства
+ac.ability.teleporter.threatening_teleport.desc=Телепортируйте предметы прямо во врага. Иногда даже маленький предмет способен убить противника.
+ac.ability.teleporter.dim_folding_theorem.desc=Увеличьте свой урон против врагов, благодаря нестабильному феномену свёртывания слабого пространства
 ac.ability.teleporter.penetrate_teleport.desc=Определите толщину препятствия перед вами и телепортируйтесь прямо через него.
 ac.ability.teleporter.mark_teleport.desc=Отмечает куда вы смотрите, как пункт назначения, и телепортирует вас туда.
 ac.ability.teleporter.flesh_ripping.desc=Разорвите внутренности вашего врага и нанесите ему кровавый урон. Чрезмерное использование может вызвать у вас чувство дискомфорта. 
-ac.ability.teleporter.location_teleport.desc=Запомните свое текущее местоположение и телепортируйтесь обратно из любой точки мира.
+ac.ability.teleporter.location_teleport.desc=Запомните своё текущее местоположение и телепортируйтесь обратно из любой точки мира.
 ac.ability.teleporter.shift_tp.desc=Телепортируйте блок примерно в середину координатной плоскости. Феномен свёртывания слабого пространства причинит вред любому существу на пути телепортации.
 ac.ability.teleporter.space_fluct.desc=Усильте свою способность складывать пространство, чтобы наносить более опасный критический урон.
 ac.ability.teleporter.flashing.desc=Используйте несколько телепортаций за короткое время, чтобы маневрировать по воздуху.
