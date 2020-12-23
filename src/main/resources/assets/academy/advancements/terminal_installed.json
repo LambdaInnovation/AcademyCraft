@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:terminal_installer"
+    },
+    "title": {
+      "translate": "advancements.general.terminal_installed"
+    },
+    "description": {
+      "translate": "advancements.general.terminal_installed.desc"
+    }
+  },
+  "parent": "academy:open_misaka_cloud",
+  "criteria":{
+    "terminal_installed": {
+      "trigger": "academy:terminal_installed"
+    }
+  }
+}

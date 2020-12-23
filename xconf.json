@@ -1,0 +1,48 @@
+{
+    "srcDir": "src/main/java",
+    "resourcesDir": "src/main/resources",
+    "domain": "academy",
+    "locPrefix": "ac_",
+    "itemConfigs": [
+      {
+        "file": "src/main/raw/items.conf",
+        "classPath": "cn.academy.ACItems"
+      },
+      {
+        "file": "src/main/raw/items_ic2.conf",
+        "classPath": "cn.academy.support.ic2.ACIC2Items",
+        "classAnnotations": [
+          "@Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)"
+        ]
+      }
+    ],
+    "blockConfigs": [
+      {
+        "file": "src/main/raw/blocks.conf",
+        "classPath": "cn.academy.ACBlocks"
+      },
+      {
+        "file": "src/main/raw/blocks_ic2.conf",
+        "classPath": "cn.academy.support.ic2.ACIC2Blocks",
+        "classAnnotations": [
+          "@Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)"
+        ]
+      }
+    ],
+    "advsDataFile": "src/main/raw/advs.conf",
+    "advsClassPath": "cn.academy.advancements.ACAdvancements",
+    "additionalImports": {
+      "all": [
+        "cn.academy.block.block.*",
+        "cn.academy.item.*",
+        "net.minecraftforge.fml.common.Optional"
+      ],
+      "item": [
+      ],
+      "block": [
+        "cn.academy.block.block.BlockNode.NodeType",
+        "cn.academy.ability.develop.DeveloperType",
+        "cn.lambdalib2.multiblock.*"
+      ]
+    }
+  }

@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:crystal_low"
+    },
+    "title": {
+      "translate": "advancements.general.dev_category"
+    },
+    "description": {
+      "translate": "advancements.general.dev_category.desc"
+    }
+  },
+  "parent": "academy:ac_developer",
+  "criteria":{
+    "dev_category": {
+      "trigger": "academy:dev_category"
+    }
+  }
+}

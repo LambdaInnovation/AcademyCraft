@@ -1,34 +1,33 @@
 package cn.academy.energy.client.ui
 
+import cn.academy.block.container.ContainerMatrix
+import cn.academy.block.tileentity.TileMatrix
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.energy.api.WirelessHelper
-import cn.academy.energy.api.event.wen.{ChangePassEvent, CreateNetworkEvent}
-import cn.academy.energy.block.{TileMatrix, ContainerMatrix}
-
+import cn.academy.event.energy.{ChangePassEvent, CreateNetworkEvent}
 import cn.academy.core.client.ui._
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.gui.Widget
-import cn.lambdalib.cgui.gui.component.TextBox
-import cn.lambdalib.s11n.{SerializeNullable, SerializeStrategy}
-import cn.lambdalib.s11n.SerializeStrategy.ExposeStrategy
-import cn.lambdalib.s11n.network.{NetworkS11n, NetworkMessage, Future}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.helper.Color
-import cpw.mods.fml.relauncher.Side
+import cn.lambdalib2.cgui.Widget
+import cn.lambdalib2.cgui.component.TextBox
+import cn.lambdalib2.s11n.{SerializeNullable, SerializeStrategy}
+import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11nType
+import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.common.MinecraftForge
-import cn.lambdalib.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.registry.StateEventCallback
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 object GuiMatrix2 {
   import MatrixNetProxy._
 
   def apply(container: ContainerMatrix) = {
     val tile = container.tile
-    val thePlayer = Minecraft.getMinecraft.thePlayer
-    val isPlacer = tile.getPlacerName == thePlayer.getCommandSenderName
+    val thePlayer = Minecraft.getMinecraft.player
+    val isPlacer = tile.getPlacerName == thePlayer.getName
 
     val invPage = InventoryPage("matrix")
 
@@ -75,8 +74,8 @@ object GuiMatrix2 {
               .blank(1)
               .button("INIT", () => {
                 val (ssidBox, passBox) = (ssidCell(0), passwordCell(0))
-                send(MSG_INIT, tile, ssidBox.content, passBox.content, Future.create((_: Boolean) =>
-                  send(MSG_GATHER_INFO, tile, Future.create((inf: InitData) => rebuildInfo(inf)))
+                send(MSG_INIT, tile, ssidBox.content, passBox.content, Future.create2((_: Boolean) =>
+                  send(MSG_GATHER_INFO, tile, Future.create2((inf: InitData) => rebuildInfo(inf)))
                 ))
               })
           } else {
@@ -85,7 +84,7 @@ object GuiMatrix2 {
         }
       }
 
-      send(MSG_GATHER_INFO, tile, Future.create((inf: InitData) => rebuildInfo(inf)))
+      send(MSG_GATHER_INFO, tile, Future.create2((inf: InitData) => rebuildInfo(inf)))
     }
 
     ret
@@ -97,7 +96,6 @@ object GuiMatrix2 {
 
 }
 
-@Registrant
 @NetworkS11nType
 @SerializeStrategy(strategy=ExposeStrategy.ALL)
 private class InitData {
@@ -110,12 +108,11 @@ private class InitData {
   def init = ssid != null
 }
 
-@Registrant
 @NetworkS11nType
 private object MatrixNetProxy {
 
-  @RegInitCallback
-  def __init() = {
+  @StateEventCallback
+  def __init(ev: FMLInitializationEvent) = {
     NetworkS11n.addDirectInstance(MatrixNetProxy)
   }
 
@@ -148,14 +145,14 @@ private object MatrixNetProxy {
 
   @Listener(channel=MSG_CHANGE_PASSWORD, side=Array(Side.SERVER))
   def changePassword(matrix: TileMatrix, player: EntityPlayer, pwd: String) = {
-    if (matrix.getPlacerName == player.getCommandSenderName) {
+    if (matrix.getPlacerName == player.getName) {
       MinecraftForge.EVENT_BUS.post(new ChangePassEvent(matrix, pwd))
     }
   }
 
   @Listener(channel=MSG_CHANGE_SSID, side=Array(Side.SERVER))
   def changeSSID(matrix: TileMatrix, player: EntityPlayer, newSSID: String) = {
-    if (matrix.getPlacerName == player.getCommandSenderName) {
+    if (matrix.getPlacerName == player.getName) {
       Option(WirelessHelper.getWirelessNet(matrix)) match {
         case Some(net) =>
           net.setSSID(newSSID)

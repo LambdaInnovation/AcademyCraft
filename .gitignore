@@ -3,6 +3,7 @@
 *.setting
 
 libs/
+lib/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -73,3 +74,5 @@ out/
 # Runtime Generic
 eclipse/
 logs/
+run/
+imgui.ini

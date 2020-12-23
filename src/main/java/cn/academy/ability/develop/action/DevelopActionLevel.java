@@ -1,22 +1,17 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.develop.action;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.CategoryManager;
-import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.Category;
+import cn.academy.ability.CategoryManager;
+import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
-import cn.academy.ability.item.ItemInductionFactor;
-import cn.lambdalib.util.generic.RandUtils;
+import cn.academy.item.ItemInductionFactor;
+import cn.lambdalib2.util.RandUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -48,8 +43,8 @@ public class DevelopActionLevel implements IDevelopAction {
         Optional<ItemStack> inductedCategory = DevelopActionReset.getFactor(player);
         if (inductedCategory.isPresent()) {
             ItemStack factor = inductedCategory.get();
-            int factorIdx = Arrays.asList(player.inventory.mainInventory).indexOf(factor);
-            player.inventory.mainInventory[factorIdx] = null;
+            int factorIdx = player.inventory.mainInventory.indexOf(factor);
+            player.inventory.setInventorySlotContents(factorIdx, ItemStack.EMPTY);
             return ItemInductionFactor.getCategory(factor);
         } else {
             CategoryManager man = CategoryManager.INSTANCE;

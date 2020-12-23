@@ -1,39 +1,38 @@
 package cn.academy.ability.develop.action;
 
-import cn.academy.ability.ModuleAbility;
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ACItems;
+import cn.academy.ability.Category;
+import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
-import cn.academy.ability.item.ItemInductionFactor;
-import com.google.common.base.Objects;
+import cn.academy.event.ability.TransformCategoryEvent;
+import cn.academy.item.ItemInductionFactor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.MinecraftForge;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 public class DevelopActionReset implements IDevelopAction {
 
     public static boolean canReset(EntityPlayer player, IDeveloper developer) {
         AbilityData data = AbilityData.get(player);
-        ItemStack equip = player.getCurrentEquippedItem();
+        ItemStack equip = player.getHeldItemMainhand();
         Optional<ItemStack> factor = getFactor(player);
 
         int level = data.getLevel();
 
         return level >= 3 &&
                 developer.getType() == DeveloperType.ADVANCED &&
-                equip != null && equip.getItem() == ModuleAbility.magneticCoil &&
+                !equip.isEmpty() && equip.getItem() == ACItems.magnetic_coil &&
                 factor.isPresent() && ItemInductionFactor.getCategory(factor.get()) != data.getCategory();
     }
 
     static Optional<ItemStack> getFactor(EntityPlayer player) {
         Category playerCategory = AbilityData.get(player).getCategoryNullable();
-        return Arrays.stream(player.inventory.mainInventory)
-                .filter(stack -> stack != null && stack.getItem() instanceof ItemInductionFactor)
+        return player.inventory.mainInventory.parallelStream()
+                .filter(stack -> (!stack.isEmpty()) && stack.getItem() instanceof ItemInductionFactor)
                 .filter(stack -> ItemInductionFactor.getCategory(stack) != playerCategory)
                 .findAny();
     }
@@ -57,14 +56,16 @@ public class DevelopActionReset implements IDevelopAction {
 
         Category newCat = ItemInductionFactor.getCategory(factor);
 
-        int prevLevel = data.getLevel();
+        int prevLevel = data.getLevel() - 1;
+        if(!MinecraftForge.EVENT_BUS.post(new TransformCategoryEvent(player, newCat, prevLevel)))
+        {
+            data.setCategory(newCat);
+            data.setLevel(prevLevel);
 
-        data.setCategory(newCat);
-        data.setLevel(prevLevel - 1);
+            player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 
-        player.setCurrentItemOrArmor(0, null);
-
-        int factorIdx = Arrays.asList(player.inventory.mainInventory).indexOf(factor);
-        player.inventory.mainInventory[factorIdx] = null;
+            int factorIdx = player.inventory.mainInventory.indexOf(factor);
+            player.inventory.mainInventory.set(factorIdx, ItemStack.EMPTY);
+        }
     }
 }

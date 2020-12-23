@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:matter_unit"
+    },
+    "title": {
+      "translate": "advancements.general.getting_phase"
+    },
+    "description": {
+      "translate": "advancements.general.getting_phase.desc"
+    }
+  },
+  "parent": "academy:open_misaka_cloud",
+  "criteria":{
+    "getting_phase": {
+      "trigger": "academy:getting_phase"
+    }
+  }
+}

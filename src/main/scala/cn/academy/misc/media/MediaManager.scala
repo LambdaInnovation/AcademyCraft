@@ -3,29 +3,29 @@ package cn.academy.misc.media
 import java.io.{File, FileInputStream, IOException, InputStreamReader}
 import java.net.{URL, URLDecoder}
 import java.nio.file.{Files, StandardCopyOption}
-import javax.imageio.ImageIO
 
-import cn.academy.core.{AcademyCraft, Resources}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.{RegInitCallback, RegPreInitCallback}
-import cn.lambdalib.util.generic.RegistryUtils
+import cn.academy.{AcademyCraft, Resources}
+import javax.imageio.ImageIO
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.util.ResourceUtils
 import com.jcraft.jorbis.VorbisFile
 import com.typesafe.config.ConfigFactory
-import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.{DynamicTexture, SimpleTexture}
-import net.minecraft.util.{ResourceLocation, StatCollector}
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.common.config.Property
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
-@Registrant
 private object MediaManagerInit {
   import scala.collection.JavaConversions._
 
   val missingCover = Resources.getTexture("guis/icons/icon_nomedia")
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(ev: FMLInitializationEvent) = {
     runSide match {
       case Side.CLIENT => loadClient()
       case Side.SERVER => loadServer()
@@ -43,7 +43,7 @@ private object MediaManagerInit {
     {
       val dest = new File(path, "README.txt").toPath
       try {
-        Files.copy(RegistryUtils.getResourceStream(
+        Files.copy(ResourceUtils.getResourceStream(
           Resources.res("media/readme_template.txt")),
           dest, StandardCopyOption.REPLACE_EXISTING)
       } catch {
@@ -54,7 +54,7 @@ private object MediaManagerInit {
     // Parse default medias.
     for (id <- conf.getStringList("default_medias")) try {
         val dst = new File(path, id + ".ogg").toPath
-        Files.copy(RegistryUtils.getResourceStream(
+        Files.copy(ResourceUtils.getResourceStream(
           Resources.res("media/source/" + id + ".ogg")),
           dst, StandardCopyOption.REPLACE_EXISTING)
 
@@ -135,8 +135,8 @@ private object MediaManagerInit {
   })
 
   def newInternal(id: String, url: URL): Media = new Media(false, id, url, calculateLength(url).get) {
-    override def name: String = StatCollector.translateToLocal("ac.media."+id+".name")
-    override def desc: String = StatCollector.translateToLocal("ac.media."+id+".desc")
+    override def name: String = I18n.translateToLocal("ac.media."+id+".name")
+    override def desc: String = I18n.translateToLocal("ac.media."+id+".desc")
   }
 
   def rootFolder: File = runSide match {
@@ -145,12 +145,12 @@ private object MediaManagerInit {
   }
 
   def readDefaultConfig() = {
-    val rdr = new InputStreamReader(RegistryUtils.getResourceStream(Resources.res("media/default.conf")))
+    val rdr = new InputStreamReader(ResourceUtils.getResourceStream(Resources.res("media/default.conf")))
     ConfigFactory.parseReader(rdr)
   }
 
   @SideOnly(Side.CLIENT)
-  def _rootFolder_c: File = new File(Minecraft.getMinecraft.mcDataDir, "acmedia")
+  def _rootFolder_c: File = new File(Minecraft.getMinecraft.gameDir, "acmedia")
 
 }
 
@@ -200,5 +200,3 @@ abstract class Media(val external: Boolean,
   def displayLength: String = MediaBackend.getDisplayTime(lengthSecs)
 
 }
-
-

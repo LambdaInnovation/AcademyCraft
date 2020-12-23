@@ -1,16 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support;
 
 import cn.academy.energy.api.IFItemManager;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +14,12 @@ import java.util.List;
  * 
  * @author WeAthFolD
  */
-@Registrant
 public class EnergyItemHelper {
 
     private static List<EnergyItemManager> supported = new ArrayList<>();
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
         register(IFItemManager.instance);
     }
 

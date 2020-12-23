@@ -1,26 +1,23 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal.app.settings;
 
-import cn.academy.core.Resources;
-import cn.academy.core.event.ConfigModifyEvent;
-import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.component.Component;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.event.*;
-import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.key.KeyManager;
+import cn.academy.Resources;
+import cn.academy.event.ConfigModifyEvent;
+import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.component.Component;
+import cn.lambdalib2.cgui.component.DrawTexture;
+import cn.lambdalib2.cgui.component.TextBox;
+import cn.lambdalib2.cgui.event.*;
+import cn.lambdalib2.input.KeyManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.Color;
 
+@SideOnly(Side.CLIENT)
 public class PropertyElements {
     
     public static IPropertyElement CHECKBOX = new IPropertyElement<UIProperty.Config>() {
@@ -82,9 +79,9 @@ public class PropertyElements {
     
     private static class EditKey extends Component {
         
-        static final Color 
-            CRL_NORMAL = new Color().setColor4i(200, 200, 200, 200),
-            CRL_EDIT = new Color().setColor4i(251, 133, 37, 200);
+        static final Color
+            CRL_NORMAL = new Color(200, 200, 200, 200),
+            CRL_EDIT = new Color(251, 133, 37, 200);
         
         IGuiEventHandler<MouseClickEvent> gMouseHandler;
         
@@ -130,7 +127,7 @@ public class PropertyElements {
             textBox.setContent("PRESS");
             textBox.option.color = CRL_EDIT;
             
-            widget.getGui().eventBus.listen(MouseClickEvent.class, 
+            widget.getGui().listen(MouseClickEvent.class,
             gMouseHandler = (w, event) -> {
                 endEditing(event.button - 100);
             });
@@ -148,7 +145,7 @@ public class PropertyElements {
             }
             
             updateKeyName();
-            widget.getGui().eventBus.unlisten(MouseClickEvent.class, gMouseHandler);
+            widget.getGui().unlisten(MouseClickEvent.class, gMouseHandler);
             MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(prop));
         }
         

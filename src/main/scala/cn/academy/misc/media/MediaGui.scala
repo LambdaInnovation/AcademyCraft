@@ -1,25 +1,24 @@
 package cn.academy.misc.media
 
-import cn.academy.core.Resources
-import cn.academy.core.client.ui.ACHud
-import cn.academy.core.client.ui.ACHud.Condition
+import cn.academy.Resources
+import cn.academy.client.auxgui.ACHud
+import cn.academy.client.auxgui.ACHud.Condition
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent
-import cn.lambdalib.cgui.gui.component._
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib.cgui.gui.{CGuiScreen, Widget, WidgetContainer}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.util.client.auxgui.AuxGui
-import cn.lambdalib.util.helper.{Color, GameTimer}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.component.DragBar.DraggedEvent
+import cn.lambdalib2.cgui.component._
+import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib2.cgui.{CGuiScreen, Widget, WidgetContainer}
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.util.{Colors, GameTimer}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 private object MediaGuiInit {
 
-  lazy val document: WidgetContainer = CGUIDocument.panicRead(Resources.getGui("media_player"))
+  lazy val document: WidgetContainer = CGUIDocument.read(Resources.getGui("media_player"))
 
 }
 
@@ -28,7 +27,7 @@ private object MediaGuiInit {
   */
 class MediaGui extends CGuiScreen {
   import MediaGuiInit._
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
 
   val backend = MediaBackend(thePlayer)
 
@@ -73,7 +72,7 @@ class MediaGui extends CGuiScreen {
     var lastTest = GameTimer.getTime
     pageMain.listens[FrameEvent](() => {
       val time = GameTimer.getTime
-      if (time - lastTest > 500) {
+      if (time - lastTest > 0.5) {
         lastTest = time
         updatePlayDisplay()
       }
@@ -82,7 +81,7 @@ class MediaGui extends CGuiScreen {
 
   // Scroll bar
   pageMain.child("scroll_bar").listens((w, evt: DraggedEvent) => {
-    val vdb = w.component[VerticalDragBar]
+    val vdb = w.component[DragBar]
     val list = pageMain.child("area").component[ElementList]
     list.setProgress((vdb.getProgress * list.getMaxProgress).toInt)
   })
@@ -129,7 +128,7 @@ class MediaGui extends CGuiScreen {
   def wrapEdit(button: Widget, box: Widget, callback: String => Any) = {
     button.transform.doesDraw = true
 
-    val dt = new DrawTexture(null).setColor(Color.monoBlend(.4, 0))
+    val dt = new DrawTexture(null).setColor(Colors.monoBlend(.4f, 0))
     box :+ dt
 
     val textBox = box.component[TextBox]
@@ -138,7 +137,7 @@ class MediaGui extends CGuiScreen {
     button.listens[LeftClickEvent](() => {
       if (!canEdit) {
         canEdit = true
-        dt.color.a =   .2
+        dt.color.setAlpha(Colors.f2i(.2f))
         textBox.allowEdit = true
         box.gainFocus()
         box.transform.doesListenKey = true
@@ -150,7 +149,7 @@ class MediaGui extends CGuiScreen {
         canEdit = false
         textBox.allowEdit = false
         box.transform.doesListenKey = false
-        dt.color.a = 0
+        dt.color.setAlpha(0)
         callback(textBox.content)
       }
     }
@@ -184,19 +183,18 @@ class MediaGui extends CGuiScreen {
 
   def currentPlaying = backend.currentPlaying
 
-  def thePlayer = Minecraft.getMinecraft.thePlayer
+  def thePlayer = Minecraft.getMinecraft.player
 
   override def doesGuiPauseGame(): Boolean = false
 }
 
 @SideOnly(Side.CLIENT)
-@Registrant
 private object MediaAuxGui {
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
 
-  @RegInitCallback
-  def init() = {
-    val base = CGUIDocument.panicRead(Resources.getGui("media_player_aux")).getWidget("base")
+  @StateEventCallback
+  def init(ev: FMLInitializationEvent) = {
+    val base = CGUIDocument.read(Resources.getGui("media_player_aux")).getWidget("base")
 
     ACHud.instance.addElement(base, new Condition {
       override def shows(): Boolean = MediaBackend().currentPlaying.isDefined
@@ -209,7 +207,7 @@ private object MediaAuxGui {
     var lastTest = GameTimer.getTime
     base.listens[FrameEvent](() => {
       val time = GameTimer.getTime
-      if (time - lastTest > 500) {
+      if (time - lastTest > 0.5) {
         lastTest = time
 
         val backend = MediaBackend()

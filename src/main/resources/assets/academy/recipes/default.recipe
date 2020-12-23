@@ -1,271 +1,277 @@
 ; AcademyCraft recipe script file
 
-shapeless(si_piece*2){
-	[wafer]
+shapeless(academy:imag_silicon_piece*2){
+	[academy:wafer]
 }
 
-shaped(data_chip){
-	[dustRedstone,dustRedstone,dustRedstone]
+shaped(academy:data_chip){
+	[redstone,redstone,redstone]
 	[nil,         plateIron,   nil]
 }
 
-shaped(data_chip){
-	[dustRedstone,dustRedstone,dustRedstone]
-	[nil,         si_piece,    nil]
+shaped(academy:data_chip){
+	[redstone,redstone,redstone]
+	[nil,         academy:imag_silicon_piece,    nil]
 }
 
-shapeless(calc_chip){
-	[data_chip,quartz,quartz]
+shapeless(academy:calc_chip){
+	[academy:data_chip,quartz,quartz]
 }
 
-shapeless(calc_chip){
-	[data_chip,reso_crystal]
+shapeless(academy:calc_chip){
+	[academy:data_chip,academy:reso_crystal]
 }
 
 
-shaped(plateIron *2){
-	[ingotIron]
-	[ingotIron]
-	[ingotIron]
+shaped(academy:reinforced_iron_plate *2){
+	[iron_ingot]
+	[iron_ingot]
+	[iron_ingot]
 }
 
-shaped(frame) {
+shaped(academy:machine_frame) {
     [nil,       plateIron,    nil]
-    [plateIron, dustRedstone, plateIron]
+    [plateIron, redstone, plateIron]
     [nil,       plateIron,    nil]
 }
 
-shaped(phase_gen) {
-    [crystal0,    frame, crystal0]
-    [matter_unit, nil,   matter_unit]
+shaped(academy:phase_gen) {
+    [academy:crystal_low,    academy:machine_frame, academy:crystal_low]
+    [academy:matter_unit, nil,   academy:matter_unit]
 }
 
-shaped(solar_gen) {
+shaped(academy:solar_gen) {
     [glass_pane, glass_pane, glass_pane]
-    [nil,        wafer,      nil]
-    [conv_comp,  frame,      conv_comp]
+    [nil,        academy:wafer,      nil]
+    [academy:energy_convert_component,  academy:machine_frame,      academy:energy_convert_component]
 }
 
-shaped(windgen_base) {
-    [ingotIron]
-    [frame]
-    [conv_comp]
+shaped(academy:windgen_base) {
+    [academy:constraint_ingot]
+    [academy:machine_frame]
+    [academy:energy_convert_component]
 }
 
-shaped(windgen_pillar) {
+shaped(academy:windgen_pillar) {
     [iron_bars]
-    [dustRedstone]
+    [redstone]
     [iron_bars]
 }
 
-shaped(windgen_main) {
-    [nil,        frame,     nil]
-    [cons_plate, conv_comp, cons_plate]
-    [nil,        frame,     nil]
+shaped(academy:windgen_main) {
+    [nil,        academy:machine_frame,     nil]
+    [academy:constraint_plate, academy:energy_convert_component, academy:constraint_plate]
+    [nil,        academy:machine_frame,     nil]
 }
 
-shaped(windgen_fan) {
+shaped(academy:windgen_fan) {
     [nil,       plateIron, nil]
     [plateIron, iron_bars, plateIron]
     [nil,       plateIron, nil]
 }
 
-shaped(node0) { 
-    [nil,       calc_chip,    nil]
-    [ingotIron, frame,        ingotIron]
-    [crystal0,  reso_crystal, crystal0]
+shaped(academy:node_basic) { 
+    [nil,       academy:calc_chip,    nil]
+    [academy:constraint_ingot, academy:machine_frame,        academy:constraint_ingot]
+    [academy:crystal_low,  academy:reso_crystal, academy:crystal_low]
 }
 
-shaped(node1) {
-    [nil,       crystal1,  nil]
-    [calc_chip, conv_comp, calc_chip]
-    [nil,       node0,     nil]
+shaped(academy:node_standard) {
+    [nil,       academy:crystal_normal,  nil]
+    [academy:calc_chip, academy:energy_convert_component, academy:calc_chip]
+    [nil,       academy:node_basic,     nil]
 }
 
-shaped(node2) {
-    [crystal2]
-    [reso_comp]
-    [node1]
+shaped(academy:node_advanced) {
+    [academy:crystal_pure]
+    [academy:resonance_component]
+    [academy:node_standard]
 }
 
-shaped(matter_unit*4) {
-    [nil,        cons_plate, nil]
-    [cons_plate, glass,      cons_plate]
-    [nil,        cons_plate, nil]
+shaped(academy:matter_unit*4) {
+    [nil,        academy:constraint_plate, nil]
+    [academy:constraint_plate, glass,      academy:constraint_plate]
+    [nil,        academy:constraint_plate, nil]
 }
 
-shaped(ene_unit) {
-    [nil,        cons_plate, nil]
-    [cons_plate, crystal0,   cons_plate]
-    [nil,        data_chip,  nil]
+shaped(academy:energy_unit) {
+    [nil,        academy:constraint_plate, nil]
+    [academy:constraint_plate, academy:crystal_low,   academy:constraint_plate]
+    [nil,        academy:data_chip,  nil]
 }
 
-shaped(ene_unit*2) {
-    [nil,        cons_plate, nil]
-    [cons_plate, crystal1,   cons_plate]
-    [nil,        data_chip,  nil]
+shaped(academy:energy_unit*2) {
+    [nil,        academy:constraint_plate, nil]
+    [academy:constraint_plate, academy:crystal_normal,   academy:constraint_plate]
+    [nil,        academy:data_chip,  nil]
 }
 
-shaped(ene_unit*4) {
-    [nil,        cons_plate, nil]
-    [cons_plate, crystal2,   cons_plate]
-    [nil,        data_chip,  nil]
+shaped(academy:energy_unit*4) {
+    [nil,        academy:constraint_plate, nil]
+    [academy:constraint_plate, academy:crystal_pure,   academy:constraint_plate]
+    [nil,        academy:data_chip,  nil]
 }
 
-shaped(cons_plate*2) {
-    [cons_ingot, cons_ingot, cons_ingot]
+shaped(academy:constraint_plate*2) {
+    [academy:constraint_ingot, academy:constraint_ingot, academy:constraint_ingot]
 }
 
-shaped(terminal) {
-    [data_chip, glass_pane, data_chip]
-    [plateIron, brain_comp, plateIron]
-    [info_comp, blockRedstone, info_comp]
+shaped(academy:terminal_installer) {
+    [academy:data_chip, glass_pane, academy:data_chip]
+    [plateIron, academy:brain_component, plateIron]
+    [academy:info_component, redstone_block, academy:info_component]
 }
 
-shaped(fusor) {
-    [cons_plate, crystal0,    cons_plate]
-    [calc_chip,  frame,       calc_chip]
-    [cons_plate, matter_unit, cons_plate]
+shaped(academy:imag_fusor) {
+    [academy:constraint_plate, academy:crystal_low,    academy:constraint_plate]
+    [academy:calc_chip,  academy:machine_frame,       academy:calc_chip]
+    [academy:constraint_plate, academy:matter_unit, academy:constraint_plate]
 }
 
-shaped(fusor) {
-    [nil,       crystal0,    nil]
-    [calc_chip, frame,       conv_comp]
-    [nil,       matter_unit, nil]
+shaped(academy:imag_fusor) {
+    [nil,       academy:crystal_low,    nil]
+    [academy:calc_chip, academy:machine_frame,       academy:energy_convert_component]
+    [nil,       academy:matter_unit, nil]
 }
 
-shaped(fusor) {
-    [nil,       crystal0,    nil]
-    [conv_comp, frame,       calc_chip]
-    [nil,       matter_unit, nil]
+shaped(academy:imag_fusor) {
+    [nil,       academy:crystal_low,    nil]
+    [academy:energy_convert_component, academy:machine_frame,       academy:calc_chip]
+    [nil,       academy:matter_unit, nil]
 }
 
-shaped(metal_former) {
+shaped(academy:metal_former) {
     [nil,        shears,      nil]
-    [calc_chip,  frame,       calc_chip]
-    [cons_plate, matter_unit, cons_plate]
+    [academy:calc_chip,  academy:machine_frame,       academy:calc_chip]
+    [academy:constraint_plate, academy:matter_unit, academy:constraint_plate]
 }
 
-shaped(mat) {
-    [nil,          reso_crystal, nil]
-    [dustRedstone, frame,        dustRedstone]
-    [data_chip,    reso_crystal, data_chip]
+shaped(academy:matrix) {
+    [nil,          academy:reso_crystal, nil]
+    [redstone, academy:machine_frame,        redstone]
+    [academy:data_chip,    academy:reso_crystal, academy:data_chip]
 }
 
-shaped(mat_core#0) {
-    [nil,       crystal0,     nil]
-    [calc_chip, reso_crystal, data_chip]
-    [nil,       conv_comp,    nil]
+shaped(academy:mat_core#0) {
+    [nil,       academy:crystal_low,     nil]
+    [academy:calc_chip, academy:reso_crystal, academy:data_chip]
+    [nil,       academy:energy_convert_component,    nil]
 }
 
-shaped(mat_core#1) {
-    [reso_crystal]
-    [crystal1]
-    [mat_core#0]
+shaped(academy:mat_core#1) {
+    [academy:reso_crystal]
+    [academy:crystal_normal]
+    [academy:mat_core#0]
 }
 
-shaped(mat_core#2) {
-    [dustGlowstone,dustGlowstone,dustGlowstone]
-    [reso_crystal, ender_pearl,  reso_crystal]
-    [nil,          mat_core#1,   nil]
+shaped(academy:mat_core#2) {
+    [glowstone_dust,glowstone_dust,glowstone_dust]
+    [academy:reso_crystal, ender_pearl,  academy:reso_crystal]
+    [nil,   academy:mat_core#1,   nil]
 }
 
-smelting(imagsil_ingot)[0.8] {
-    [imagsil_ore]
+smelting(academy:imag_silicon_ingot)[0.8] {
+    [academy:imagsil_ore]
 }
 
-smelting(cons_ingot)[0.7] {
-    [cons_ore]
+smelting(academy:constraint_ingot)[0.7] {
+    [academy:constraint_metal]
 }
 
-smelting(crystal0)[0.8] {
-    [crystal_ore]
+smelting(academy:crystal_low)[0.8] {
+    [academy:crystal_ore]
 }
 
-shaped(info_comp) {
-    [dustGlowstone]
-    [data_chip]
+shaped(academy:info_component) {
+    [glowstone_dust]
+    [academy:data_chip]
 }
 
-shaped(brain_comp) {
-    [nil,          nuggetGold, nil]
-    [dustRedstone, calc_chip,  dustRedstone]
-    [nil,          nuggetGold, nil]
+shaped(academy:brain_component) {
+    [nil,          gold_nugget, nil]
+    [redstone, academy:calc_chip,  redstone]
+    [nil,          gold_nugget, nil]
 }
 
-shaped(reso_comp) {
-    [cons_plate, reso_crystal, cons_plate]
-    [nil,        dustRedstone, nil]
+shaped(academy:resonance_component) {
+    [academy:constraint_plate, academy:reso_crystal, academy:constraint_plate]
+    [nil,        redstone, nil]
 }
 
-shaped(conv_comp) {
-    [calc_chip]
-    [ene_unit]
-    [reso_crystal]
+shaped(academy:energy_convert_component) {
+    [academy:calc_chip]
+    [academy:energy_unit]
+    [academy:reso_crystal]
 }
 
-shaped(app_skill_tree) {
+shaped(academy:app_skill_tree) {
     [compass]
-    [data_chip]
-    [info_comp]
+    [academy:data_chip]
+    [academy:info_component]
 }
 
-shaped(app_media_player) {
+shaped(academy:app_media_player) {
     [noteblock, noteblock, noteblock]
-    [nil,       data_chip, nil]
-    [nil,       info_comp, nil]
+    [nil,       academy:data_chip, nil]
+    [nil,       academy:info_component, nil]
 }
 
-shaped(app_freq_transmitter) {
-    [reso_comp]
-    [data_chip]
-    [info_comp]
+shaped(academy:app_freq_transmitter) {
+    [academy:resonance_component]
+    [academy:data_chip]
+    [academy:info_component]
 }
 
-shaped(mag_hook*3) {
+shaped(academy:mag_hook*3) {
     [nil,       plateIron, nil]
     [plateIron, plateIron, plateIron]
     [nil,       plateIron, nil]
 }
 
-shaped(dev_portable) {
-    [data_chip,  glass_pane, calc_chip]
-    [brain_comp, info_comp,  conv_comp]
-    [cons_plate, crystal0,   cons_plate]
+shaped(academy:developer_portable) {
+    [academy:data_chip,  glass_pane, academy:calc_chip]
+    [academy:brain_component, academy:info_component,  academy:energy_convert_component]
+    [academy:constraint_plate, academy:crystal_low,   academy:constraint_plate]
 }
 
-shapeless(silbarn){
-	[si_piece,si_piece]
+shapeless(academy:silbarn){
+	[academy:imag_silicon_piece,academy:imag_silicon_piece]
 }
 
-shaped(dev_normal) {
-    [nil,        dev_portable, nil]
-    [mat_core#0, bed,          piston]
-    [crystal1,   frame,        dustRedstone]
+shaped(academy:dev_normal) {
+    [nil,        academy:developer_portable, nil]
+    [academy:mat_core#0, bed,          piston]
+    [academy:crystal_normal,   academy:machine_frame,        redstone]
 }
 
-shaped(dev_normal) {
-    [brain_comp, info_comp, conv_comp]
-    [mat_core#0, bed,       piston]
-    [crystal1,   frame,     dustRedstone]
+shaped(academy:dev_normal) {
+    [academy:brain_component, academy:info_component, academy:energy_convert_component]
+    [academy:mat_core#0, bed,       piston]
+    [academy:crystal_normal,   academy:machine_frame,     redstone]
 }
 
-shaped(dev_advanced) {
-    [cons_plate, cons_plate, cons_plate]
-    [glowstone,  dev_normal, glowstone]
-    [node1,      crystal2,   reso_crystal]
+shaped(academy:dev_advanced) {
+    [academy:constraint_plate, academy:constraint_plate, academy:constraint_plate]
+    [glowstone,  academy:dev_normal, glowstone]
+    [academy:node_standard,      academy:crystal_pure,   academy:reso_crystal]
 }
 
-shapeless(wafer) {
-    [imagsil_ingot]
+shaped(academy:ability_interferer) {
+    [nil, academy:energy_convert_component, nil]
+    [academy:brain_component,  academy:machine_frame, noteblock]
+    [nil,      academy:calc_chip,   nil]
 }
 
-shapeless(tutorial) {
-	[book, crystal0]
+shapeless(academy:wafer) {
+    [academy:imag_silicon_ingot]
 }
 
-shaped(magnetic_coil) {
-    [cons_plate, reso_crystal, cons_plate]
-    [cons_plate, reso_crystal, cons_plate]
+shapeless(academy:tutorial) {
+	[book, academy:crystal_low]
+}
+
+shaped(academy:magnetic_coil) {
+    [academy:constraint_plate, academy:reso_crystal, academy:constraint_plate]
+    [academy:constraint_plate, academy:reso_crystal, academy:constraint_plate]
     [plateIron , diamond     , plateIron ]
 }

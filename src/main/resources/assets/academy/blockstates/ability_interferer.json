@@ -1,0 +1,1 @@
+{"defaults":{"model":"cube_all","textures":{"all":"academy:blocks/ability_interf_off"}},"forge_marker":1,"variants":{"inventory":[{}],"on":{"false":{},"true":{"textures":{"all":"academy:blocks/ability_interf_on"}}}},"__xconfgen":true}

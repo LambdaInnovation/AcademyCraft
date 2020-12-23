@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:cat_engine"
+    },
+    "title": {
+      "translate": "advancements.general.ac_overload"
+    },
+    "description": {
+      "translate": "advancements.general.ac_overload.desc"
+    }
+  },
+  "parent": "academy:ac_learning_skill",
+  "criteria":{
+    "ac_overload": {
+      "trigger": "academy:ac_overload"
+    }
+  }
+}

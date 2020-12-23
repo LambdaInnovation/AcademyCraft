@@ -1,0 +1,499 @@
+# AcademyCraft 語言檔案
+# 文件主要按內容分類和分節 (以需要和minecraft做交互的本地化名稱作爲例外).
+
+# 常規
+itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] 解析自定義資料配置檔案失敗。錯誤:
+
+# 物品名稱
+item.ac_crystal_low.name=低純度虛能水晶
+item.ac_crystal_normal.name=中純度虛能水晶
+item.ac_crystal_pure.name=高純度虛能水晶
+item.ac_constraint_ingot.name=束能金屬錠
+item.ac_constraint_plate.name=束能金屬板
+item.ac_imag_silicon_ingot.name=虛像矽錠
+item.ac_wafer.name=虛像矽晶圓
+item.ac_imag_silicon_piece.name=矽晶片
+item.ac_reso_crystal.name=諧振水晶
+
+item.ac_brain_component.name=腦波分析模組
+item.ac_info_component.name=資訊處理模組
+item.ac_reinforced_iron_plate.name=強化鐵板
+item.ac_resonance_component.name=共振模組
+item.ac_energy_convert_component.name=能量轉換模組
+item.ac_calc_chip.name=計算晶片
+item.ac_data_chip.name=數據晶片
+
+item.ac_matter_unit.name=物質單元
+item.ac_matter_unit_phase_liquid.name=虛相位液體單元
+item.ac_matter_unit_none.name=空單元
+item.ac_matrix_core.name=矩陣核心
+item.ac_mat_core_0.name=基礎矩陣核心
+item.ac_mat_core_1.name=改良矩陣核心
+item.ac_mat_core_2.name=高階矩陣核心
+item.ac_energy_unit.name=能量單元
+item.ac_windgen_fan.name=風力能量發生機 - 扇葉
+
+item.ac_coin.name=硬幣
+item.ac_silbarn.name=擴散性支援半導體
+item.ac_needle.name=鋼針
+item.ac_mag_hook.name=磁力鉤
+
+item.ac_terminal_installer.name=資料終端
+item.ac_apps.name=應用安裝器
+
+item.ac_developer_portable.name=便攜能力開發機
+item.ac_magnetic_coil.name=高壓磁增幅線圈
+item.ac_magnetic_coil.desc=超載開發機以重置個人現實
+item.ac_induction_factor.name=能力誘導因子
+item.ac_tutorial.name=御坂雲終端
+
+# 方塊名稱
+tile.ac_constraint_metal.name=束能金屬礦
+tile.ac_crystal_ore.name=虛能水晶礦
+tile.ac_imagsil_ore.name=虛像矽礦
+tile.ac_reso_ore.name=諧振水晶礦
+tile.ac_machine_frame.name=機械框架
+
+tile.ac_imag_phase.name=虛相位液體
+
+tile.ac_imag_fusor.name=虛能融合機
+tile.ac_matrix.name=無線虛能矩陣
+tile.ac_node_basic.name=基礎無線虛能節點
+tile.ac_node_standard.name=改良無線虛能節點
+tile.ac_node_advanced.name=高階無線虛能節點
+tile.ac_metal_former.name=金屬處理機
+tile.ac_solar_gen.name=太陽能能量發生機
+tile.ac_cat_engine.name=吐司貓
+tile.ac_phase_gen.name=虛相位能量發生機
+tile.ac_windgen_base.name=風力能量發生器 - 支架底座
+tile.ac_windgen_pillar.name=風力能量發生器 - 支架
+tile.ac_windgen_main.name=風力能量發生器 - 主機
+tile.ac_eu_output.name=能源橋 (IC2 EU輸出) 
+tile.ac_eu_input.name=能源橋 (IC2 EU輸入) 
+tile.ac_rf_output.name=能源橋 (CoFH RF輸出)
+tile.ac_rf_input.name=能源橋 (CoFH RF輸入)
+tile.ac_dev_normal.name=基礎能力開發機
+tile.ac_dev_advanced.name=高階能力開發機
+tile.ac_ability_interferer.name=能力干涉方塊
+
+# 資料終端
+ac.terminal.notinstalled=你沒有安裝資料終端.
+ac.terminal.alrdy_installed=你已經安裝過了資料終端.
+ac.terminal.key_hint=成功安裝資料終端。使用%s鍵來開/關資料終端界面。
+
+ac.gui.terminal.installing=安裝中...
+ac.gui.terminal.appcount=%d 應用
+
+ac.terminal.app_alrdy_installed=你已經安裝過了%s.
+ac.terminal.app_installed=成功安裝%s.
+
+# 應用
+ac.app.skill_tree.name=技能樹
+ac.app.knowledge_record.name=人生記錄
+ac.app.settings.name=設置
+ac.app.media_player.name=媒體播放器
+ac.app.tutorial.name=御坂雲終端
+
+ac.app.freq_transmitter.name=頻率變送器
+ac.app.freq_transmitter.s0_0=請右擊一個無線矩陣或節點以建立連線.
+ac.app.freq_transmitter.s1_0=按下"回車"以確認
+ac.app.freq_transmitter.s1_1=驗證中...
+ac.app.freq_transmitter.s2_0=右擊附近的無線節點以建立連線.單擊其他方塊以退出.
+ac.app.freq_transmitter.s3_0=右擊附近的無線能源接收對象或能源發生機以建立連線. 單擊其他方塊以退出.
+ac.app.freq_transmitter.st=操作超時.
+
+ac.app.freq_transmitter.e0=這個無線矩陣還未初始化.
+ac.app.freq_transmitter.e1=驗證失敗.
+ac.app.freq_transmitter.e2=連線失敗. 可能是由於矩陣已達到負載飽和或超出最大範圍.
+ac.app.freq_transmitter.e3=連線失敗. 可能是由於節點已達到負載飽和或超出最大範圍.
+ac.app.freq_transmitter.e4=操作取消.
+ac.app.freq_transmitter.e5=傳輸中...
+ac.app.freq_transmitter.e6=連線成功.
+
+## 設置App
+ac.settings.cat.generic=常規
+ac.settings.prop.attackPlayer=開啓PvP (玩家傷害)
+ac.settings.prop.destroyBlocks=開啓方塊破壞
+ac.settings.prop.headsOrTails=開啓猜硬幣
+ac.settings.prop.useMouseWheel=使用滾輪調整傳送距離
+
+ac.settings.cat.keys=鍵位
+ac.settings.prop.ability_activation=激活能力
+ac.settings.prop.edit_preset=設置技能預設
+ac.settings.prop.switch_preset=切換技能預設
+ac.settings.prop.open_data_terminal=開/關資料終端
+ac.settings.prop.debug_console=開/關調試資訊
+ac.settings.prop.ability_0=能力 #1
+ac.settings.prop.ability_1=能力 #2
+ac.settings.prop.ability_2=能力 #3
+ac.settings.prop.ability_3=能力 #4
+
+ac.settings.cat.misc=雜項
+ac.settings.prop.edit_ui=自定義UI
+
+## 媒體App
+## -> ac.app.media.*
+ac.media.acquired=你已安裝媒體  %s
+ac.media.haveone=你已經持有媒體  %s
+ac.media.notinstalled=你還沒有安裝媒體播放器App！
+
+### 媒體名稱
+ac.media.only_my_railgun.name=Only My Railgun
+ac.media.only_my_railgun.desc=《某科學的超電磁炮》 OP1
+ac.media.level5_judgelight.name=Level5 -Judgelight-
+ac.media.level5_judgelight.desc=《某科學的超電磁炮》 OP2
+ac.media.sisters_noise.name=Sister's Noise
+ac.media.sisters_noise.desc=《某科學的超電磁炮S》 OP1
+
+# 能力通用
+ac.ability.level0=無能力者(LV0)
+ac.ability.level1=低能力者(LV1)
+ac.ability.level2=異能力者(LV2)
+ac.ability.level3=強能力者(LV3)
+ac.ability.level4=大能力者(LV4)
+ac.ability.level5=超能力者(LV5)
+
+death.attack.ac_skill=%1$s 被 %2$s 使用 %3$s 擊殺了
+
+ac.activate_key.deactivate.desc=解除能力
+ac.activate_key.endspecial.desc=結束特殊技能模式
+ac.activate_key.endskill.desc=停止技能
+
+ac.gui.preset_edit.name=預設編輯
+ac.gui.preset_edit.tag=預設 #
+ac.gui.preset_edit.skill_remove=移除當前技能
+ac.gui.preset_edit.skill_select=選擇技能
+
+# 常規技能
+ac.ability.generic.brain_course.name=大腦訓練課程
+ac.ability.generic.brain_course_advanced.name=大腦訓練課程 (高階)
+ac.ability.generic.mind_course.name=思維修養課程
+
+ac.ability.generic.brain_course.desc=鍛鍊能力者的大腦，使其能力的有效持續時間延長。提高最大計算力1000點。
+ac.ability.generic.brain_course_advanced.desc=更深入有效的開發大腦的思維能力。提高最大計算力1000點，最大過載100點。
+ac.ability.generic.mind_course.desc=學習如何更好的放鬆自己的思想。計算力恢復速率提高20%%。
+
+## 電擊使
+ac.ability.electromaster.name=電擊使
+
+### 電擊使 技能
+ac.ability.electromaster.arc_gen.name=電弧激發
+ac.ability.electromaster.mag_manip.name=磁場控制
+ac.ability.electromaster.mine_detect.name=礦物探測
+ac.ability.electromaster.railgun.name=超電磁炮
+ac.ability.electromaster.mag_movement.name=電磁牽引
+ac.ability.electromaster.iron_sand.name=鐵砂操作
+ac.ability.electromaster.iron_sand.sword.name=鐵砂長劍
+ac.ability.electromaster.iron_sand.whip.name=鐵砂長鞭
+ac.ability.electromaster.iron_sand.storm.name=鐵砂風暴
+ac.ability.electromaster.iron_sand.cone.name=鐵椎
+ac.ability.electromaster.charging.name=電流回衝
+ac.ability.electromaster.body_intensify.name=生物電強化
+ac.ability.electromaster.thunder_clap.name=終極落雷
+ac.ability.electromaster.thunder_bolt.name=雷擊之槍
+
+ac.ability.electromaster.arc_gen.desc=激發出一道較微弱的電弧，會在落點處擴散來造成傷害，如果直擊到易燃方塊，可能會將其點燃。
+ac.ability.electromaster.mag_manip.desc=使用電磁力操縱並且移動世界中的可磁化物體，甚至將它們投擲出去殺傷敵人。
+ac.ability.electromaster.mine_detect.desc=閉上眼睛感受周圍的磁力線流動，可以讓你看到身旁珍惜礦物資源的痕跡。
+ac.ability.electromaster.railgun.desc=利用電磁誘導原理，將硬幣高速射出，在全力一擊的情況下有恐怖的破壞力。
+ac.ability.electromaster.mag_movement.desc=向外界的某個可磁化物體釋放電磁力，使自己的身體快速移動。
+ac.ability.electromaster.iron_sand.desc=通過分離和操縱身體周圍的鐵砂，創造出變化多端而又極其危險的攻擊效果。
+ac.ability.electromaster.charging.desc=對手持的物品或世界中的電力方塊進行充能。
+ac.ability.electromaster.body_intensify.desc=操縱自身生物電，在短時間內強化身體素質。
+ac.ability.electromaster.thunder_clap.desc=操縱大氣中的電磁場氛圍，催化出雷雲，並牽引其中的電力產生一次破壞性的落雷。
+ac.ability.electromaster.thunder_bolt.desc=生成海量的電力，將其約束成柱形發射.擊中實體後，猛烈的電流會爆發出去產生第二次傷害。
+
+## 傳送使
+ac.ability.teleporter.name=傳送使
+
+### 傳送使 技能
+ac.ability.teleporter.threatening_teleport.name=危險傳送
+ac.ability.teleporter.dim_folding_theorem.name=摺疊空間概論
+ac.ability.teleporter.penetrate_teleport.name=穿透傳送
+ac.ability.teleporter.mark_teleport.name=標記傳送
+ac.ability.teleporter.flesh_ripping.name=肌體撕裂
+ac.ability.teleporter.location_teleport.name=定位傳送
+ac.ability.teleporter.shift_tp.name=轉移傳送
+ac.ability.teleporter.space_fluct.name=空間波動
+ac.ability.teleporter.flashing.name=高速閃現
+
+ac.ability.teleporter.threatening_teleport.desc=將小質量的物品移動到自己附近的某個位置。有時候，只需要一小塊體內的碎片就可以對生物造成巨大傷害。
+ac.ability.teleporter.dim_folding_theorem.desc=通過傳送時不穩定的微弱空間摺疊現象來對自己的空間跳躍類攻擊進行一次概率性的空間分裂，來對敵人造成更高程度的傷害。
+ac.ability.teleporter.penetrate_teleport.desc=對於空間的奇妙感覺能讓你大致推演出前方障礙物的厚度，並穿過障礙物達到對面。
+ac.ability.teleporter.mark_teleport.desc=以肉眼確認一個實體，確認實體某個面為自己的傳送座標，並進行傳送。
+ac.ability.teleporter.flesh_ripping.desc=鎖定某個生物，將其身體部分血肉直接撕裂並傳送出體外，但是因為過於血腥的殺傷效果，可能在使用技能之後產生反胃。
+ac.ability.teleporter.location_teleport.desc=記憶下當前的座標，如有必要可發動超遠端範圍傳送來到該座標，可將較近距離的生物一起傳送，計算力消耗極大。
+ac.ability.teleporter.shift_tp.desc=將方塊運用座標移動的方式高速發射出去，因為其運動方式並非動能推動而是座標改變，所以並不會因為其速度與質量而影響破壞力。 
+ac.ability.teleporter.space_fluct.desc=利用空間的波動，將空間跳躍類攻擊的分裂性擴大，來造成更高的殺傷。
+ac.ability.teleporter.flashing.desc=遠超標記傳送機動性的新傳送方式，極高的傳送速度與速度的重置能讓你實現靈活的空中機動。
+ac.ability.teleporter.crithit=達成%fx暴擊！
+
+ac.gui.loctele.err_exp=經驗不足，無法跨維度傳送
+ac.gui.loctele.err_cp=CP不足，無法傳送
+
+## 原子崩壞
+ac.ability.meltdowner.name=原子崩壞
+
+### 原子崩壞 技能
+ac.ability.meltdowner.electron_bomb.name=電子光束
+ac.ability.meltdowner.rad_intensify.name=β射線強化
+ac.ability.meltdowner.ray_barrage.name=散射光束雨
+ac.ability.meltdowner.scatter_bomb.name=電子彈散射
+ac.ability.meltdowner.meltdowner.name=粒機波形炮
+ac.ability.meltdowner.light_shield.name=光盾
+ac.ability.meltdowner.jet_engine.name=突擊噴射
+ac.ability.meltdowner.mine_ray_basic.name=採集光束
+ac.ability.meltdowner.mine_ray_expert.name=採集光束精修
+ac.ability.meltdowner.mine_ray_luck.name=採集光束-時運
+ac.ability.meltdowner.electron_missile.name=巡航光束炮
+
+ac.ability.meltdowner.electron_bomb.desc=聚集少量電子形成球形，延遲極短時間後從光球中射出光束，若擊中物體將會對該物體造成破壞。 
+ac.ability.meltdowner.rad_intensify.desc=高速的電子射流中攜帶的β射線會損害被照射生物的身體機能，使其更加脆弱。
+ac.ability.meltdowner.ray_barrage.desc=雖然可以從掌心製造出多個電子彈進行攻擊，但是電子彈無法形成彈幕，難以應對全方位的飽和攻擊，因此你通過“擴散支援半導體”來應對能力無法大規模攻擊的缺點。
+ac.ability.meltdowner.scatter_bomb.desc=複數的操控電子團放射來進行攻擊，作為複數操控的代價，你無法精準的控制落點。
+ac.ability.meltdowner.meltdowner.desc=以雷擊之勢所放出的特殊電子線，可以將金屬像紙屑般吹散，厚實的牆壁溶解，連同障礙物與敵人一起貫穿。然而由於能力過於強大與不穩定，高出力的原子崩壞可能會傷害自己。
+ac.ability.meltdowner.light_shield.desc=將電子團橫截面擴大形成護盾，高速運動的電子將會摧毀來犯物質，並傷害任何近距離接觸自己的東西。    
+ac.ability.meltdowner.jet_engine.desc=將電子用類似火箭引擎噴射的原理激發出去，利用反作用力來產生極速的位移，過程中周身產生短暫的光盾保護自己。
+ac.ability.meltdowner.mine_ray_basic.desc=經過鍛鍊的電子射流，能夠在不毀滅瞄準物的情況下將其採集出來。
+ac.ability.meltdowner.mine_ray_expert.desc=持續的使用原子崩壞能力去參與挖礦與伐木等活動，讓你對如何使用破壞性的電子束收集素材有了自己獨特的理解，能夠更有效的對礦物進行採集。
+ac.ability.meltdowner.mine_ray_luck.desc=經過長久的鍛鍊，你已經可以以較高的機率將礦物中蘊含的礦物完美的採集出來。
+ac.ability.meltdowner.electron_missile.desc=為了能獨立形成足夠強度的彈幕攻擊，你開始產生製造大塊的電子團，但是每次只發射小部分進行攻擊，可惜穩定大塊電子團的時候你無法分辨敵我。
+
+## 向量操作
+ac.ability.vecmanip.name=向量操作
+
+### 向量操作 技能
+ac.ability.vecmanip.dir_shock.name=定向衝力
+ac.ability.vecmanip.ground_shock.name=踏擊導向
+ac.ability.vecmanip.vec_accel.name=向量加速
+ac.ability.vecmanip.vec_deviation.name=向量偏移
+ac.ability.vecmanip.dir_blast.name=集束衝擊
+ac.ability.vecmanip.storm_wing.name=風之翼
+ac.ability.vecmanip.blood_retro.name=血源逆行
+ac.ability.vecmanip.vec_reflection.name=向量反射
+ac.ability.vecmanip.plasma_cannon.name=電漿炮
+
+ac.ability.vecmanip.dir_shock.desc=將揮拳時產生的反作用力奪取併疊加到正前方的衝擊力上，使得拳擊有一定威力。
+ac.ability.vecmanip.ground_shock.desc=踐踏地面，將對地面產生的作用力收束並向前衝擊，接觸到活動的物體後會爆發將其擊飛。
+ac.ability.vecmanip.vec_accel.desc=操作向量使踩踏地面產生的力的方向全部調整為向前，使自身獲得極大的加速。
+ac.ability.vecmanip.vec_deviation.desc=使向你飛來的投射物失去飛行速度並墜落，並且抵消一定的近戰傷害。
+ac.ability.vecmanip.dir_blast.desc=將揮拳時產生的反作用力奪取並加倍疊加到向前的衝擊力上，使得拳頭具有極強的破壞性。直接擊打方塊會將其破壞。
+ac.ability.vecmanip.storm_wing.desc=操作空氣的向量，在背後展開四個微型龍捲風，並用它們產生的推進力高速飛行。在熟練度較低時會破壞周圍的方塊。
+ac.ability.vecmanip.blood_retro.desc=操作敵人的血液流向，使主動脈破裂並造成致死的傷害。
+ac.ability.vecmanip.vec_reflection.desc=將攻擊自己的危險向量向視線方向反轉，讓敵人自食其果。
+ac.ability.vecmanip.plasma_cannon.desc=操作極大範圍的空氣流動，將其壓縮混合，變成一枚巨大的電漿體，並向前投擲。
+
+# 指令
+ac.command.invalid=§c無效輸入，請再次嘗試.
+ac.command.successful=§2指令已執行.
+ac.command.notlearned=§6玩家還未學習任何能力.
+
+ac.command.knowledge.usage=/knowledge <command>|<help> [參數...]
+ac.command.knowledge.help=/knowledge help: 顯示幫助資訊.
+ac.command.knowledge.stat=/knowledge stat: 顯示玩家知識的統計資訊.
+ac.command.knowledge.clear=/knowledge clear: 清除任何知識資訊，從頭再來.
+ac.command.knowledge.getall=/knowledge getall: 立刻學習所有知識.
+ac.command.knowledge.list=/knowledge list: 列出所有可用知識.
+ac.command.knowledge.learn=/knowledge learn [知識名稱]: 學習指定的知識.
+ac.command.knowledge.unlearn=/knowledge unlearn [知識名稱]: 忘記指定的知識.
+ac.command.knowledge.stat2=知識已學習: %s
+ac.command.knowledge.stat3=知識已發現: %s
+ac.command.knowledge.notfound=名稱爲  %s 的知識不存在.
+ac.command.knowledge.all=所有知識: 
+ac.command.knowledge.discover=/knowledge discover [知識名稱]: 發現指定的知識.
+
+ac.command.aim.usage=/aim <command>|<help> [參數…]
+ac.command.aim.help=/aim help:顯示幫助資訊。
+ac.command.aim.cat=/aim cat [能力名稱]：改變指定玩家的能力或是顯示當前能力。
+ac.command.aim.catlist=/aim catlist:列出所有可用能力。
+ac.command.aim.learn=/aim learn <id>|<技能名稱>：無視所有要求學習指定技能。
+ac.command.aim.unlearn=/aim unlearn <id>|<技能名>：取消學習某個技能。
+ac.command.aim.learn_all=/aim learn_all:學習所有技能。
+ac.command.aim.reset=/aim reset:清空你的能力資訊。
+ac.command.aim.learned=/aim learned:顯示已學習的技能。
+ac.command.aim.skills=/aim skills:顯示玩家當前能力的所有技能。
+ac.command.aim.fullcp=/aim fullcp:將當前玩家CP恢復至滿。
+ac.command.aim.level=/aim level:設定當前玩家的能力等級。
+ac.command.aim.exp=/aim exp <id>|<技能名> [值]：設定或者修改某技能的經驗。
+ac.command.aim.cd_clear=/aim cd_clear:清除所有技能的冷卻。
+ac.command.aim.nocat=該能力不存在。使用/aim catlist以列出所有能力。
+ac.command.aim.cats=當前可用能力：
+ac.command.aim.curcat=玩家當前能力：%s
+ac.command.aim.nonecat=無能力
+ac.command.aim.noskill=該技能不存在。使用/aim skills以列出當前能力系的所有技能。
+ac.command.aim.learned.format=已習得技能：%s
+ac.command.aim.curexp=技能%s的當前經驗：%.0f%%.
+ac.command.aim.nocomm=該指令不存在。使用/aim help以列出當前可用的所有指令。
+ac.command.aim.notactive=/aim指令當前未被開啟。使用/aim cheats_on或/aim cheats_off來改變開啟狀態。
+ac.command.aim.warning=§c警告：使用/aim指令會破壞遊戲平衡並且影響你對mod內容的體驗。請謹慎使用！
+ac.command.aim.outofrange=§c輸入不合法：§f必須是%s和%s之間的一個值。
+ac.command.aim.invalidnum=§c非法數字：%s.
+ac.command.aim.maxout=/aim maxout:將當前等級陞級進度設定為100%%。
+ac.command.aim.nonecathint=你還未學習能力！
+
+ac.command.aimp.usage=/aimp <player name> <command>|<help> [參數…]
+ac.command.aimp.help=/aimp help: 顯示幫助資訊。
+ac.command.aimp.cat=/aimp <player name> cat [能力名稱]：改變指定玩家的能力或是顯示當前能力。
+ac.command.aimp.catlist=/aimp <player name> catlist:列出所有可用能力。
+ac.command.aimp.learn=/aimp <player name> learn <id>|<技能名稱>：無視所有要求學習指定技能。
+ac.command.aimp.unlearn=/aimp <player name> unlearn <id>|<技能名>：取消學習某個技能。
+ac.command.aimp.learn_all=/aimp <player name> learn_all: 學習所有技能。
+ac.command.aimp.reset=/aimp <player name> reset: 清空你的能力資訊。
+ac.command.aimp.learned=/aimp <player name> learned: 顯示已學習的技能。
+ac.command.aimp.skills=/aimp <player name> skills: 顯示玩家當前能力的所有技能。
+ac.command.aimp.fullcp=/aimp <player name> fullcp: 將當前玩家CP恢復至滿。
+ac.command.aimp.level=/aimp <player name> level: 設定當前玩家的能力等級。
+ac.command.aimp.exp=/aimp <player name> exp <id>|<技能名> [值]：設定或者修改某技能的經驗。
+ac.command.aimp.cd_clear=/aimp <player name> cd_clear: 清除所有技能的冷卻。
+ac.command.aimp.nocat=該能力不存在。使用/aimp catlist以列出所有能力。
+ac.command.aimp.cats=當前可用能力：
+ac.command.aimp.curcat=玩家當前能力：%s
+ac.command.aimp.nonecat=無能力
+ac.command.aimp.noskill=該技能不存在。使用/aimp <player name> skills以列出當前能力系的所有技能。
+ac.command.aimp.learned.format=已習得技能：%s
+ac.command.aimp.curexp=技能%s的當前經驗：%.0f%%.
+ac.command.aimp.nocomm=該指令不存在。使用/aimp help以列出當前可用的所有指令。
+ac.command.aimp.notactive=/aimp指令當前未被開啟。使用/aimp cheats_on或/aimp cheats_off來改變開啟狀態。
+ac.command.aimp.warning=§c警告：使用/aimp指令會破壞遊戲平衡並且影響你對mod內容的體驗。請謹慎使用！
+ac.command.aimp.outofrange=§c輸入不合法：§f必須是%s和%s之間的一個值。
+ac.command.aimp.maxout=/aimp <player name> maxout: 將當前等級陞級進度設定為100%%。
+ac.command.aimp.nonecathint=你還未學習能力！
+
+# 進度
+advancements.general.root=Academy Craft
+advancements.general.root.desc=一切的起點
+advancements.general.open_misaka_cloud=初次接觸
+advancements.general.open_misaka_cloud.desc=打開禦阪雲
+advancements.general.getting_phase=神秘而有力
+advancements.general.getting_phase.desc=獲取一個裝有虛相位液體的單元
+advancements.general.phase_generator=新能源
+advancements.general.phase_generator.desc=製造虛相位能源發生機
+advancements.general.ac_node=瑟瑟發抖的導線
+advancements.general.ac_node.desc=製造初級能源節點
+advancements.general.ac_matrix=WIFI全覆蓋
+advancements.general.ac_matrix.desc=製造矩陣
+advancements.general.terminal_installed=科技改變生活
+advancements.general.terminal_installed.desc=安裝數據終端
+advancements.general.getting_factor=無限的可能性
+advancements.general.getting_factor.desc=獲得任意一種能力誘導因數
+advancements.general.ac_developer=人類的能力是有極限的
+advancements.general.ac_developer.desc=製造可擕式能力開發機
+advancements.general.dev_category=超越人類
+advancements.general.dev_category.desc=開發能力
+advancements.general.ac_level_3=獨當一面
+advancements.general.ac_level_3.desc=陞級至level 3
+advancements.general.ac_level_5=你們一起上吧
+advancements.general.ac_level_5.desc=陞級至level 5
+advancements.general.convert_category=能力由我不由天
+advancements.general.convert_category.desc=轉換能力系
+advancements.general.ac_learning_skill=熟能生巧
+advancements.general.ac_learning_skill.desc=習得一個技能
+advancements.general.ac_milestone=你為什麼這麼熟練啊
+advancements.general.ac_milestone.desc=達到第一個技能的里程碑
+advancements.general.ac_exp_full=究竟做過多少次了啊
+advancements.general.ac_exp_full.desc=某個技能熟練度達到滿值
+advancements.general.ac_overload=超能力者也是有極限的
+advancements.general.ac_overload.desc=使用能力直到超載
+
+# UI通用
+ac.gui.common.pg_wireless.not_connected=未連線
+ac.gui.common.sep.info=資訊
+ac.gui.common.sep.wireless_info=無線網資訊
+ac.gui.common.sep.wireless_init=無線網初始化
+ac.gui.common.sep.wireless_noinit=無線網還未初始化。
+ac.gui.common.sep.change_pass=更改密碼
+ac.gui.common.hist.energy=能量
+ac.gui.common.hist.buffer=能量緩存
+ac.gui.common.hist.liquid=虛相液體
+ac.gui.common.hist.capacity=負載
+ac.gui.common.prop.range=傳輸範圍
+ac.gui.common.prop.owner=所有者
+ac.gui.common.prop.node_name=節點名
+ac.gui.common.prop.password=密碼
+ac.gui.common.prop.bandwidth=帶寬
+ac.gui.common.prop.ssid=SSID
+ac.gui.common.prop.gen_speed=發電速率
+ac.gui.common.prop.altitude=海拔
+
+# 技能樹
+ac.skill_tree.dev_developing=開發中...
+ac.skill_tree.dev_successful=開發成功。
+ac.skill_tree.dev_failed=開發失敗。
+ac.skill_tree.progress=進度
+ac.skill_tree.noenergy=機器能量不足。
+ac.skill_tree.condition_fail=開發技能所需條件沒有滿足。
+ac.skill_tree.learn_question=是否學習？ (預計消耗：%s IF)
+ac.skill_tree.level_question=要繼續嗎？
+ac.skill_tree.req=需求
+ac.skill_tree.skill_not_learned=技能未學習。
+ac.skill_tree.skill_exp=技能經驗：
+ac.skill_tree.uplevel=升級到 %s
+ac.skill_tree.anyskill=%d 級的任意技能
+ac.skill_tree.level_fail=必須先達到 %d 級才能學習該技能。
+
+ac.skill_tree.type_portable=便攜能力開發機
+ac.skill_tree.type_normal=普通能力開發機
+ac.skill_tree.type_advanced=高階能力開發機
+
+ac.skill_tree.console.init=Welcome to Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \n檢測到使用者 %s, 系統啟動中......
+ac.skill_tree.console.invalid_cat=\n嚴重錯誤：無法檢測使用者的能力資訊,啟動終止。\n
+ac.skill_tree.console.learn_hint=請使用 `learn` 指令來獲得能力。\n
+ac.skill_tree.console.override=\n警告：系統過載！檢測到來自外部的注入.....\n\n能力重置：使用 `reset` 指令來進行能力重置。當前能力等級必須至少為3並且攜帶能力誘導因子。\n
+ac.skill_tree.console.boot_failed=啟動失敗。\n
+ac.skill_tree.console.invalid_command=無效的命令。\n
+ac.skill_tree.console.progress=進度：%s%%
+ac.skill_tree.console.reset_begin=開始能力重置 ...
+ac.skill_tree.console.reset_succ=個人現實重置成功。\n
+ac.skill_tree.console.reset_fail=個人現實重置失敗。\n
+ac.skill_tree.console.reset_fail_dev=無法重置能力——必須使用高階能力開發機。\n
+ac.skill_tree.console.reset_fail_other=無法重置能力——當前能力等級低於3或未檢測到能力誘導因子。\n
+ac.skill_tree.console.dev_begin=開始能力開發......\n
+ac.skill_tree.console.dev_succ=開發成功。\n
+ac.skill_tree.console.dev_fail=開發失敗。\n
+
+# 虛相位能量發生機
+
+# 虛能融合機
+
+# 金屬處理機
+ac.gui.metal_former.mode.etch=蝕刻
+ac.gui.metal_former.mode.plate=衝壓
+ac.gui.metal_former.mode.incise=切割
+ac.gui.metal_former.mode.refine=洗練
+
+# 能力干擾方塊
+ac.gui.ability_interf.switch=開關
+ac.ability_interf.cantuse=你無法使用這個能力干擾方塊。
+
+# UI編輯界面
+ac.gui.uiedit.elements=控件
+
+ac.gui.uiedit.elm.cpbar=CP指示槽
+ac.gui.uiedit.elm.keyhint=操作提示
+ac.gui.uiedit.elm.notification=通知欄
+ac.gui.uiedit.elm.media=媒體播放器
+
+# 吐司貓
+ac.cat_engine.unlink=已經和節點斷開了連線喵~
+ac.cat_engine.notfound=並沒有在旁邊找到任何節點喵~
+ac.cat_engine.linked=連線到了名字爲%s的節點喵~
+
+# 教程項
+ac.gui.crafttype.shaped=有序合成
+ac.gui.crafttype.shapeless=無序合成
+ac.tutorial.misaka=御坂%d號
+ac.tutorial.update=雲終端更新
+ac.tutorial.crafting=合成: %s
+
+# 猜硬幣
+# 小駝峯邪教
+ac.headsOrTails.0=硬幣正面朝上
+ac.headsOrTails.1=硬幣反面朝上
+
+# 轉換器方塊
+ac.converter.desc_template=轉換%s到%s
+
+# About App
+ac.app.about.name=關於
+ac.about.donators_info=排名不分先後

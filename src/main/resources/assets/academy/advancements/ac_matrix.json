@@ -1,0 +1,20 @@
+{
+  "__xconfgen": true,
+  "display": {
+    "icon": {
+      "item": "academy:mat_core"
+    },
+    "title": {
+      "translate": "advancements.general.ac_matrix"
+    },
+    "description": {
+      "translate": "advancements.general.ac_matrix.desc"
+    }
+  },
+  "parent": "academy:ac_node",
+  "criteria":{
+    "ac_matrix": {
+      "trigger": "academy:ac_matrix"
+    }
+  }
+}

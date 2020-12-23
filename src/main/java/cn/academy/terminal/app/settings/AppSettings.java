@@ -1,27 +1,19 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal.app.settings;
 
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
-import cn.academy.terminal.registry.AppRegistration.RegApp;
-import cn.lambdalib.annoreg.core.Registrant;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.academy.terminal.RegApp;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 
 /**
  * @author WeAthFolD
  *
  */
-@Registrant
 public class AppSettings extends App {
 
-    @RegApp
+    @RegApp(priority = -1)
     public static AppSettings instance = new AppSettings();
     
     private AppSettings() {
@@ -30,6 +22,7 @@ public class AppSettings extends App {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public AppEnvironment createEnvironment() {
         return new AppEnvironment() {
             @Override

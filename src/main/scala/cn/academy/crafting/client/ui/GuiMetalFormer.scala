@@ -1,27 +1,28 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.core.Resources
+import cn.academy.Resources
+import cn.academy.block.container.ContainerMetalFormer
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
-import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.ScalaCGUI._
-import cn.lambdalib.cgui.gui.Widget
-import cn.lambdalib.cgui.gui.component.{DrawTexture, ProgressBar}
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib.util.helper.Color
-import cpw.mods.fml.relauncher.Side
+import cn.academy.block.tileentity.TileMetalFormer
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.Widget
+import cn.lambdalib2.cgui.component.{DrawTexture, ProgressBar}
+import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent}
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.util.Colors
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.Side
 
 object GuiMetalFormer {
   import MFNetDelegate._
 
-  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_metalformer")).getWidget("main")
+  private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_metalformer")).getWidget("main")
 
   def apply(container: ContainerMetalFormer) = {
     val tile = container.tile
@@ -39,13 +40,13 @@ object GuiMetalFormer {
         w.component[ProgressBar].progress = tile.getWorkProgress
       })
 
-      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, dir, Future.create[TileMetalFormer.Mode](updateModeTexture(_)))
+      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, dir, Future.create2[TileMetalFormer.Mode](updateModeTexture))
 
       invWidget.child("btn_left").listens[LeftClickEvent](handleAlt(-1))
       invWidget.child("btn_right").listens[LeftClickEvent](handleAlt(1))
 
       {
-        val option = new FontOption(10, FontAlign.CENTER, new Color(0xaaffffff))
+        val option = new FontOption(10, FontAlign.CENTER, Colors.fromHexColor(0xaaffffff))
         invWidget.child("icon_mode").listens((w: Widget, evt: FrameEvent) => if (evt.hovering) {
           TechUI.drawTextBox(tile.mode.toString, option, 6, -10)
         })
@@ -68,11 +69,10 @@ object GuiMetalFormer {
 
 }
 
-@Registrant
 private object MFNetDelegate {
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(ev: FMLInitializationEvent) = {
     NetworkS11n.addDirectInstance(MFNetDelegate)
   }
 

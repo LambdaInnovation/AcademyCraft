@@ -1,0 +1,498 @@
+﻿# AcademyCraft Russian Language file
+# This file is mainly categorized by use (except for those which needs to follow the rules of Minecraft).
+
+# Common
+itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] Failed to parse custom config data file. The error:
+
+# Item
+item.ac_crystal_low.name=Кристалл низкой имаг частоты
+item.ac_crystal_normal.name=Кристалл средней имаг частоты
+item.ac_crystal_pure.name=Кристалл высокой имаг частоты
+item.ac_constraint_ingot.name=Слиток ограниченого металла
+item.ac_constraint_plate.name=Пластина ограниченого металла
+item.ac_imag_silicon_ingot.name=Кремниевый имаг слиток
+item.ac_wafer.name=Кремниевая имаг вафля
+item.ac_imag_silicon_piece.name=Кусок имаг кремния
+item.ac_reso_crystal.name=Резонирующий кристалл
+
+item.ac_brain_component.name=Анализатор мозговых волн
+item.ac_info_component.name=Обработчик информации
+item.ac_reinforced_iron_plate.name=Укрепленная железная пластина
+item.ac_resonance_component.name=Резонатор
+item.ac_energy_convert_component.name=Преобразователь энергии
+item.ac_calc_chip.name=Вычислительный чип
+item.ac_data_chip.name=Чип данных
+
+item.ac_matter_unit.name=Материальная единица
+item.ac_matter_unit_phase_liquid.name=Жидкая имаг материальная единица
+item.ac_matter_unit_none.name=Пустая единица
+item.ac_matrix_core.name=Матричное ядро
+item.ac_mat_core_0.name=Базовоя матричное ядро
+item.ac_mat_core_1.name=Улучшеное матричное ядро
+item.ac_mat_core_2.name=Продвинутое матричное ядро
+item.ac_energy_unit.name=Энергетическая кдиницв
+item.ac_windgen_fan.name=Ротор ветрогенератора
+
+item.ac_coin.name=Монета
+item.ac_silbarn.name=Что-то кремниевое
+item.ac_needle.name=Игла
+item.ac_mag_hook.name=Магнитный крюк
+
+item.ac_terminal_installer.name=Терминал данных
+item.ac_apps.name=Установщик приложений
+
+item.ac_developer_portable.name=Портативный производитель
+item.ac_magnetic_coil.name=Магнитная катушка высокого напряжения
+item.ac_magnetic_coil.desc=Заряжает разработчика<br>Для того, чтобы переписать личную реальность
+item.ac_induction_factor.name=Коэфициент индукционной способности
+item.ac_tutorial.name=Терминал MisakaCloud
+
+# Block
+tile.ac_constraint_metal.name=Ограниченая металлическая руда
+tile.ac_crystal_ore.name=Имаг кристалическая руда
+tile.ac_imagsil_ore.name=Имаг кремниевая руда
+tile.ac_reso_ore.name=Резонирующая кристальная руда
+tile.ac_machine_frame.name=Машинный корпус
+
+tile.ac_imag_phase.name=Переходник в имаг жидкость
+
+tile.ac_imag_fusor.name=Имаг Термоблок
+tile.ac_matrix.name=Беспроводная Имаг Матрица
+tile.ac_node_basic.name=Базовая беспроводная имаг нода
+tile.ac_node_standard.name=Улучшеная беспроводная имаг нода
+tile.ac_node_advanced.name=Продвинутая беспроводная имаг нода
+tile.ac_metal_former.name=Металло формировщик
+tile.ac_solar_gen.name=Солнечный генератор
+tile.ac_cat_engine.name=Кот и Тост
+tile.ac_phase_gen.name=Фазовый генератор
+tile.ac_windgen_base.name=Основа столба ветрогенератора
+tile.ac_windgen_pillar.name=Столб ветрогенератора
+tile.ac_windgen_main.name=Ветрогенератор
+tile.ac_eu_output.name=Енергентический мост (IC2 EU Выходит)
+tile.ac_eu_input.name=Енергентический мост (IC2 EU Входит)
+tile.ac_rf_output.name=Енергентический мост (CoFH RF Выходит)
+tile.ac_rf_input.name=Енергентический мост (CoFH RF Входит)
+tile.ac_dev_normal.name=Разработчик нормальных способностей
+tile.ac_dev_advanced.name=Разработчик продвинутых способностей
+tile.ac_ability_interferer.name=Умение мешать (я сам хз)
+
+# Data Terminal
+ac.terminal.notinstalled=Вы еще не установили Терминал Данных.
+ac.terminal.alrdy_installed=Вы уже установили Терминал Данных.
+ac.terminal.key_hint=Терминал Данных успешно установлен. Используйте кнопку %s что-бы открыть/закрыть интерфейс
+ac.gui.terminal.installing= Установка...
+ac.gui.terminal.appcount=%d Приложений
+
+ac.terminal.app_alrdy_installed=Вы уже установили приложение %s.
+ac.terminal.app_installed=Вы успешно установили приложение %s.
+
+# Apps
+ac.app.skill_tree.name=Древо Умений
+ac.app.knowledge_record.name=Записыватель жизни
+ac.app.settings.name=Настройки
+ac.app.media_player.name=Медиа проигрыватель
+ac.app.tutorial.name=MisakaCloud
+ac.app.about.name=Информация
+
+ac.app.freq_transmitter.name=Передатчик частот
+ac.app.freq_transmitter.s0_0=Пожалуйста, щелкните правой кнопкой мыши на беспроводной матрице или узле, чтобы начать устанавливать связь с.
+ac.app.freq_transmitter.s1_0=Нажмите ENTER что-бы продолжить
+ac.app.freq_transmitter.s1_1=Авторизация...
+ac.app.freq_transmitter.s2_0=Щелкните правой кнопкой мыши на любом беспроводном узле поблизости, чтобы установить связь. Нажмите на любые другие блоки, чтобы выйти.
+ac.app.freq_transmitter.s3_0=Щелкните правой кнопкой мыши по любому беспроводному приемнику или генераторе поблизости, чтобы добавить ссылку. Нажмите на любые другие блоки, чтобы выйти.
+ac.app.freq_transmitter.st=Время действия вышло.
+
+ac.app.freq_transmitter.e0=Беспроводная матрица не инициализирована.
+ac.app.freq_transmitter.e1=Ошибка авторизации.
+ac.app.freq_transmitter.e2=Соеденение прервано. Возможно, матрица достигла своей емкости или сигнал находится вне диапазона.
+ac.app.freq_transmitter.e3=Соеденение прервано. Возможно, нода достигла своей емкости или сигнал находится вне диапазона.
+ac.app.freq_transmitter.e4=Действие отменено.
+ac.app.freq_transmitter.e5=Передача...
+ac.app.freq_transmitter.e6=Соеденение успешно.
+
+## Settings App
+ac.settings.cat.generic=Общие
+ac.settings.prop.attackPlayer=Включить PvP
+ac.settings.prop.destroyBlocks=Уничтожать блоки
+ac.settings.prop.headsOrTails=Играть в головы или хвосты (Автор нарк)
+ac.settings.prop.useMouseWheel=Колесо мыши регулирует расстояние телепортации
+#Use mouse wheel to adjust Penetrate Teleport distance
+
+ac.settings.cat.keys=Клавиши
+ac.settings.prop.ability_activation=Активировать способность
+ac.settings.prop.edit_preset=Редактировать пресет
+ac.settings.prop.switch_preset=Переключить пресет
+ac.settings.prop.open_data_terminal=Открыть Терминал Данных
+ac.settings.prop.ability_0=Способность #1
+ac.settings.prop.ability_1=Способность #2
+ac.settings.prop.ability_2=Способность #3
+ac.settings.prop.ability_3=Способность #4
+ac.settings.prop.debug_console=Дебаг Консоль
+
+ac.settings.cat.misc=Остальное
+ac.settings.prop.edit_ui=Кастомизировать Интерфейс
+
+## Media App
+## -> ac.app.media.*
+ac.media.acquired=Вы установили медиа-файл %s
+ac.media.haveone=Вы уже установили медиа-файл %s
+ac.media.notinstalled=Вы еще не установили Медиа Проигрователь.
+
+### Medias
+ac.media.only_my_railgun.name=only my railgun
+ac.media.only_my_railgun.desc=Toaru Kagaku no Railgun OP1
+ac.media.level5_judgelight.name=LEVEL5-judgelight-
+ac.media.level5_judgelight.desc=Toaru Kagaku no Railgun OP2
+ac.media.sisters_noise.name=sister's noise
+ac.media.sisters_noise.desc=Toaru Kagaku no Railgun S OP1
+
+# Ability Generic
+ac.ability.level0=Уровень 0
+ac.ability.level1=Уровень 1
+ac.ability.level2=Уровень 2
+ac.ability.level3=Уровень 3
+ac.ability.level4=Уровень 4
+ac.ability.level5=Уровень 5
+
+death.attack.ac_skill=%1$s был убит %2$s припомощи %3$s
+
+ac.activate_key.deactivate.desc=Деактивировать способность
+ac.activate_key.endspecial.desc=Завершить режим специальных навыков
+ac.activate_key.endskill.desc=Откатить умение
+
+ac.gui.preset_edit.name=Редактировать премет
+ac.gui.preset_edit.tag=Пресет #
+ac.gui.preset_edit.skill_remove=Удалить текущий
+ac.gui.preset_edit.skill_select=Выбрать умение
+
+## Generic Skills
+ac.ability.generic.brain_course.name=Мозговой курс
+ac.ability.generic.brain_course_advanced.name=Продвинутый курс мозга
+ac.ability.generic.mind_course.name=Курс разума (Внимания, может духа)
+ac.ability.generic.brain_course.desc=Uпройти тренировку для вашего мозга. Увеличивает Макс. CP на 1000.
+ac.ability.generic.brain_course_advanced.desc=Развивть мыслительные способности вашего мозга глубже. Увеличивает Макс. CP на 1000 и Макс. Перегрузку на 100.
+ac.ability.generic.mind_course.desc=Узнайте, как лучше расслабить свой мозг. Ускоряет восстановление CP на 20 %%.
+
+## Electromaster
+ac.ability.electromaster.name=Электромастер
+
+### EM Skills
+ac.ability.electromaster.arc_gen.name=Генерация дуги
+ac.ability.electromaster.mag_manip.name=Магнитные манипуляции
+ac.ability.electromaster.mine_detect.name=Обнаружение мин
+ac.ability.electromaster.railgun.name=Рейлган
+ac.ability.electromaster.mag_movement.name=Магнитное движение
+ac.ability.electromaster.iron_sand.name=Контрль железного песка
+ac.ability.electromaster.iron_sand.sword.name=Меч из железного песка
+ac.ability.electromaster.iron_sand.whip.name=Кнут из железного песка
+ac.ability.electromaster.iron_sand.storm.name=Буря из железного песка
+ac.ability.electromaster.iron_sand.cone.name=Конус из железного песка
+ac.ability.electromaster.charging.name=Текущая зарядка
+ac.ability.electromaster.body_intensify.name=Активизировать тело
+ac.ability.electromaster.thunder_clap.name=Удар грома
+ac.ability.electromaster.thunder_bolt.name=Молния
+
+ac.ability.electromaster.arc_gen.desc=Вызывает слабую электрическую дугу, которая наносит небольшой урон по области, которую она поражает. Если он непосредственно попадет на огнеопасный блок, у него будет шанс его зажечь.
+ac.ability.electromaster.mag_manip.desc=Управляйте и перемещайте намагничиваемые предметы с помощью магнитной силы, даже выбрасывайте их, чтобы повредить врагов.
+ac.ability.electromaster.mine_detect.desc=Закройте глаза и почувствуйте поток магнетизма, позволяющий увидеть намеки на драгоценные минеральные ресурсы вокруг вас.
+ac.ability.electromaster.railgun.desc=Стреляйте монетой на высокой скорости с помощью электромагнитной индукции. Причиняет разрушительный ущерб там, где она воздействует.
+ac.ability.electromaster.mag_movement.desc=Создайте сильное магнитное поле и притяните себя к какой-нибудь магнитной цели. Чрезвычайно полезен при движении или побеге.
+ac.ability.electromaster.iron_sand.desc=Отделите железо от песка и управляйте им, чтобы создать изменчивый и опасный эффект атаки.
+ac.ability.electromaster.charging.desc=Генерирует электрический ток для зарядки вещи в вашей руке или электрических блоков в мире.
+ac.ability.electromaster.body_intensify.desc=Точно настройте биоэлектричество, чтобы улучшить свои физические способности на короткое время.
+ac.ability.electromaster.thunder_clap.desc=Управляйте магнитным полем в атмосфере, создавая грозовые тучи, и направляйте электричество вниз, чтобы вызвать разрушительный удар молнии.
+ac.ability.electromaster.thunder_bolt.desc=Сжимает огромное количество электричества в мощный болт, взрываясь и повреждая что-либо в его области.
+
+## Teleporter
+ac.ability.teleporter.name=Телепортер
+
+### TP Skills
+ac.ability.teleporter.threatening_teleport.name=Угрожающий Телепорт
+ac.ability.teleporter.dim_folding_theorem.name=Размерная теорема складывания
+ac.ability.teleporter.penetrate_teleport.name=Проникающий телепорт
+ac.ability.teleporter.mark_teleport.name=Телепортация по метке
+ac.ability.teleporter.flesh_ripping.name=Разрывание плоти
+ac.ability.teleporter.location_teleport.name=Телепорт по локации
+ac.ability.teleporter.shift_tp.name=Телепортационный сдвиг
+ac.ability.teleporter.space_fluct.name=Колебания пространства
+ac.ability.teleporter.flashing.name=Мигание
+
+ac.ability.teleporter.threatening_teleport.desc=Телепортируйте предметы куда-то вокруг вас. Иногда даже маленький фрагмент способен убить врага.
+ac.ability.teleporter.dim_folding_theorem.desc=Увеличьте свой урон против врагов, создавая крошечный феномен складывания пространства.
+ac.ability.teleporter.penetrate_teleport.desc=Определите толщину препятствия перед вами и телепортируйтесь прямо через него.
+ac.ability.teleporter.mark_teleport.desc=Отмечает, куда вы смотрите как пункт назначения, и телепортирует вас туда.
+ac.ability.teleporter.flesh_ripping.desc=Разорвите внутри вашего врага и нанесите кровавый урон. Чрезмерно кровавый эффект может вызвать у вас дискомфорт. 
+ac.ability.teleporter.location_teleport.desc=Запомните ваше текущее местоположение и телепортируйтесь обратно из любого места, которое будет дальше.
+ac.ability.teleporter.shift_tp.desc=Телепортируйте блок по кординатной прямой. На пуьи блок повредит сущность 
+ac.ability.teleporter.space_fluct.desc=Усильте свою способность складывать пространство, чтобы наносить более опасный критический урон.
+ac.ability.teleporter.flashing.desc=Используйте несколько телепортаций за короткое время, чтобы маневрировать по воздуху.
+ac.ability.teleporter.crithit=%fx критический удар!
+
+ac.gui.loctele.err_exp=Слишком мало опыта, немогу пройти измерение
+ac.gui.loctele.err_cp=CP недостаточно, немогу телепортироватся
+
+## Meltdowner
+ac.ability.meltdowner.name=Плавитель
+
+### MD Skills
+ac.ability.meltdowner.electron_bomb.name=Бомьа из электронов
+ac.ability.meltdowner.rad_intensify.name=β Радиационная интенсивность
+ac.ability.meltdowner.ray_barrage.name=Спектр лучей
+ac.ability.meltdowner.scatter_bomb.name=Касетные бомбы
+ac.ability.meltdowner.meltdowner.name=Плавитель
+ac.ability.meltdowner.light_shield.name=Молниеносный щит
+ac.ability.meltdowner.jet_engine.name=Реактивный двигатель
+ac.ability.meltdowner.mine_ray_basic.name=Базовый копательный луч
+ac.ability.meltdowner.mine_ray_expert.name=Экспертный копательный луч
+ac.ability.meltdowner.mine_ray_luck.name=Везучий копательный луч
+ac.ability.meltdowner.electron_missile.name=Заряд электронов
+
+ac.ability.meltdowner.electron_bomb.desc=Соберите небольшое количество электронов, чтобы создать угрожающий луч.
+ac.ability.meltdowner.rad_intensify.desc=Из-за излучения высокой интенсивности цель, пораженная лучом, вдвойне уязвима для атак в течение нескольких секунд.. 
+ac.ability.meltdowner.ray_barrage.desc=SВыстрелите своим высокоэнергетическим лучом в Силиконовый сарай (сам хз), чтобы рассеять его в лучевой барьер, который разрушает все перед вами. 
+ac.ability.meltdowner.scatter_bomb.desc=Манипулируйте более чем одной групой электронов для атаки. В результате вы не можете точно контролировать точку удара. 
+ac.ability.meltdowner.meltdowner.desc=Экстремальный высокоэнергетический электронный пучок, который расплавляет стены и металлы. 
+ac.ability.meltdowner.light_shield.desc=Формирует электроны в щит. Быстро движущиеся электроны уничтожат все, что вас атакует, и повредят все, что вас коснется.    
+ac.ability.meltdowner.jet_engine.desc=Используйте движущую силу электронов, запускайте себя в воздух. Создаст легкий щит, чтобы защитить вас в полете.
+ac.ability.meltdowner.mine_ray_basic.desc=После долгой практики вы можете сделать свой электронный луч пригодным для сбора полезных ископаемых, не разрушая их.
+ac.ability.meltdowner.mine_ray_expert.desc=Понимая, как лучше контролировать интенсивность электронов, теперь вы можете более эффективно собирать минеральные ресурсы.
+ac.ability.meltdowner.mine_ray_luck.desc=После долгой практики вы можете практически полностью собрать полезные ресурсы в руде..
+ac.ability.meltdowner.electron_missile.desc=Соберите ОГРОМНОЕ количество электронов в облаке и используйте некоторые из них для атаки каждый раз.
+
+## Vector Manipulation
+ac.ability.vecmanip.name=Векторные манипуляции
+
+### VM skills
+ac.ability.vecmanip.dir_shock.name=Направленый шок
+ac.ability.vecmanip.ground_shock.name=Шок по земле
+ac.ability.vecmanip.vec_accel.name=Векторная прокрутка
+ac.ability.vecmanip.vec_deviation.name=Вектор отклонение
+ac.ability.vecmanip.dir_blast.name=Направленная взрывная волна
+ac.ability.vecmanip.storm_wing.name=Крылья шторма
+ac.ability.vecmanip.blood_retro.name=Кровавый град
+ac.ability.vecmanip.vec_reflection.name=Векторная реакция
+ac.ability.vecmanip.plasma_cannon.name=Плазменная пушка
+
+ac.ability.vecmanip.dir_shock.desc=Захватите противодействующую силу при ударе по объекту и перенаправьте его на сам объект, делая удар более мощным.
+ac.ability.vecmanip.ground_shock.desc=Нанесите мощный удар по земле и направьте его вперед, который разбивает землю и запускает врагов в воздух.
+ac.ability.vecmanip.vec_accel.desc=Увеличьте силу прыжка на мгновение, чтобы ускорить себя.
+ac.ability.vecmanip.vec_deviation.desc=Отменяет скорость снарядов, летящих к вам, и отменяет часть боевого урона.
+ac.ability.vecmanip.dir_blast.desc=Утройте силу удара в объект, делая его чрезвычайно разрушительным. Будет разбивать блоки на области, которую он поражает.
+ac.ability.vecmanip.storm_wing.desc=Управляйте скоростью воздуха, чтобы сформировать четыре микро-вихря на вашей спине, и летите на высокой скорости, используя силы, которые они генерируют. Будут разбивать блоки поблизости, если неопытный.
+ac.ability.vecmanip.blood_retro.desc=Размешайте кровоток органических врагов, чтобы их сосуд лопнул и умер от сильной боли.
+ac.ability.vecmanip.vec_reflection.desc=Отражает опасные входящие атаки в направлении вашей прямой видимости и заставляет вашего противника выдержать это.
+ac.ability.vecmanip.plasma_cannon.desc=Управляйте большой областью воздушного потока с чрезвычайной точностью, чтобы сформировать плазменное тело. Выбросьте его, чтобы вызвать катастрофический взрыв.
+
+# Command
+ac.command.invalid=§cInvalid input, please try again.
+ac.command.successful=§2Command sucessfully performed.
+ac.command.notlearned=§6The player has not learned any ability yet.
+
+ac.command.knowledge.usage=/knowledge <command>|<help> [parameters...]
+ac.command.knowledge.help=/knowledge help: Display the help message.
+ac.command.knowledge.stat=/knowledge stat: Show statistics info of player ac.knowledge.
+ac.command.knowledge.clear=/knowledge clear: Clear all knowledge info and start over again.
+ac.command.knowledge.getall=/knowledge getall: Learn all knowledges right now.
+ac.command.knowledge.list=/knowledge list: List all available knowledges.
+ac.command.knowledge.learn=/knowledge learn [knowledge_name]: Learn some ac.knowledge. 
+ac.command.knowledge.unlearn=/knowledge unlearn [knowledge_name]: Unlearn some ac.knowledge.
+ac.command.knowledge.stat2=Knowledge learned: %s
+ac.command.knowledge.stat3=Knowledge discovered: %s
+ac.command.knowledge.notfound=Knowledge with name %s doesn't exist.
+ac.command.knowledge.all=All knowledges:
+ac.command.knowledge.discover=/knowledge discover [knowledge_name]: Discover a specific ac.knowledge.
+
+ac.command.aim.usage=/aim <command>|<help> [parameters...]
+ac.command.aim.help=/aim help: Display the help message.
+ac.command.aim.cat=/aim cat [catName]: Change the specified player's categories or display the current category.
+ac.command.aim.catlist=/aim catlist: List all available categories' names.
+ac.command.aim.learn=/aim learn <id>|<skillName>: Learn the specified skill, regardless of its learning condition requirements.
+ac.command.aim.unlearn=/aim unlearn <id>|<skillName>: Unlearn the specified skill.
+ac.command.aim.learn_all=/aim learn_all: Learn all the skills.
+ac.command.aim.reset=/aim reset: Clear your ability information.
+ac.command.aim.learned=/aim learned: Display all currently learned skills.
+ac.command.aim.skills=/aim skills: Display all skills in player's current category.
+ac.command.aim.fullcp=/aim fullcp: Restore full cp of the player.
+ac.command.aim.level=/aim level: Set the player's ability level.
+ac.command.aim.exp=/aim exp <id>|<skillName> [exp]: Set or view the skill's experience level.
+ac.command.aim.cd_clear=/aim cd_clear: Clear all skill cooldown.
+ac.command.aim.nocat=Specified category not found. Use /aim catlist to list all categories.
+ac.command.aim.cats=Currently available categories: 
+ac.command.aim.curcat=Player current category: %s
+ac.command.aim.nonecat=No ability
+ac.command.aim.noskill=No such skill was found. Use /aim skills to list all skills in current category.
+ac.command.aim.learned.format=Learned skills: %s
+ac.command.aim.curexp=Skill %s's current exp: %.0f%%.
+ac.command.aim.notactive=The /aim command is currently inactive. Use /aim cheats_on or /aim cheats_off to change the active state.
+ac.command.aim.warning=§cWARNING: Using /aim command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
+ac.command.aim.outofrange=§cInput out of range: §fMust be a value between %s and %s.
+ac.command.aim.invalidnum=§cInvalid number: %s.
+ac.command.aim.maxout=Set current level's upgrade progress to 100%%.
+ac.command.aim.nocomm=No such command was found. Use /aim help to list all commands available.
+ac.command.aim.nonecathint=Ты еще не выучил никакой способности!
+
+ac.command.aimp.usage=/aimp <player name> <command>|<help> [parameters...]
+ac.command.aimp.help=/aimp help: Display the help message.
+ac.command.aimp.cat=/aimp <player name> cat [catName]: Change the specified player's categories or display the current category.
+ac.command.aimp.catlist=/aimp catlist: List all available categories' names.
+ac.command.aimp.learn=/aimp <player name> learn <id>|<skillName>: Learn the specified skill, regardless of its learning condition requirements.
+ac.command.aimp.unlearn=/aimp <player name> unlearn <id>|<skillName>: Unlearn the specified skill.
+ac.command.aimp.learn_all=/aimp <player name> learn_all: Learn all the skills.
+ac.command.aimp.reset=/aimp <player name> reset: Clear your ability information.
+ac.command.aimp.learned=/aimp <player name> learned: Display all currently learned skills.
+ac.command.aimp.skills=/aimp <player name> skills: Display all skills in player's current category.
+ac.command.aimp.fullcp=/aimp <player name> fullcp: Restore full cp of the player.
+ac.command.aimp.level=/aimp <player name> level: Set the player's ability level.
+ac.command.aimp.exp=/aimp <player name> exp <id>|<skillName> [exp]: Set or view the skill's experience level.
+ac.command.aimp.cd_clear=/aimp <player name> cd_clear: Clear all skill cooldown.
+ac.command.aimp.nocat=Specified category not found. Use /aimp catlist to list all categories.
+ac.command.aimp.cats=Возможные сейчас категории: 
+ac.command.aimp.curcat=Категория игрока: %s
+ac.command.aimp.nonecat=Нет способности
+ac.command.aimp.noskill=No such skill was found. Use /aimp <player name> skills to list all skills in current category.
+ac.command.aimp.learned.format=Выучено умение: %s
+ac.command.aimp.curexp=Skill %s's опыта сейчас: %.0f%%.
+ac.command.aimp.notactive=The /aimp command is currently inactive. Use /aimp cheats_on or /aimp cheats_off to change the active state.
+ac.command.aimp.warning=§cWARNING: Using /aimp command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
+ac.command.aimp.outofrange=§cЗа доступным радиусом: §fДолжно быть значение между %s и %s.
+ac.command.aimp.maxout=/aimp <player name> maxout:Set current level's upgrade progress to 100%%.
+ac.command.aimp.nocomm=No such command was found. Use /aimp help to list all commands available.
+ac.command.aimp.nonecathint=Ты еще не выучил никакой способности!
+
+# Advancement
+advancements.general.root=Academy Craft
+advancements.general.root.desc=Начало всего
+advancements.general.open_misaka_cloud=Первый контак
+advancements.general.open_misaka_cloud.desc=Открыть Misaka Cloud
+advancements.general.getting_phase=Мистический и мощный
+advancements.general.getting_phase.desc=Получить капсулу с жидким Имагом
+advancements.general.phase_generator=Новая энергия
+advancements.general.phase_generator.desc=Сделать фазовый генератор
+advancements.general.ac_node=Больше никаких проводов!
+advancements.general.ac_node.desc=Сделать базовую беспроводную имаг ноду
+advancements.general.ac_matrix=WIFI доступен тут
+advancements.general.ac_matrix.desc=Сделать матрицу
+advancements.general.terminal_installed=Технологии изменяют жизнь
+advancements.general.terminal_installed.desc=Установить информационный терминал
+advancements.general.getting_factor=Бесконечные возможности
+advancements.general.getting_factor.desc=Получить фактор индукции
+advancements.general.ac_developer=Лимит для людей
+advancements.general.ac_developer.desc=Сделать портативный производчик способностей
+advancements.general.dev_category=Над человеком
+advancements.general.dev_category.desc=Сделать способнсть
+advancements.general.ac_level_3=На своих двух
+advancements.general.ac_level_3.desc=Улучшиться до 3 уровня
+advancements.general.ac_level_5=Один в поле воин
+advancements.general.ac_level_5.desc=Улучишться до 5 уровня
+advancements.general.convert_category=Больше никаких случайностей
+advancements.general.convert_category.desc=Изменить свою категорию
+advancements.general.ac_learning_skill=Практика делает идеальным
+advancements.general.ac_learning_skill.desc=Выучить любое умение
+advancements.general.ac_milestone=Улучшить модуль
+advancements.general.ac_milestone.desc=Достигните рубежа первого навыка
+advancements.general.ac_exp_full=Сколько раз ты это сделал?
+advancements.general.ac_exp_full.desc=Получи весь опыт на умении
+advancements.general.ac_overload=Тут досих пор лимит на ESPов
+advancements.general.ac_overload.desc=Используй свое умение пока оно не перегрузится
+
+# UI Commons
+ac.gui.common.pg_wireless.not_connected=Не подключено
+ac.gui.common.sep.info=Информация
+ac.gui.common.sep.wireless_info=Беспроводная информация
+ac.gui.common.sep.wireless_init=Инициализация беспроводной сети
+ac.gui.common.sep.wireless_noinit=Беспроводная сеть не инициализирована
+ac.gui.common.sep.change_pass=Измениит пароль
+ac.gui.common.hist.energy=ЭНЕРГИЯ
+ac.gui.common.hist.buffer=ЗАПАС
+ac.gui.common.hist.liquid=ЖИДКОСТЬ
+ac.gui.common.hist.capacity=ВМЕСТИМОСТЬ
+ac.gui.common.prop.range=Длинна транспортировки
+ac.gui.common.prop.owner=Владелец
+ac.gui.common.prop.node_name=Имя ноды
+ac.gui.common.prop.password=Пароль
+ac.gui.common.prop.bandwidth=Пропускная способность
+ac.gui.common.prop.ssid=SSID
+ac.gui.common.prop.gen_speed=Скорость генерации
+ac.gui.common.prop.altitude=Высота
+
+# Skill Tree
+ac.skill_tree.dev_successful=Производство успешно.
+ac.skill_tree.dev_failed=Производство провалено.
+ac.skill_tree.progress=Прогрес...
+ac.skill_tree.noenergy=Недостаточно энергии.
+ac.skill_tree.condition_fail=Состояние развития не соблюдено.
+ac.skill_tree.learn_question=Выучить? (Потребление Estm.：%s ЕСЛИ)
+ac.skill_tree.level_question=Продолжить?
+ac.skill_tree.req=Нужно.
+ac.skill_tree.skill_not_learned=Умение не выучено.
+ac.skill_tree.skill_exp=Опыт умения:
+ac.skill_tree.uplevel=Улучшить до %s
+ac.skill_tree.anyskill=Любое умение выучено до уровня: %d
+ac.skill_tree.level_fail=Сначала вам надо получить %d уровень.
+
+ac.skill_tree.type_portable=Портативный производитель
+ac.skill_tree.type_normal=Обычный производитель
+ac.skill_tree.type_advanced=Продвинутый производитель
+
+ac.skill_tree.console.init=Добро пожаловать в Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \nПользователь %s обнаружен, Запуск системы......
+ac.skill_tree.console.invalid_cat=\nFATAL: Категория пользовательских возможностей неверна, запуск отменен.\n
+ac.skill_tree.console.learn_hint=Наберите `learn` чтобы приобрести новую категорию.\n
+ac.skill_tree.console.override=\nWARNING: Переопределение системы! Обнаруженое наружное вторжение.....\n\nСБРАСЫВАНИЕ СПОСОБНОСТЕЙ: Используйте команду `reset` чтобы сбросить китегорию. \nМинимальный уровень способностей:3, и индукционный фактор должен быть в инвентаре.\n
+ac.skill_tree.console.boot_failed=Запуск провелен.\n
+ac.skill_tree.console.invalid_command=Неверная команда.\n
+ac.skill_tree.console.progress=Прогрес: %s%%
+ac.skill_tree.console.reset_begin=Начат сброс категории...
+ac.skill_tree.console.reset_succ=Успешный сброс личной реальности.\n
+ac.skill_tree.console.reset_fail=Сброс личной реальности провален.\n
+ac.skill_tree.console.reset_fail_dev=Неможу сбросить возможности -- Надо использувать продвинутый производитель.\n
+ac.skill_tree.console.reset_fail_other=Неможем сбросить способности -- Уровень ниже 3, или индукционный фактор не обнаружен.\n
+ac.skill_tree.console.dev_begin=начало симуляции......\n
+ac.skill_tree.console.dev_succ=Производство успешно.\n
+ac.skill_tree.console.dev_fail=Производство провалено.\n
+
+# Phase Generator
+
+# Imag Fusor
+
+# Metal Former
+ac.gui.metal_former.mode.etch=Гравировка
+ac.gui.metal_former.mode.plate=Дробление пластин
+ac.gui.metal_former.mode.incise=Вырезка
+ac.gui.metal_former.mode.refine=Очистка
+
+# Ability interference block
+ac.gui.ability_interf.switch=Переключить
+ac.ability_interf.cantuse=Вы не можете использовать этот блок помех.
+
+# UI Editing
+ac.gui.uiedit.elements=Элементы
+
+ac.gui.uiedit.elm.cpbar=Индикатор CP
+ac.gui.uiedit.elm.keyhint=Контроль подсказок
+ac.gui.uiedit.elm.notification=Уведомления
+ac.gui.uiedit.elm.media=Медиа проигрыватель
+
+# Cat Engine
+ac.cat_engine.unlink=Отключен от ноды meow~
+ac.cat_engine.notfound=Поблизости не найдена нода meow~
+ac.cat_engine.linked=Подключен к ноду подназванием %s meow~
+
+# Tutorials
+ac.gui.crafttype.shaped=Shaped Crafting
+ac.gui.crafttype.shapeless=Shapeless Crafting
+
+ac.tutorial.crafting=Crafting: %s
+ac.tutorial.misaka=Misaka Не.%d
+ac.tutorial.update=Cloud Terminal обновлен
+
+# Heads Or Tails
+ac.headsOrTails.0=Результат ХВОСТЫ!
+ac.headsOrTails.1=Результат ГОЛОВЫ!
+
+# Converter Block
+ac.converter.desc_template=Конвертирует %s в %s
+ac.skill_tree.dev_developing=Производим...
+
+# About App
+ac.about.donators_info=In no particular order\nThe list will be updated once a version

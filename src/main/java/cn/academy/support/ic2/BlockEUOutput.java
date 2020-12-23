@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.ic2;
 
 import cn.academy.support.BlockConverterBase;
@@ -17,7 +11,7 @@ import net.minecraft.world.World;
 public class BlockEUOutput extends BlockConverterBase {
 
     public BlockEUOutput() {
-        super("eu_output", "IF", "EU", TileEUOutput.class);
+        super( "IF", "EU", TileEUOutput.class);
     }
     
     @Override
