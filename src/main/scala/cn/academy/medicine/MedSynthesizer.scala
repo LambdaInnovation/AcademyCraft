@@ -1,27 +1,43 @@
 package cn.academy.medicine
 
+import cn.academy.Resources
+import cn.academy.block.block.ACBlockContainer
+import cn.academy.block.container.TechUIContainer
+import cn.academy.block.tileentity.TileReceiverBase
+import cn.academy.container.{SlotConditional, SlotOutput}
+import cn.lambdalib2.cgui.component.ProgressBar
+import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent}
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.registry.mc.RegTileEntity
+import cn.lambdalib2.registry.mc.gui.GuiHandlerBase
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.{NetworkMessage, NetworkS11n, TargetPoints}
+import cn.lambdalib2.util.{RandUtils, TickScheduler}
+import net.minecraft.util.math.BlockPos
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
 import java.util.function.Predicate
 
-import cn.academy.core.Resources
-import cn.academy.core.block.{ACBlockContainer, TileReceiverBase}
+//import cn.academy.core.Resources
+//import cn.academy.core.block.{ACBlockContainer, TileReceiverBase}
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui.{InventoryPage, WirelessPage}
-import cn.academy.core.container.{SlotConditional, SlotOutput, TechUIContainer}
+//import cn.academy.core.container.{SlotConditional, SlotOutput, TechUIContainer}
 import cn.academy.medicine.MedSynth.MedicineApplyInfo
 import cn.academy.medicine.Properties._
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
-import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase
-import cn.lambdalib.cgui.gui.component.ProgressBar
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.{NetworkMessage, NetworkS11n, TargetPoints}
-import cn.lambdalib.template.container.CleanContainer
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.helper.TickScheduler
-import cn.lambdalib.util.mc.SideHelper
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+//import cn.lambdalib.annoreg.core.Registrant
+//import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
+//import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase
+//import cn.lambdalib.cgui.gui.component.ProgressBar
+//import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent}
+//import cn.lambdalib.cgui.xml.CGUIDocument
+//import cn.lambdalib.s11n.network.NetworkMessage.Listener
+//import cn.lambdalib.s11n.network.{NetworkMessage, NetworkS11n, TargetPoints}
+//import cn.lambdalib.template.container.CleanContainer
+//import cn.lambdalib.util.generic.RandUtils
+//import cn.lambdalib.util.helper.TickScheduler
+//import cn.lambdalib.util.mc.SideHelper
+//import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{IInventory, Slot}
 import net.minecraft.item.ItemStack
@@ -45,7 +61,7 @@ object MedSynthesizer {
 
   val guiHandler = new GuiHandlerBase {
     override protected def getServerContainer(player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-      world.getTileEntity(x, y, z) match {
+      world.getTileEntity(new BlockPos(x, y, z)) match {
         case tile: TileMedSynthesizer => new ContainerMedSynthesizer(player, tile)
         case _ => null
       }
@@ -127,14 +143,12 @@ object MedSynthesizer {
 
 import MedSynthesizer._
 
-object BLockMedSynthesizer extends ACBlockContainer("medicine_synthesizer",
-  net.minecraft.block.material.Material.rock, guiHandler) {
+object BLockMedSynthesizer extends ACBlockContainer(net.minecraft.block.material.Material.ROCK, guiHandler) {
 
   override def createNewTileEntity(world: World, meta: Int): TileEntity = new TileMedSynthesizer
 
 }
 
-@Registrant
 @RegTileEntity
 class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 10000, 100) {
   import scala.collection.JavaConversions._
@@ -146,7 +160,7 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
   scheduler.every(5).atOnly(Side.SERVER).run(() => sync())
 
   override def updateEntity() = {
-    val world = getWorldObj
+    val world = getWorld
 
     if (synthesizing_) {
       progress_ = math.min(1, progress_ + ProgPerTick)
@@ -173,7 +187,7 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
   }
 
   def beginSynth() = {
-    require(!getWorldObj.isRemote)
+    require(!getWorld.isRemote)
     if (!synthesizing_ && canSynth) {
       progress_ = 0.0f
       synthesizing_ = true
@@ -191,7 +205,7 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
   }
 
   private def doSynth(): Unit = {
-    require(!getWorldObj.isRemote)
+    require(!getWorld.isRemote)
 
     val result = synth(inventory.take(4).toList.filter(_ != null).map(ItemPowder.getProperty))
     val resultStack = ItemMedicineBottle.create(result)
@@ -199,8 +213,8 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
     (0 until 4).map(inputSlot).foreach(inventory.update(_, null))
     setInventorySlotContents(outputSlot, resultStack)
 
-    inventory(bottleSlot).stackSize -= 1
-    if (inventory(bottleSlot).stackSize == 0) {
+    inventory(bottleSlot).getCount -= 1
+    if (inventory(bottleSlot).getCount == 0) {
       inventory.update(bottleSlot, null)
     }
   }
@@ -218,7 +232,7 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
 
 class ContainerMedSynthesizer(p: EntityPlayer, t: TileMedSynthesizer) extends
   TechUIContainer[TileMedSynthesizer](p, t) {
-  import CleanContainer._
+  import cn.lambdalib2.template.container.CleanContainer._
 
   class SlotPowder(inv: IInventory, slot: Int, x: Int, y: Int) extends Slot(inv, slot, x, y) {
     override def isItemValid(stack : ItemStack): Boolean = stack.getItem.isInstanceOf[ItemPowder]
@@ -252,7 +266,6 @@ class ContainerMedSynthesizer(p: EntityPlayer, t: TileMedSynthesizer) extends
 
 }
 
-@Registrant
 private object MSNetEvents {
 
   @RegInitCallback
@@ -270,10 +283,10 @@ private object MSNetEvents {
 }
 
 object GuiMedSynthesizer {
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
   import MSNetEvents.MSG_BEGIN_SYNTH
 
-  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_med_synth")).getWidget("main")
+  private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_med_synth")).getWidget("main")
 
   def apply(container: ContainerMedSynthesizer) = {
     val tile = container.tile

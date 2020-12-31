@@ -11,8 +11,9 @@ object MatExtraction {
 
   case class ItemMeta(item: Item, meta: Int) {
     lazy val id = {
-      val itemName = Item.itemRegistry.getNameForObject(item)
-      if (item.getHasSubtypes) itemName + "_" + meta else itemName
+//      val itemName = Item.itemRegistry.getNameForObject(item)
+//      if (item.getHasSubtypes) itemName + "_" + meta else itemName
+      Item.getIdFromItem(Item)
     }
   }
 
@@ -25,35 +26,35 @@ object MatExtraction {
   def ofItem(item: Item, damages: Int*): List[ItemMeta] = damages.map(ItemMeta(item, _)).toList
 
   val allRecipes: List[Recipe] = List(
-    ofItem(Items.apple) -> List(Targ_Life, Str_Normal),
-    ofItem(Items.potato) -> List(Targ_CP),
-    ofItem(Items.poisonous_potato) -> List(Var_Fluct),
-    ofItem(Items.wheat) -> List(Apply_Continuous_Incr),
-    ofItem(Items.reeds) -> List(Targ_MoveSpeed),
-    ofBlock(Blocks.cactus) -> List(Str_Mild),
-    ofItem(Items.wheat_seeds) -> List(Apply_Continuous_Incr, Str_Mild),
-    ofItem(Items.carrot) -> List(Str_Weak),
-    ofItem(Items.melon) -> List(Targ_Life),
-    ofBlock(Blocks.cocoa) -> List(Targ_Overload, Apply_Continuous_Decr),
-    ofItem(Items.egg) -> List(Apply_Instant_Incr),
-    ofItem(Items.milk_bucket) -> List(Apply_Continuous_Incr, Var_Stabilize),
-    ofItem(Items.feather) -> List(Targ_Jump),
-    ofItem(Items.spider_eye) -> List(Targ_Cooldown),
-    ofItem(Items.bone) -> List(Str_Mild),
-    ofItem(Items.rotten_flesh) -> List(Var_Fluct),
-    ofItem(Items.porkchop) -> List(Targ_CP),
-    ofItem(Items.cooked_porkchop) -> List(Targ_CP),
-    ofItem(Items.chicken) -> List(Targ_CP),
-    ofItem(Items.cooked_chicken) -> List(Targ_CP),
-    ofItem(Items.beef) -> List(Targ_CP),
-    ofItem(Items.cooked_beef) -> List(Targ_CP),
-    ofItem(Items.fish) -> List(Apply_Continuous_Incr), // Var_Stablize
-    ofItem(Items.cooked_fished) -> List(Apply_Continuous_Incr),
-    ofItem(Items.ender_pearl) -> List(Targ_CP, Targ_Overload, Var_Fluct),
-    ofItem(Items.blaze_powder) -> List(Targ_Attack, Str_Strong),
+    ofItem(Items.APPLE) -> List(Targ_Life, Str_Normal),
+    ofItem(Items.POTATO) -> List(Targ_CP),
+    ofItem(Items.POISONOUS_POTATO) -> List(Var_Fluct),
+    ofItem(Items.WHEAT) -> List(Apply_Continuous_Incr),
+    ofItem(Items.REEDS) -> List(Targ_MoveSpeed),
+    ofBlock(Blocks.CACTUS) -> List(Str_Mild),
+    ofItem(Items.WHEAT_SEEDS) -> List(Apply_Continuous_Incr, Str_Mild),
+    ofItem(Items.CARROT) -> List(Str_Weak),
+    ofItem(Items.MELON) -> List(Targ_Life),
+    ofBlock(Blocks.COCOA) -> List(Targ_Overload, Apply_Continuous_Decr),
+    ofItem(Items.EGG) -> List(Apply_Instant_Incr),
+    ofItem(Items.MILK_BUCKET) -> List(Apply_Continuous_Incr, Var_Stabilize),
+    ofItem(Items.FEATHER) -> List(Targ_Jump),
+    ofItem(Items.SPIDER_EYE) -> List(Targ_Cooldown),
+    ofItem(Items.BONE) -> List(Str_Mild),
+    ofItem(Items.ROTTEN_FLESH) -> List(Var_Fluct),
+    ofItem(Items.PORKCHOP) -> List(Targ_CP),
+    ofItem(Items.COOKED_PORKCHOP) -> List(Targ_CP),
+    ofItem(Items.CHICKEN) -> List(Targ_CP),
+    ofItem(Items.COOKED_CHICKEN) -> List(Targ_CP),
+    ofItem(Items.BEEF) -> List(Targ_CP),
+    ofItem(Items.COOKED_BEEF) -> List(Targ_CP),
+    ofItem(Items.FISH) -> List(Apply_Continuous_Incr), // Var_Stablize
+    ofItem(Items.COOKED_FISH) -> List(Apply_Continuous_Incr),
+    ofItem(Items.ENDER_PEARL) -> List(Targ_CP, Targ_Overload, Var_Fluct),
+    ofItem(Items.BLAZE_POWDER) -> List(Targ_Attack, Str_Strong),
     // ofItem(Items.redstone) -> List(Var_Neturalize),
-    ofItem(Items.glowstone_dust) -> List(Str_Strong, Var_Desens),
-    ofItem(Items.nether_star) -> List(Var_Infinity)
+    ofItem(Items.GLOWSTONE_DUST) -> List(Str_Strong, Var_Desens),
+    ofItem(Items.NETHER_STAR) -> List(Var_Infinity)
   )
 
   val allCombinations = allRecipes.flatMap { case (metas, props) =>

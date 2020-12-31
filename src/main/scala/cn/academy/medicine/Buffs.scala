@@ -1,18 +1,16 @@
 package cn.academy.medicine
 
-import java.util
-
-import cn.academy.ability.api.cooldown.CooldownData
-import cn.academy.ability.api.cooldown.CooldownData.SkillCooldown
-import cn.academy.ability.api.data.CPData
+import cn.academy.datapart.{CPData, CooldownData}
+import cn.academy.datapart.CooldownData.SkillCooldown
 import cn.academy.medicine.BuffData.BuffApplyData
-import cn.lambdalib.annoreg.core.Registrant
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+
+import java.util
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.DamageSource
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 abstract class BuffPerTick extends Buff {
   protected var perTick: Float = _
@@ -27,7 +25,6 @@ abstract class BuffPerTick extends Buff {
 
 }
 
-@Registrant
 @RegBuff
 class BuffHeal extends BuffPerTick {
 
@@ -39,14 +36,13 @@ class BuffHeal extends BuffPerTick {
     if (perTick >= 0) {
       player.heal(perTick)
     } else {
-      player.attackEntityFrom(DamageSource.magic, perTick)
+      player.attackEntityFrom(DamageSource.MAGIC, perTick)
     }
   }
 
   override val id: String = "heal"
 }
 
-@Registrant
 @RegBuff
 class BuffCPRecovery extends BuffPerTick {
 
@@ -61,7 +57,6 @@ class BuffCPRecovery extends BuffPerTick {
 
 }
 
-@Registrant
 @RegBuff
 class BuffOverloadRecovery extends BuffPerTick {
 
@@ -75,7 +70,6 @@ class BuffOverloadRecovery extends BuffPerTick {
   override val id: String = "overload_recovery"
 }
 
-@Registrant
 @RegBuff
 class BuffAttackBoost extends Buff {
 
@@ -98,9 +92,9 @@ class BuffAttackBoost extends Buff {
 
   @SubscribeEvent
   private def onLivingHurt(evt: LivingHurtEvent) = {
-    evt.source.getEntity match {
-      case player: EntityPlayer if player.getCommandSenderName == playerName =>
-        evt.ammount *= ratio
+    evt.getSource.getTrueSource match {
+      case player: EntityPlayer if player.getName == playerName =>
+        evt.setAmount(evt.getAmount * ratio)
       case _ => ()
     }
   }
@@ -119,7 +113,6 @@ class BuffAttackBoost extends Buff {
   override val id = "attack_boost"
 }
 
-@Registrant
 @RegBuff
 class BuffCooldownRecovery extends BuffPerTick {
 

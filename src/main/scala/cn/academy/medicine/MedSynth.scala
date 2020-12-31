@@ -1,18 +1,25 @@
 package cn.academy.medicine
 
-import cn.academy.ability.api.cooldown.CooldownData
-import cn.academy.ability.api.data.CPData
-import cn.academy.core.LocalHelper
+//import cn.academy.ability.api.cooldown.CooldownData
+//import cn.academy.ability.api.data.CPData
+//import cn.academy.core.LocalHelper
+import cn.academy.datapart.{CPData, CooldownData}
 import cn.academy.medicine.MedSynth.MedicineApplyInfo
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.helper.Color
-import cn.lambdalib.util.mc.StackUtils
+import cn.academy.util.LocalHelper
+import cn.lambdalib2.util.{Colors, RandUtils, StackUtils}
+import net.minecraft.init.{MobEffects, SoundEvents}
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.text.TextFormatting
+import org.lwjgl.util.Color
+//import cn.lambdalib.util.generic.RandUtils
+//import cn.lambdalib.util.helper.Color
+//import cn.lambdalib.util.mc.StackUtils
 import com.google.common.base.Preconditions
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.{Potion, PotionEffect}
-import net.minecraft.util.{DamageSource, EnumChatFormatting}
+import net.minecraft.util.{DamageSource}
 
 /**
   * Handles medicine synthesizing logic.
@@ -30,10 +37,10 @@ object MedSynth {
     import org.lwjgl.util.{Color => LColor}
 
     private implicit def c2l(x: Color):LColor = new LColor(
-      (x.r*255).toByte, (x.g*255).toByte,
-      (x.b*255).toByte, (x.a*255).toByte)
+      (x.getRed*255).toByte, (x.getGreen*255).toByte,
+      (x.getBlue*255).toByte, (x.getAlpha*255).toByte)
 
-    private implicit def l2c(x: LColor): Color = new Color(x.getRed/255.0f, x.getGreen/255.0f, x.getBlue/255.0f, x.getAlpha/255.0f)
+    private implicit def l2c(x: LColor): Color = Colors.fromFloat(x.getRed/255.0f, x.getGreen/255.0f, x.getBlue/255.0f, x.getAlpha/255.0f)
 
     private def toHSB(color: Color): (Float, Float, Float) = {
       val lwjColor: LColor = color
@@ -105,7 +112,7 @@ object Properties {
 
     def id: String
 
-    override def stackDisplayHint = formatItemDesc("targ", EnumChatFormatting.GREEN, displayDesc)
+    override def stackDisplayHint = formatItemDesc("targ", TextFormatting.GREEN, displayDesc)
     override def internalID = "targ_" + id
 
   }
@@ -114,7 +121,7 @@ object Properties {
 
     val baseValue: Float
     def id: String
-    override def stackDisplayHint = formatItemDesc("str", EnumChatFormatting.RED, displayDesc)
+    override def stackDisplayHint = formatItemDesc("str", TextFormatting.RED, displayDesc)
     override def internalID = "str_" + id
 
   }
@@ -125,14 +132,14 @@ object Properties {
     val strength: Float
 
     def id: String
-    override def stackDisplayHint = formatItemDesc("app", EnumChatFormatting.AQUA, displayDesc)
+    override def stackDisplayHint = formatItemDesc("app", TextFormatting.AQUA, displayDesc)
     override def internalID = "app_" + id
   }
 
   trait Variation extends Property {
     def id: String
     override def internalID = "var_" + id
-    override def stackDisplayHint = formatItemDesc("var", EnumChatFormatting.DARK_PURPLE, displayDesc)
+    override def stackDisplayHint = formatItemDesc("var", TextFormatting.DARK_PURPLE, displayDesc)
   }
 
   // --- impls
@@ -158,7 +165,7 @@ object Properties {
     }
 
     def id = "life"
-    val baseColor = new Color(0xffff0000)
+    val baseColor = Colors.fromHexColor(0xffff0000)
     val medSensitiveRatio = 0.05f
   }
 
@@ -178,7 +185,7 @@ object Properties {
     }
 
     def id = "cp"
-    val baseColor = new Color(0xff0000ff)
+    val baseColor = Colors.fromHexColor(0xff0000ff)
     val medSensitiveRatio = 0.05f
   }
 
@@ -195,7 +202,7 @@ object Properties {
     }
 
     def id = "overload"
-    val baseColor = new Color(0xffffff00)
+    val baseColor = Colors.fromHexColor(0xffffff00)
     val medSensitiveRatio = 0.05f
   }
 
@@ -204,12 +211,12 @@ object Properties {
       require(data.method == Apply_Continuous_Incr)
 
       val time = ContApplyTime
-      val eff = new PotionEffect(Potion.jump.id, time, strenghToLevel(data.strengthType))
+      val eff = new PotionEffect(MobEffects.JUMP_BOOST, time, strenghToLevel(data.strengthType))
       player.addPotionEffect(eff)
     }
 
     def id: String = "jump"
-    val baseColor = new Color(0xffffffff)
+    val baseColor = Colors.fromHexColor(0xffffffff)
     val medSensitiveRatio = 0.03f
   }
 
@@ -227,7 +234,7 @@ object Properties {
     }
 
     override def id: String = "cooldown"
-    val baseColor = new Color(0xff0000ff)
+    val baseColor = Colors.fromHexColor(0xff0000ff)
     val medSensitiveRatio = 0.1f
   }
 
@@ -236,19 +243,19 @@ object Properties {
       require(!data.method.instant)
 
       val time = ContApplyTime
-      val potion = if (data.method.incr) Potion.moveSpeed else Potion.moveSlowdown
-      player.addPotionEffect(new PotionEffect(potion.id, time, strenghToLevel(data.strengthType)))
+      val potion = if (data.method.incr) MobEffects.SPEED else MobEffects.SLOWNESS
+      player.addPotionEffect(new PotionEffect(potion, time, strenghToLevel(data.strengthType)))
     }
 
     override def id: String = "move_speed"
-    val baseColor = new Color(0xffffffff)
+    val baseColor = Colors.fromHexColor(0xffffffff)
     val medSensitiveRatio = 0.03f
   }
 
   val Targ_Disposed = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
       val test = RandUtils.rangef(0, 1)
-      val world = player.worldObj
+      val world = player.world
 
       test match {
         case p if p < 0.5f => // No effect but adds sensitivity
@@ -257,14 +264,15 @@ object Properties {
         case p if p < 0.75f => // Debuff
           println("Debuff")
 
+          SoundCategory.PLAYERS
         case _ => // Fake Explosion
-          world.playSoundEffect(player.posX, player.posY, player.posZ, "random.explode", 4.0f, 1.0f)
+          player.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 4.0f, 1.0f)
           player.attackEntityFrom(DamageSource.causePlayerDamage(player), 10f)
       }
     }
 
     override def id: String = "disposed"
-    val baseColor = new Color(0xff000000)
+    val baseColor = Colors.fromHexColor(0xff000000)
     val medSensitiveRatio = 0.5f
   }
 
@@ -275,13 +283,13 @@ object Properties {
       val time = ContApplyTime
       val boostRatio = 1 + (0.2f * data.strengthModifier)
 
-      BuffData(player).addBuff(new BuffAttackBoost(boostRatio, player.getCommandSenderName), time)
+      BuffData(player).addBuff(new BuffAttackBoost(boostRatio, player.getName), time)
     }
 
     override def id: String = "attack"
 
     override val medSensitiveRatio: Float = 0
-    override val baseColor: Color = new Color(0xffff00ff)
+    override val baseColor: Color = Colors.fromHexColor(0xffff00ff)
   }
 
 
@@ -390,8 +398,8 @@ object Properties {
     case Str_Infinity => 4
   }
 
-  private def formatItemDesc(propType: String, color: EnumChatFormatting, name: String) = {
-    color + localTypes.get(propType) + ": " + EnumChatFormatting.RESET + name
+  private def formatItemDesc(propType: String, color: TextFormatting, name: String) = {
+    color + localTypes.get(propType) + ": " + TextFormatting.RESET + name
   }
 
   // --- storage & s11n

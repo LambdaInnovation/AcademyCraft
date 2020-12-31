@@ -1,24 +1,23 @@
 package cn.academy.medicine
 
-import cn.academy.core.command.ACCommand
 import cn.academy.medicine.MedSynth.MedicineApplyInfo
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegCommand
-import cn.lambdalib.template.command.LICommandBase
+import cn.academy.util.ACCommand
+import cn.lambdalib2.registry.mc.RegCommand
+import cn.lambdalib2.util.PlayerUtils
 import net.minecraft.command.{CommandBase, ICommandSender}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
+import net.minecraft.server.MinecraftServer
 
-@Registrant
 @RegCommand
 class CommandMedicine extends ACCommand("med") {
   val commands = List("help", "props", "synth")
 
-  override def getCommandName: String = "med"
+  override def getName: String = "med"
 
-  override def processCommand(ics : ICommandSender, args : Array[String]): Unit = {
+  override def execute(svr: MinecraftServer, ics : ICommandSender, args : Array[String]): Unit = {
     def msg(content: String, args: Any*) = {
-      LICommandBase.sendChat(ics, content, args.map(_.asInstanceOf[AnyRef]): _*)
+      PlayerUtils.sendChat(ics, content, args.map(_.asInstanceOf[AnyRef]): _*)
     }
 
     def synthFromArgs(method: MedicineApplyInfo => ItemStack) = {
@@ -30,15 +29,15 @@ class CommandMedicine extends ACCommand("med") {
         val applyInfo = MedSynthesizer.synth(props)
         val medicine = method(applyInfo)
 
-        val entity = new EntityItem(player.worldObj, player.posX, player.posY + 1, player.posZ, medicine)
-        player.worldObj.spawnEntityInWorld(entity)
+        val entity = new EntityItem(player.world, player.posX, player.posY + 1, player.posZ, medicine)
+        player.world.spawnEntity(entity)
       } else {
         msg(getLoc("no_prop"))
       }
     }
 
     if (args.length == 0) {
-      msg(getCommandUsage(ics))
+      msg(getUsage(ics))
     } else {
       args.head match {
         case "help" | "?" =>

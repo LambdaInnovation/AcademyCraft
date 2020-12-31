@@ -1,23 +1,21 @@
 package cn.academy.medicine
 
+import cn.academy.Resources
+import cn.academy.datapart.CPData
+import cn.academy.medicine.BuffData.BuffApplyData
+import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
+import cn.lambdalib2.util.{MathUtils, TickScheduler}
+
 import java.util
 import java.util.{Collections, Comparator}
-
-import cn.academy.ability.api.data.CPData
-import cn.academy.core.Resources
-import cn.academy.medicine.BuffData.BuffApplyData
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegPostInitCallback
-import cn.lambdalib.util.datapart.{DataPart, EntityData, RegDataPart}
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.TickScheduler
-import cpw.mods.fml.common.network.ByteBufUtils
-import cpw.mods.fml.relauncher.Side
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.MobEffects
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.util.{DamageSource, ResourceLocation}
+import net.minecraftforge.fml.common.network.ByteBufUtils
+import net.minecraftforge.fml.relauncher.Side
 
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag
@@ -43,7 +41,6 @@ trait Buff {
 
 }
 
-@Registrant
 @RegBuff
 class BuffMedSens() extends Buff {
   private var percentage: Float = 0.0f
@@ -66,7 +63,7 @@ class BuffMedSens() extends Buff {
     }
     def hunger(secs: Int) = {
       val ticks = secs * 20
-      val effect = new PotionEffect(Potion.hunger.id, ticks, 1)
+      val effect = new PotionEffect(MobEffects.HUNGER, ticks, 1)
       player.addPotionEffect(effect)
     }
 
@@ -91,7 +88,6 @@ class BuffMedSens() extends Buff {
   override val id: String = "med_sensitive"
 }
 
-@Registrant
 object BuffRegistry {
 
   private val buffTypes = new util.ArrayList[Class[_ <: Buff]]()
@@ -145,7 +141,6 @@ object BuffData {
 
 }
 
-@Registrant
 @RegDataPart(value=classOf[EntityPlayer])
 class BuffData extends DataPart[EntityPlayer] {
   import BuffData._
@@ -201,30 +196,30 @@ class BuffData extends DataPart[EntityPlayer] {
     scheduler.runTick()
   }
 
-  override def fromByteBuf(buf: ByteBuf): Unit = {
-    checkSide(Side.CLIENT)
-
-    activeBuffs.clear()
-
-    val count = buf.readInt
-    (0 until count).foreach(_ => {
-      val id = ByteBufUtils.readUTF8String(buf)
-      val tickLeft = buf.readInt
-      val maxTicks = buf.readInt
-
-      activeBuffs.add(BuffRuntimeData(ClientFakeBuff(id), BuffApplyData(tickLeft, maxTicks)))
-    })
-  }
-
-  override def toByteBuf(buf: ByteBuf): Unit = {
-    checkSide(Side.SERVER)
-
-    buf.writeInt(activeBuffs.size)
-    activeBuffs.foreach { case BuffRuntimeData(buff, BuffApplyData(tickLeft, maxTicks)) =>
-        ByteBufUtils.writeUTF8String(buf, buff.id)
-        buf.writeInt(tickLeft).writeInt(maxTicks)
-    }
-  }
+//  override def fromByteBuf(buf: ByteBuf): Unit = {
+//    checkSide(Side.CLIENT)
+//
+//    activeBuffs.clear()
+//
+//    val count = buf.readInt
+//    (0 until count).foreach(_ => {
+//      val id = ByteBufUtils.readUTF8String(buf)
+//      val tickLeft = buf.readInt
+//      val maxTicks = buf.readInt
+//
+//      activeBuffs.add(BuffRuntimeData(ClientFakeBuff(id), BuffApplyData(tickLeft, maxTicks)))
+//    })
+//  }
+//
+//  override def toByteBuf(buf: ByteBuf): Unit = {
+//    checkSide(Side.SERVER)
+//
+//    buf.writeInt(activeBuffs.size)
+//    activeBuffs.foreach { case BuffRuntimeData(buff, BuffApplyData(tickLeft, maxTicks)) =>
+//        ByteBufUtils.writeUTF8String(buf, buff.id)
+//        buf.writeInt(tickLeft).writeInt(maxTicks)
+//    }
+//  }
 
   override def toNBT(tag: NBTTagCompound) = {
     val list = new NBTTagList
