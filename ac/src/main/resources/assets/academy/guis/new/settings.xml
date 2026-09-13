@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Mirrors AcademyCraft assets/academy/guis/settings.xml:
+  main 742×923 @ scale 0.2, area 614×720, rows height 60 (t_cathead/t_checkbox/t_key/t_callback).
+  One list template hosts the four row kinds; settings_reactive shows only the active section.
+-->
+<Ui size="0.0,0.0" align="center,center">
+
+  <!-- size on <template> so list-set! reads :h=60 (not the default 24). -->
+  <template name="t_row" pos="0.0,0.0" size="611.0,60.0" align="left,top">
+    <!-- t_cathead: bottom rule + bottom-aligned title -->
+    <image id="cathead-line" pos="0.0,0.0" size="611.0,4.0" align="left,bottom" tint="#96FFFFFF"/>
+    <text id="cathead-text" pos="8.0,0.0" size="611.0,60.0" align="left,bottom" text="" font-size="42.0" color="#AAFFFFFF"/>
+
+    <!-- t_checkbox -->
+    <group id="checkbox-row" pos="0.0,0.0" size="611.0,60.0" align="left,top">
+      <text id="text" pos="15.0,0.0" size="300.0,40.0" align="left,center" text="" font-size="40.0" color="#FFFFFFFF"/>
+      <image id="box" pos="550.0,0.0" size="35.0,35.0" align="left,center" src="liutils:textures/cgui/missing.png"/>
+    </group>
+
+    <!-- t_key: key hit target has hover Tint (idle α=0, hover α=0.2) -->
+    <group id="key-row" pos="0.0,0.0" size="611.0,60.0" align="left,top">
+      <text id="key-label" pos="15.0,0.0" size="300.0,40.0" align="left,center" text="" font-size="40.0" color="#FFFFFFFF"/>
+      <box id="key-hit" pos="440.0,0.0" size="160.0,40.0" align="left,center" fill="#00000000" hover-tint="0.2">
+        <text id="key-value" pos="0.0,0.0" size="160.0,40.0" align="left,center" text="" font-size="40.0" color="#C8C8C8C8"/>
+      </box>
+    </group>
+
+    <!-- t_callback -->
+    <group id="callback-row" pos="0.0,0.0" size="611.0,60.0" align="left,top">
+      <text id="callback-label" pos="15.0,0.0" size="300.0,40.0" align="left,center" text="" font-size="40.0" color="#FFFFFFFF"/>
+      <box id="callback-button" pos="440.0,0.0" size="160.0,40.0" align="left,center" fill="#FF333333" hover-tint="1.65">
+        <text id="callback-button-text" pos="0.0,0.0" size="160.0,40.0" align="center,center" text="OK" font-size="40.0" color="#FFFFFFFF"/>
+      </box>
+    </group>
+  </template>
+
+  <!--
+    Upstream XML used scale=0.2 under CGuiScreen. On a Minecraft Screen that
+    yields a ~1–2px-wide scrollbar hit target, so settings-reactive applies a
+    fit-scale to #main each frame instead (design size stays 742×923).
+  -->
+  <image id="main" pos="0.0,0.0" size="742.0,923.0" scale="1.0" align="center,center" src="academy:textures/guis/settings.png">
+    <!--
+      Wider invisible hit pad; visible art stays the 9px rollbar.
+
+      z above #area: the pad spans x 660..696 and #area spans 60..674, so they
+      overlap by 14px. hit-test returns the LAST tape entry containing the
+      point, and #area is declared after this pad, so without a z the list
+      swallowed every press on the pad's left 14px — including the thumb's own
+      left edge. The draggable region ended up sitting to the right of the bar
+      you can see. A scrollbar belongs over its content anyway.
+    -->
+    <box id="scrollbar-hit" pos="660.0,119.0" size="36.0,96.0" align="left,top" fill="#00000000" z="10.0">
+      <image id="scrollbar" pos="13.0,0.0" size="9.0,96.0" align="left,top" src="academy:textures/guis/life_record/rollbar.png"/>
+    </box>
+    <group id="area" pos="60.0,120.0" size="614.0,720.0" align="left,top" clip="true">
+      <list id="settings-list" pos="0.0,0.0" size="614.0,720.0" template="t_row" spacing="0.0"/>
+    </group>
+  </image>
+
+</Ui>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <group id="root" pos="0.0,0.0" size="427.0,240.0" align="center,center">
+    <!-- Left panel: container + background -->
+    <group id="left-panel" pos="7.0,0.0" size="85.0,220.5" align="left,center">
+      <image id="left-bg" pos="0.0,0.0" size="85.0,220.5" align="left,top" src="academy:textures/guis/window_tutorial_left.png"/>
+      <group id="list" pos="6.6,7.0" size="72.0,207.0" align="left,top"/>
+    </group>
+    <!-- Right panel: all content right of left panel -->
+    <group id="right-panel" pos="92.0,0.0" size="332.0,220.5" align="left,center">
+      <!-- Logos (centered, scale=0.25) -->
+      <image id="logo0" pos="0.0,-32.5" size="899.0,548.0" scale="0.25" align="center,center" src="academy:textures/guis/tutorial/logo0.png"/>
+      <image id="logo1" pos="0.0,59.0" size="899.0,236.0" scale="0.25" align="center,center" src="academy:textures/guis/tutorial/logo1.png"/>
+      <image id="logo2" pos="0.0,59.0" size="899.0,236.0" scale="0.25" align="center,center" src="academy:textures/guis/tutorial/logo2.png"/>
+      <image id="logo3" pos="0.0,-36.0" size="149.0,149.0" scale="0.25" align="center,center" src="academy:textures/guis/tutorial/logo3.png"/>
+      <!-- Glow anchor (matches logo1 pos + scale) -->
+      <group id="logo1-anchor" pos="0.0,59.0" size="0.0,0.0" scale="0.25" align="center,center"/>
+      <!-- Center markdown content area — hidden until first entry click.
+           Matches upstream centerPart's text widget (160×210.5 at 2,0, LEFT/CENTER)
+           and clips the scrolled content to that box like upstream's stencil.
+           center-panel is the FIXED clip window; the segment children live in
+           center-content and scroll INSIDE it (moving the clip window itself
+           would look like the display region scrolling, not the content). -->
+      <group id="center-panel" pos="2.0,0.0" size="160.0,210.5" align="left,center" visible="false" clip="true">
+        <group id="center-content" pos="0.0,0.0" size="160.0,210.5" align="left,top"/>
+      </group>
+      <!-- Scrollbar container — 172px matches center content width so right-aligned
+           thumb sits near the content edge, not the screen edge -->
+      <group id="scroll-container" pos="0.0,0.0" size="172.0,220.5" align="left,center" visible="false">
+        <image id="scroll-track" pos="0.0,0.0" size="9.5,216.5" align="right,center" src="academy:textures/guis/button/widget_scroll_1.png"/>
+        <image id="scroll-thumb" pos="0.0,2.0" size="9.5,53.0" align="right,top" src="academy:textures/guis/button/widget_scroll_2.png" tint="#CCFFFFFF"/>
+      </group>
+      <!-- Preview window — hidden until first entry click -->
+      <group id="show-window" pos="0.0,0.0" size="158.5,136.0" align="right,top" visible="false">
+        <group id="preview-area" pos="0.0,-2.0" size="134.0,134.0" align="center,center"/>
+        <group id="tag-area" pos="12.0,120.75" size="133.0,18.0" align="left,top"/>
+        <image id="btn-left" pos="5.0,41.75" size="30.0,130.0" scale="0.4" align="left,top" src="academy:textures/guis/button/button_left_2.png" tint="#CCFFFFFF"/>
+        <image id="btn-right" pos="140.0,41.75" size="30.0,130.0" scale="0.4" align="left,top" src="academy:textures/guis/button/button_right_2.png" tint="#CCFFFFFF"/>
+      </group>
+      <!-- Right text window — matches upstream rightWindow: 158.5×82,
+           text area 146×69 CENTER/CENTER aligned (y=-0.25 → 6.25 inset from top).
+           Split into title + brief but kept within the same logical area. -->
+      <group id="right-window" pos="0.0,0.0" size="158.5,82.0" align="right,bottom" visible="false">
+        <image id="right-window-bg" pos="0.0,0.0" size="158.5,82.0" align="left,top" src="academy:textures/guis/window_tutorial_left.png"/>
+        <!-- Title/brief x=3 inside the centered 146px area — upstream draws at
+             (3,3)/(3,15) within the text widget; without the 3px inset the text
+             presses against the window frame's left border. -->
+        <text id="title-text" pos="3.0,6.25" size="146.0,12.0" align="center,top" text="" font-size="10.0" color="#FFFFFFFF"/>
+        <!-- Brief markdown: clipped to its 146×50 box so long briefs cannot
+             spill past the window border (upstream renders unclipped; ours
+             must stay inside the 158.5×82 window). -->
+        <group id="brief-content" pos="3.0,18.25" size="146.0,50.0" align="center,top" clip="true"/>
+      </group>
+    </group>
+    <!-- Tag tooltip (rendered above everything) -->
+    <text id="tag-tooltip" pos="0.0,0.0" size="120.0,14.0" align="left,top" text="" font-size="10.0" color="#FFFFFFFF" visible="false"/>
+  </group>
+</Ui>

@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url "https://maven.fabricmc.net" }
+        maven { url "https://maven.neoforged.net/releases/" }
+        maven { url "https://maven.architectury.dev" }
+    }
+    def catalog = new groovy.json.JsonSlurper().parse(new File(rootDir, "platform-catalog.json"))
+    def targetId = (gradle.startParameter.projectProperties["platformTarget"]
+        ?: catalog.defaultTarget).toString()
+    def target = catalog.targets[targetId] ?: catalog.targets[catalog.defaultTarget.toString()]
+    def profile = catalog.buildProfiles[target.buildProfile.toString()]
+    def platformPluginId = (profile.platformPluginId ?: (profile.toolchain == "mdg" ? "net.neoforged.moddev" : "dev.architectury.loom")).toString()
+    def platformPluginVersion = (profile.platformPluginVersion ?: profile.loomVersion ?: profile.modDevGradleVersion).toString()
+    def shadowPluginId = profile.shadowPluginId?.toString()
+    def shadowVersion = profile.shadowVersion?.toString()
+    ext._platformPluginId = platformPluginId
+    ext._platformPluginVersion = platformPluginVersion
+    ext._shadowPluginId = shadowPluginId
+    dependencies {
+        classpath "${platformPluginId}:${platformPluginId}.gradle.plugin:${platformPluginVersion}"
+        // Shadow is not apply-false on root (johnrengelman vs gradleup capability clash).
+        // Put the selected shadow plugin on this project's buildscript classpath instead.
+        if (shadowVersion) {
+            classpath "${shadowPluginId}:${shadowPluginId}.gradle.plugin:${shadowVersion}"
+        }
+    }
+}
+
+plugins {
+    id "dev.clojurephant.clojure"
+}
+
+def catalog = new groovy.json.JsonSlurper().parse(rootProject.file("platform-catalog.json"))
+def targetId = (findProperty("platformTarget") ?: catalog.defaultTarget).toString()
+def target = catalog.targets[targetId]
+if (target == null) {
+    throw new GradleException("Unknown platformTarget '${targetId}'")
+}
+def profile = catalog.buildProfiles[target.buildProfile.toString()]
+def platformToolchain = (profile?.toolchain ?: "loom").toString()
+def platformPluginId = (profile?.platformPluginId ?: (platformToolchain == "mdg" ? "net.neoforged.moddev" : "dev.architectury.loom")).toString()
+def shadowPluginId = profile?.shadowPluginId?.toString()
+
+if (platformToolchain == "loom") {
+    extensions.extraProperties.set("loom.platform", target.loader)
+    System.setProperty("loom.platform", target.loader.toString())
+}
+apply plugin: platformPluginId
+if (shadowPluginId) {
+    apply plugin: shadowPluginId
+}
+
+ext.platformToolchain = platformToolchain
+ext.platformPluginId = platformPluginId
+ext.platformShadowPluginId = shadowPluginId
+
+apply from: rootProject.file("build-logic/platform-target.gradle")

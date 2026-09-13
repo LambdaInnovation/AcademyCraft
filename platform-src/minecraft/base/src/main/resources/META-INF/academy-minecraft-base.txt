@@ -1,0 +1,2 @@
+# Shared Minecraft glue that compiles against every supported MC version.
+# Version forks live in cn.li.mcver.* under each mc-<version> component.

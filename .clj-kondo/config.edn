@@ -1,0 +1,53 @@
+{:lint-as {cn.li.ac.util.init-guard/defonce-guard clojure.core/def
+           cn.li.ac.util.init-guard/with-init-guard clojure.core/when
+           cn.li.ac.ability.dsl/defcategory clojure.core/def}
+ :hooks {:analyze-call {cn.li.ac.ability.dsl/defskill hooks.defskill/defskill
+                      cn.li.ac.ability.dsl/def-skill-config-ops hooks.defskill/def-skill-config-ops
+                      cn.li.ac.ability.client.fx-templates.arc-beam/def-arc-beam-fx hooks.defskill/arc-beam-fx
+                      java.lang.ThreadLocal/. hooks.thread-local/thread-local-ctor
+                      clojure.core/ns hooks.forbid-loader-api/analyze-ns}}
+ :linters
+ {:unresolved-symbol {:level :warning}
+  ;; An alias or fully-qualified call whose namespace is never required is
+  ;; never intentional, and nothing else in the build catches it: most ac
+  ;; namespaces are not AOT-compiled (fullAot=false), so the file only fails
+  ;; when it is first loaded — in front of a player. Errors here, unlike
+  ;; :unresolved-symbol, have no legitimate dynamic counterpart.
+  :unresolved-namespace {:level :error}
+  ;; The project has several intentional runtime registration boundaries:
+  ;; provider namespaces are loaded for side effects, callback vars are found
+  ;; through keyword/Var registries, and platform callback signatures preserve
+  ;; unused parameters.  Removing any of these based on kondo's lexical view
+  ;; can break indirect, reflective, or string-based dispatch.  Keep the
+  ;; unresolved-namespace gate above strict, but do not treat these dynamic
+  ;; contracts as dead code.
+  :unused-namespace {:level :off}
+  :unused-private-var {:level :off}
+  :unused-binding {:level :off}
+  :unused-import {:level :off}
+  :unused-value {:level :off}
+  :misplaced-docstring {:level :off}
+  :redundant-let {:level :off}
+  :redundant-do {:level :off}
+  :duplicate-require {:level :off}
+  :single-arg-or {:level :off}
+  :missing-else-branch {:level :off}
+  :missing-body-in-when {:level :off}
+  :redefined-var {:level :off}
+  :type-hint {:level :off}
+  ;; *framework* is initialized to nil and injected via alter-var-root at runtime.
+  ;; clj-kondo cannot track the runtime injection, so suppress false-positive
+  ;; nil-deref warnings on @*framework* across all namespaces.
+  :deref {:level :off}
+  ;; Catch (:import [net.minecraft...]) in ac/mcmod — not covered by reflection warnings.
+  :loader-api-in-neutral-layer {:level :error}
+  ;; *client-session-id* and *player-state-owner* are defn functions (not ^:dynamic)
+  ;; that read from ThreadLocal. Earmuffs naming is intentional for API compatibility
+  ;; (function signature unchanged from the original ^:dynamic vars).
+  ;; See AGENT_AND_TOOLING.md § ThreadLocal + 高阶函数.
+  :earmuffed-var-not-dynamic {:exclude [cn.li.mcmod.hooks.core/*client-session-id*
+                                        cn.li.mcmod.hooks.core/*player-state-owner*]}
+  ;; ThreadLocal constructor calls outside hooks.core → warning.
+  ;; See AGENT_AND_TOOLING.md § ThreadLocal 上下文调用规范.
+  :discouraged-var {java.lang.ThreadLocal. {:level :warning
+                                             :message "ThreadLocal must only be used in cn.li.mcmod.hooks.core via with-client-ctx-fn"}}}}

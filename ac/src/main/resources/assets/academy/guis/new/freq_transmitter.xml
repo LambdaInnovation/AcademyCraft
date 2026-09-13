@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="380.0,220.0" align="center,center">
+  <box id="bg" pos="0.0,0.0" size="380.0,220.0" fill="#77272727"/>
+  <image id="icon" pos="8.0,8.0" size="18.0,18.0" src="academy:textures/guis/apps/freq_transmitter/icon.png"/>
+  <text id="title" pos="32.0,10.0" size="330.0,18.0" text="Frequency Transmitter" font-size="10.0" color="#FFFFFFFF"/>
+  <group id="content" pos="10.0,34.0" size="360.0,176.0" clip="true"/>
+</Ui>

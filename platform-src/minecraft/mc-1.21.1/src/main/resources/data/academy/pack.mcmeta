@@ -1,0 +1,7 @@
+{
+  "pack": {
+    "pack_format": 34,
+    "supported_formats": [34, 48],
+    "description": "AcademyCraft data pack (1.21.1)"
+  }
+}

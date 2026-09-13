@@ -1,125 +1,1187 @@
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import org.gradle.internal.os.OperatingSystem
+import java.util.regex.Pattern
+
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
-		}
-		maven {
-			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots"
-		}
-	}
-	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-	}
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.ow2.asm:asm:9.10.1"
+    }
 }
 
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-	def prop = new Properties()
-	prop.load(it)
-	project.ext.config = new ConfigSlurper().parse prop
+plugins {
+    id "dev.clojurephant.clojure" apply false
 }
 
-configurations {
-	deployerJars
+ext {
+    def baseModVersion = findProperty("mod_version") ?: "0.0.0"
+    def artifactBaseName = findProperty("mod_artifact_base_name")?.toString()?.trim()
+    if (artifactBaseName == null || artifactBaseName.isEmpty()) {
+        throw new GradleException("mod_artifact_base_name must not be empty")
+    }
+    def releaseSuffix = findProperty("mod_release_suffix")?.toString()?.trim()
+    if (releaseSuffix != null && !releaseSuffix.isEmpty() &&
+        !(releaseSuffix ==~ /(?i)(alpha|beta|rc)[0-9]+/)) {
+        throw new GradleException(
+            "-Pmod_release_suffix must match alpha1, beta2, rc1, etc.; got '${releaseSuffix}'")
+    }
+    modVersion = releaseSuffix == null || releaseSuffix.isEmpty()
+        ? baseModVersion
+        : "${baseModVersion}-${releaseSuffix}"
+    modArtifactBaseName = artifactBaseName
+    clojureVersions = [
+        clojure: findProperty("clojure_version") ?: "1.13.0-alpha6",
+        testCheck: findProperty("clojure_test_check_version") ?: "1.1.1",
+        cloverage: findProperty("cloverage_version") ?: "1.2.4",
+        specAlpha: findProperty("spec_alpha_version") ?: "0.6.249",
+        coreSpecsAlpha: findProperty("core_specs_alpha_version") ?: "0.6.122-alpha8"
+    ]
+
+    // Neutral runtime projects (:ac and :mcmod) are source-first by default.
+    // Pass -PfullAot or -PfullAot=true to restore the historical full-AOT build.
+    def fullAotRaw = findProperty("fullAot")
+    def fullAotText = fullAotRaw == null ? "false" : fullAotRaw.toString().trim()
+    if (fullAotText.isEmpty()) {
+        fullAotText = "true"
+    }
+    if (!fullAotText.equalsIgnoreCase("true") && !fullAotText.equalsIgnoreCase("false")) {
+        throw new GradleException("-PfullAot must be true or false (or pass -PfullAot for true), got '${fullAotRaw}'")
+    }
+    fullAotEnabled = fullAotText.equalsIgnoreCase("true")
 }
 
-apply plugin: 'scala'
-apply plugin: 'forge'
-apply plugin: 'idea'
+allprojects {
+    group = rootProject.findProperty("mod_group")
+    version = rootProject.ext.modVersion
 
-version				= config.mod_ver
-group				= config.mod_group
-archivesBaseName	= config.mod_name
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-minecraft {
-	version = "${config.mc_ver}-${config.forge_ver}"
-	runDir = "eclipse"
-
-    // Replacing stuff in the source
-	replace "@VERSION@", config.mod_ver
-    replace "@LL_VERSION@", config.lambdalib_ver
-    replace "@MC_VERSION@", config.mc_ver
+    repositories {
+        mavenCentral()
+        maven { url "https://maven.architectury.dev/" }
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://maven.minecraftforge.net" }
+        maven { url "https://maven.neoforged.net/releases/" }
+        maven { url "https://repo.clojars.org" }
+        maven {
+            url = "https://maven.blamejared.com"
+            name = "BlameJared Maven"
+        }
+    }
 }
 
-repositories {
-	mavenCentral()
-	mavenLocal()
-	maven {
-		name = "chickenbones"
-		url = "http://chickenbones.net/maven"
-	}
-	maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to"
-	}
+subprojects {
+    plugins.withId("dev.clojurephant.clojure") {
+        local.ClojurephantFlushFix.configure(project)
+        // Platform source roots are selected dynamically from the catalog.
+        // Configure after their sourceSets are complete, otherwise aotAll()
+        // snapshots an empty namespace set for :platform.
+        afterEvaluate {
+            // Every Clojure-bearing module is a runtime module. Keep the AOT
+            // policy here so new modules cannot accidentally ship source-only
+            // or partially AOT-compiled namespaces.
+            clojure {
+                builds {
+                    main {
+                        if (rootProject.ext.fullAotEnabled || !(project.path in [":ac", ":mcmod"])) {
+                            aotAll()
+                        } else {
+                            // Empty AOT set keeps the plugin available for source
+                            // compilation/checking while avoiding neutral-project AOT.
+                            aotNamespaces.set([])
+                        }
+                        checkAll()
+                        reflection = "fail"
+                    }
+                }
+            }
+
+            tasks.named("compileClojure").configure { task ->
+                doLast {
+                    if (!rootProject.ext.fullAotEnabled && project.path in [":ac", ":mcmod"]) {
+                        return
+                    }
+                    def sourceRoots = sourceSets.main.clojure.srcDirs.findAll { it.isDirectory() }
+                    def missingAotClasses = sourceRoots.collectMany { File sourceRoot ->
+                        fileTree(sourceRoot) { include "**/*.clj" }.files.collect { File sourceFile ->
+                            def namespaceName = sourceRoot.toPath()
+                                .relativize(sourceFile.toPath())
+                                .toString()
+                                .replace("\\", "/")
+                                .replaceAll(/\.clj$/, "")
+                                .replace("/", ".")
+                                .replace("_", "-")
+                            def outputDirectory = layout.buildDirectory.dir("clojure/main").get().asFile
+                            [namespaceName, new File(outputDirectory, namespaceName.replace(".", "/").replace("-", "_") + "__init.class")]
+                        }
+                    }.findAll { namespaceAndClass -> !namespaceAndClass[1].isFile() }
+                    if (!missingAotClasses.isEmpty()) {
+                        throw new GradleException("Full AOT output is incomplete for ${project.path}: " +
+                            missingAotClasses.collect { it[0] }.sort())
+                    }
+                }
+            }
+        }
+        // Clojurephant forks a dedicated JVM for AOT (not JavaExec). Inject via forkOptions.
+        // Loom 1.13 tiny-remapper AIOOBE on Clojure 1.13 :doc metadata; elide :doc only,
+        // keep :file/:line for crash stack lines.
+        def ensureClojureForkJvmArg = { task, String arg ->
+            def args = (task.forkOptions.jvmArgs ?: []) as List
+            if (!args.contains(arg)) {
+                args << arg
+            }
+            task.forkOptions.jvmArgs = args
+        }
+        tasks.matching { it.name in ["compileClojure", "compileTestClojure"] }.configureEach { task ->
+            if (!task.forkOptions.memoryMaximumSize) {
+                task.forkOptions.memoryMaximumSize = "1536m"
+            }
+            ensureClojureForkJvmArg(task, "-Dfile.encoding=UTF-8")
+            ensureClojureForkJvmArg(task, "-XX:+UseG1GC")
+            ensureClojureForkJvmArg(task, "-Dclojure.compile.elide-meta=[:doc]")
+        }
+        // Other Clojurephant forked tasks (e.g. checkClojure) keep baseline JVM settings.
+        tasks.matching { task ->
+            task.name !in ["compileClojure", "compileTestClojure"] &&
+                task.metaClass.hasProperty(task, "forkOptions") != null
+        }.configureEach { task ->
+            if (!task.forkOptions.memoryMaximumSize) {
+                task.forkOptions.memoryMaximumSize = "1536m"
+            }
+            ensureClojureForkJvmArg(task, "-Dfile.encoding=UTF-8")
+            ensureClojureForkJvmArg(task, "-XX:+UseG1GC")
+        }
+    }
+
+    plugins.withType(JavaPlugin) {
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(21)
+            }
+        }
+        tasks.withType(JavaCompile).configureEach {
+            options.release = 17
+        }
+        tasks.withType(Jar).configureEach {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+    }
 }
 
-
-configurations {
-    provided
+ext.platformCatalog = {
+    new JsonSlurper().parse(rootProject.file("platform-catalog.json"))
 }
 
-dependencies {
-	compile "cn.lambdalib:LambdaLib:${config.lambdalib_ver}:dev"
-	
-	provided "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
-	
-	compile "codechicken:CodeChickenLib:1.7.10-${config.ccl_ver}:dev"
-  compile "codechicken:CodeChickenCore:1.7.10-${config.ccc_ver}:dev"
-  compile "codechicken:NotEnoughItems:1.7.10-${config.nei_ver}:dev"
-	
-	deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
+tasks.register("verifyNoLegacyArchitecture") {
+    group = "verification"
+    description = "Fail if deleted platform-module architecture returns."
+    doLast {
+        def forbiddenDirs = ["mc-1.20.1", "forge-1.20.1", "fabric-1.20.1", "test-support", "platform-target"]
+            .collect { rootProject.file(it) }
+            .findAll { it.exists() }
+        if (!forbiddenDirs.isEmpty()) {
+            throw new GradleException("Legacy root directories still exist: " + forbiddenDirs)
+        }
+    }
 }
 
-
-sourceSets.main.compileClasspath += [configurations.provided]
-
-idea {
-  module{
-    scopes.PROVIDED.plus += [configurations.provided]
-  }
+tasks.register("verifyNoThinForwarders") {
+    group = "verification"
+    description = "Fail if old platform SPI or forwarding bootstrap code remains."
+    doLast {
+        def offenders = fileTree(rootProject.projectDir) {
+            include "api/src/main/java/**/PlatformBootstrap*.java"
+            include "mcmod/src/main/java/**/PlatformBootstrap*.java"
+            include "platform-src/**/Platform*Bootstrap*.java"
+            include "platform-src/**/bootstrap_entry.clj"
+            include "platform-src/**/spi_bootstrap.clj"
+            include "platform-src/**/META-INF/services/cn.li.mcmod.platform.spi.PlatformBootstrap"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/gui_open.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/media_library.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/media_playback.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/saved_data.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/damage_interception.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/config_persist.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/events.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/world_owner_key.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/energy_integration.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/command_runtime.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/integration_runtime.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/runtime_interop.clj"
+            include "mcmod/src/main/clojure/cn/li/mcmod/platform/named_position_store.clj"
+            exclude "**/build/**"
+            exclude "**/.gradle/**"
+        }.files
+        if (!offenders.isEmpty()) {
+            throw new GradleException("Thin/legacy platform bootstrap residues remain: " + offenders)
+        }
+    }
 }
 
-sourceSets.main {
-    java.srcDirs = []
-    scala.srcDirs =  ['src/main/java', 'src/main/scala']
+tasks.register("verifyNoCompatibilityResidues") {
+    group = "verification"
+    description = "Fail if old compatibility or partial platform install APIs return."
+    doLast {
+        def patterns = [
+            ~/Backward compatible/,
+            ~/backward compatible/,
+            ~/install-[A-Za-z0-9_-]+-only!/,
+            ~/install-platform-foundation\+hooks!/,
+            ~/install-foundation!/
+        ]
+        def hits = []
+        fileTree(rootProject.projectDir) {
+            include "mcmod/src/main/clojure/**/*.clj"
+            include "platform-src/**/*.clj"
+            exclude "**/build/**"
+            exclude "**/.gradle/**"
+        }.files.each { File f ->
+            f.eachLine { line, number ->
+                patterns.each { pattern ->
+                    if ((line =~ pattern).find()) {
+                        hits << "${rootDir.toPath().relativize(f.toPath())}:${number}: ${line.trim()}"
+                    }
+                }
+            }
+        }
+        if (!hits.isEmpty()) {
+            throw new GradleException("Compatibility/partial-install residues remain:\n" + hits.join("\n"))
+        }
+    }
 }
 
-processResources {
-	from(sourceSets.main.resources.srcDirs) {
-		include 'mcmod.info'
-		expand 'version':project.version, 'mcversion':project.minecraft.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
-	}
+tasks.register("verifyNoDuplicateCapabilities") {
+    group = "verification"
+    description = "Verify each target capability has exactly one owner."
+    doLast {
+        def problems = []
+        rootProject.ext.platformCatalog().targets.each { id, target ->
+            def components = rootProject.ext.platformCatalog().components ?: [:]
+            ((target.sourceComponents ?: []) + (target.testComponents ?: [])).each { componentId ->
+                if (!components.containsKey(componentId.toString())) {
+                    problems << "${id}: unknown component ${componentId}"
+                }
+            }
+            (target.capabilities ?: []).each { capability ->
+                def owners = (target.capabilityOwners ?: [:])[capability] ?: []
+                if (owners.size() != 1) {
+                    problems << "${id}:${capability} owners=${owners}"
+                } else if (!components.containsKey(owners.first().toString())) {
+                    problems << "${id}:${capability} unknown owner=${owners.first()}"
+                }
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new GradleException("Invalid capability ownership:\n" + problems.join("\n"))
+        }
+    }
 }
 
-compileJava.options.encoding = "UTF-8"
-compileScala.options.encoding = "UTF-8"
-
-task deobfJar(type: Jar, dependsOn: 'jar') {
-	classifier 'dev'
-	from sourceSets.main.output
+tasks.register("verifyPlatformCatalog") {
+    group = "verification"
+    description = "Verify platform catalog targets compose declared components only."
+    doLast {
+        def catalog = rootProject.ext.platformCatalog()
+        def components = catalog.components ?: [:]
+        def profiles = catalog.buildProfiles ?: [:]
+        def problems = []
+        if ((catalog.javaBaseline ?: 0) as int < 17) {
+            problems << "javaBaseline must be at least 17 because api uses Java 17 language/library features"
+        }
+        if (profiles.isEmpty()) {
+            problems << "catalog has no buildProfiles"
+        }
+        profiles.each { profileId, profile ->
+            if (!profile.gradleVersion || !profile.gradleJvmVersion || !profile.wrapper) {
+                problems << "buildProfile ${profileId} must declare gradleVersion, gradleJvmVersion and wrapper"
+            }
+        }
+        if (components.isEmpty()) {
+            problems << "catalog has no components"
+        }
+        components.each { id, component ->
+            if (id.toString().toLowerCase().startsWith("ac-") || component.content) {
+                problems << "platform component ${id} must not bind a content module to a concrete platform"
+            }
+            ["source", "tests"].each { key ->
+                if (component[key]) {
+                    def componentPath = file(component[key].toString())
+                    if (!componentPath.exists()) {
+                        problems << "component ${id}.${key} missing path ${component[key]}"
+                    }
+                }
+            }
+        }
+        catalog.targets.each { targetId, target ->
+            ["buildProfile", "gradleJvmVersion", "compileJavaVersion", "runtimeJavaVersion"].each { key ->
+                if (!target[key]) problems << "${targetId} missing ${key}"
+            }
+            if (target.loader?.toString() != "none" && !(target.neutralAotWhitelist instanceof Collection)) {
+                problems << "${targetId} must declare neutralAotWhitelist (the reviewed mcmod AOT boundary)"
+            }
+            def manifests = target.providerManifests
+            def expectedProviderSides = ["common", "server", "client", "datagen"] as Set
+            def manifestSides = manifests instanceof Map
+                ? (manifests.keySet().collect { it.toString() } as Set)
+                : ([] as Set)
+            if (!(manifests instanceof Map) || manifestSides != expectedProviderSides) {
+                problems << "${targetId} providerManifests must contain exactly common/server/client/datagen"
+            } else {
+                manifests.each { side, modules ->
+                    if (!(modules instanceof Collection)) {
+                        problems << "${targetId} provider manifest ${side} must be a collection"
+                    }
+                    (modules ?: []).each { module ->
+                        ["id", "namespace", "function", "provides"].each { key ->
+                            if (!module[key]) problems << "${targetId} provider manifest ${side} missing ${key}"
+                        }
+                    }
+                }
+            }
+            (target.contentProjects ?: []).each { projectId ->
+                if (!rootProject.findProject(":${projectId}")) problems << "${targetId} references unknown content project ${projectId}"
+            }
+            if (target.buildProfile && !profiles.containsKey(target.buildProfile.toString())) {
+                problems << "${targetId} references unknown buildProfile ${target.buildProfile}"
+            }
+            if (target.buildProfile && profiles[target.buildProfile.toString()] &&
+                target.gradleJvmVersion as int != (profiles[target.buildProfile.toString()].gradleJvmVersion ?: 0) as int) {
+                problems << "${targetId} gradleJvmVersion does not match buildProfile ${target.buildProfile}"
+            }
+            if ((target.compileJavaVersion ?: 0) as int < (catalog.javaBaseline ?: 17) as int) {
+                problems << "${targetId} compileJavaVersion is below javaBaseline"
+            }
+            if ((target.runtimeJavaVersion ?: 0) as int < (target.compileJavaVersion ?: 17) as int) {
+                problems << "${targetId} runtimeJavaVersion is below compileJavaVersion"
+            }
+            (target.sourceComponents ?: []).each { componentId ->
+                def component = components[componentId.toString()]
+                if (component == null) {
+                    problems << "${targetId} source component ${componentId} is not declared"
+                } else {
+                    if (!component.source) {
+                        problems << "${targetId} source component ${componentId} has no source root"
+                    }
+                    if (component.loader && component.loader != target.loader) {
+                        problems << "${targetId} loader ${target.loader} does not match component ${componentId} loader ${component.loader}"
+                    }
+                    if (component.minecraftVersion && component.minecraftVersion != target.minecraftVersion) {
+                        problems << "${targetId} Minecraft ${target.minecraftVersion} does not match component ${componentId} Minecraft ${component.minecraftVersion}"
+                    }
+                }
+            }
+            (target.testComponents ?: []).each { componentId ->
+                def component = components[componentId.toString()]
+                if (component == null) {
+                    problems << "${targetId} test component ${componentId} is not declared"
+                } else if (!(component.tests ?: component.source)) {
+                    problems << "${targetId} test component ${componentId} has no tests/source root"
+                }
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new GradleException("Invalid platform catalog:\n" + problems.join("\n"))
+        }
+    }
 }
 
-artifacts {
-	archives deobfJar
+tasks.register("verifyNoTargetHardcoding") {
+    group = "verification"
+    description = "Verify active build files use the catalog instead of legacy project paths."
+    doLast {
+        def legacyCatalogName = "platform-" + "targets.json"
+        def oldCatalog = file(legacyCatalogName)
+        if (oldCatalog.exists()) {
+            throw new GradleException("Legacy target catalog remains: ${oldCatalog}")
+        }
+        def newCatalog = file("platform-catalog.json")
+        if (!newCatalog.isFile()) {
+            throw new GradleException("Missing platform catalog: ${newCatalog}")
+        }
+        def filesToScan = [file("settings.gradle"), file("build.gradle")] +
+            fileTree("build-logic") { include "**/*.gradle" }.files +
+            fileTree("platform") { include "**/*.gradle" }.files
+        def forbidden = [
+            legacyCatalogName,
+            "project(':forge-" + "1.20.1')",
+            "project(':fabric-" + "1.20.1')",
+            "platform-src/minecraft/version/mc-" + "1201"
+        ]
+        def hits = []
+        filesToScan.each { File f ->
+            def text = f.text
+            forbidden.each { token ->
+                if (text.contains(token)) {
+                    hits << "${rootDir.toPath().relativize(f.toPath())}: ${token}"
+                }
+            }
+        }
+        def sourceForbidden = [
+            legacyCatalogName,
+            ":forge-" + "1.20.1",
+            ":fabric-" + "1.20.1",
+            "\"forge-" + "1.20.1\"",
+            "\"fabric-" + "1.20.1\""
+        ]
+        def sourceFilesToScan = files(
+            fileTree("api") { include "**/*.java", "**/*.clj", "**/*.gradle" },
+            fileTree("mcmod") { include "**/*.java", "**/*.clj", "**/*.gradle" },
+            fileTree("ac") { include "**/*.java", "**/*.clj", "**/*.gradle" },
+            fileTree("platform-src") { include "**/*.java", "**/*.clj", "**/*.gradle" },
+            fileTree("platform") { include "**/*.java", "**/*.clj", "**/*.gradle" },
+            fileTree("build-logic") { include "**/*.gradle" }
+        ).files.findAll { File f ->
+            !f.toPath().any { it.toString() in ["build", ".gradle"] }
+        }
+        sourceFilesToScan.each { File f ->
+            def text = f.text
+            sourceForbidden.each { token ->
+                if (text.contains(token)) {
+                    hits << "${rootDir.toPath().relativize(f.toPath())}: ${token}"
+                }
+            }
+        }
+        if (!hits.isEmpty()) {
+            throw new GradleException("Legacy target hardcoding remains:\n" + hits.join("\n"))
+        }
+    }
 }
 
-task getLibs << {
-	ant.mkdir(dir: 'libs')
-	ant.get(src: 'http://minetweaker.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar', dest: 'libs/MineTweaker3-Dev-1.7.10-3.0.9C.jar', skipexisting: 'true')
+tasks.register("verifyRepositoryHygiene") {
+    group = "verification"
+    description = "Verify generated/build residues are not inside platform source components."
+    doLast {
+        def residues = fileTree("platform-src") {
+            include "**/.gradle/**"
+            include "**/build/**"
+            include "**/run/**"
+            include "**/run-data/**"
+            include "**/run-gametest/**"
+            include "**/bin/**"
+            exclude "**/src/**"
+        }.files
+        if (!residues.isEmpty()) {
+            throw new GradleException("Generated residues remain under platform-src; remove explicit paths first. Count=${residues.size()}")
+        }
+    }
 }
 
-sourceMainJava.dependsOn getLibs
-install.dependsOn build
+tasks.register("compareDatagenParityManifests") {
+    group = "verification"
+    description = "Compare generated datagen hash manifests for targets in the same parity group."
+    doLast {
+        def catalog = rootProject.ext.platformCatalog()
+        def targetsByGroup = catalog.targets.findAll { id, target ->
+            target.datagenParityGroup
+        }.groupBy { id, target ->
+            target.datagenParityGroup.toString()
+        }
+        def problems = []
+        targetsByGroup.each { group, entries ->
+            def manifests = entries.collectEntries { id, target ->
+                def manifest = file("build/targets/${id}/platform/generated/datagen/${id}/META-INF/academy-datagen-hashes.json")
+                manifest.isFile() ? [(id): new JsonSlurper().parse(manifest)] : [:]
+            }
+            if (manifests.size() < 2) {
+                logger.lifecycle("[datagen-parity] group ${group}: need at least two manifests, found ${manifests.keySet().sort()}")
+                return
+            }
+            def baselineId = manifests.keySet().sort().first()
+            def baselineFiles = manifests[baselineId].files ?: [:]
+            manifests.keySet().sort().findAll { it != baselineId }.each { id ->
+                def files = manifests[id].files ?: [:]
+                if (files != baselineFiles) {
+                    def baselineKeys = baselineFiles.keySet() as Set
+                    def keys = files.keySet() as Set
+                    problems << [
+                        group: group,
+                        baseline: baselineId,
+                        target: id,
+                        missing: (baselineKeys - keys).sort(),
+                        extra: (keys - baselineKeys).sort(),
+                        changed: (baselineKeys.intersect(keys).findAll { k -> baselineFiles[k] != files[k] }).sort()
+                    ]
+                }
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new GradleException("Datagen parity mismatch:\n" + JsonOutput.prettyPrint(JsonOutput.toJson(problems)))
+        }
+    }
+}
 
+tasks.register("verifyUiXmlIds") {
+    group = "verification"
+    description = "Report reactive-UI node ids referenced from Clojure that no XML or build-child! declares. Run on demand; deliberately NOT part of any gate."
+    doLast {
+        // Why this is not a gate: a wrong id costs nothing until the branch
+        // holding it actually runs, so it ships green and fails in front of a
+        // player. But the match is textual -- ids built at runtime are invisible
+        // to it -- so it advises rather than blocks.
+        def xmlById = [:]
+        fileTree(file("ac/src/main/resources/assets")) { include "**/guis/**/*.xml" }.each { File x ->
+            xmlById[x.name] = (x.getText("UTF-8") =~ /id="([^"]+)"/).collect { it[1] } as Set
+        }
+
+        // Accessor forms that take a literal node id keyword.
+        def refPattern = ~/(?:node-by-id|set-prop!|set-node-prop!|on-confirm-input|events\/on!|list-set!|register-event!)\s+\w+\s+(:[\w?*<>=+.\-]+)/
+        def declPattern = ~/:id\s+(:[\w?*<>=+.\-]+)/
+        def xmlRefPattern = ~/([\w\-]+\.xml)/
+
+        def findings = []
+        fileTree(file("ac/src/main/clojure")) { include "**/*.clj"; include "**/*.cljc" }.each { File src ->
+            def text = src.getText("UTF-8")
+            def names = (text =~ xmlRefPattern).collect { it[1] }.unique().findAll { xmlById.containsKey(it) }
+            if (!names) return
+            // Ids this namespace declares itself via rt/build-child! specs count
+            // as declared -- tutorial's glow lines exist only at runtime.
+            def declared = ((declPattern.matcher(text).collect { it[1] }) as Set)
+            names.each { declared.addAll(xmlById[it].collect { id -> ":" + id }) }
+            def refs = refPattern.matcher(text).collect { it[1] }
+            // A keyword that also appears away from an accessor call is being
+            // declared somewhere this scan cannot model -- a build-child! spec
+            // built by a local helper, say. Only ids that exist *purely* as
+            // lookups are suspect.
+            def unresolved = (refs as Set)
+                .findAll { !declared.contains(it) }
+                .findAll { kw ->
+                    def total = (text =~ (java.util.regex.Pattern.quote(kw) + /(?![\w?*<>=+.\-])/)).count
+                    total <= refs.count { it == kw }
+                }
+                .sort()
+            if (unresolved) {
+                findings << "  ${rootProject.relativePath(src)} (${names.join(', ')}): ${unresolved.join(' ')}"
+            }
+        }
+
+        if (findings) {
+            logger.lifecycle("[verifyUiXmlIds] {} file(s) reference ids nothing declares:", findings.size())
+            findings.each { logger.lifecycle(it) }
+            logger.lifecycle("[verifyUiXmlIds] Note: ids assembled at runtime cannot be seen here; confirm before changing anything.")
+        } else {
+            logger.lifecycle("[verifyUiXmlIds] ok ({} gui xml files)", xmlById.size())
+        }
+    }
+}
+
+tasks.register("verifyParticleDefinitions") {
+    group = "verification"
+    description = "Fail if a particles/<id>.json definition references a texture that is not at textures/particle/<path>.png. The per-type definition format (assets/<ns>/particles/<id>.json with {\"textures\": [\"ns:path\"]}) is identical across 1.20.1 / 1.21.1 / 26.2, and every loader binds the sprite set from it — a missing file leaves the MutableSpriteSet unbound and every spawn NPEs."
+    doLast {
+        def slurper = new groovy.json.JsonSlurper()
+        def problems = []
+        def fileCount = 0
+        fileTree(file("ac/src/main/resources/assets")) { include "**/particles/*.json" }.each { File defFile ->
+            fileCount++
+            def ns = defFile.parentFile.parentFile.parentFile.name
+            def textures = []
+            try {
+                def json = slurper.parse(defFile)
+                textures = (json.textures ?: []) as List
+            } catch (Exception e) {
+                problems << "${defFile.name}: unparseable json (${e.message})"
+            }
+            textures.each { String tex ->
+                def parts = tex.split(":", 2)
+                def texNs = parts.length == 2 ? parts[0] : ns
+                def path = parts.length == 2 ? parts[1] : parts[0]
+                def expected = file("ac/src/main/resources/assets/${texNs}/textures/particle/${path}.png")
+                if (!expected.exists()) {
+                    def misplaced = file("ac/src/main/resources/assets/${texNs}/textures/${path}.png")
+                    def hint = misplaced.exists()
+                        ? " (texture exists at textures/${path}.png — particle atlas sprites resolve under textures/particle/, like vanilla smoke.json → textures/particle/generic_7.png)"
+                        : ""
+                    problems << "${defFile.name}: texture \"${tex}\" missing at textures/particle/${path}.png${hint}"
+                }
+            }
+        }
+        if (problems) {
+            problems.each { logger.lifecycle("[verifyParticleDefinitions] " + it) }
+            throw new GradleException("[verifyParticleDefinitions] ${problems.size()} particle definition problem(s) — every spawn of a sprite-set particle NPEs (sprites list never rebound)")
+        }
+        logger.lifecycle("[verifyParticleDefinitions] ok ({} particle definition file(s))", fileCount)
+    }
+}
+
+tasks.register("verifyNeutralClojureNoMinecraftApis") {
+    group = "verification"
+    description = "Fail if ac/mcmod Clojure sources or build.gradle files import or reference Minecraft/Forge/Fabric/NeoForge APIs."
+    doLast {
+        def roots = [
+            file("ac/src/main/clojure"),
+            file("ac/src/test/clojure"),
+            file("mcmod/src/main/clojure"),
+            file("mcmod/src/test/clojure")
+        ].findAll { it.directory }
+        // Real API refs look like net.minecraft.Foo ??docstrings saying "net.minecraft.*" do not match.
+        def forbidden = ~/net\.(minecraft|minecraftforge|fabricmc|neoforged)\.[A-Za-z_]/
+        // Neutral source is shipped as .clj in remapped Loom jars.  Project
+        // platform classes are just as unsafe there as net.minecraft names:
+        // Clojure would compile the original symbol after remap has finished.
+        def internalPlatformForbidden = ~/cn\.li\.(mc1201|mc1211|mc262|mcbase|fabric1201|fabric1211|fabric262|fabricbase|forge1201|neoforge1211|neoforge262|neoforgebase)\.[A-Za-z_]/
+        def violations = []
+        roots.each { File root ->
+            fileTree(root) { include "**/*.clj"; include "**/*.cljc" }.each { File src ->
+                def inBlockComment = false
+                src.eachLine { String line, int idx ->
+                    def code = line
+                    if (inBlockComment) {
+                        def end = code.indexOf("*/")
+                        if (end < 0) {
+                            return
+                        }
+                        code = code.substring(end + 2)
+                        inBlockComment = false
+                    }
+                    while (true) {
+                        def start = code.indexOf("/*")
+                        if (start < 0) {
+                            break
+                        }
+                        def end = code.indexOf("*/", start + 2)
+                        if (end < 0) {
+                            code = code.substring(0, start)
+                            inBlockComment = true
+                            break
+                        }
+                        code = code.substring(0, start) + code.substring(end + 2)
+                    }
+                    def lineComment = code.indexOf(";")
+                    if (lineComment >= 0) {
+                        code = code.substring(0, lineComment)
+                    }
+                    // Drop string literals so docstring mentions do not trip the gate.
+                    code = code.replaceAll(/"(?:\\.|[^\\"])*"/, "\"\"")
+                    code = code.replaceAll(/'(?:\\.|[^\\'])*'/, "''")
+                    def matcher = forbidden.matcher(code)
+                    while (matcher.find()) {
+                        violations << "${src}:${idx + 1}: ${matcher.group()}"
+                    }
+                    def internalMatcher = internalPlatformForbidden.matcher(code)
+                    while (internalMatcher.find()) {
+                        violations << "${src}:${idx + 1}: ${internalMatcher.group()}"
+                    }
+                }
+            }
+        }
+        // Also ban loader coordinates in neutral-module build scripts.
+        def gradleForbidden = ~/net\.(minecraftforge|fabricmc|neoforged):/
+        ["ac/build.gradle", "mcmod/build.gradle"].each { String path ->
+            def gradleFile = file(path)
+            if (!gradleFile.isFile()) {
+                return
+            }
+            gradleFile.eachLine { String line, int idx ->
+                def code = line
+                def lineComment = code.indexOf("//")
+                if (lineComment >= 0) {
+                    code = code.substring(0, lineComment)
+                }
+                def matcher = gradleForbidden.matcher(code)
+                while (matcher.find()) {
+                    violations << "${gradleFile}:${idx + 1}: ${matcher.group()}"
+                }
+            }
+        }
+        if (!violations.isEmpty()) {
+            throw new GradleException(
+                "Neutral layers (ac/mcmod) must not reference Minecraft/loader APIs.\n" +
+                "Reflection Guard only catches untyped interop; (:import [net.minecraft...]) needs this gate.\n" +
+                "Platform-only code belongs under platform-src.\n" +
+                violations.take(40).join("\n") +
+                (violations.size() > 40 ? "\n... and ${violations.size() - 40} more" : ""))
+        }
+        logger.lifecycle("[verifyNeutralClojureNoMinecraftApis] ok ({} roots)", roots.size())
+    }
+}
+
+def targetProviderDescriptors = { target ->
+    ((target.providerManifests ?: [:]).values().collectMany { modules -> modules ?: [] })
+}
+
+tasks.register("verifyNeutralProviderClosure") {
+    group = "verification"
+    description = "Verify generated runtime providers resolve only platform-neutral source namespaces."
+    doLast {
+        def catalog = rootProject.ext.platformCatalog()
+        def roots = [file("api/src/main/clojure"), file("mcmod/src/main/clojure"), file("ac/src/main/clojure")]
+            .findAll { it.directory }
+        def forbidden = java.util.regex.Pattern.compile("(?:net\\.(minecraft|minecraftforge|fabricmc|neoforged)|cn\\.li\\.(mc1201|mc1211|mc262|mcbase|fabric1201|fabric1211|fabric262|fabricbase|forge1201|neoforge1211|neoforge262|neoforgebase))\\.")
+        def findSource = { String namespaceName ->
+            def rel = namespaceName.replace('.', '/').replace('-', '_') + ".clj"
+            roots.collect { new File(it, rel) }.find { it.isFile() }
+        }
+        def violations = []
+        def descriptors = catalog.targets.values().collectMany { target -> targetProviderDescriptors(target) }
+        descriptors.each { descriptor ->
+            def rootNamespace = descriptor.namespace?.toString()
+            if (!rootNamespace) {
+                violations << "provider without namespace: ${descriptor}"
+                return
+            }
+            def queue = new ArrayDeque<String>()
+            def visited = new LinkedHashSet<String>()
+            queue.add(rootNamespace)
+            while (!queue.isEmpty()) {
+                def namespaceName = queue.removeFirst()
+                if (!visited.add(namespaceName)) continue
+                def source = findSource(namespaceName)
+                if (source == null) {
+                    violations << "${descriptor.id}: provider closure namespace is not neutral source: ${namespaceName}"
+                    continue
+                }
+                def text = source.getText("UTF-8")
+                // Direct imports and type references are covered globally by
+                // verifyNeutralClojureNoMinecraftApis. Here the transitive
+                // closure check focuses on static namespace edges and the one
+                // source-level escape hatch that can hide a class reference.
+                if (text.readLines().any { String line ->
+                    line.contains("Class/forName") && forbidden.matcher(line).find()
+                }) {
+                    violations << "${descriptor.id}: provider closure reflectively names a platform class: ${source}"
+                }
+                // Require vectors are the only permitted static edge for a
+                // neutral provider. Dynamic require remains prohibited by the
+                // provider implementation contract and hot-path tests.
+                def matcher = java.util.regex.Pattern.compile("\\[\\s*(cn\\.li\\.[A-Za-z0-9_.-]+)").matcher(text)
+                while (matcher.find()) {
+                    def dependency = matcher.group(1)
+                    if (findSource(dependency) != null) queue.add(dependency)
+                    if (dependency.startsWith("cn.li.platform.") ||
+                        dependency ==~ /cn\.li\.(mc1201|mc1211|mc262|mcbase|fabric1201|fabric1211|fabric262|fabricbase|forge1201|neoforge1211|neoforge262|neoforgebase)(\..*)?/) {
+                        violations << "${descriptor.id}: provider closure requires platform namespace ${dependency}"
+                    }
+                }
+            }
+        }
+        if (!violations.isEmpty()) {
+            throw new GradleException("Neutral provider closure violations:\n" + violations.unique().join("\n"))
+        }
+        logger.lifecycle("[verifyNeutralProviderClosure] ok ({} provider descriptors)", descriptors.size())
+    }
+}
+
+tasks.register("verifyNeutralProviderRuntimeLoad", JavaExec) {
+    group = "verification"
+    description = "Require every neutral provider factory on a classpath without platform sources or Minecraft libraries."
+    dependsOn ":api:classes", ":mcmod:classes", ":ac:classes"
+    def neutralProjects = [project(":api"), project(":mcmod"), project(":ac")]
+    // Gradle 9 rejects resolving a child project's Configuration while this
+    // JavaExec task's inputs are being snapshotted.  Resolve this deliberately
+    // at configuration time instead: it still contains only api/mcmod/ac
+    // runtime entries, and the task continues to launch a fresh, isolated JVM.
+    def neutralRuntimeClasspath = neutralProjects.collectMany {
+        it.sourceSets.main.runtimeClasspath.files
+    }
+    classpath = files(neutralRuntimeClasspath)
+    mainClass = "clojure.main"
+    doFirst {
+        def catalog = rootProject.ext.platformCatalog()
+        def factorySymbols = catalog.targets.values()
+            .collectMany { target -> targetProviderDescriptors(target) }
+            .collect { descriptor -> "${descriptor.namespace}/${descriptor.function}" }
+            .unique()
+            .sort()
+        // The command intentionally does no factory invocation: it proves the
+        // source closure can be required on an isolated neutral classpath,
+        // while provider validation itself remains an initialization concern.
+        args = ["-e", "(doseq [factory '[${factorySymbols.join(' ')}]] (requiring-resolve factory))"]
+    }
+}
+
+tasks.register("verifyVersionSeamParity") {
+    group = "verification"
+    description = "Ensure each target has at most one MC version component and version-seam members match across versions."
+    doLast {
+        def catalog = rootProject.ext.platformCatalog()
+        def components = catalog.components ?: [:]
+        def problems = []
+
+        catalog.targets.each { targetId, target ->
+            def versionComponents = (target.sourceComponents ?: []).findAll { componentId ->
+                def component = components[componentId.toString()]
+                component != null && component.kind?.toString() == "minecraft"
+            }
+            if (versionComponents.size() > 1) {
+                problems << "${targetId}: multiple minecraft version components ${versionComponents}"
+            }
+        }
+
+        components.each { componentId, component ->
+            if (component.kind?.toString() == "minecraft" && !component.javaNamespace) {
+                problems << "component ${componentId} (kind:minecraft) must declare javaNamespace"
+            }
+        }
+
+        // Shared components (minecraft-base, neoforge-shared, …) must not reference
+        // versioned Minecraft or loader namespaces declared via javaNamespace.
+        def forbiddenPatterns = components.findAll { id, component ->
+            def kind = component.kind?.toString() ?: ""
+            component.javaNamespace && (kind == "minecraft" || kind == "loader")
+        }.collect { id, component ->
+            Pattern.compile(Pattern.quote(component.javaNamespace.toString()) + "\\.")
+        }
+
+        components.each { componentId, component ->
+            def kind = component.kind?.toString() ?: ""
+            if (!kind.endsWith("-shared") || !component.source) {
+                return
+            }
+            def root = file(component.source.toString())
+            ["**/*.clj", "**/*.cljc", "**/*.java"].each { pattern ->
+                if (!root.directory) {
+                    return
+                }
+                fileTree(root) { include pattern }.each { File src ->
+                    src.eachLine { String line, int idx ->
+                        forbiddenPatterns.each { Pattern forbiddenNs ->
+                            if (forbiddenNs.matcher(line).find()) {
+                                problems << "${componentId} must not reference version namespaces: ${src}:${idx + 1}"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        def seamSets = [:]
+        components.each { componentId, component ->
+            if (component.kind?.toString() != "minecraft" || !component.source) {
+                return
+            }
+            def root = file(component.source.toString())
+            def seamRoot = new File(root, "java/cn/li/mcver")
+            def names = new TreeSet()
+            if (seamRoot.directory) {
+                fileTree(seamRoot) {
+                    include "**/*.java"
+                }.each { File src ->
+                    def rel = seamRoot.toPath().relativize(src.toPath()).toString().replace("\\", "/")
+                    names << rel.replaceAll(/\.java$/, "").replace("/", ".")
+                }
+            }
+            def cljSeam = new File(root, "clojure/cn/li/mcver")
+            if (cljSeam.directory) {
+                fileTree(cljSeam) { include "**/*.clj" }.each { File src ->
+                    def rel = cljSeam.toPath().relativize(src.toPath()).toString().replace("\\", "/")
+                    names << rel.replaceAll(/\.clj$/, "").replace("/", ".").replace("_", "-")
+                }
+            }
+            seamSets[componentId.toString()] = names
+        }
+
+        def reference = seamSets.find { k, v -> !v.isEmpty() }
+        if (reference != null) {
+            seamSets.each { componentId, names ->
+                if (names != reference.value) {
+                    problems << "version seam mismatch for ${componentId}: expected ${reference.value}, found ${names}"
+                }
+            }
+        }
+
+        if (!problems.isEmpty()) {
+            throw new GradleException("verifyVersionSeamParity failed:\n" + problems.take(40).join("\n"))
+        }
+        logger.lifecycle("[verifyVersionSeamParity] ok ({} version components)", seamSets.size())
+    }
+}
+
+tasks.register("verifyMinecraftComponentNeutrality") {
+    group = "verification"
+    description = "Ensure Minecraft version components do not import a specific loader API."
+    doLast {
+        def catalog = rootProject.ext.platformCatalog()
+        def problems = []
+        (catalog.components ?: [:]).each { componentId, component ->
+            if (component.kind?.toString() != "minecraft" || !component.source) {
+                return
+            }
+            def root = file(component.source.toString())
+            if (!root.directory) {
+                problems << "${componentId}: missing source root ${component.source}"
+                return
+            }
+            fileTree(root) {
+                include "**/*.java"
+                include "**/*.clj"
+                include "**/*.cljc"
+                exclude "**/build/**"
+                exclude "**/.gradle/**"
+            }.each { File source ->
+                source.eachLine { String line, int number ->
+                    if (line ==~ /.*\bnet\.(minecraftforge|neoforged|fabricmc)\..*/) {
+                        problems << "${componentId}: loader import in ${source}:${number}: ${line.trim()}"
+                    }
+                    if (line ==~ /.*\bdev\.architectury\..*/) {
+                        problems << "${componentId}: Architectury import in ${source}:${number}: ${line.trim()}"
+                    }
+                }
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new GradleException("Minecraft component neutrality violations:\n" + problems.take(80).join("\n"))
+        }
+        logger.lifecycle("[verifyMinecraftComponentNeutrality] ok")
+    }
+}
+
+tasks.register("verifyCurrentPlatforms") {
+    group = "verification"
+    description = "Run architecture gates for the catalog-based platform layout."
+    dependsOn "verifyNoLegacyArchitecture",
+              "verifyNoThinForwarders",
+              "verifyNoCompatibilityResidues",
+              "verifyPlatformCatalog",
+              "verifyNoDuplicateCapabilities",
+              "verifyNoTargetHardcoding",
+              "verifyBuildProfiles",
+              "verifyTargetBuildEntrypoints",
+              "verifySingleApiBoundary",
+              "verifyRepositoryHygiene",
+              "verifyNeutralClojureNoMinecraftApis",
+              "verifyNeutralProviderClosure",
+              "verifyNeutralProviderRuntimeLoad",
+              "verifyMinecraftComponentNeutrality",
+              "verifyVersionSeamParity",
+              "verifyParticleDefinitions"
+}
+
+tasks.register("verifyBuildProfiles") {
+    group = "verification"
+    description = "Validate Gradle wrapper/profile isolation rules."
+    doLast {
+        def catalog = rootProject.ext.platformCatalog()
+        def wrapperText = file("gradle/wrapper/gradle-wrapper.properties").text
+        def rootVersion = (wrapperText =~ /gradle-([0-9.]+)-bin\.zip/).find() ?
+            ((wrapperText =~ /gradle-([0-9.]+)-bin\.zip/)[0][1]) : null
+        def problems = []
+        def clojurephantVersions = new LinkedHashSet()
+        def shadowByToolchain = [:].withDefault { new LinkedHashSet() }
+        (catalog.buildProfiles ?: [:]).each { profileId, profile ->
+            def toolchain = profile.toolchain?.toString()
+            if (!toolchain || !(toolchain in ["loom", "mdg"])) {
+                problems << "${profileId}: must declare toolchain as loom or mdg"
+            }
+            if (toolchain == "loom" && !profile.loomVersion) {
+                problems << "${profileId}: loom toolchain must declare loomVersion"
+            }
+            if (toolchain == "mdg" && !profile.modDevGradleVersion) {
+                problems << "${profileId}: mdg toolchain must declare modDevGradleVersion"
+            }
+            if (!profile.platformPluginId || !profile.platformPluginVersion) {
+                problems << "${profileId}: must declare platformPluginId and platformPluginVersion"
+            }
+            if ((profile.shadowPluginId && !profile.shadowVersion) || (!profile.shadowPluginId && profile.shadowVersion)) {
+                problems << "${profileId}: shadowPluginId and shadowVersion must be declared together"
+            }
+            if (!profile.clojurephantVersion) {
+                problems << "${profileId}: must declare clojurephantVersion"
+            }
+            if (profile.wrapper == "root" && profile.gradleVersion.toString() != rootVersion) {
+                problems << "${profileId}: declared Gradle ${profile.gradleVersion} but root wrapper is ${rootVersion}"
+            }
+            if (profile.wrapper != "root") {
+                def wrapperPath = profile.wrapper.toString()
+                if (!file(wrapperPath).exists() && !file("${wrapperPath}.bat").exists()) {
+                    problems << "${profileId}: missing isolated wrapper ${wrapperPath} (or ${wrapperPath}.bat)"
+                }
+            }
+            if (profile.clojurephantVersion) {
+                clojurephantVersions << profile.clojurephantVersion.toString()
+            }
+            if (profile.shadowPluginId && profile.shadowVersion) {
+                shadowByToolchain[profile.shadowPluginId.toString()] << profile.shadowVersion.toString()
+            }
+        }
+        if (clojurephantVersions.size() > 1) {
+            problems << "clojurephantVersion must be identical across all profiles; found ${clojurephantVersions}"
+        }
+        shadowByToolchain.each { shadowPluginId, versions ->
+            if (versions.size() > 1) {
+                problems << "shadow plugin ${shadowPluginId} must use one version; found ${versions}"
+            }
+        }
+        def rootBuildText = file("build.gradle").text
+        if (rootBuildText =~ /id\s+[\"']dev\.architectury\.loom[\"']\s+version\s+/) {
+            problems << "build.gradle must not hardcode Architectury Loom version; resolve it from platform-catalog buildProfiles via settings.gradle pluginManagement"
+        }
+        if (rootBuildText =~ /id\s+[\"']net\.neoforged\.moddev[\"']\s+version\s+/) {
+            problems << "build.gradle must not hardcode ModDevGradle version; resolve it from platform-catalog buildProfiles via settings.gradle pluginManagement"
+        }
+        if (rootBuildText =~ /id\s+[\"']dev\.clojurephant\.clojure[\"']\s+version\s+/) {
+            problems << "build.gradle must not hardcode clojurephant version; resolve it from platform-catalog buildProfiles via settings.gradle pluginManagement"
+        }
+        if (rootBuildText =~ /id\s+[\"']com\.github\.johnrengelman\.shadow[\"']\s+version\s+/) {
+            problems << "build.gradle must not hardcode johnrengelman shadow version; resolve it from platform-catalog buildProfiles via settings.gradle pluginManagement"
+        }
+        if (rootBuildText =~ /id\s+[\"']com\.gradleup\.shadow[\"']\s+version\s+/) {
+            problems << "build.gradle must not hardcode gradleup shadow version; resolve it from platform-catalog buildProfiles via settings.gradle pluginManagement"
+        }
+        if (!problems.isEmpty()) throw new GradleException("Invalid build profiles:\n" + problems.join("\n"))
+    }
+}
+
+tasks.register("verifyTargetBuildEntrypoints") {
+    group = "verification"
+    description = "Verify all supported OS target-build frontends share the launcher contract."
+    doLast {
+        def scripts = ["scripts/target-gradle.ps1", "scripts/target-gradle.cmd", "scripts/target-gradle.sh"]
+        def problems = []
+        scripts.each { path ->
+            def script = file(path)
+            if (!script.isFile()) {
+                problems << "missing target build entrypoint ${path}"
+            } else {
+                def text = script.text
+                if (!text.contains("target-launcher")) problems << "${path} does not invoke target-launcher"
+                if (text.contains("--stacktrace")) problems << "${path} must not append --stacktrace"
+            }
+        }
+        if (!problems.isEmpty()) throw new GradleException("Invalid target build entrypoints:\n" + problems.join("\n"))
+    }
+}
+
+tasks.register("verifySingleApiBoundary") {
+    group = "verification"
+    description = "Verify the repository exposes one API project and platform builds consume its output."
+    doLast {
+        def settingsText = file("settings.gradle").text
+        if ((settingsText =~ /include\s+[\"']api[\"']/).count != 1) {
+            throw new GradleException("settings.gradle must include exactly one api project")
+        }
+        def buildLogicText = file("build-logic/platform-target.gradle").text
+        if (buildLogicText.contains("api/src/main/java")) {
+            throw new GradleException("platform build must not inject api source files")
+        }
+        if (!buildLogicText.contains('project(":api")')) {
+            throw new GradleException("platform build must consume the :api project artifact")
+        }
+    }
+}
+
+// ============================================================================
+// clj-kondo native static lint ??packaging gate via compileClojure
+// ============================================================================
+
+def cljKondoVersion = "2025.10.15"
+def kondoDir = layout.buildDirectory.dir("clj-kondo-bin").get().asFile
+def kondoExt = OperatingSystem.current().isWindows() ? ".exe" : ""
+def kondoExe = new File(kondoDir, "clj-kondo${kondoExt}")
+
+tasks.register("downloadCljKondo") {
+    group = "verification"
+    description = "Install/download the clj-kondo native binary for this OS (standalone)."
+    outputs.file(kondoExe)
+    doLast {
+        if (kondoExe.exists()) {
+            return
+        }
+        kondoDir.mkdirs()
+        def os = OperatingSystem.current()
+        def archiveExt = ".zip"
+        def arch = System.getProperty("os.arch").toLowerCase()
+        def arm = arch.contains("aarch64") || arch.contains("arm64")
+        def platform =
+            os.windows ? "windows-amd64"
+            : os.macOsX ? (arm ? "macos-aarch64" : "macos-amd64")
+            : (arm ? "linux-aarch64" : "linux-amd64")
+        if (!os.windows && !os.macOsX) {
+            archiveExt = ".tar.gz"
+        }
+        def url = "https://github.com/clj-kondo/clj-kondo/releases/download/v${cljKondoVersion}/clj-kondo-${cljKondoVersion}-${platform}${archiveExt}"
+        logger.lifecycle("[clj-kondo] downloading {}", url)
+        def archiveFile = new File(kondoDir, "download${archiveExt}")
+        new URI(url).toURL().withInputStream { input ->
+            archiveFile.withOutputStream { output -> output << input }
+        }
+        if (archiveExt == ".zip") {
+            copy { from zipTree(archiveFile); into kondoDir }
+        } else {
+            copy { from tarTree(resources.gzip(archiveFile)); into kondoDir }
+        }
+        archiveFile.delete()
+        if (!OperatingSystem.current().isWindows()) {
+            kondoExe.setExecutable(true)
+        }
+        logger.lifecycle("[clj-kondo] ready: {}", kondoExe)
+    }
+}
+
+tasks.register("lintClojureNative") {
+    group = "verification"
+    description = "Run clj-kondo and fail the build on lint errors."
+    dependsOn tasks.named("downloadCljKondo")
+    dependsOn tasks.named("verifyNeutralClojureNoMinecraftApis")
+    def lintLog = layout.buildDirectory.file("reports/clj-kondo-lint.log")
+    outputs.file(lintLog)
+    // Declare the linted source roots as inputs; without them the task is
+    // UP-TO-DATE as soon as the report exists and silently skips real errors
+    // after the first run. Resolved lazily so per-target source wiring is
+    // visible at up-to-date-check time.
+    inputs.files {
+        def dirs = []
+        subprojects { sp ->
+            sp.plugins.withId("dev.clojurephant.clojure") {
+                sp.sourceSets.main.clojure.srcDirs.each { File dir ->
+                    if (dir.directory) {
+                        dirs << dir.absolutePath
+                    }
+                }
+            }
+        }
+        dirs
+    }
+    inputs.file(file(".clj-kondo/config.edn"))
+    doLast {
+        def dirs = []
+        subprojects { sp ->
+            sp.plugins.withId("dev.clojurephant.clojure") {
+                sp.sourceSets.main.clojure.srcDirs.each { File dir ->
+                    if (dir.directory) {
+                        dirs << dir.absolutePath
+                    }
+                }
+            }
+        }
+        if (dirs.isEmpty()) {
+            logger.lifecycle("[clj-kondo] no Clojure source directories")
+            return
+        }
+        def configFile = file(".clj-kondo/config.edn")
+        def kondoArgs = ["--lint"]
+        kondoArgs.addAll(dirs)
+        if (configFile.isFile()) {
+            kondoArgs.addAll(["--config", configFile.absolutePath])
+        }
+        kondoArgs.addAll(["--fail-level", "error"])
+        def out = new ByteArrayOutputStream()
+        def err = new ByteArrayOutputStream()
+        def pb = new ProcessBuilder([kondoExe.absolutePath] + kondoArgs)
+        pb.directory(rootProject.projectDir)
+        pb.redirectErrorStream(true)
+        def proc = pb.start()
+        proc.inputStream.withStream { input -> out << input }
+        def exitValue = proc.waitFor()
+        def result = [exitValue: exitValue]
+        def log = out.toString("UTF-8")
+        def logFile = lintLog.get().asFile
+        logFile.parentFile.mkdirs()
+        logFile.text = log
+        if (result.exitValue != 0) {
+            logger.error("[clj-kondo] failed; see {}", logFile)
+            throw new GradleException("clj-kondo check failed (exit ${result.exitValue}); details: ${logFile}")
+        }
+        logger.lifecycle("[clj-kondo] passed ({} source roots)", dirs.size())
+    }
+}
+
+gradle.projectsEvaluated {
+    subprojects { sp ->
+        sp.plugins.withId("dev.clojurephant.clojure") {
+            sp.tasks.matching { it.name == "compileClojure" }.configureEach {
+                dependsOn rootProject.tasks.named("lintClojureNative")
+            }
+        }
+    }
+}

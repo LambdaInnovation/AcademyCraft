@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <group id="base" pos="-6.0,-6.0" size="145.0,36.0" align="right,bottom">
+    <group id="progress" pos="14.0,27.0" size="120.0,1.5" align="left,top"/>
+    <text id="title" pos="13.0,17.0" size="100.0,10.0" align="left,top" text="Only My Railgun" font-size="10.0" color="#FFFFFFFF"/>
+    <image id="progress_base" pos="14.0,27.2" size="120.0,1.1" align="left,top" tint="#33000000"/>
+    <text id="time" pos="117.0,27.0" size="25.0,10.0" align="left,top" text="04:30" font-size="8.5" color="#FFFFFFFF"/>
+  </group>
+</Ui>

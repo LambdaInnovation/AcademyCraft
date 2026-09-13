@@ -1,0 +1,685 @@
+{
+  "schemaVersion": 3,
+  "defaultTarget": "forge-1.20.1",
+  "javaBaseline": 17,
+  "buildProfiles": {
+    "mc1201-loom-1.13-gradle-8.8": {
+      "gradleVersion": "8.8",
+      "wrapper": "root",
+      "gradleJvmVersion": 21,
+      "toolchain": "loom",
+      "loomVersion": "1.13.469",
+      "platformPluginId": "dev.architectury.loom",
+      "platformPluginVersion": "1.13.469",
+      "mappingsMode": "official-mojang",
+      "obfuscationMode": "remapped",
+      "clojurephantVersion": "0.9.1",
+      "shadowPluginId": "com.github.johnrengelman.shadow",
+      "shadowVersion": "8.1.1"
+    },
+    "mc1211-loom-1.13-gradle-8.8": {
+      "gradleVersion": "8.8",
+      "wrapper": "root",
+      "gradleJvmVersion": 21,
+      "toolchain": "loom",
+      "loomVersion": "1.13.469",
+      "platformPluginId": "dev.architectury.loom",
+      "platformPluginVersion": "1.13.469",
+      "mappingsMode": "official-mojang",
+      "obfuscationMode": "remapped",
+      "clojurephantVersion": "0.9.1",
+      "shadowPluginId": "com.github.johnrengelman.shadow",
+      "shadowVersion": "8.1.1"
+    },
+    "mc262-mdg-gradle-9.2": {
+      "gradleVersion": "9.2.0",
+      "wrapper": "platform-builds/gradle-9.2/gradlew",
+      "gradleJvmVersion": 25,
+      "toolchain": "mdg",
+      "modDevGradleVersion": "2.0.141",
+      "platformPluginId": "net.neoforged.moddev",
+      "platformPluginVersion": "2.0.141",
+      "mappingsMode": "none",
+      "obfuscationMode": "named",
+      "clojurephantVersion": "0.9.1",
+      "shadowPluginId": "com.gradleup.shadow",
+      "shadowVersion": "9.6.1"
+    },
+    "fabric262-loom-1.17-gradle-9.7.1": {
+      "gradleVersion": "9.7.1",
+      "wrapper": "platform-builds/gradle-9.7.1/gradlew",
+      "gradleJvmVersion": 25,
+      "toolchain": "loom",
+      "loomVersion": "1.17.18",
+      "platformPluginId": "net.fabricmc.fabric-loom",
+      "platformPluginVersion": "1.17.18",
+      "mappingsMode": "none",
+      "obfuscationMode": "named",
+      "clojurephantVersion": "0.9.1"
+    }
+  },
+  "components": {
+    "platform-shared": {
+      "kind": "platform-shared",
+      "source": "platform-src/platform/shared/src/main",
+      "tests": "platform-src/platform/shared/src/test"
+    },
+    "minecraft-base": {
+      "kind": "minecraft-shared",
+      "source": "platform-src/minecraft/base/src/main"
+    },
+    "minecraft-1.20.1": {
+      "kind": "minecraft",
+      "minecraftVersion": "1.20.1",
+      "javaNamespace": "cn.li.mc1201",
+      "source": "platform-src/minecraft/mc-1.20.1/src/main"
+    },
+    "minecraft-1.21.1": {
+      "kind": "minecraft",
+      "minecraftVersion": "1.21.1",
+      "javaNamespace": "cn.li.mc1211",
+      "source": "platform-src/minecraft/mc-1.21.1/src/main",
+      "resourceOverlayExcludes": ["data/*/pack.mcmeta"]
+    },
+    "minecraft-26.2": {
+      "kind": "minecraft",
+      "minecraftVersion": "26.2",
+      "javaNamespace": "cn.li.mc262",
+      "source": "platform-src/minecraft/mc-26.2/src/main",
+      "resourceOverlayExcludes": ["data/*/pack.mcmeta"]
+    },
+    "forge-1.20.1": {
+      "kind": "loader",
+      "loader": "forge",
+      "minecraftVersion": "1.20.1",
+      "source": "platform-src/loader/forge-1.20.1/src/main",
+      "tests": "platform-src/loader/forge-1.20.1/src/test",
+      "runtimeAotEntrypoint": "cn.li.forge1201.mod"
+    },
+    "fabric-1.20.1": {
+      "kind": "loader",
+      "loader": "fabric",
+      "minecraftVersion": "1.20.1",
+      "source": "platform-src/loader/fabric-1.20.1/src/main",
+      "tests": "platform-src/loader/fabric-1.20.1/src/test",
+      "runtimeAotEntrypoint": "cn.li.fabric1201.mod"
+    },
+    "fabric-shared": {
+      "kind": "loader-shared",
+      "loader": "fabric",
+      "javaNamespace": "cn.li.fabricbase",
+      "source": "platform-src/loader/fabric-shared/src/main",
+      "tests": "platform-src/loader/fabric-shared/src/test"
+    },
+    "fabric-1.21.1": {
+      "kind": "loader",
+      "loader": "fabric",
+      "minecraftVersion": "1.21.1",
+      "javaNamespace": "cn.li.fabric1211",
+      "source": "platform-src/loader/fabric-1.21.1/src/main",
+      "tests": "platform-src/loader/fabric-1.21.1/src/test",
+      "runtimeAotEntrypoint": "cn.li.fabric1211.mod"
+    },
+    "fabric-26.2": {
+      "kind": "loader",
+      "loader": "fabric",
+      "minecraftVersion": "26.2",
+      "javaNamespace": "cn.li.fabric262",
+      "source": "platform-src/loader/fabric-26.2/src/main",
+      "tests": "platform-src/loader/fabric-26.2/src/test",
+      "runtimeAotEntrypoint": "cn.li.fabric262.mod"
+    },
+    "neoforge-shared": {
+      "kind": "loader-shared",
+      "loader": "neoforge",
+      "javaNamespace": "cn.li.neoforgebase",
+      "source": "platform-src/loader/neoforge-shared/src/main"
+    },
+    "neoforge-1.21.1": {
+      "kind": "loader",
+      "loader": "neoforge",
+      "minecraftVersion": "1.21.1",
+      "javaNamespace": "cn.li.neoforge1211",
+      "source": "platform-src/loader/neoforge-1.21.1/src/main",
+      "tests": "platform-src/loader/neoforge-1.21.1/src/test",
+      "runtimeAotEntrypoint": "cn.li.neoforge1211.mod"
+    },
+    "neoforge-26.2": {
+      "kind": "loader",
+      "loader": "neoforge",
+      "minecraftVersion": "26.2",
+      "javaNamespace": "cn.li.neoforge262",
+      "source": "platform-src/loader/neoforge-26.2/src/main",
+      "tests": "platform-src/loader/neoforge-26.2/src/test",
+      "runtimeAotEntrypoint": "cn.li.neoforge262.mod"
+    },
+    "platform-test-support": {
+      "kind": "test-support",
+      "tests": "platform-src/test-support/src/main"
+    }
+  },
+  "targets": {
+    "core": {
+      "id": "core",
+      "loader": "none",
+      "minecraftVersion": null,
+      "buildProfile": "mc1201-loom-1.13-gradle-8.8",
+      "gradleJvmVersion": 21,
+      "compileJavaVersion": 17,
+      "runtimeJavaVersion": 21,
+      "providerManifests": {"common": [], "server": [], "client": [], "datagen": []},
+      "sourceComponents": [],
+      "testComponents": [],
+      "capabilities": [],
+      "capabilityOwners": {},
+      "dependencies": {},
+      "artifact": {
+        "baseName": "academy-core",
+        "classifier": "core"
+      }
+    },
+    "forge-1.20.1": {
+      "id": "forge-1.20.1",
+      "loader": "forge",
+      "minecraftVersion": "1.20.1",
+      "buildProfile": "mc1201-loom-1.13-gradle-8.8",
+      "gradleJvmVersion": 21,
+      "compileJavaVersion": 17,
+      "runtimeJavaVersion": 21,
+      "providerManifests": {
+        "common": [
+          {"id": "ac", "namespace": "cn.li.ac.core", "function": "runtime-provider", "provides": ["register-content!"]},
+          {"id": "registry-metadata", "namespace": "cn.li.mcmod.protocol.metadata", "function": "runtime-provider", "provides": ["get-all-block-ids", "get-all-creative-tab-entries", "get-all-effect-ids", "get-all-fluid-ids", "get-all-item-ids", "get-all-particle-ids", "get-all-sound-ids", "get-all-tile-ids", "get-block-registry-name", "get-block-spec", "get-block-tile-id", "get-effect-registry-name", "get-effect-spec", "get-fluid-id-for-block", "get-fluid-registry-name", "get-fluid-spec", "get-item-registry-name", "get-item-spec", "get-loot-injections-for-table", "get-particle-registry-name", "get-particle-spec", "get-sound-registry-name", "get-tile-block-ids", "get-tile-registry-name", "has-block-entity?", "has-block-state-properties?", "fluid-block?", "should-create-block-item?"]},
+          {"id": "blockstate-metadata", "namespace": "cn.li.mcmod.runtime.blockstate-provider", "function": "runtime-provider", "provides": ["get-all-blockstate-definitions", "get-block-state-definition", "is-multipart-block?", "get-model-cube-texture-config", "get-model-texture-config", "get-item-model-id"]}
+          ,{"id": "config", "namespace": "cn.li.mcmod.runtime.config-provider", "function": "runtime-provider", "provides": ["mod-id", "asset-path", "namespaced-path", "config-file-path", "get-all-config-domains", "get-config-descriptors", "get-config-values", "set-config-value!", "set-config-values!", "disabled-renderer-ids", "init-descriptors!", "script-render-enabled?"]}
+          ,{"id": "hooks", "namespace": "cn.li.mcmod.runtime.hooks-provider", "function": "runtime-provider", "provides": ["freeze-runtime-hooks", "register-runtime-hook-keys!", "client-session-id", "player-state-owner", "current-player-state-owner", "current-context-owner", "player-state-session-id", "require-player-state-session-id", "player-state-server-session-id", "require-player-state-server-session-id", "player-state-client-session-id", "context-player-state-session-id", "require-context-player-state-session-id", "with-client-ctx-fn", "with-player-state-owner-fn", "push-session-context!", "pop-session-context!", "clear-session-context!", "push-player-state-owner!", "pop-client-context!", "register-power-runtime-hooks!", "register-action!", "dispatch-action!", "register-sync-descriptor!", "list-sync-descriptors", "apply-sync!", "register-player-persistence-descriptor!", "list-player-persistence-descriptors", "register-player-state-domain!", "list-player-state-domains", "register-server-player-login-hook!", "run-server-player-login-hooks!", "on-player-login!", "on-player-logout!", "on-server-stop!", "on-player-clone!", "on-player-death!", "on-player-dimension-change!", "on-server-tick-start!", "on-player-tick!", "on-server-tick-end!", "init-damage-handlers!", "list-player-uuids", "build-sync-payload", "player-state-dirty?", "mark-player-clean!", "get-player-state", "runtime-activated?", "sync-player-state!", "ensure-player-state!", "fresh-player-state", "register-network-handlers!", "subscribe-achievement-trigger!", "register-context-route-fns!", "register-context-send-fns!", "get-context-player-uuid", "register-damage-handler!", "unregister-damage-handler!", "get-active-damage-handlers", "process-damage-interception", "should-cancel-attack-interception?", "run-attack-precheck-side-effects!", "resolve-item-use-action", "on-runtime-item-action!", "build-item-use-plan", "compute-aoe-damage", "select-reflection-target", "compute-reflected-damage", "get-reflection-search-radius", "client-new-context", "client-register-context!", "client-get-context", "client-terminate-context!", "client-transition-to-alive!", "client-send-context-local!", "client-build-overlay-plan", "set-client-overlay-activated!", "client-poll-particle-effects", "client-poll-sound-effects", "client-tick-start!", "client-font-init!", "client-tick-keys!", "client-active-contexts", "client-latest-sync", "client-register-push-handlers!", "client-notify-visual-event!", "client-show-combat-notice!", "client-enqueue-level-effect!", "client-build-level-effect-plan", "client-level-effects-active?", "client-tick-level-effects!", "client-level-effect-fov-offset", "client-slot-visual-state", "client-visual-state", "client-on-slot-key-down!", "client-on-slot-key-tick!", "client-on-slot-key-up!", "client-on-slot-key-abort!", "client-on-movement-key-down!", "client-on-movement-key-tick!", "client-on-movement-key-up!", "client-on-slot-wheel!", "client-clear-owner-state!", "client-abort-all!", "client-tick!", "client-tick-hand-effects!", "client-drain-camera-pitch-deltas!", "client-current-hand-transform", "toggle-debug-overlay-state!", "set-default-client-owner-fn!", "default-client-owner"]}
+          ,{"id": "tabbed-gui", "namespace": "cn.li.mcmod.runtime.tabbed-gui-provider", "function": "runtime-provider", "provides": ["tabbed-container?", "slots-active?", "slots-active-for-menu?", "detach-tab-sync!"]}
+          ,{"id": "client-network", "namespace": "cn.li.mcmod.runtime.client-network-provider", "function": "runtime-provider", "provides": ["register-request-transport!", "send-to-server", "clear-client-session-state!", "handle-push", "handle-response"]}
+          ,{"id": "keyboard-input", "namespace": "cn.li.mcmod.runtime.keyboard-input-provider", "function": "runtime-provider", "provides": ["emit-keyboard-input!"]}
+          ,{"id": "ui", "namespace": "cn.li.mcmod.runtime.ui-provider", "function": "runtime-provider", "provides": ["user-signal", "dispose!", "resize!", "flush!", "put-user-signal!", "clock-ms-sig", "partial-ticks-sig", "game-ticks-sig", "get-tape-arr", "focus-idx", "hovered-idx", "node-by-idx", "set-hovered-idx!", "ensure-layout!", "ensure-tape!", "hit-test", "dispatch-editable-key!", "dispatch-key!", "dispatch-char!", "dispatch-mouse-press!", "dispatch-mouse-release!", "dispatch-mouse-drag!", "dispatch-scroll!", "sset-l!", "sset-d!", "push-clip-sentinel", "pop-clip-sentinel", "push-transform-sentinel", "pop-transform-sentinel", "flag-hovered", "flag-focused", "flag-render-dirty"]}
+          ,{"id": "client-runtime", "namespace": "cn.li.mcmod.runtime.client-runtime-provider", "function": "runtime-provider", "provides": ["merge-client-bridge!", "call-adapter", "resolve-shader", "open-screen!", "reactive-overlay-build", "reactive-overlay-update", "reactive-overlay-mode-switch!", "run-client-tick-hooks!", "create-widget", "register-default-renderer-init-fns!", "register-all-renderers!", "get-scripted-tile-renderer", "scripted-renderers-snapshot", "install-pose-ops!", "install-render-buffer-ops!", "register-texture!", "get-texture-path", "reset-texture-registry-for-test!"]}
+          ,{"id": "block-runtime", "namespace": "cn.li.mcmod.runtime.block-runtime-provider", "function": "runtime-provider", "provides": ["get-block-spec", "list-all-blocks", "identify-block-from-full-name", "is-part-block?", "has-block-event-handler?", "snapshot-tiles-by-id", "register-tile-capability-keys!", "merge-tile-kind-defaults", "create-property-registry", "register-block-properties!", "get-property", "get-all-properties"]}
+          ,{"id": "event-runtime", "namespace": "cn.li.mcmod.runtime.event-runtime-provider", "function": "runtime-provider", "provides": ["on-block-right-click", "on-block-place", "on-block-break", "interaction-consumed?", "gui-open-result?", "dispatch-world-load", "dispatch-world-unload", "dispatch-world-save", "dispatch-world-tick", "remember-saved-data!", "consume-saved-data!", "clear-world-saved-data!", "set-on-world-state-changed-fn!", "world-key"]}
+          ,{"id": "command-runtime", "namespace": "cn.li.mcmod.runtime.command-runtime-provider", "function": "runtime-provider", "provides": ["create-context", "execute", "execute-action-impl", "get-all-command-ids", "get-command-spec", "init-commands!"]}
+          ,{"id": "client-render", "namespace": "cn.li.mcmod.runtime.client-render-provider", "function": "runtime-provider", "provides": ["initial-button-state", "handle-button-state!", "validate-profile!", "kind-renderer-key", "register-scripted-effect-kind!", "resolve-kind-renderer-key", "supported-kinds", "get-profile", "snapshot"]}
+          ,{"id": "network-runtime", "namespace": "cn.li.mcmod.runtime.network-runtime-provider", "function": "runtime-provider", "provides": ["encode", "decode", "list-descriptors", "handle-request"]}
+          ,{"id": "gui-runtime", "namespace": "cn.li.mcmod.runtime.gui-runtime-provider", "function": "runtime-provider", "provides": ["get-all-gui-ids", "get-registry-name", "get-display-name", "get-slot-layout", "get-slot-range", "get-screen-factory-fn", "get-screen-factory-fn-kw", "get-gui-handler", "get-server-container", "get-container-for-menu", "owner-from-container", "register-menu-container!", "unregister-menu-container!", "get-gui-id-for-container", "safe-close!", "safe-validate", "server-menu-sync!", "slot-can-place?", "slot-changed!", "slot-count", "slot-get-item", "slot-set-item!", "clamp-int", "get-slot-validator"]}
+          ,{"id": "integration-runtime", "namespace": "cn.li.mcmod.runtime.integration-runtime-provider", "function": "runtime-provider", "provides": ["content-to-fe", "fe-to-content", "validate-conversion-rate", "forge-energy-conversion-rate", "ic2-energy-conversion-rate", "jei-get-all-categories", "jei-get-recipes", "jei-format-recipe", "get-jei-nbt-subtype-item-ids", "msg-id", "on-item-event!", "process-pending-activations!", "register-tutorial-activated-hook!"]}
+        ],
+        "server": [], "client": [], "datagen": []
+      },
+      "neutralAotWhitelist": [],
+      "contentProjects": ["ac"],
+      "sourceComponents": [
+        "platform-shared",
+        "minecraft-base",
+        "minecraft-1.20.1",
+        "forge-1.20.1"
+      ],
+      "testComponents": [
+        "platform-test-support",
+        "platform-shared",
+        "forge-1.20.1"
+      ],
+      "capabilities": [
+        "loader-entrypoint",
+        "client-entrypoint",
+        "datagen-entrypoint",
+        "minecraft-runtime",
+        "registry",
+        "network",
+        "gui",
+        "capability",
+        "jei"
+      ],
+      "capabilityOwners": {
+        "loader-entrypoint": ["forge-1.20.1"],
+        "client-entrypoint": ["forge-1.20.1"],
+        "datagen-entrypoint": ["forge-1.20.1"],
+        "minecraft-runtime": ["minecraft-1.20.1"],
+        "registry": ["forge-1.20.1"],
+        "network": ["forge-1.20.1"],
+        "gui": ["forge-1.20.1"],
+        "capability": ["forge-1.20.1"],
+        "jei": ["forge-1.20.1"]
+      },
+      "dependencies": {
+        "minecraft": "com.mojang:minecraft:1.20.1",
+        "loader": "net.minecraftforge:forge:1.20.1-47.4.0",
+        "jeiCommonApi": "mezz.jei:jei-1.20.1-common-api:15.20.0.112",
+        "jeiForgeApi": "mezz.jei:jei-1.20.1-forge-api:15.20.0.112",
+        "jeiForgeRuntime": "mezz.jei:jei-1.20.1-forge:15.20.0.112",
+        "sparkRuntimeFile": "platform-src/loader/forge-1.20.1/libs/spark-1.10.53-forge.jar"
+      },
+      "datagenParityGroup": "mc-1201",
+      "entrypoint": {
+        "namespace": "cn.li.forge1201.platform.init",
+        "function": "init-platform!"
+      },
+      "artifact": {
+        "classifier": "forge-1.20.1",
+        "runtimeLibraryPackaging": "loom-include"
+      }
+    },
+    "fabric-1.20.1": {
+      "id": "fabric-1.20.1",
+      "loader": "fabric",
+      "minecraftVersion": "1.20.1",
+      "buildProfile": "mc1201-loom-1.13-gradle-8.8",
+      "gradleJvmVersion": 21,
+      "compileJavaVersion": 17,
+      "runtimeJavaVersion": 21,
+      "providerManifests": {
+        "common": [
+          {"id": "ac", "namespace": "cn.li.ac.core", "function": "runtime-provider", "provides": ["register-content!"]},
+          {"id": "registry-metadata", "namespace": "cn.li.mcmod.protocol.metadata", "function": "runtime-provider", "provides": ["get-all-block-ids", "get-all-creative-tab-entries", "get-all-effect-ids", "get-all-fluid-ids", "get-all-item-ids", "get-all-particle-ids", "get-all-sound-ids", "get-all-tile-ids", "get-block-registry-name", "get-block-spec", "get-block-tile-id", "get-effect-registry-name", "get-effect-spec", "get-fluid-id-for-block", "get-fluid-registry-name", "get-fluid-spec", "get-item-registry-name", "get-item-spec", "get-loot-injections-for-table", "get-particle-registry-name", "get-particle-spec", "get-sound-registry-name", "get-tile-block-ids", "get-tile-registry-name", "has-block-entity?", "has-block-state-properties?", "fluid-block?", "should-create-block-item?"]},
+          {"id": "blockstate-metadata", "namespace": "cn.li.mcmod.runtime.blockstate-provider", "function": "runtime-provider", "provides": ["get-all-blockstate-definitions", "get-block-state-definition", "is-multipart-block?", "get-model-cube-texture-config", "get-model-texture-config", "get-item-model-id"]}
+          ,{"id": "config", "namespace": "cn.li.mcmod.runtime.config-provider", "function": "runtime-provider", "provides": ["mod-id", "asset-path", "namespaced-path", "config-file-path", "get-all-config-domains", "get-config-descriptors", "get-config-values", "set-config-value!", "set-config-values!", "disabled-renderer-ids", "init-descriptors!", "script-render-enabled?"]}
+          ,{"id": "hooks", "namespace": "cn.li.mcmod.runtime.hooks-provider", "function": "runtime-provider", "provides": ["freeze-runtime-hooks", "register-runtime-hook-keys!", "client-session-id", "player-state-owner", "current-player-state-owner", "current-context-owner", "player-state-session-id", "require-player-state-session-id", "player-state-server-session-id", "require-player-state-server-session-id", "player-state-client-session-id", "context-player-state-session-id", "require-context-player-state-session-id", "with-client-ctx-fn", "with-player-state-owner-fn", "push-session-context!", "pop-session-context!", "clear-session-context!", "push-player-state-owner!", "pop-client-context!", "register-power-runtime-hooks!", "register-action!", "dispatch-action!", "register-sync-descriptor!", "list-sync-descriptors", "apply-sync!", "register-player-persistence-descriptor!", "list-player-persistence-descriptors", "register-player-state-domain!", "list-player-state-domains", "register-server-player-login-hook!", "run-server-player-login-hooks!", "on-player-login!", "on-player-logout!", "on-server-stop!", "on-player-clone!", "on-player-death!", "on-player-dimension-change!", "on-server-tick-start!", "on-player-tick!", "on-server-tick-end!", "init-damage-handlers!", "list-player-uuids", "build-sync-payload", "player-state-dirty?", "mark-player-clean!", "get-player-state", "runtime-activated?", "sync-player-state!", "ensure-player-state!", "fresh-player-state", "register-network-handlers!", "subscribe-achievement-trigger!", "register-context-route-fns!", "register-context-send-fns!", "get-context-player-uuid", "register-damage-handler!", "unregister-damage-handler!", "get-active-damage-handlers", "process-damage-interception", "should-cancel-attack-interception?", "run-attack-precheck-side-effects!", "resolve-item-use-action", "on-runtime-item-action!", "build-item-use-plan", "compute-aoe-damage", "select-reflection-target", "compute-reflected-damage", "get-reflection-search-radius", "client-new-context", "client-register-context!", "client-get-context", "client-terminate-context!", "client-transition-to-alive!", "client-send-context-local!", "client-build-overlay-plan", "set-client-overlay-activated!", "client-poll-particle-effects", "client-poll-sound-effects", "client-tick-start!", "client-font-init!", "client-tick-keys!", "client-active-contexts", "client-latest-sync", "client-register-push-handlers!", "client-notify-visual-event!", "client-show-combat-notice!", "client-enqueue-level-effect!", "client-build-level-effect-plan", "client-level-effects-active?", "client-tick-level-effects!", "client-level-effect-fov-offset", "client-slot-visual-state", "client-visual-state", "client-on-slot-key-down!", "client-on-slot-key-tick!", "client-on-slot-key-up!", "client-on-slot-key-abort!", "client-on-movement-key-down!", "client-on-movement-key-tick!", "client-on-movement-key-up!", "client-on-slot-wheel!", "client-clear-owner-state!", "client-abort-all!", "client-tick!", "client-tick-hand-effects!", "client-drain-camera-pitch-deltas!", "client-current-hand-transform", "toggle-debug-overlay-state!", "set-default-client-owner-fn!", "default-client-owner"]}
+          ,{"id": "tabbed-gui", "namespace": "cn.li.mcmod.runtime.tabbed-gui-provider", "function": "runtime-provider", "provides": ["tabbed-container?", "slots-active?", "slots-active-for-menu?", "detach-tab-sync!"]}
+          ,{"id": "client-network", "namespace": "cn.li.mcmod.runtime.client-network-provider", "function": "runtime-provider", "provides": ["register-request-transport!", "send-to-server", "clear-client-session-state!", "handle-push", "handle-response"]}
+          ,{"id": "keyboard-input", "namespace": "cn.li.mcmod.runtime.keyboard-input-provider", "function": "runtime-provider", "provides": ["emit-keyboard-input!"]}
+          ,{"id": "ui", "namespace": "cn.li.mcmod.runtime.ui-provider", "function": "runtime-provider", "provides": ["user-signal", "dispose!", "resize!", "flush!", "put-user-signal!", "clock-ms-sig", "partial-ticks-sig", "game-ticks-sig", "get-tape-arr", "focus-idx", "hovered-idx", "node-by-idx", "set-hovered-idx!", "ensure-layout!", "ensure-tape!", "hit-test", "dispatch-editable-key!", "dispatch-key!", "dispatch-char!", "dispatch-mouse-press!", "dispatch-mouse-release!", "dispatch-mouse-drag!", "dispatch-scroll!", "sset-l!", "sset-d!", "push-clip-sentinel", "pop-clip-sentinel", "push-transform-sentinel", "pop-transform-sentinel", "flag-hovered", "flag-focused", "flag-render-dirty"]}
+          ,{"id": "client-runtime", "namespace": "cn.li.mcmod.runtime.client-runtime-provider", "function": "runtime-provider", "provides": ["merge-client-bridge!", "call-adapter", "resolve-shader", "open-screen!", "reactive-overlay-build", "reactive-overlay-update", "reactive-overlay-mode-switch!", "run-client-tick-hooks!", "create-widget", "register-default-renderer-init-fns!", "register-all-renderers!", "get-scripted-tile-renderer", "scripted-renderers-snapshot", "install-pose-ops!", "install-render-buffer-ops!", "register-texture!", "get-texture-path", "reset-texture-registry-for-test!"]}
+          ,{"id": "block-runtime", "namespace": "cn.li.mcmod.runtime.block-runtime-provider", "function": "runtime-provider", "provides": ["get-block-spec", "list-all-blocks", "identify-block-from-full-name", "is-part-block?", "has-block-event-handler?", "snapshot-tiles-by-id", "register-tile-capability-keys!", "merge-tile-kind-defaults", "create-property-registry", "register-block-properties!", "get-property", "get-all-properties"]}
+          ,{"id": "event-runtime", "namespace": "cn.li.mcmod.runtime.event-runtime-provider", "function": "runtime-provider", "provides": ["on-block-right-click", "on-block-place", "on-block-break", "interaction-consumed?", "gui-open-result?", "dispatch-world-load", "dispatch-world-unload", "dispatch-world-save", "dispatch-world-tick", "remember-saved-data!", "consume-saved-data!", "clear-world-saved-data!", "set-on-world-state-changed-fn!", "world-key"]}
+          ,{"id": "command-runtime", "namespace": "cn.li.mcmod.runtime.command-runtime-provider", "function": "runtime-provider", "provides": ["create-context", "execute", "execute-action-impl", "get-all-command-ids", "get-command-spec", "init-commands!"]}
+          ,{"id": "client-render", "namespace": "cn.li.mcmod.runtime.client-render-provider", "function": "runtime-provider", "provides": ["initial-button-state", "handle-button-state!", "validate-profile!", "kind-renderer-key", "register-scripted-effect-kind!", "resolve-kind-renderer-key", "supported-kinds", "get-profile", "snapshot"]}
+          ,{"id": "network-runtime", "namespace": "cn.li.mcmod.runtime.network-runtime-provider", "function": "runtime-provider", "provides": ["encode", "decode", "list-descriptors", "handle-request"]}
+          ,{"id": "gui-runtime", "namespace": "cn.li.mcmod.runtime.gui-runtime-provider", "function": "runtime-provider", "provides": ["get-all-gui-ids", "get-registry-name", "get-display-name", "get-slot-layout", "get-slot-range", "get-screen-factory-fn", "get-screen-factory-fn-kw", "get-gui-handler", "get-server-container", "get-container-for-menu", "owner-from-container", "register-menu-container!", "unregister-menu-container!", "get-gui-id-for-container", "safe-close!", "safe-validate", "server-menu-sync!", "slot-can-place?", "slot-changed!", "slot-count", "slot-get-item", "slot-set-item!", "clamp-int", "get-slot-validator"]}
+          ,{"id": "integration-runtime", "namespace": "cn.li.mcmod.runtime.integration-runtime-provider", "function": "runtime-provider", "provides": ["content-to-fe", "fe-to-content", "validate-conversion-rate", "forge-energy-conversion-rate", "ic2-energy-conversion-rate", "jei-get-all-categories", "jei-get-recipes", "jei-format-recipe", "get-jei-nbt-subtype-item-ids", "msg-id", "on-item-event!", "process-pending-activations!", "register-tutorial-activated-hook!"]}
+        ],
+        "server": [], "client": [], "datagen": []
+      },
+      "neutralAotWhitelist": [],
+      "contentProjects": ["ac"],
+      "sourceComponents": [
+        "platform-shared",
+        "minecraft-base",
+        "minecraft-1.20.1",
+        "fabric-shared",
+        "fabric-1.20.1"
+      ],
+      "testComponents": [
+        "platform-test-support",
+        "platform-shared",
+        "fabric-shared",
+        "fabric-1.20.1"
+      ],
+      "capabilities": [
+        "loader-entrypoint",
+        "client-entrypoint",
+        "datagen-entrypoint",
+        "minecraft-runtime",
+        "registry",
+        "network",
+        "gui",
+        "capability",
+        "jei"
+      ],
+      "capabilityOwners": {
+        "loader-entrypoint": ["fabric-1.20.1"],
+        "client-entrypoint": ["fabric-1.20.1"],
+        "datagen-entrypoint": ["fabric-1.20.1"],
+        "minecraft-runtime": ["minecraft-1.20.1"],
+        "registry": ["fabric-1.20.1"],
+        "network": ["fabric-1.20.1"],
+        "gui": ["fabric-1.20.1"],
+        "capability": ["fabric-1.20.1"],
+        "jei": ["fabric-1.20.1"]
+      },
+      "dependencies": {
+        "minecraft": "com.mojang:minecraft:1.20.1",
+        "fabricLoader": "net.fabricmc:fabric-loader:0.16.14",
+        "fabricApi": "net.fabricmc.fabric-api:fabric-api:0.92.6+1.20.1",
+        "fabricEnergyApi": "teamreborn:energy:3.0.0",
+        "fabricEnergyRuntime": "teamreborn:energy:3.0.0",
+        "jeiCommonApi": "mezz.jei:jei-1.20.1-common-api:15.20.0.129",
+        "jeiFabricApi": "mezz.jei:jei-1.20.1-fabric-api:15.20.0.129",
+        "jeiFabricRuntime": "mezz.jei:jei-1.20.1-fabric:15.20.0.129"
+      },
+      "datagenParityGroup": "mc-1201",
+      "entrypoint": {
+        "namespace": "cn.li.fabric1201.platform.init",
+        "function": "init-platform!"
+      },
+      "artifact": {
+        "classifier": "fabric-1.20.1",
+        "finalTask": "remapJar",
+        "runtimeLibraryPackaging": "loom-include"
+      }
+    },
+    "fabric-1.21.1": {
+      "id": "fabric-1.21.1",
+      "loader": "fabric",
+      "minecraftVersion": "1.21.1",
+      "buildProfile": "mc1211-loom-1.13-gradle-8.8",
+      "gradleJvmVersion": 21,
+      "compileJavaVersion": 21,
+      "runtimeJavaVersion": 21,
+      "providerManifests": {
+        "common": [
+          {"id": "ac", "namespace": "cn.li.ac.core", "function": "runtime-provider", "provides": ["register-content!"]},
+          {"id": "registry-metadata", "namespace": "cn.li.mcmod.protocol.metadata", "function": "runtime-provider", "provides": ["get-all-block-ids", "get-all-creative-tab-entries", "get-all-effect-ids", "get-all-fluid-ids", "get-all-item-ids", "get-all-particle-ids", "get-all-sound-ids", "get-all-tile-ids", "get-block-registry-name", "get-block-spec", "get-block-tile-id", "get-effect-registry-name", "get-effect-spec", "get-fluid-id-for-block", "get-fluid-registry-name", "get-fluid-spec", "get-item-registry-name", "get-item-spec", "get-loot-injections-for-table", "get-particle-registry-name", "get-particle-spec", "get-sound-registry-name", "get-tile-block-ids", "get-tile-registry-name", "has-block-entity?", "has-block-state-properties?", "fluid-block?", "should-create-block-item?"]},
+          {"id": "blockstate-metadata", "namespace": "cn.li.mcmod.runtime.blockstate-provider", "function": "runtime-provider", "provides": ["get-all-blockstate-definitions", "get-block-state-definition", "is-multipart-block?", "get-model-cube-texture-config", "get-model-texture-config", "get-item-model-id"]}
+          ,{"id": "config", "namespace": "cn.li.mcmod.runtime.config-provider", "function": "runtime-provider", "provides": ["mod-id", "asset-path", "namespaced-path", "config-file-path", "get-all-config-domains", "get-config-descriptors", "get-config-values", "set-config-value!", "set-config-values!", "disabled-renderer-ids", "init-descriptors!", "script-render-enabled?"]}
+          ,{"id": "hooks", "namespace": "cn.li.mcmod.runtime.hooks-provider", "function": "runtime-provider", "provides": ["freeze-runtime-hooks", "register-runtime-hook-keys!", "client-session-id", "player-state-owner", "current-player-state-owner", "current-context-owner", "player-state-session-id", "require-player-state-session-id", "player-state-server-session-id", "require-player-state-server-session-id", "player-state-client-session-id", "context-player-state-session-id", "require-context-player-state-session-id", "with-client-ctx-fn", "with-player-state-owner-fn", "push-session-context!", "pop-session-context!", "clear-session-context!", "push-player-state-owner!", "pop-client-context!", "register-power-runtime-hooks!", "register-action!", "dispatch-action!", "register-sync-descriptor!", "list-sync-descriptors", "apply-sync!", "register-player-persistence-descriptor!", "list-player-persistence-descriptors", "register-player-state-domain!", "list-player-state-domains", "register-server-player-login-hook!", "run-server-player-login-hooks!", "on-player-login!", "on-player-logout!", "on-server-stop!", "on-player-clone!", "on-player-death!", "on-player-dimension-change!", "on-server-tick-start!", "on-player-tick!", "on-server-tick-end!", "init-damage-handlers!", "list-player-uuids", "build-sync-payload", "player-state-dirty?", "mark-player-clean!", "get-player-state", "runtime-activated?", "sync-player-state!", "ensure-player-state!", "fresh-player-state", "register-network-handlers!", "subscribe-achievement-trigger!", "register-context-route-fns!", "register-context-send-fns!", "get-context-player-uuid", "register-damage-handler!", "unregister-damage-handler!", "get-active-damage-handlers", "process-damage-interception", "should-cancel-attack-interception?", "run-attack-precheck-side-effects!", "resolve-item-use-action", "on-runtime-item-action!", "build-item-use-plan", "compute-aoe-damage", "select-reflection-target", "compute-reflected-damage", "get-reflection-search-radius", "client-new-context", "client-register-context!", "client-get-context", "client-terminate-context!", "client-transition-to-alive!", "client-send-context-local!", "client-build-overlay-plan", "set-client-overlay-activated!", "client-poll-particle-effects", "client-poll-sound-effects", "client-tick-start!", "client-font-init!", "client-tick-keys!", "client-active-contexts", "client-latest-sync", "client-register-push-handlers!", "client-notify-visual-event!", "client-show-combat-notice!", "client-enqueue-level-effect!", "client-build-level-effect-plan", "client-level-effects-active?", "client-tick-level-effects!", "client-level-effect-fov-offset", "client-slot-visual-state", "client-visual-state", "client-on-slot-key-down!", "client-on-slot-key-tick!", "client-on-slot-key-up!", "client-on-slot-key-abort!", "client-on-movement-key-down!", "client-on-movement-key-tick!", "client-on-movement-key-up!", "client-on-slot-wheel!", "client-clear-owner-state!", "client-abort-all!", "client-tick!", "client-tick-hand-effects!", "client-drain-camera-pitch-deltas!", "client-current-hand-transform", "toggle-debug-overlay-state!", "set-default-client-owner-fn!", "default-client-owner"]}
+          ,{"id": "tabbed-gui", "namespace": "cn.li.mcmod.runtime.tabbed-gui-provider", "function": "runtime-provider", "provides": ["tabbed-container?", "slots-active?", "slots-active-for-menu?", "detach-tab-sync!"]}
+          ,{"id": "client-network", "namespace": "cn.li.mcmod.runtime.client-network-provider", "function": "runtime-provider", "provides": ["register-request-transport!", "send-to-server", "clear-client-session-state!", "handle-push", "handle-response"]}
+          ,{"id": "keyboard-input", "namespace": "cn.li.mcmod.runtime.keyboard-input-provider", "function": "runtime-provider", "provides": ["emit-keyboard-input!"]}
+          ,{"id": "ui", "namespace": "cn.li.mcmod.runtime.ui-provider", "function": "runtime-provider", "provides": ["user-signal", "dispose!", "resize!", "flush!", "put-user-signal!", "clock-ms-sig", "partial-ticks-sig", "game-ticks-sig", "get-tape-arr", "focus-idx", "hovered-idx", "node-by-idx", "set-hovered-idx!", "ensure-layout!", "ensure-tape!", "hit-test", "dispatch-editable-key!", "dispatch-key!", "dispatch-char!", "dispatch-mouse-press!", "dispatch-mouse-release!", "dispatch-mouse-drag!", "dispatch-scroll!", "sset-l!", "sset-d!", "push-clip-sentinel", "pop-clip-sentinel", "push-transform-sentinel", "pop-transform-sentinel", "flag-hovered", "flag-focused", "flag-render-dirty"]}
+          ,{"id": "client-runtime", "namespace": "cn.li.mcmod.runtime.client-runtime-provider", "function": "runtime-provider", "provides": ["merge-client-bridge!", "call-adapter", "resolve-shader", "open-screen!", "reactive-overlay-build", "reactive-overlay-update", "reactive-overlay-mode-switch!", "run-client-tick-hooks!", "create-widget", "register-default-renderer-init-fns!", "register-all-renderers!", "get-scripted-tile-renderer", "scripted-renderers-snapshot", "install-pose-ops!", "install-render-buffer-ops!", "register-texture!", "get-texture-path", "reset-texture-registry-for-test!"]}
+          ,{"id": "block-runtime", "namespace": "cn.li.mcmod.runtime.block-runtime-provider", "function": "runtime-provider", "provides": ["get-block-spec", "list-all-blocks", "identify-block-from-full-name", "is-part-block?", "has-block-event-handler?", "snapshot-tiles-by-id", "register-tile-capability-keys!", "merge-tile-kind-defaults", "create-property-registry", "register-block-properties!", "get-property", "get-all-properties"]}
+          ,{"id": "event-runtime", "namespace": "cn.li.mcmod.runtime.event-runtime-provider", "function": "runtime-provider", "provides": ["on-block-right-click", "on-block-place", "on-block-break", "interaction-consumed?", "gui-open-result?", "dispatch-world-load", "dispatch-world-unload", "dispatch-world-save", "dispatch-world-tick", "remember-saved-data!", "consume-saved-data!", "clear-world-saved-data!", "set-on-world-state-changed-fn!", "world-key"]}
+          ,{"id": "command-runtime", "namespace": "cn.li.mcmod.runtime.command-runtime-provider", "function": "runtime-provider", "provides": ["create-context", "execute", "execute-action-impl", "get-all-command-ids", "get-command-spec", "init-commands!"]}
+          ,{"id": "client-render", "namespace": "cn.li.mcmod.runtime.client-render-provider", "function": "runtime-provider", "provides": ["initial-button-state", "handle-button-state!", "validate-profile!", "kind-renderer-key", "register-scripted-effect-kind!", "resolve-kind-renderer-key", "supported-kinds", "get-profile", "snapshot"]}
+          ,{"id": "network-runtime", "namespace": "cn.li.mcmod.runtime.network-runtime-provider", "function": "runtime-provider", "provides": ["encode", "decode", "list-descriptors", "handle-request"]}
+          ,{"id": "gui-runtime", "namespace": "cn.li.mcmod.runtime.gui-runtime-provider", "function": "runtime-provider", "provides": ["get-all-gui-ids", "get-registry-name", "get-display-name", "get-slot-layout", "get-slot-range", "get-screen-factory-fn", "get-screen-factory-fn-kw", "get-gui-handler", "get-server-container", "get-container-for-menu", "owner-from-container", "register-menu-container!", "unregister-menu-container!", "get-gui-id-for-container", "safe-close!", "safe-validate", "server-menu-sync!", "slot-can-place?", "slot-changed!", "slot-count", "slot-get-item", "slot-set-item!", "clamp-int", "get-slot-validator"]}
+          ,{"id": "integration-runtime", "namespace": "cn.li.mcmod.runtime.integration-runtime-provider", "function": "runtime-provider", "provides": ["content-to-fe", "fe-to-content", "validate-conversion-rate", "forge-energy-conversion-rate", "ic2-energy-conversion-rate", "jei-get-all-categories", "jei-get-recipes", "jei-format-recipe", "get-jei-nbt-subtype-item-ids", "msg-id", "on-item-event!", "process-pending-activations!", "register-tutorial-activated-hook!"]}
+        ],
+        "server": [], "client": [], "datagen": []
+      },
+      "neutralAotWhitelist": [],
+      "contentProjects": ["ac"],
+      "sourceComponents": [
+        "platform-shared",
+        "minecraft-base",
+        "minecraft-1.21.1",
+        "fabric-shared",
+        "fabric-1.21.1"
+      ],
+      "testComponents": [
+        "platform-test-support",
+        "platform-shared",
+        "fabric-shared",
+        "fabric-1.21.1"
+      ],
+      "capabilities": [
+        "loader-entrypoint",
+        "client-entrypoint",
+        "datagen-entrypoint",
+        "minecraft-runtime",
+        "registry",
+        "network",
+        "gui",
+        "capability",
+        "jei"
+      ],
+      "capabilityOwners": {
+        "loader-entrypoint": ["fabric-1.21.1"],
+        "client-entrypoint": ["fabric-1.21.1"],
+        "datagen-entrypoint": ["fabric-1.21.1"],
+        "minecraft-runtime": ["minecraft-1.21.1"],
+        "registry": ["fabric-1.21.1"],
+        "network": ["fabric-1.21.1"],
+        "gui": ["fabric-1.21.1"],
+        "capability": ["fabric-1.21.1"],
+        "jei": ["fabric-1.21.1"]
+      },
+      "dependencies": {
+        "minecraft": "com.mojang:minecraft:1.21.1",
+        "fabricLoader": "net.fabricmc:fabric-loader:0.16.14",
+        "fabricApi": "net.fabricmc.fabric-api:fabric-api:0.116.15+1.21.1",
+        "fabricEnergyApi": "teamreborn:energy:4.1.0",
+        "fabricEnergyRuntime": "teamreborn:energy:4.1.0",
+        "jeiCommonApi": "mezz.jei:jei-1.21.1-common-api:19.39.0.368",
+        "jeiFabricApi": "mezz.jei:jei-1.21.1-fabric-api:19.39.0.368",
+        "jeiFabricRuntime": "mezz.jei:jei-1.21.1-fabric:19.39.0.368"
+      },
+      "datagenParityGroup": "mc-1211",
+      "entrypoint": {
+        "namespace": "cn.li.fabric1211.platform.init",
+        "function": "init-platform!"
+      },
+      "artifact": {
+        "classifier": "fabric-1.21.1",
+        "finalTask": "remapJar",
+        "runtimeLibraryPackaging": "loom-include"
+      }
+    },
+    "neoforge-1.21.1": {
+      "id": "neoforge-1.21.1",
+      "loader": "neoforge",
+      "minecraftVersion": "1.21.1",
+      "buildProfile": "mc1211-loom-1.13-gradle-8.8",
+      "gradleJvmVersion": 21,
+      "compileJavaVersion": 21,
+      "runtimeJavaVersion": 21,
+      "providerManifests": {
+        "common": [
+          {"id": "ac", "namespace": "cn.li.ac.core", "function": "runtime-provider", "provides": ["register-content!"]},
+          {"id": "registry-metadata", "namespace": "cn.li.mcmod.protocol.metadata", "function": "runtime-provider", "provides": ["get-all-block-ids", "get-all-creative-tab-entries", "get-all-effect-ids", "get-all-fluid-ids", "get-all-item-ids", "get-all-particle-ids", "get-all-sound-ids", "get-all-tile-ids", "get-block-registry-name", "get-block-spec", "get-block-tile-id", "get-effect-registry-name", "get-effect-spec", "get-fluid-id-for-block", "get-fluid-registry-name", "get-fluid-spec", "get-item-registry-name", "get-item-spec", "get-loot-injections-for-table", "get-particle-registry-name", "get-particle-spec", "get-sound-registry-name", "get-tile-block-ids", "get-tile-registry-name", "has-block-entity?", "has-block-state-properties?", "fluid-block?", "should-create-block-item?"]},
+          {"id": "blockstate-metadata", "namespace": "cn.li.mcmod.runtime.blockstate-provider", "function": "runtime-provider", "provides": ["get-all-blockstate-definitions", "get-block-state-definition", "is-multipart-block?", "get-model-cube-texture-config", "get-model-texture-config", "get-item-model-id"]}
+          ,{"id": "config", "namespace": "cn.li.mcmod.runtime.config-provider", "function": "runtime-provider", "provides": ["mod-id", "asset-path", "namespaced-path", "config-file-path", "get-all-config-domains", "get-config-descriptors", "get-config-values", "set-config-value!", "set-config-values!", "disabled-renderer-ids", "init-descriptors!", "script-render-enabled?"]}
+          ,{"id": "hooks", "namespace": "cn.li.mcmod.runtime.hooks-provider", "function": "runtime-provider", "provides": ["freeze-runtime-hooks", "register-runtime-hook-keys!", "client-session-id", "player-state-owner", "current-player-state-owner", "current-context-owner", "player-state-session-id", "require-player-state-session-id", "player-state-server-session-id", "require-player-state-server-session-id", "player-state-client-session-id", "context-player-state-session-id", "require-context-player-state-session-id", "with-client-ctx-fn", "with-player-state-owner-fn", "push-session-context!", "pop-session-context!", "clear-session-context!", "push-player-state-owner!", "pop-client-context!", "register-power-runtime-hooks!", "register-action!", "dispatch-action!", "register-sync-descriptor!", "list-sync-descriptors", "apply-sync!", "register-player-persistence-descriptor!", "list-player-persistence-descriptors", "register-player-state-domain!", "list-player-state-domains", "register-server-player-login-hook!", "run-server-player-login-hooks!", "on-player-login!", "on-player-logout!", "on-server-stop!", "on-player-clone!", "on-player-death!", "on-player-dimension-change!", "on-server-tick-start!", "on-player-tick!", "on-server-tick-end!", "init-damage-handlers!", "list-player-uuids", "build-sync-payload", "player-state-dirty?", "mark-player-clean!", "get-player-state", "runtime-activated?", "sync-player-state!", "ensure-player-state!", "fresh-player-state", "register-network-handlers!", "subscribe-achievement-trigger!", "register-context-route-fns!", "register-context-send-fns!", "get-context-player-uuid", "register-damage-handler!", "unregister-damage-handler!", "get-active-damage-handlers", "process-damage-interception", "should-cancel-attack-interception?", "run-attack-precheck-side-effects!", "resolve-item-use-action", "on-runtime-item-action!", "build-item-use-plan", "compute-aoe-damage", "select-reflection-target", "compute-reflected-damage", "get-reflection-search-radius", "client-new-context", "client-register-context!", "client-get-context", "client-terminate-context!", "client-transition-to-alive!", "client-send-context-local!", "client-build-overlay-plan", "set-client-overlay-activated!", "client-poll-particle-effects", "client-poll-sound-effects", "client-tick-start!", "client-font-init!", "client-tick-keys!", "client-active-contexts", "client-latest-sync", "client-register-push-handlers!", "client-notify-visual-event!", "client-show-combat-notice!", "client-enqueue-level-effect!", "client-build-level-effect-plan", "client-level-effects-active?", "client-tick-level-effects!", "client-level-effect-fov-offset", "client-slot-visual-state", "client-visual-state", "client-on-slot-key-down!", "client-on-slot-key-tick!", "client-on-slot-key-up!", "client-on-slot-key-abort!", "client-on-movement-key-down!", "client-on-movement-key-tick!", "client-on-movement-key-up!", "client-on-slot-wheel!", "client-clear-owner-state!", "client-abort-all!", "client-tick!", "client-tick-hand-effects!", "client-drain-camera-pitch-deltas!", "client-current-hand-transform", "toggle-debug-overlay-state!", "set-default-client-owner-fn!", "default-client-owner"]}
+          ,{"id": "tabbed-gui", "namespace": "cn.li.mcmod.runtime.tabbed-gui-provider", "function": "runtime-provider", "provides": ["tabbed-container?", "slots-active?", "slots-active-for-menu?", "detach-tab-sync!"]}
+          ,{"id": "client-network", "namespace": "cn.li.mcmod.runtime.client-network-provider", "function": "runtime-provider", "provides": ["register-request-transport!", "send-to-server", "clear-client-session-state!", "handle-push", "handle-response"]}
+          ,{"id": "keyboard-input", "namespace": "cn.li.mcmod.runtime.keyboard-input-provider", "function": "runtime-provider", "provides": ["emit-keyboard-input!"]}
+          ,{"id": "ui", "namespace": "cn.li.mcmod.runtime.ui-provider", "function": "runtime-provider", "provides": ["user-signal", "dispose!", "resize!", "flush!", "put-user-signal!", "clock-ms-sig", "partial-ticks-sig", "game-ticks-sig", "get-tape-arr", "focus-idx", "hovered-idx", "node-by-idx", "set-hovered-idx!", "ensure-layout!", "ensure-tape!", "hit-test", "dispatch-editable-key!", "dispatch-key!", "dispatch-char!", "dispatch-mouse-press!", "dispatch-mouse-release!", "dispatch-mouse-drag!", "dispatch-scroll!", "sset-l!", "sset-d!", "push-clip-sentinel", "pop-clip-sentinel", "push-transform-sentinel", "pop-transform-sentinel", "flag-hovered", "flag-focused", "flag-render-dirty"]}
+          ,{"id": "client-runtime", "namespace": "cn.li.mcmod.runtime.client-runtime-provider", "function": "runtime-provider", "provides": ["merge-client-bridge!", "call-adapter", "resolve-shader", "open-screen!", "reactive-overlay-build", "reactive-overlay-update", "reactive-overlay-mode-switch!", "run-client-tick-hooks!", "create-widget", "register-default-renderer-init-fns!", "register-all-renderers!", "get-scripted-tile-renderer", "scripted-renderers-snapshot", "install-pose-ops!", "install-render-buffer-ops!", "register-texture!", "get-texture-path", "reset-texture-registry-for-test!"]}
+          ,{"id": "block-runtime", "namespace": "cn.li.mcmod.runtime.block-runtime-provider", "function": "runtime-provider", "provides": ["get-block-spec", "list-all-blocks", "identify-block-from-full-name", "is-part-block?", "has-block-event-handler?", "snapshot-tiles-by-id", "register-tile-capability-keys!", "merge-tile-kind-defaults", "create-property-registry", "register-block-properties!", "get-property", "get-all-properties"]}
+          ,{"id": "event-runtime", "namespace": "cn.li.mcmod.runtime.event-runtime-provider", "function": "runtime-provider", "provides": ["on-block-right-click", "on-block-place", "on-block-break", "interaction-consumed?", "gui-open-result?", "dispatch-world-load", "dispatch-world-unload", "dispatch-world-save", "dispatch-world-tick", "remember-saved-data!", "consume-saved-data!", "clear-world-saved-data!", "set-on-world-state-changed-fn!", "world-key"]}
+          ,{"id": "command-runtime", "namespace": "cn.li.mcmod.runtime.command-runtime-provider", "function": "runtime-provider", "provides": ["create-context", "execute", "execute-action-impl", "get-all-command-ids", "get-command-spec", "init-commands!"]}
+          ,{"id": "client-render", "namespace": "cn.li.mcmod.runtime.client-render-provider", "function": "runtime-provider", "provides": ["initial-button-state", "handle-button-state!", "validate-profile!", "kind-renderer-key", "register-scripted-effect-kind!", "resolve-kind-renderer-key", "supported-kinds", "get-profile", "snapshot"]}
+          ,{"id": "network-runtime", "namespace": "cn.li.mcmod.runtime.network-runtime-provider", "function": "runtime-provider", "provides": ["encode", "decode", "list-descriptors", "handle-request"]}
+          ,{"id": "gui-runtime", "namespace": "cn.li.mcmod.runtime.gui-runtime-provider", "function": "runtime-provider", "provides": ["get-all-gui-ids", "get-registry-name", "get-display-name", "get-slot-layout", "get-slot-range", "get-screen-factory-fn", "get-screen-factory-fn-kw", "get-gui-handler", "get-server-container", "get-container-for-menu", "owner-from-container", "register-menu-container!", "unregister-menu-container!", "get-gui-id-for-container", "safe-close!", "safe-validate", "server-menu-sync!", "slot-can-place?", "slot-changed!", "slot-count", "slot-get-item", "slot-set-item!", "clamp-int", "get-slot-validator"]}
+          ,{"id": "integration-runtime", "namespace": "cn.li.mcmod.runtime.integration-runtime-provider", "function": "runtime-provider", "provides": ["content-to-fe", "fe-to-content", "validate-conversion-rate", "forge-energy-conversion-rate", "ic2-energy-conversion-rate", "jei-get-all-categories", "jei-get-recipes", "jei-format-recipe", "get-jei-nbt-subtype-item-ids", "msg-id", "on-item-event!", "process-pending-activations!", "register-tutorial-activated-hook!"]}
+        ],
+        "server": [], "client": [], "datagen": []
+      },
+      "neutralAotWhitelist": [],
+      "contentProjects": ["ac"],
+      "sourceComponents": [
+        "platform-shared",
+        "minecraft-base",
+        "minecraft-1.21.1",
+        "neoforge-shared",
+        "neoforge-1.21.1"
+      ],
+      "testComponents": [
+        "platform-test-support",
+        "platform-shared",
+        "neoforge-1.21.1"
+      ],
+      "capabilities": [
+        "loader-entrypoint",
+        "client-entrypoint",
+        "datagen-entrypoint",
+        "minecraft-runtime",
+        "registry",
+        "network",
+        "gui",
+        "capability"
+      ],
+      "capabilityOwners": {
+        "loader-entrypoint": ["neoforge-1.21.1"],
+        "client-entrypoint": ["neoforge-1.21.1"],
+        "datagen-entrypoint": ["neoforge-1.21.1"],
+        "minecraft-runtime": ["minecraft-1.21.1"],
+        "registry": ["neoforge-1.21.1"],
+        "network": ["neoforge-1.21.1"],
+        "gui": ["neoforge-1.21.1"],
+        "capability": ["neoforge-1.21.1"]
+      },
+      "dependencies": {
+        "minecraft": "com.mojang:minecraft:1.21.1",
+        "loader": "net.neoforged:neoforge:21.1.248"
+      },
+      "datagenParityGroup": "mc-1211",
+      "entrypoint": {
+        "namespace": "cn.li.neoforge1211.platform.init",
+        "function": "init-platform!"
+      },
+      "artifact": {
+        "classifier": "neoforge-1.21.1",
+        "runtimeLibraryPackaging": "loom-include"
+      }
+    },
+    "neoforge-26.2": {
+      "id": "neoforge-26.2",
+      "loader": "neoforge",
+      "minecraftVersion": "26.2",
+      "buildProfile": "mc262-mdg-gradle-9.2",
+      "gradleJvmVersion": 25,
+      "compileJavaVersion": 25,
+      "runtimeJavaVersion": 25,
+      "providerManifests": {
+        "common": [
+          {"id": "ac", "namespace": "cn.li.ac.core", "function": "runtime-provider", "provides": ["register-content!"]},
+          {"id": "registry-metadata", "namespace": "cn.li.mcmod.protocol.metadata", "function": "runtime-provider", "provides": ["get-all-block-ids", "get-all-creative-tab-entries", "get-all-effect-ids", "get-all-fluid-ids", "get-all-item-ids", "get-all-particle-ids", "get-all-sound-ids", "get-all-tile-ids", "get-block-registry-name", "get-block-spec", "get-block-tile-id", "get-effect-registry-name", "get-effect-spec", "get-fluid-id-for-block", "get-fluid-registry-name", "get-fluid-spec", "get-item-registry-name", "get-item-spec", "get-loot-injections-for-table", "get-particle-registry-name", "get-particle-spec", "get-sound-registry-name", "get-tile-block-ids", "get-tile-registry-name", "has-block-entity?", "has-block-state-properties?", "fluid-block?", "should-create-block-item?"]},
+          {"id": "blockstate-metadata", "namespace": "cn.li.mcmod.runtime.blockstate-provider", "function": "runtime-provider", "provides": ["get-all-blockstate-definitions", "get-block-state-definition", "is-multipart-block?", "get-model-cube-texture-config", "get-model-texture-config", "get-item-model-id"]}
+          ,{"id": "config", "namespace": "cn.li.mcmod.runtime.config-provider", "function": "runtime-provider", "provides": ["mod-id", "asset-path", "namespaced-path", "config-file-path", "get-all-config-domains", "get-config-descriptors", "get-config-values", "set-config-value!", "set-config-values!", "disabled-renderer-ids", "init-descriptors!", "script-render-enabled?"]}
+          ,{"id": "hooks", "namespace": "cn.li.mcmod.runtime.hooks-provider", "function": "runtime-provider", "provides": ["freeze-runtime-hooks", "register-runtime-hook-keys!", "client-session-id", "player-state-owner", "current-player-state-owner", "current-context-owner", "player-state-session-id", "require-player-state-session-id", "player-state-server-session-id", "require-player-state-server-session-id", "player-state-client-session-id", "context-player-state-session-id", "require-context-player-state-session-id", "with-client-ctx-fn", "with-player-state-owner-fn", "push-session-context!", "pop-session-context!", "clear-session-context!", "push-player-state-owner!", "pop-client-context!", "register-power-runtime-hooks!", "register-action!", "dispatch-action!", "register-sync-descriptor!", "list-sync-descriptors", "apply-sync!", "register-player-persistence-descriptor!", "list-player-persistence-descriptors", "register-player-state-domain!", "list-player-state-domains", "register-server-player-login-hook!", "run-server-player-login-hooks!", "on-player-login!", "on-player-logout!", "on-server-stop!", "on-player-clone!", "on-player-death!", "on-player-dimension-change!", "on-server-tick-start!", "on-player-tick!", "on-server-tick-end!", "init-damage-handlers!", "list-player-uuids", "build-sync-payload", "player-state-dirty?", "mark-player-clean!", "get-player-state", "runtime-activated?", "sync-player-state!", "ensure-player-state!", "fresh-player-state", "register-network-handlers!", "subscribe-achievement-trigger!", "register-context-route-fns!", "register-context-send-fns!", "get-context-player-uuid", "register-damage-handler!", "unregister-damage-handler!", "get-active-damage-handlers", "process-damage-interception", "should-cancel-attack-interception?", "run-attack-precheck-side-effects!", "resolve-item-use-action", "on-runtime-item-action!", "build-item-use-plan", "compute-aoe-damage", "select-reflection-target", "compute-reflected-damage", "get-reflection-search-radius", "client-new-context", "client-register-context!", "client-get-context", "client-terminate-context!", "client-transition-to-alive!", "client-send-context-local!", "client-build-overlay-plan", "set-client-overlay-activated!", "client-poll-particle-effects", "client-poll-sound-effects", "client-tick-start!", "client-font-init!", "client-tick-keys!", "client-active-contexts", "client-latest-sync", "client-register-push-handlers!", "client-notify-visual-event!", "client-show-combat-notice!", "client-enqueue-level-effect!", "client-build-level-effect-plan", "client-level-effects-active?", "client-tick-level-effects!", "client-level-effect-fov-offset", "client-slot-visual-state", "client-visual-state", "client-on-slot-key-down!", "client-on-slot-key-tick!", "client-on-slot-key-up!", "client-on-slot-key-abort!", "client-on-movement-key-down!", "client-on-movement-key-tick!", "client-on-movement-key-up!", "client-on-slot-wheel!", "client-clear-owner-state!", "client-abort-all!", "client-tick!", "client-tick-hand-effects!", "client-drain-camera-pitch-deltas!", "client-current-hand-transform", "toggle-debug-overlay-state!", "set-default-client-owner-fn!", "default-client-owner"]}
+          ,{"id": "tabbed-gui", "namespace": "cn.li.mcmod.runtime.tabbed-gui-provider", "function": "runtime-provider", "provides": ["tabbed-container?", "slots-active?", "slots-active-for-menu?", "detach-tab-sync!"]}
+          ,{"id": "client-network", "namespace": "cn.li.mcmod.runtime.client-network-provider", "function": "runtime-provider", "provides": ["register-request-transport!", "send-to-server", "clear-client-session-state!", "handle-push", "handle-response"]}
+          ,{"id": "keyboard-input", "namespace": "cn.li.mcmod.runtime.keyboard-input-provider", "function": "runtime-provider", "provides": ["emit-keyboard-input!"]}
+          ,{"id": "ui", "namespace": "cn.li.mcmod.runtime.ui-provider", "function": "runtime-provider", "provides": ["user-signal", "dispose!", "resize!", "flush!", "put-user-signal!", "clock-ms-sig", "partial-ticks-sig", "game-ticks-sig", "get-tape-arr", "focus-idx", "hovered-idx", "node-by-idx", "set-hovered-idx!", "ensure-layout!", "ensure-tape!", "hit-test", "dispatch-editable-key!", "dispatch-key!", "dispatch-char!", "dispatch-mouse-press!", "dispatch-mouse-release!", "dispatch-mouse-drag!", "dispatch-scroll!", "sset-l!", "sset-d!", "push-clip-sentinel", "pop-clip-sentinel", "push-transform-sentinel", "pop-transform-sentinel", "flag-hovered", "flag-focused", "flag-render-dirty"]}
+          ,{"id": "client-runtime", "namespace": "cn.li.mcmod.runtime.client-runtime-provider", "function": "runtime-provider", "provides": ["merge-client-bridge!", "call-adapter", "resolve-shader", "open-screen!", "reactive-overlay-build", "reactive-overlay-update", "reactive-overlay-mode-switch!", "run-client-tick-hooks!", "create-widget", "register-default-renderer-init-fns!", "register-all-renderers!", "get-scripted-tile-renderer", "scripted-renderers-snapshot", "install-pose-ops!", "install-render-buffer-ops!", "register-texture!", "get-texture-path", "reset-texture-registry-for-test!"]}
+          ,{"id": "block-runtime", "namespace": "cn.li.mcmod.runtime.block-runtime-provider", "function": "runtime-provider", "provides": ["get-block-spec", "list-all-blocks", "identify-block-from-full-name", "is-part-block?", "has-block-event-handler?", "snapshot-tiles-by-id", "register-tile-capability-keys!", "merge-tile-kind-defaults", "create-property-registry", "register-block-properties!", "get-property", "get-all-properties"]}
+          ,{"id": "event-runtime", "namespace": "cn.li.mcmod.runtime.event-runtime-provider", "function": "runtime-provider", "provides": ["on-block-right-click", "on-block-place", "on-block-break", "interaction-consumed?", "gui-open-result?", "dispatch-world-load", "dispatch-world-unload", "dispatch-world-save", "dispatch-world-tick", "remember-saved-data!", "consume-saved-data!", "clear-world-saved-data!", "set-on-world-state-changed-fn!", "world-key"]}
+          ,{"id": "command-runtime", "namespace": "cn.li.mcmod.runtime.command-runtime-provider", "function": "runtime-provider", "provides": ["create-context", "execute", "execute-action-impl", "get-all-command-ids", "get-command-spec", "init-commands!"]}
+          ,{"id": "client-render", "namespace": "cn.li.mcmod.runtime.client-render-provider", "function": "runtime-provider", "provides": ["initial-button-state", "handle-button-state!", "validate-profile!", "kind-renderer-key", "register-scripted-effect-kind!", "resolve-kind-renderer-key", "supported-kinds", "get-profile", "snapshot"]}
+          ,{"id": "network-runtime", "namespace": "cn.li.mcmod.runtime.network-runtime-provider", "function": "runtime-provider", "provides": ["encode", "decode", "list-descriptors", "handle-request"]}
+          ,{"id": "gui-runtime", "namespace": "cn.li.mcmod.runtime.gui-runtime-provider", "function": "runtime-provider", "provides": ["get-all-gui-ids", "get-registry-name", "get-display-name", "get-slot-layout", "get-slot-range", "get-screen-factory-fn", "get-screen-factory-fn-kw", "get-gui-handler", "get-server-container", "get-container-for-menu", "owner-from-container", "register-menu-container!", "unregister-menu-container!", "get-gui-id-for-container", "safe-close!", "safe-validate", "server-menu-sync!", "slot-can-place?", "slot-changed!", "slot-count", "slot-get-item", "slot-set-item!", "clamp-int", "get-slot-validator"]}
+          ,{"id": "integration-runtime", "namespace": "cn.li.mcmod.runtime.integration-runtime-provider", "function": "runtime-provider", "provides": ["content-to-fe", "fe-to-content", "validate-conversion-rate", "forge-energy-conversion-rate", "ic2-energy-conversion-rate", "jei-get-all-categories", "jei-get-recipes", "jei-format-recipe", "get-jei-nbt-subtype-item-ids", "msg-id", "on-item-event!", "process-pending-activations!", "register-tutorial-activated-hook!"]}
+        ],
+        "server": [], "client": [], "datagen": []
+      },
+      "neutralAotWhitelist": [],
+      "contentProjects": ["ac"],
+      "sourceComponents": [
+        "platform-shared",
+        "minecraft-base",
+        "minecraft-26.2",
+        "neoforge-shared",
+        "neoforge-26.2"
+      ],
+      "testComponents": [
+        "platform-test-support",
+        "platform-shared",
+        "neoforge-26.2"
+      ],
+      "capabilities": [
+        "loader-entrypoint",
+        "client-entrypoint",
+        "datagen-entrypoint",
+        "minecraft-runtime",
+        "registry",
+        "network",
+        "gui",
+        "capability"
+      ],
+      "capabilityOwners": {
+        "loader-entrypoint": ["neoforge-26.2"],
+        "client-entrypoint": ["neoforge-26.2"],
+        "datagen-entrypoint": ["neoforge-26.2"],
+        "minecraft-runtime": ["minecraft-26.2"],
+        "registry": ["neoforge-26.2"],
+        "network": ["neoforge-26.2"],
+        "gui": ["neoforge-26.2"],
+        "capability": ["neoforge-26.2"]
+      },
+      "dependencies": {
+      "neoForgeVersion": "26.2.0.25-beta"
+      },
+      "datagenParityGroup": "mc-262",
+      "entrypoint": {
+        "namespace": "cn.li.neoforge262.platform.init",
+        "function": "init-platform!"
+      },
+      "artifact": {
+        "classifier": "neoforge-26.2",
+        "finalTask": "jar",
+        "runtimeLibraryPackaging": "mdg-jarjar"
+      }
+    },
+    "fabric-26.2": {
+      "id": "fabric-26.2",
+      "loader": "fabric",
+      "minecraftVersion": "26.2",
+      "buildProfile": "fabric262-loom-1.17-gradle-9.7.1",
+      "gradleJvmVersion": 25,
+      "compileJavaVersion": 25,
+      "runtimeJavaVersion": 25,
+      "providerManifests": {
+        "common": [
+          {"id": "ac", "namespace": "cn.li.ac.core", "function": "runtime-provider", "provides": ["register-content!"]},
+          {"id": "registry-metadata", "namespace": "cn.li.mcmod.protocol.metadata", "function": "runtime-provider", "provides": ["get-all-block-ids", "get-all-creative-tab-entries", "get-all-effect-ids", "get-all-fluid-ids", "get-all-item-ids", "get-all-particle-ids", "get-all-sound-ids", "get-all-tile-ids", "get-block-registry-name", "get-block-spec", "get-block-tile-id", "get-effect-registry-name", "get-effect-spec", "get-fluid-id-for-block", "get-fluid-registry-name", "get-fluid-spec", "get-item-registry-name", "get-item-spec", "get-loot-injections-for-table", "get-particle-registry-name", "get-particle-spec", "get-sound-registry-name", "get-tile-block-ids", "get-tile-registry-name", "has-block-entity?", "has-block-state-properties?", "fluid-block?", "should-create-block-item?"]},
+          {"id": "blockstate-metadata", "namespace": "cn.li.mcmod.runtime.blockstate-provider", "function": "runtime-provider", "provides": ["get-all-blockstate-definitions", "get-block-state-definition", "is-multipart-block?", "get-model-cube-texture-config", "get-model-texture-config", "get-item-model-id"]}
+          ,{"id": "config", "namespace": "cn.li.mcmod.runtime.config-provider", "function": "runtime-provider", "provides": ["mod-id", "asset-path", "namespaced-path", "config-file-path", "get-all-config-domains", "get-config-descriptors", "get-config-values", "set-config-value!", "set-config-values!", "disabled-renderer-ids", "init-descriptors!", "script-render-enabled?"]}
+          ,{"id": "hooks", "namespace": "cn.li.mcmod.runtime.hooks-provider", "function": "runtime-provider", "provides": ["freeze-runtime-hooks", "register-runtime-hook-keys!", "client-session-id", "player-state-owner", "current-player-state-owner", "current-context-owner", "player-state-session-id", "require-player-state-session-id", "player-state-server-session-id", "require-player-state-server-session-id", "player-state-client-session-id", "context-player-state-session-id", "require-context-player-state-session-id", "with-client-ctx-fn", "with-player-state-owner-fn", "push-session-context!", "pop-session-context!", "clear-session-context!", "push-player-state-owner!", "pop-client-context!", "register-power-runtime-hooks!", "register-action!", "dispatch-action!", "register-sync-descriptor!", "list-sync-descriptors", "apply-sync!", "register-player-persistence-descriptor!", "list-player-persistence-descriptors", "register-player-state-domain!", "list-player-state-domains", "register-server-player-login-hook!", "run-server-player-login-hooks!", "on-player-login!", "on-player-logout!", "on-server-stop!", "on-player-clone!", "on-player-death!", "on-player-dimension-change!", "on-server-tick-start!", "on-player-tick!", "on-server-tick-end!", "init-damage-handlers!", "list-player-uuids", "build-sync-payload", "player-state-dirty?", "mark-player-clean!", "get-player-state", "runtime-activated?", "sync-player-state!", "ensure-player-state!", "fresh-player-state", "register-network-handlers!", "subscribe-achievement-trigger!", "register-context-route-fns!", "register-context-send-fns!", "get-context-player-uuid", "register-damage-handler!", "unregister-damage-handler!", "get-active-damage-handlers", "process-damage-interception", "should-cancel-attack-interception?", "run-attack-precheck-side-effects!", "resolve-item-use-action", "on-runtime-item-action!", "build-item-use-plan", "compute-aoe-damage", "select-reflection-target", "compute-reflected-damage", "get-reflection-search-radius", "client-new-context", "client-register-context!", "client-get-context", "client-terminate-context!", "client-transition-to-alive!", "client-send-context-local!", "client-build-overlay-plan", "set-client-overlay-activated!", "client-poll-particle-effects", "client-poll-sound-effects", "client-tick-start!", "client-font-init!", "client-tick-keys!", "client-active-contexts", "client-latest-sync", "client-register-push-handlers!", "client-notify-visual-event!", "client-show-combat-notice!", "client-enqueue-level-effect!", "client-build-level-effect-plan", "client-level-effects-active?", "client-tick-level-effects!", "client-level-effect-fov-offset", "client-slot-visual-state", "client-visual-state", "client-on-slot-key-down!", "client-on-slot-key-tick!", "client-on-slot-key-up!", "client-on-slot-key-abort!", "client-on-movement-key-down!", "client-on-movement-key-tick!", "client-on-movement-key-up!", "client-on-slot-wheel!", "client-clear-owner-state!", "client-abort-all!", "client-tick!", "client-tick-hand-effects!", "client-drain-camera-pitch-deltas!", "client-current-hand-transform", "toggle-debug-overlay-state!", "set-default-client-owner-fn!", "default-client-owner"]}
+          ,{"id": "tabbed-gui", "namespace": "cn.li.mcmod.runtime.tabbed-gui-provider", "function": "runtime-provider", "provides": ["tabbed-container?", "slots-active?", "slots-active-for-menu?", "detach-tab-sync!"]}
+          ,{"id": "client-network", "namespace": "cn.li.mcmod.runtime.client-network-provider", "function": "runtime-provider", "provides": ["register-request-transport!", "send-to-server", "clear-client-session-state!", "handle-push", "handle-response"]}
+          ,{"id": "keyboard-input", "namespace": "cn.li.mcmod.runtime.keyboard-input-provider", "function": "runtime-provider", "provides": ["emit-keyboard-input!"]}
+          ,{"id": "ui", "namespace": "cn.li.mcmod.runtime.ui-provider", "function": "runtime-provider", "provides": ["user-signal", "dispose!", "resize!", "flush!", "put-user-signal!", "clock-ms-sig", "partial-ticks-sig", "game-ticks-sig", "get-tape-arr", "focus-idx", "hovered-idx", "node-by-idx", "set-hovered-idx!", "ensure-layout!", "ensure-tape!", "hit-test", "dispatch-editable-key!", "dispatch-key!", "dispatch-char!", "dispatch-mouse-press!", "dispatch-mouse-release!", "dispatch-mouse-drag!", "dispatch-scroll!", "sset-l!", "sset-d!", "push-clip-sentinel", "pop-clip-sentinel", "push-transform-sentinel", "pop-transform-sentinel", "flag-hovered", "flag-focused", "flag-render-dirty"]}
+          ,{"id": "client-runtime", "namespace": "cn.li.mcmod.runtime.client-runtime-provider", "function": "runtime-provider", "provides": ["merge-client-bridge!", "call-adapter", "resolve-shader", "open-screen!", "reactive-overlay-build", "reactive-overlay-update", "reactive-overlay-mode-switch!", "run-client-tick-hooks!", "create-widget", "register-default-renderer-init-fns!", "register-all-renderers!", "get-scripted-tile-renderer", "scripted-renderers-snapshot", "install-pose-ops!", "install-render-buffer-ops!", "register-texture!", "get-texture-path", "reset-texture-registry-for-test!"]}
+          ,{"id": "block-runtime", "namespace": "cn.li.mcmod.runtime.block-runtime-provider", "function": "runtime-provider", "provides": ["get-block-spec", "list-all-blocks", "identify-block-from-full-name", "is-part-block?", "has-block-event-handler?", "snapshot-tiles-by-id", "register-tile-capability-keys!", "merge-tile-kind-defaults", "create-property-registry", "register-block-properties!", "get-property", "get-all-properties"]}
+          ,{"id": "event-runtime", "namespace": "cn.li.mcmod.runtime.event-runtime-provider", "function": "runtime-provider", "provides": ["on-block-right-click", "on-block-place", "on-block-break", "interaction-consumed?", "gui-open-result?", "dispatch-world-load", "dispatch-world-unload", "dispatch-world-save", "dispatch-world-tick", "remember-saved-data!", "consume-saved-data!", "clear-world-saved-data!", "set-on-world-state-changed-fn!", "world-key"]}
+          ,{"id": "command-runtime", "namespace": "cn.li.mcmod.runtime.command-runtime-provider", "function": "runtime-provider", "provides": ["create-context", "execute", "execute-action-impl", "get-all-command-ids", "get-command-spec", "init-commands!"]}
+          ,{"id": "client-render", "namespace": "cn.li.mcmod.runtime.client-render-provider", "function": "runtime-provider", "provides": ["initial-button-state", "handle-button-state!", "validate-profile!", "kind-renderer-key", "register-scripted-effect-kind!", "resolve-kind-renderer-key", "supported-kinds", "get-profile", "snapshot"]}
+          ,{"id": "network-runtime", "namespace": "cn.li.mcmod.runtime.network-runtime-provider", "function": "runtime-provider", "provides": ["encode", "decode", "list-descriptors", "handle-request"]}
+          ,{"id": "gui-runtime", "namespace": "cn.li.mcmod.runtime.gui-runtime-provider", "function": "runtime-provider", "provides": ["get-all-gui-ids", "get-registry-name", "get-display-name", "get-slot-layout", "get-slot-range", "get-screen-factory-fn", "get-screen-factory-fn-kw", "get-gui-handler", "get-server-container", "get-container-for-menu", "owner-from-container", "register-menu-container!", "unregister-menu-container!", "get-gui-id-for-container", "safe-close!", "safe-validate", "server-menu-sync!", "slot-can-place?", "slot-changed!", "slot-count", "slot-get-item", "slot-set-item!", "clamp-int", "get-slot-validator"]}
+          ,{"id": "integration-runtime", "namespace": "cn.li.mcmod.runtime.integration-runtime-provider", "function": "runtime-provider", "provides": ["content-to-fe", "fe-to-content", "validate-conversion-rate", "forge-energy-conversion-rate", "ic2-energy-conversion-rate", "jei-get-all-categories", "jei-get-recipes", "jei-format-recipe", "get-jei-nbt-subtype-item-ids", "msg-id", "on-item-event!", "process-pending-activations!", "register-tutorial-activated-hook!"]}
+        ],
+        "server": [], "client": [], "datagen": []
+      },
+      "neutralAotWhitelist": [],
+      "contentProjects": ["ac"],
+      "sourceComponents": [
+        "platform-shared",
+        "minecraft-base",
+        "minecraft-26.2",
+        "fabric-shared",
+        "fabric-26.2"
+      ],
+      "testComponents": [
+        "platform-test-support",
+        "platform-shared",
+        "fabric-shared",
+        "fabric-26.2"
+      ],
+      "capabilities": [
+        "loader-entrypoint",
+        "client-entrypoint",
+        "datagen-entrypoint",
+        "minecraft-runtime",
+        "registry",
+        "network",
+        "gui",
+        "capability",
+        "jei"
+      ],
+      "capabilityOwners": {
+        "loader-entrypoint": ["fabric-26.2"],
+        "client-entrypoint": ["fabric-26.2"],
+        "datagen-entrypoint": ["fabric-26.2"],
+        "minecraft-runtime": ["minecraft-26.2"],
+        "registry": ["fabric-26.2"],
+        "network": ["fabric-26.2"],
+        "gui": ["fabric-26.2"],
+        "capability": ["fabric-26.2"],
+        "jei": ["fabric-26.2"]
+      },
+      "dependencies": {
+        "minecraft": "com.mojang:minecraft:26.2",
+        "fabricLoader": "net.fabricmc:fabric-loader:0.19.3",
+      "fabricApi": "net.fabricmc.fabric-api:fabric-api:0.155.0+26.2",
+        "fabricEnergyApi": "teamreborn:energy:5.0.0",
+        "fabricEnergyRuntime": "teamreborn:energy:5.0.0",
+        "jeiCommonApi": "mezz.jei:jei-26.2-common-api:30.16.0.124",
+        "jeiFabricApi": "mezz.jei:jei-26.2-fabric-api:30.16.0.124",
+        "jeiFabricRuntime": "mezz.jei:jei-26.2-fabric:30.16.0.124"
+      },
+      "datagenParityGroup": "mc-262",
+      "entrypoint": {
+        "namespace": "cn.li.fabric262.platform.init",
+        "function": "init-platform!"
+      },
+      "artifact": {
+        "classifier": "fabric-26.2",
+        "finalTask": "jar",
+        "runtimeLibraryPackaging": "loom-include"
+      }
+    }
+  }
+}

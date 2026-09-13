@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <image id="main" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/parent/parent_background.png">
+    <image id="ui_inv" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/ui/ui_inventory.png"/>
+    <image id="ui_block" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/ui/ui_imagfusor.png"/>
+    <text id="text_imagneeded" pos="68.0,12.0" size="44.0,12.0" align="left,top" text="10000" font-size="12.0" color="#CCFFFFFF"/>
+    <!-- Upstream ProgressBar: progress_fusor.png, dir RIGHT, 60.97×15 at
+         (0.1875, 46.5) CENTER/TOP — fg is the single-texture bar clipped by
+         the work-progress ratio, matching the upstream rightward fill. -->
+    <progress id="progress" pos="0.2,46.5" size="61.0,15.0" align="center,top" fg-src="academy:textures/guis/progress/progress_fusor.png"/>
+  </image>
+</Ui>

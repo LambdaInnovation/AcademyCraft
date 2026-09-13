@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TerminalUI's perspective renderer owns placement and scale (1/310), so this
+  remains in the original left/top design space instead of Screen-centering it.
+-->
+<Ui size="640.0,785.0" align="left,top">
+  <image id="back" pos="0.0,0.0" size="640.0,785.0" align="left,top" src="academy:textures/guis/data_terminal/back.png">
+    <text id="text_appcount" pos="-40.0,84.0" size="300.0,30.0" align="right,top" text="9 Applications, 19:23" font-size="30.0" color="#99FFFFFF"/>
+    <image id="icon" pos="40.0,50.0" size="50.0,50.0" align="left,top" src="academy:textures/guis/data_terminal/logo.png"/>
+    <image id="arrow_up" pos="0.0,133.0" size="100.0,25.0" scale="0.80" align="center,top" src="academy:textures/guis/data_terminal/arrow_up.png"/>
+    <image id="app_template" pos="30.0,155.0" size="151.0,151.0" align="left,top" src="academy:textures/guis/data_terminal/app_back.png">
+      <image id="template_icon" pos="9.0,32.0" size="110.0,110.0" align="left,top" src="academy:textures/guis/apps/knowledge_record/icon.png" tint="#A0FFFFFF"/>
+      <text id="template_text" pos="0.0,148.0" size="151.0,21.0" align="left,top" text="Life Record" font-size="32.0" color="#FFFFFFFF"/>
+    </image>
+    <text id="text_username" pos="-40.0,41.7" size="200.0,30.0" align="right,top" text="[username]" font-size="40.0" color="#CCFFFFFF"/>
+    <image id="icon_loading" pos="25.0,-31.0" size="48.0,48.0" align="left,top" src="academy:textures/guis/data_terminal/loading.png" tint="#BEFFFFFF"/>
+    <text id="text_loading" pos="80.0,-23.0" size="120.0,30.0" align="left,top" text="Loading" font-size="30.0" color="#AAFFFFFF"/>
+    <text id="text_static_1" pos="98.0,74.0" size="160.0,30.0" align="left,top" text="TERMINAL" font-size="40.0" color="#AAFFFFFF"/>
+    <text id="text_static_0" pos="98.0,42.0" size="100.0,30.0" align="left,top" text="DATA" font-size="40.0" color="#AAFFFFFF"/>
+    <image id="arrow_down" pos="0.0,-40.0" size="100.0,25.0" scale="0.80" align="center,bottom" src="academy:textures/guis/data_terminal/arrow_down.png"/>
+  </image>
+</Ui>

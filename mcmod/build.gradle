@@ -1,0 +1,270 @@
+plugins {
+    id "java-library"
+    id "dev.clojurephant.clojure"
+}
+
+// ============================================================================
+// ModId.java — generated from gradle.properties mod_id (single source of truth)
+// ============================================================================
+def generatedModConfigDir = layout.buildDirectory.dir('generated/mod-config/java')
+
+def generateModId = tasks.register('generateModId') {
+    description = 'Generate ModId.java from gradle.properties mod_id'
+    def outputFile = generatedModConfigDir.map { it.file('cn/li/mcmod/ModId.java') }
+    outputs.file(outputFile)
+    // Declare gradle.properties as input for UP-TO-DATE tracking
+    inputs.property('mod_id', rootProject.findProperty('mod_id'))
+    inputs.property('mod_name', rootProject.findProperty('mod_name'))
+
+    doLast {
+        def file = outputFile.get().asFile
+        file.parentFile.mkdirs()
+        file.text = """\
+            |// AUTO-GENERATED from gradle.properties. DO NOT EDIT.
+            |package cn.li.mcmod;
+            |
+            |/** Build-time constants sourced from gradle.properties (mod_id / mod_name). */
+            |public final class ModId {
+            |    private ModId() {}
+            |
+            |    /** The mod identifier used for ResourceLocation, registries, and mod metadata. */
+            |    public static final String ID = "${rootProject.findProperty('mod_id')}";
+            |
+            |    /** Human-readable mod name. */
+            |    public static final String NAME = "${rootProject.findProperty('mod_name')}";
+            |}
+            |""".stripMargin()
+    }
+}
+
+sourceSets.main.java.srcDir(generatedModConfigDir)
+tasks.named('compileJava').configure { dependsOn generateModId }
+
+// 反射拦截器
+tasks.matching { it.name == 'compileClojure' || it.name == 'compileTestClojure' }.configureEach {
+    forkOptions.jvmArgs += ['-Dclojure.compile.warn-on-reflection=true']
+
+    logging.addStandardOutputListener(new StandardOutputListener() {
+        @Override
+        void onOutput(CharSequence output) {
+            String log = output.toString()
+            if (log.contains("Reflection warning")) {
+                throw new GradleException(
+                    "\n[Reflection Guard] 检测到 Clojure AOT 隐式反射调用！\n" +
+                    "反射会导致 Loom remap 失效，使最终 Jar 在运行时崩溃。\n" +
+                    "请添加 ^TypeHint 元数据或使用 Java 桥接类修复：\n" +
+                    "--------------------------------------------------\n" +
+                    log.trim() + "\n" +
+                    "--------------------------------------------------"
+                )
+            }
+        }
+    })
+}
+
+// Source-first by default; full-AOT mode uses classes as the only runtime representation.
+tasks.named('processResources').configure {
+    if (rootProject.ext.fullAotEnabled) {
+        exclude '**/*.clj', '**/*.cljc'
+    } else {
+        from(sourceSets.main.clojure.srcDirs) {
+            include '**/*.clj', '**/*.cljc'
+        }
+    }
+}
+
+// mcmod Clojure imports local Java SPI/bootstrap classes; compile them first.
+tasks.named('compileClojure').configure {
+    onlyIf { rootProject.ext.fullAotEnabled }
+    dependsOn 'compileJava'
+    classpath.from(files(layout.buildDirectory.dir('classes/java/main')))
+}
+
+// Ensure stale mirrored classes from previous output layouts do not shadow fresh Clojure output.
+tasks.named('compileJava').configure {
+    // This task deliberately clears its output to prevent stale mirrored AOT
+    // classes. Incremental javac would otherwise compile only changed sources
+    // against files that the doFirst action just removed.
+    options.incremental = false
+    doFirst {
+        delete(layout.buildDirectory.dir('classes/java/main').get().asFile)
+    }
+}
+
+// Emit AOT classes directly to Java output.
+tasks.named('compileClojure').configure { task ->
+    def targetDirProvider = layout.buildDirectory.dir('clojure/main')
+    def targetDirFile = targetDirProvider.get().asFile
+    if (task.metaClass.hasProperty(task, 'destinationDirectory')) {
+        task.destinationDirectory = targetDirProvider
+    } else if (task.metaClass.hasProperty(task, 'destinationDir')) {
+        task.destinationDir = targetDirFile
+    } else {
+        throw new GradleException("compileClojure task does not expose destinationDirectory/destinationDir: ${task.class.name}")
+    }
+}
+
+// Strip LVT from AOT class files (same as the platform target build).
+// TinyRemapper (Loom 1.13) can crash on bad/nested LVT slots from Clojure AOT.
+def stripAotLvt = tasks.register('stripAotLvt') {
+    dependsOn tasks.named('compileClojure')
+    onlyIf { rootProject.ext.fullAotEnabled }
+    def classesDir = layout.buildDirectory.dir('clojure/main')
+    def strippedDir = layout.buildDirectory.dir('clojure/main-stripped')
+    inputs.dir(classesDir)
+    outputs.dir(strippedDir)
+    doLast {
+        def dir = classesDir.get().asFile
+        def outDir = strippedDir.get().asFile
+        delete(outDir)
+        if (!dir.isDirectory()) {
+            outDir.mkdirs()
+            return
+        }
+        int stripped = 0
+        int copied = 0
+        dir.eachFileRecurse { file ->
+            def rel = dir.toPath().relativize(file.toPath()).toString()
+            def target = new File(outDir, rel)
+            if (!file.name.endsWith('.class')) {
+                if (file.isFile()) {
+                    target.parentFile.mkdirs()
+                    target.bytes = file.bytes
+                }
+                return
+            }
+            try {
+                def reader = new org.objectweb.asm.ClassReader(file.bytes)
+                def writer = new org.objectweb.asm.ClassWriter(0)
+                def dropped = [0]
+                reader.accept(new org.objectweb.asm.ClassVisitor(
+                        org.objectweb.asm.Opcodes.ASM9, writer) {
+                    org.objectweb.asm.MethodVisitor visitMethod(int ac, String nm, String desc,
+                                                                  String sig, String[] ex) {
+                        def mv = super.visitMethod(ac, nm, desc, sig, ex)
+                        return new org.objectweb.asm.MethodVisitor(
+                                org.objectweb.asm.Opcodes.ASM9, mv) {
+                            void visitLocalVariable(String n, String d, String s,
+                                                    org.objectweb.asm.Label st,
+                                                    org.objectweb.asm.Label en,
+                                                    int idx) { dropped[0]++ }
+                        }
+                    }
+                }, 0)
+                if (dropped[0] > 0) {
+                    target.parentFile.mkdirs()
+                    target.bytes = writer.toByteArray()
+                    stripped++
+                } else {
+                    target.parentFile.mkdirs()
+                    target.bytes = file.bytes
+                    copied++
+                }
+            } catch (Exception ex) {
+                logger.warn("[stripAotLvt] skipping ${file.name}: ${ex.message}")
+            }
+        }
+        if (stripped > 0 || copied > 0) {
+            logger.lifecycle('[stripAotLvt] stripped LVT from {} AOT classes; copied {} unchanged', stripped, copied)
+        }
+    }
+}
+def clearNeutralAotOutput = tasks.register('clearNeutralAotOutput') {
+    onlyIf { !rootProject.ext.fullAotEnabled }
+    doLast {
+        delete(layout.buildDirectory.dir('clojure/main').get().asFile)
+        delete(layout.buildDirectory.dir('clojure/main-stripped').get().asFile)
+    }
+}
+tasks.named('classes').configure { dependsOn clearNeutralAotOutput }
+// LVT stripping only needed for packaging (TinyRemapper); skip for dev runs.
+tasks.named('jar', Jar).configure {
+    dependsOn stripAotLvt
+    dependsOn clearNeutralAotOutput
+    // During migration, stale mirror classes can coexist with AOT outputs.
+    // Keep first entry so packaging stays deterministic and non-failing.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+configurations {
+    cloverageRuntime
+}
+
+def clojureVersions = rootProject.ext.clojureVersions
+
+dependencies {
+    implementation "org.clojure:clojure:${clojureVersions.clojure}"
+
+    api("org.slf4j:slf4j-api:1.7.25")
+    testImplementation "org.clojure:test.check:${clojureVersions.testCheck}"
+    cloverageRuntime "cloverage:cloverage:${clojureVersions.cloverage}"
+}
+
+sourceSets.test.clojure.srcDir rootProject.file('platform-src/test-support/src/main/clojure')
+// The test support installs neutral runtime facades shared with platform AOT
+// code; keep those namespaces on mcmod's test source path for clean builds.
+sourceSets.test.clojure.srcDir rootProject.file('platform-src/platform/shared/src/main/clojure')
+
+def mcmodTestOnlyNamespaces = (System.getProperty('mcmod.test.only') ?: '')
+    .split(',')
+    .collect { it.trim() }
+    .findAll { !it.isEmpty() } as Set
+
+tasks.matching { it.name == 'compileTestClojure' }.configureEach {
+    if (!mcmodTestOnlyNamespaces.isEmpty()) {
+        def effective = (mcmodTestOnlyNamespaces + ['cn.li.mcmod.test-runner']) as Set
+        namespaces.set(effective)
+        inputs.property('mcmod.test.only', mcmodTestOnlyNamespaces.join(','))
+        doFirst {
+            logger.lifecycle('[mcmod:compileTestClojure] focused namespace compile active, requested={}, effective={}', mcmodTestOnlyNamespaces.size(), effective.size())
+        }
+    }
+}
+
+tasks.register('runMcmodClojureTests', JavaExec) {
+    group = 'verification'
+    description = 'Run clojure.test suites for mcmod via cn.li.mcmod.test-runner.'
+    dependsOn compileTestClojure, compileClojure, classes
+    workingDir = project.projectDir
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'clojure.main'
+    if (System.getProperty('mcmod.test.only') != null) {
+        systemProperty 'mcmod.test.only', System.getProperty('mcmod.test.only')
+    }
+    args '-m', 'cn.li.mcmod.test-runner'
+}
+
+tasks.register('runMcmodClojureTestsFast', JavaExec) {
+    group = 'verification'
+    description = 'Run mcmod clojure.test suites directly from source classpath (bypasses compileTestClojure lock hotpath).'
+    dependsOn compileClojure, classes
+    workingDir = project.projectDir
+    // Do not use sourceSets.test.runtimeClasspath here: it carries test output build deps
+    // and pulls compileTestClojure back into the supposedly fast path.
+    classpath = sourceSets.main.runtimeClasspath + configurations.testRuntimeClasspath + files(sourceSets.test.resources.srcDirs) + files(sourceSets.test.allSource.srcDirs)
+    mainClass = 'clojure.main'
+    if (System.getProperty('mcmod.test.only') != null) {
+        systemProperty 'mcmod.test.only', System.getProperty('mcmod.test.only')
+    }
+    if (System.getProperty('mcmod.test.jfr') != null) {
+        jvmArgs "-XX:StartFlightRecording=filename=${System.getProperty('mcmod.test.jfr')},settings=profile"
+    }
+    args '-m', 'cn.li.mcmod.test-runner'
+}
+
+tasks.register('coverageMcmodClojureTests', JavaExec) {
+    group = 'verification'
+    description = 'Run mcmod clojure tests with cloverage coverage report.'
+    dependsOn compileTestClojure, compileClojure, classes
+    workingDir = project.projectDir
+    classpath = sourceSets.test.runtimeClasspath + configurations.cloverageRuntime
+    mainClass = 'clojure.main'
+    args '-m', 'cloverage.coverage',
+            '--src-ns-path', 'src/main/clojure',
+            '--test-ns-path', 'src/test/clojure',
+            '--ns-regex', 'cn\\.li\\.mcmod\\..*',
+            '--test-ns-regex', 'cn\\.li\\.mcmod\\..*-test',
+            // Exclude client.obj (huge glue) and platform.position (IBlockPos must stay non-instrumented for test stubs).
+            '--ns-exclude-regex', 'cn\\.li\\.mcmod\\.(client\\.obj|platform\\.position)',
+            '--output', "${project.buildDir}/reports/coverage"
+}

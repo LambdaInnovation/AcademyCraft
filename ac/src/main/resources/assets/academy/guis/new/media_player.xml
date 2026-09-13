@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+
+  <template name="t_one">
+    <box pos="0.0,0.0" size="554.0,60.0" align="left,top" fill="#14FFFFFF" hover-tint="0.2">
+      <image id="icon" pos="4.0,5.0" size="50.0,50.0" align="left,top" src="liutils:textures/cgui/missing.png"/>
+      <text id="title" pos="65.0,1.0" size="300.0,30.0" align="left,top" text="Eternal Reality" font-size="35.0" color="#BBFFFFFF"/>
+      <text id="time" pos="-6.0,0.0" size="70.0,30.0" align="right,center" text="04:27" font-size="28.0" color="#B9FFFFFF"/>
+      <text id="desc" pos="66.1,29.0" size="300.0,23.0" align="left,top" text="FripSide" font-size="27.0" color="#EEFFFFFF"/>
+      <image id="btn_edit_desc" pos="368.0,35.2" size="20.0,20.0" align="left,top" src="academy:textures/guis/icons/edit.png" tint="#33FFFFFF"/>
+      <image id="btn_edit_name" pos="368.0,7.1" size="20.0,20.0" align="left,top" src="academy:textures/guis/icons/edit.png" tint="#33FFFFFF"/>
+    </box>
+  </template>
+
+  <image id="back" pos="0.0,0.0" size="650.0,504.0" scale="0.32" align="center,center" src="academy:textures/guis/apps/media_player/back.png">
+    <text id="play_time" pos="403.7,126.8" size="200.0,30.0" align="left,top" text="01:30" font-size="30.0" color="#DDFFFFFF"/>
+    <group id="area" pos="51.0,169.0" size="552.0,302.0" align="left,top" clip="true">
+      <list id="media-list" pos="-2.0,-1.0" size="554.0,302.0" template="t_one" spacing="0.0"/>
+    </group>
+    <image id="scroll_bar" pos="604.0,169.0" size="5.0,55.0" align="left,top" tint="#82FFFFFF"/>
+    <group id="progress" pos="52.0,120.0" size="554.0,6.0" align="left,top"/>
+    <!--
+      Seek target. Not upstream: its progress bar is display-only, because
+      the paulscode backend it uses exposes the play position read-only.
+      Same x/width as #progress so a fraction across this pad maps straight
+      onto the bar; taller only because 6px is not a clickable target.
+      Declared after #progress and clear of #area (y 169+), so it wins the
+      hit test without stealing from the track list.
+    -->
+    <box id="progress-hit" pos="52.0,114.0" size="554.0,18.0" align="left,top" fill="#00000000"/>
+    <text id="title" pos="-50.0,77.8" size="275.6,30.0" align="right,top" text="Only My Railgun" font-size="36.0" color="#99FFFFFF"/>
+    <image id="stop" pos="114.8,71.8" size="50.0,42.0" align="left,top" src="academy:textures/guis/apps/media_player/stop.png" tint="#C8FFFFFF"/>
+    <image id="pop" pos="51.9,71.8" size="50.0,42.0" align="left,top" src="academy:textures/guis/apps/media_player/play.png" tint="#C8FFFFFF"/>
+    <image id="volume_back" pos="179.7,77.0" size="256.0,64.0" scale="0.50" align="left,top" src="academy:textures/guis/icons/volume_overlay.png"/>
+    <box id="volume_bar" pos="186.0,77.9" size="9.4,30.0" align="left,top" fill="#99FFFFFF" hover-tint="0.8"/>
+  </image>
+</Ui>

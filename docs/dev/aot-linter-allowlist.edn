@@ -1,0 +1,5 @@
+{:allowed-top-levels
+ #{cn.li.mcmod.util.log/logger
+   cn.li.mcmod.runtime.deferred/deferred-init-lock}
+ :allowed-side-effects
+ #{}}

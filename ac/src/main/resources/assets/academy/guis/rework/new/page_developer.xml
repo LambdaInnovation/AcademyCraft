@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="left,top">
+  <group id="main" pos="0.0,0.0" size="400.0,187.0" align="left,top">
+    <!-- Right side frame -->
+    <group id="parent-right" pos="-4.0,0.0" size="278.0,187.0" align="right,center">
+      <image id="bg-parent-right" pos="0.0,0.0" size="278.0,187.0" align="left,top" src="academy:textures/guis/parent/parent_background_developerright.png"/>
+      <image id="ui-right" pos="0.0,0.0" size="278.0,187.0" align="right,center" src="academy:textures/guis/ui/ui_developerright.png"/>
+      <group id="area" pos="10.0,18.0" size="257.0,139.0" align="left,top"/>
+    </group>
+    <!-- Left side frame -->
+    <group id="parent-left" pos="4.0,0.0" size="108.5,187.0" align="left,center">
+      <image id="bg-parent-left" pos="0.0,0.0" size="108.5,187.0" align="left,top" src="academy:textures/guis/parent/parent_background_developerleft.png"/>
+      <image id="ui-left" pos="0.0,0.0" size="108.5,187.0" align="right,center" src="academy:textures/guis/ui/ui_developerleft.png"/>
+      <!-- Ability panel -->
+      <group id="panel-ability" pos="2.0,-10.0" size="104.0,32.0" align="left,center">
+        <image id="logo-ability" pos="0.0,0.0" size="32.0,32.0" align="left,center" src="academy:textures/guis/icons/icon_nocategory.png"/>
+        <text id="text-abilityname" pos="14.0,-8.0" size="70.0,12.0" align="center,center" text="N/A" font-size="13.0" color="#FFFFFFFF"/>
+        <text id="text-exp" pos="30.0,15.5" size="42.0,10.0" align="left,top" text="EXP 0%" font-size="8.0" color="#FFFFFFFF"/>
+        <box id="logo-progress-back" pos="31.0,-2.0" size="70.0,1.5" align="left,center" fill="#4D666666"/>
+        <box id="logo-progress" pos="31.0,-2.0" size="70.0,1.5" align="left,center" fill="#FFFFFFFF"/>
+        <text id="text-level" pos="27.8,6.0" size="41.2,12.0" align="center,center" text-align="right" text="Lv.1" font-size="9.0" color="#FF1177D6"/>
+        <image id="btn-upgrade" pos="60.0,14.5" size="186.0,59.5" scale="0.26" align="left,top" visible="false" src="academy:textures/guis/button/button_learn.png" tint="#B2FFFFFF"/>
+      </group>
+      <!-- Machine panel -->
+      <group id="panel-machine" pos="0.0,0.0" size="108.5,187.0" align="left,top">
+        <image id="panel-machine-bg" pos="0.0,0.0" size="108.5,187.0" align="left,top" src="academy:textures/guis/parent/parent_background_developermachine.png"/>
+        <text id="text-wireless" pos="0.0,17.0" size="100.0,12.0" align="center,center" text="Current Node:" font-size="12.0" color="#FFFFFFFF"/>
+        <text id="text-power" pos="0.0,43.0" size="100.0,12.0" align="center,center" text="Power:" font-size="12.0" color="#FFFFFFFF"/>
+        <image id="button-wireless" pos="0.0,29.0" size="100.0,16.0" align="center,center" src="academy:textures/guis/element/element_background300x32.png" tint="#B2FFFFFF">
+          <text id="text-nodename" pos="11.0,0.0" size="70.0,12.0" align="center,center" text="N/A" font-size="12.0" color="#FFFFFFFF"/>
+          <image id="logo-node" pos="-37.0,0.0" size="12.0,12.0" align="center,center" src="academy:textures/guis/icons/icon_node.png"/>
+        </image>
+        <text id="text-syncrate" pos="0.0,66.0" size="100.0,12.0" align="center,center" text="Sync Rate:" font-size="12.0" color="#FFFFFFFF"/>
+        <!-- Foreground fill bars are LEFT-aligned so the runtime width
+             binding grows them from the left edge (upstream ProgressBar);
+             center alignment would shrink them symmetrically around the
+             middle. x = (108.5 panel width - 97 bar width) / 2. -->
+        <box id="progress-power-back" pos="0.0,55.5" size="97.0,8.0" align="center,center" fill="#33FFFFFF"/>
+        <box id="progress-power" pos="5.75,55.5" size="97.0,8.0" align="left,center" fill="#FFFCC532"/>
+        <box id="progress-syncrate-back" pos="0.0,77.5" size="97.0,8.0" align="center,center" fill="#33FFFFFF"/>
+        <box id="progress-syncrate" pos="5.75,77.5" size="97.0,8.0" align="left,center" fill="#FF32A4FC"/>
+      </group>
+    </group>
+  </group>
+</Ui>

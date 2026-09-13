@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library' // 仅使用标准 Java 插件
+}
+
+// 使用 JDK21 编译，同时将 API 字节码固定为 Java17。
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar() // 必须导出源码包，方便第三方开发者查看接口注释
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+}
+
+dependencies {
+    // 理论上 API 模块不应有任何依赖。
+    // 如果接口中必须引用某些通用注解（如 @Nullable），请使用 compileOnly。
+    compileOnly 'org.jetbrains:annotations:24.0.0'
+}
+
+// 核心设置：确保打包时极其纯净
+jar {
+    // 可以在这里混淆或精简，但通常 API 模块保持原样即可
+    archiveClassifier = '' 
+}
+
+// 禁止发布任何依赖项到 POM 文件中
+// 这样第三方 Mod 引用你时，Gradle 不会尝试去下载 Clojure
+tasks.withType(GenerateMavenPom).configureEach {
+    pom.withXml {
+        asNode().remove(asNode().get("dependencies"))
+    }
+}

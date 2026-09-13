@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <image id="ImagFusor" pos="0.0,0.0" size="196.0,128.0" scale="0.60" align="center,center" src="academy:textures/guis/tutorial_fusor.png">
+    <text id="amount" pos="81.0,14.5" size="52.0,15.0" align="left,top" text="2333" font-size="14.0" color="#FFFFFFFF"/>
+    <group id="progress" pos="66.0,68.5" size="66.0,18.0" align="left,top"/>
+    <group id="slot_out" pos="147.0,62.5" size="32.0,31.0" align="left,top"/>
+    <group id="slot_in" pos="19.0,62.5" size="32.0,31.0" align="left,top"/>
+  </image>
+  <image id="MetalFormer" pos="0.0,0.0" size="192.0,192.0" scale="0.50" align="center,center" src="academy:textures/guis/tutorial_metalformer.png">
+    <group id="progress" pos="77.7,83.5" size="36.7,23.3" align="left,top"/>
+    <group id="slot_out" pos="155.3,88.5" size="25.0,25.0" align="left,top"/>
+    <image id="mode" pos="82.7,22.7" size="25.0,25.0" align="left,top" src="academy:textures/guis/missing.png"/>
+    <group id="slot_in" pos="11.3,88.5" size="25.0,25.0" align="left,top"/>
+  </image>
+  <image id="Smelting" pos="0.0,0.0" size="192.0,128.0" scale="0.60" align="center,center" src="academy:textures/guis/tutorial_smelting.png">
+    <group id="slot_in" pos="30.0,43.2" size="32.0,32.0" align="left,top"/>
+    <group id="slot_out" pos="123.3,43.2" size="32.0,32.0" align="left,top"/>
+  </image>
+</Ui>

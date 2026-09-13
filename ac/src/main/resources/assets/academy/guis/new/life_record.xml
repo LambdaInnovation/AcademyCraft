@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <image id="t_title_acquired" pos="60.0,290.0" size="611.0,44.0" align="left,top" src="academy:textures/guis/life_record/title_acquired.png"/>
+  <image id="t_title_discovered" pos="60.0,120.0" size="611.0,44.0" align="left,top" src="academy:textures/guis/life_record/title_discovered.png"/>
+  <image id="back" pos="0.0,0.0" size="742.0,923.0" scale="0.20" align="center,center" src="academy:textures/guis/life_record/back.png">
+    <image id="scrollbar" pos="671.0,119.0" size="9.0,96.0" align="left,top" src="academy:textures/guis/life_record/rollbar.png"/>
+    <group id="area" pos="60.0,120.0" size="614.0,740.0" align="left,top"/>
+  </image>
+  <image id="t_discovered" pos="60.0,165.0" size="611.0,107.0" align="left,top" src="academy:textures/guis/life_record/discovered_back.png">
+    <image id="icon" pos="27.0,0.0" size="68.0,68.0" align="left,center" src="liutils:textures/cgui/missing.png"/>
+    <text id="title" pos="105.0,15.0" size="490.0,45.0" align="left,top" text="Some VERY awesome Stuff" font-size="10.0" color="#FFFFFFFF"/>
+    <text id="desc" pos="105.0,55.0" size="490.0,40.0" align="left,top" text="The way to get the stuff" font-size="10.0" color="#FFFFFFFF"/>
+  </image>
+</Ui>

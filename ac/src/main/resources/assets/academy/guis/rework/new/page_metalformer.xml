@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <image id="main" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/parent/parent_background.png">
+    <image id="ui_inv" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/ui/ui_inventory.png"/>
+    <image id="ui_block" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/ui/ui_metalformer.png"/>
+    <!-- Upstream ProgressBar: progress_metalformer.png, dir RIGHT, 57×15 at
+         (0, 46.5) CENTER/TOP — fg is the single-texture bar clipped by the
+         work-progress ratio, matching the upstream rightward fill. -->
+    <progress id="progress" pos="0.0,46.5" size="57.0,15.0" align="center,top" fg-src="academy:textures/guis/progress/progress_metalformer.png"/>
+    <image id="icon_mode" pos="0.0,4.5" size="24.0,24.0" align="center,top" src="academy:textures/guis/icons/icon_former_refine.png"/>
+    <image id="btn_left" pos="-20.0,8.5" size="16.0,16.0" align="center,top" src="academy:textures/guis/button/button_arrowlefta.png"/>
+    <image id="btn_right" pos="20.0,8.5" size="16.0,16.0" align="center,top" src="academy:textures/guis/button/button_arrowrighta.png"/>
+  </image>
+</Ui>

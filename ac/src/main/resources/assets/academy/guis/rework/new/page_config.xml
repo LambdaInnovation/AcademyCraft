@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <image id="main" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/parent/parent_background.png">
+    <image id="ui_info" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/ui/ui_info.png"/>
+    <group id="panel_config" pos="0.0,26.0" size="158.0,48.0" align="center,top">
+      <image id="btn_arrow_up" pos="0.0,0.0" size="16.0,16.0" align="right,top" src="academy:textures/guis/button/button_arrowupb.png"/>
+      <image id="btn_arrow_down" pos="0.0,0.0" size="16.0,16.0" align="right,bottom" src="academy:textures/guis/button/button_arrowdownb.png"/>
+      <group id="zone_elementlist" pos="0.0,0.0" size="142.0,48.0" align="left,top"/>
+    </group>
+    <group id="panel_diagram" pos="0.0,26.0" size="158.0,48.0" align="center,top">
+      <group id="zone_histogram" pos="19.0,90.0" size="84.0,60.0" align="left,top"/>
+      <group id="zone_elementlist" pos="0.0,60.0" size="50.0,90.0" align="right,top">
+        <group id="element" pos="0.0,0.0" size="50.0,10.0" align="left,top">
+          <image id="element_mark" pos="0.0,0.0" size="8.0,8.0" align="left,center" src="academy:textures/guis/progress/progress_blue.png"/>
+          <text id="element_name" pos="0.0,0.0" size="40.0,8.0" align="right,center" text="name" font-size="10.0" color="#FFFFFFFF"/>
+        </group>
+      </group>
+    </group>
+  </image>
+</Ui>

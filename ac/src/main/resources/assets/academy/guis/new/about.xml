@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Upstream about UI is 742×923 @ scale ~0.25 under CGuiScreen. On a Minecraft
+  Screen that makes the 10px drag bar ~2px wide, so about-reactive applies a
+  fit-scale to #main each frame instead (design size stays 742×923).
+-->
+<Ui size="0.0,0.0" align="center,center">
+  <image id="main" pos="0.0,0.0" size="742.0,923.0" scale="1.0" align="center,center" src="academy:textures/guis/about/bg.png" z="5.0">
+    <group id="area" pos="53.0,266.0" size="630.0,605.0" align="left,top">
+      <box id="btn_credits" pos="0.0,0.0" size="315.0,58.0" align="left,top" fill="#33FFFFFF">
+        <image id="btn_credits_glow" pos="0.0,0.0" size="332.0,80.0" align="center,center" src="academy:textures/guis/about/button_glow.png" tint="#FF2984F1"/>
+        <text id="btn_credits_text" pos="0.0,0.0" size="315.0,58.0" align="left,top" text-align="center" text="Credits" font-size="42.0" color="#FFFFFFFF"/>
+      </box>
+      <box id="btn_donate" pos="315.0,0.0" size="315.0,58.0" align="left,top" fill="#33FFFFFF">
+        <image id="btn_donate_glow" pos="0.0,0.0" size="332.0,80.0" align="center,center" src="academy:textures/guis/about/button_glow.png" tint="#FFE79CFF"/>
+        <text id="btn_donate_text" pos="0.0,0.0" size="315.0,58.0" align="left,top" text-align="center" text="Donate" font-size="42.0" color="#FFFFFFFF"/>
+      </box>
+      <!--
+        Wider invisible hit pad; visible bar stays 10×70.
+
+        z above #scroll_area: the pad spans x 600..630 and scroll_area spans
+        0..620, so they overlap by 20px. hit-test returns the LAST tape entry
+        containing the point and scroll_area is declared after the pad, so
+        without a z the content swallowed the pad's whole left 20px and the
+        draggable region collapsed onto the 10px bar itself. A scrollbar
+        belongs over its content anyway.
+      -->
+      <box id="drag_bar_hit" pos="600.0,58.0" size="30.0,70.0" align="left,top" fill="#00000000" z="10.0">
+        <box id="drag_bar" pos="20.0,0.0" size="10.0,70.0" align="left,top" fill="#85FFFFFF"/>
+      </box>
+      <group id="scroll_area" pos="0.0,58.0" size="620.0,540.0" align="left,top" clip="true">
+        <group id="content" pos="0.0,0.0" size="620.0,540.0" align="left,top"/>
+      </group>
+    </group>
+  </image>
+</Ui>

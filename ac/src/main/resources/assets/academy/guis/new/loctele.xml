@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <group id="inspect" pos="-62.3,6.7" size="100.0,140.0" scale="1.20" align="center,center">
+    <image id="area" pos="11.0,26.0" size="84.0,115.0" align="left,top">
+      <box id="t_loc" pos="0.0,0.0" size="84.0,13.0" align="left,top" fill="#00000000" hover-tint="0.1">
+        <image id="cancel" pos="73.0,3.0" size="8.0,8.0" align="left,top" src="academy:textures/guis/location_teleport/cancel.png" tint="#B4FFFFFF"/>
+        <text id="text" pos="2.0,0.0" size="71.0,13.0" align="left,top" text="[5] Gensokyo" font-size="10.0" color="#FFFFFFFF"/>
+      </box>
+    </image>
+    <image id="tag" pos="10.6,5.4" size="95.0,21.0" scale="0.80" align="left,top"/>
+    <box id="dragbar" pos="95.0,26.0" size="2.0,15.0" align="left,top" fill="#8C969696" hover-tint="0.7"/>
+  </group>
+  <group id="add" pos="84.4,50.9" size="130.0,60.0" scale="1.10" align="center,center">
+    <image id="tag" pos="0.0,0.0" size="70.0,13.0" align="left,top"/>
+    <image id="back" pos="0.0,17.0" size="135.0,48.0" align="left,top">
+      <text id="text_input" pos="27.0,3.0" size="100.0,11.0" align="left,top" text="" font-size="10.0" color="#FFFFFFFF"/>
+      <text id="button" pos="0.0,36.9" size="20.0,10.0" align="center,top" text="+" font-size="10.0" color="#FFFFFFFF"/>
+      <text id="text_name" pos="1.2,0.3" size="25.0,11.0" align="left,top" text="Name:" font-size="10.0" color="#FFFFFFFF"/>
+      <text id="text_disabled" pos="4.0,25.0" size="125.0,11.0" align="left,top" text="ac.gui.loctele.warn1" font-size="10.0" color="#FFFFFFFF"/>
+      <text id="text_coord" pos="4.0,15.0" size="125.0,11.0" align="left,top" text="Coordinate: (233, 14, 233)" font-size="10.0" color="#FFFFFFFF"/>
+    </image>
+  </group>
+  <image id="action" pos="86.6,-32.7" size="120.0,63.0" scale="1.06" align="center,center">
+    <text id="text_nocp" pos="6.0,35.0" size="100.0,10.0" align="left,top" text="ac.gui.loctele.warn0" font-size="10.0" color="#FFFFFFFF"/>
+    <text id="text_dist" pos="6.0,14.0" size="100.0,10.0" align="left,top" text="Distance: 2403.45" font-size="10.0" color="#FFFFFFFF"/>
+    <text id="button" pos="0.0,48.0" size="35.0,10.0" align="center,top" text="ac.gui.loctele.teleport" font-size="10.0" color="#FFFFFFFF"/>
+    <text id="text_loc" pos="6.0,4.0" size="100.0,10.0" align="left,top" text="Location: (255, 65, 33403)" font-size="10.0" color="#FFFFFFFF"/>
+    <text id="text_dim" pos="6.0,24.0" size="100.0,10.0" align="left,top" text="Dimension: Dim #0" font-size="10.0" color="#FFFFFFFF"/>
+  </image>
+</Ui>

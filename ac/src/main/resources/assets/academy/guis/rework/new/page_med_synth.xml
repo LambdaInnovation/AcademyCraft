@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <group id="main" pos="0.0,0.0" size="0.0,0.0" align="left,top">
+    <group id="ui_inv" pos="0.0,0.0" size="0.0,0.0" align="left,top"/>
+    <group id="ui_block" pos="0.0,0.0" size="0.0,0.0" align="left,top"/>
+    <group id="progress" pos="0.0,0.0" size="0.0,0.0" align="left,top"/>
+    <group id="btn_go" pos="0.0,0.0" size="0.0,0.0" align="left,top"/>
+  </group>
+</Ui>

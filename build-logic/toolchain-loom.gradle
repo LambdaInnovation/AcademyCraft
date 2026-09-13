@@ -1,0 +1,311 @@
+// Architectury Loom toolchain: Forge/Fabric/NeoForge on the legacy
+// (obfuscated-mappings, remapped-jar) Minecraft versions, e.g. 1.20.1 and
+// 1.21.1. Applied from platform-target.gradle via `apply from:` once the
+// shared source-set/dependency/AOT wiring for the target is in place.
+//
+// `apply from:` evaluates this file as its own Groovy Script instance, so
+// plain `def` locals declared in platform-target.gradle are NOT visible here
+// — only Project-level state (plugins, extensions, tasks, sourceSets, ...)
+// is shared automatically. platform-target.gradle bridges the handful of
+// catalog-derived values this file needs through `project.ext` right before
+// applying it: target, targetId, catalog, components, resolveComponent,
+// componentSourceRoot, sourceComponentIds, modId, generatedDatagenResources,
+// loaderResourceRoots, acResources, clojureRuntimeLibraries,
+// packagedRuntimeLibraries, stripClassLocalVariableTables.
+
+if (target.loader == "forge" || target.loader == "neoforge") {
+    def forgeModClassRoots = [
+        layout.buildDirectory.dir("classes/java/main"),
+        layout.buildDirectory.dir("clojure/main"),
+        layout.buildDirectory.dir("resources/main")
+    ]
+    // Loom writes MOD_CLASSES from the full source-set graph (including stale
+    // platform/build and IDE out/production paths). Force the target-local
+    // roots at execution time so an unexpanded/stale mods.toml cannot win.
+    tasks.matching { it.name in ["runClient", "runServer", "runData", "runDatagen", "runGametestServer"] }
+        .configureEach { task ->
+            task.doFirst {
+                def roots = forgeModClassRoots
+                    .collect { it.get().asFile }
+                    .findAll { it.directory }
+                    .collect { "main%%${it.absolutePath}" }
+                if (roots.isEmpty()) {
+                    throw new GradleException("Forge/NeoForge MOD_CLASSES is empty for target '${targetId}'; run processResources/classes first")
+                }
+                def resourcesRoot = layout.buildDirectory.dir("resources/main").get().asFile
+                def modsTomlName = target.loader == "neoforge" ? "META-INF/neoforge.mods.toml" : "META-INF/mods.toml"
+                def modsToml = new File(resourcesRoot, modsTomlName)
+                if (!modsToml.isFile()) {
+                    throw new GradleException("Missing processed ${modsTomlName} at ${modsToml}; run :platform:processResources first")
+                }
+                task.environment "MOD_CLASSES", roots.join(File.pathSeparator)
+            }
+        }
+}
+
+if (target.loader == "forge") {
+    loom {
+        forge {}
+        mods {
+            main {
+                modFiles.setFrom([])
+                sourceSet("main")
+            }
+        }
+    }
+} else if (target.loader == "neoforge") {
+    loom {
+        neoForge {}
+        mods {
+            main {
+                modFiles.setFrom([])
+                sourceSet("main")
+            }
+        }
+    }
+}
+
+dependencies {
+    minecraft target.dependencies.minecraft
+    mappings loom.officialMojangMappings()
+
+    if (target.loader == "forge") {
+        add("forge", target.dependencies.loader)
+        clojureRuntimeLibraries.each { dependencyNotation ->
+            add("forgeRuntimeLibrary", dependencyNotation)
+        }
+        compileOnly "com.blamejared.crafttweaker:CraftTweaker-common-1.20.1:14.0.60"
+        add("modCompileOnlyApi", target.dependencies.jeiCommonApi)
+        add("modCompileOnlyApi", target.dependencies.jeiForgeApi)
+        add("modRuntimeOnly", target.dependencies.jeiForgeRuntime)
+        add("modRuntimeOnly", files(rootProject.file(target.dependencies.sparkRuntimeFile)))
+    } else if (target.loader == "neoforge") {
+        add("neoForge", target.dependencies.loader)
+        clojureRuntimeLibraries.each { dependencyNotation ->
+            // Arch Loom reuses the forgeRuntimeLibrary configuration name for NeoForge.
+            add("forgeRuntimeLibrary", dependencyNotation)
+        }
+    } else if (target.loader == "fabric") {
+        add("modImplementation", target.dependencies.fabricLoader)
+        add("modImplementation", target.dependencies.fabricApi)
+        compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+    } else {
+        throw new GradleException("Unsupported loader '${target.loader}' for target '${target.id}'")
+    }
+
+    // Architectury Loom's include configuration is the Jar-in-Jar mechanism
+    // for Forge, NeoForge, and Fabric. It creates nested dependency jars in
+    // the final remapped archive instead of relying on users to install
+    // ordinary library jars in the mods directory. The packaged set embeds
+    // the slim clojure variant; the runtime classpath above keeps the full
+    // jar so dev runs do not pay load-time compilation.
+    if (runtimeLibraryPackaging == "loom-include") {
+        packagedRuntimeLibraries.each { dependencyNotation ->
+            include(dependencyNotation)
+        }
+    }
+}
+
+def stripPlatformOutputLvt = tasks.register("stripPlatformOutputLvt") {
+    group = "build"
+    description = "Strip local variable tables from packaged platform classes before loader remapping."
+    dependsOn tasks.named("classes")
+    def outputDir = layout.buildDirectory.dir("classes/java/main")
+    def marker = layout.buildDirectory.file("tmp/stripPlatformOutputLvt/stripped.marker")
+    inputs.dir(outputDir)
+    outputs.file(marker)
+    doLast {
+        def dir = outputDir.get().asFile
+        int stripped = 0
+        int unchanged = 0
+        if (dir.isDirectory()) {
+            dir.eachFileRecurse { File file ->
+                if (!file.isFile() || !file.name.endsWith(".class")) {
+                    return
+                }
+                try {
+                    def strippedClass = stripClassLocalVariableTables(file.bytes)
+                    if (strippedClass.stripped) {
+                        file.bytes = strippedClass.bytes
+                        stripped++
+                    } else {
+                        unchanged++
+                    }
+                } catch (Exception ex) {
+                    logger.warn("[stripPlatformOutputLvt] skipped {}: {}", file, ex.message)
+                }
+            }
+        }
+        def markerFile = marker.get().asFile
+        markerFile.parentFile.mkdirs()
+        markerFile.text = "stripped=${stripped}, unchanged=${unchanged}${System.lineSeparator()}"
+        logger.lifecycle("[stripPlatformOutputLvt] stripped LVT from {} class files; left {} unchanged", stripped, unchanged)
+    }
+}
+
+tasks.named("jar", Jar).configure {
+    dependsOn stripPlatformOutputLvt
+}
+tasks.matching { it.name == "shadowJar" }.configureEach {
+    dependsOn stripPlatformOutputLvt
+}
+
+def remapInputArchive = tasks.named("jar", Jar).flatMap { it.archiveFile }
+def remapInputTask = tasks.named("jar")
+if (target.loader == "fabric" && runtimeLibraryPackaging == "shadow-remap") {
+    def shadowArchive = tasks.named("shadowJar", Jar).flatMap { it.archiveFile }
+    def strippedShadowArchive = layout.buildDirectory.file("libs/${target.artifact.baseName}-${project.version}-${target.artifact.classifier}-shadow-stripped.jar")
+    def stripShadowJarLvt = tasks.register("stripShadowJarLvt") {
+        group = "build"
+        description = "Strip local variable tables from the Fabric shadow jar before loader remapping."
+        dependsOn tasks.named("shadowJar")
+        inputs.file(shadowArchive)
+        outputs.file(strippedShadowArchive)
+        doLast {
+            def input = shadowArchive.get().asFile
+            def output = strippedShadowArchive.get().asFile
+            output.parentFile.mkdirs()
+            int stripped = 0
+            int unchanged = 0
+            def seen = new LinkedHashSet<String>()
+            new java.util.jar.JarInputStream(new FileInputStream(input)).withCloseable { jarInput ->
+                new java.util.jar.JarOutputStream(new FileOutputStream(output)).withCloseable { jarOutput ->
+                    java.util.jar.JarEntry entry
+                    while ((entry = jarInput.nextJarEntry) != null) {
+                        if (!seen.add(entry.name)) {
+                            jarInput.closeEntry()
+                            continue
+                        }
+                        if (entry.name ==~ /^META-INF\/.*\.(SF|DSA|RSA)$/) {
+                            jarInput.closeEntry()
+                            continue
+                        }
+                        def outEntry = new java.util.jar.JarEntry(entry.name)
+                        outEntry.time = entry.time
+                        if (entry.extra != null) {
+                            outEntry.extra = entry.extra
+                        }
+                        jarOutput.putNextEntry(outEntry)
+                        if (!entry.isDirectory()) {
+                            def entryBuffer = new ByteArrayOutputStream()
+                            byte[] readBuffer = new byte[8192]
+                            int readCount
+                            while ((readCount = jarInput.read(readBuffer)) != -1) {
+                                entryBuffer.write(readBuffer, 0, readCount)
+                            }
+                            byte[] bytes = entryBuffer.toByteArray()
+                            if (entry.name.endsWith(".class")) {
+                                try {
+                                    def strippedClass = stripClassLocalVariableTables(bytes)
+                                    bytes = strippedClass.bytes
+                                    if (strippedClass.stripped) {
+                                        stripped++
+                                    } else {
+                                        unchanged++
+                                    }
+                                } catch (Exception ex) {
+                                    logger.warn("[stripShadowJarLvt] copied {} without bytecode rewrite: {}", entry.name, ex.message)
+                                }
+                            }
+                            jarOutput.write(bytes)
+                        }
+                        jarOutput.closeEntry()
+                        jarInput.closeEntry()
+                    }
+                }
+            }
+            logger.lifecycle("[stripShadowJarLvt] stripped LVT from {} shadow classes; left {} unchanged", stripped, unchanged)
+        }
+    }
+    remapInputArchive = strippedShadowArchive
+    remapInputTask = stripShadowJarLvt
+}
+
+tasks.named("remapJar").configure {
+    inputFile.set(remapInputArchive)
+    archiveBaseName.set(target.artifact.baseName)
+    archiveClassifier.set(target.artifact.classifier)
+    dependsOn remapInputTask
+}
+
+tasks.register("verifyRemappedPlatformEntrypoints") {
+    group = "verification"
+    description = "Verify the final Loom-remapped jar retains platform Clojure entrypoints as class-only resources."
+    dependsOn tasks.named("remapJar")
+    doLast {
+        def archive = tasks.named("remapJar").get().archiveFile.get().asFile
+        if (!archive.isFile()) {
+            throw new GradleException("Missing remapped archive for ${target.id}: ${archive}")
+        }
+        // Inside a task closure Groovy resolves bare `components` to Gradle's
+        // SoftwareComponentContainer. Use the catalog map explicitly; source
+        // components such as platform-shared are catalog entries, not Gradle
+        // software components.
+        def catalogComponents = project.ext.components
+        def entrypoints = ((target.sourceComponents ?: [])
+            .collect { componentId -> catalogComponents[componentId.toString()]?.runtimeAotEntrypoint }
+            .findAll { it } + [target.entrypoint?.namespace])
+            .findAll { it }
+            .collect { it.toString() }
+            .unique()
+        def missing = []
+        def sourceLeaks = []
+        new java.util.zip.ZipFile(archive).withCloseable { zip ->
+            entrypoints.each { String namespaceName ->
+                def base = namespaceName.replace(".", "/").replace("-", "_")
+                if (zip.getEntry("${base}__init.class") == null) {
+                    missing << namespaceName
+                }
+                if (zip.getEntry("${base}.clj") != null || zip.getEntry("${base}.cljc") != null) {
+                    sourceLeaks << namespaceName
+                }
+            }
+        }
+        if (!missing.isEmpty() || !sourceLeaks.isEmpty()) {
+            throw new GradleException("Remapped platform entrypoint check failed for ${target.id}: " +
+                "missing=${missing.sort()}, sourceLeaks=${sourceLeaks.sort()}")
+        }
+        logger.lifecycle("[verifyRemappedPlatformEntrypoints] ok ({})", archive.name)
+    }
+}
+
+loom {
+    runs {
+        client {
+            client()
+            configName = "${target.id} Client"
+            runDir = "run/${target.id}/client"
+        }
+        server {
+            server()
+            configName = "${target.id} Server"
+            runDir = "run/${target.id}/server"
+            if (target.loader == "forge") {
+                property "forge.enabledGameTestNamespaces", "${modId},minecraft"
+            } else if (target.loader == "neoforge") {
+                property "neoforge.enabledGameTestNamespaces", "${modId},minecraft"
+            }
+        }
+        if (target.loader == "forge" || target.loader == "neoforge") {
+            data {
+                data()
+                configName = "${target.id} Data"
+                runDir = "run/${target.id}/data"
+                def existingArgs = ["--mod", modId, "--all",
+                    "--output", generatedDatagenResources.get().asFile.absolutePath]
+                loaderResourceRoots.each { existingArgs.addAll(["--existing", it]) }
+                existingArgs.addAll(["--existing", acResources])
+                programArgs existingArgs as String[]
+            }
+        } else if (target.loader == "fabric") {
+            datagen {
+                server()
+                configName = "${target.id} DataGen"
+                runDir = "run/${target.id}/data"
+                vmArg "-Dfabric-api.datagen"
+                vmArg "-Dfabric-api.datagen.output-dir=${generatedDatagenResources.get().asFile.absolutePath}"
+                vmArg "-Dfabric-api.datagen.modid=${rootProject.findProperty("mod_id")}"
+            }
+        }
+    }
+}

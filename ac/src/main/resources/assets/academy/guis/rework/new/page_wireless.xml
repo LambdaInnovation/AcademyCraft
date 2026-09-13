@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui size="0.0,0.0" align="center,center">
+  <template name="t_element">
+    <image id="el_row" pos="0.0,0.0" size="150.0,16.0" align="left,top" src="academy:textures/guis/element/element_background300x32.png">
+      <image id="el_icon_logo" pos="8.0,0.0" size="12.0,12.0" align="left,center" src="academy:textures/guis/icons/icon_matrix.png" tint="#B2FFFFFF"/>
+      <text id="el_text_name" pos="20.0,0.0" size="40.0,8.0" align="left,center" text="" font-size="9.0" color="#FFDDDDDD"/>
+      <image id="el_icon_key" pos="60.0,0.0" size="12.0,12.0" align="left,center" src="academy:textures/guis/icons/icon_key.png" tint="#B2FFFFFF"/>
+      <box id="el_input_bg" pos="72.5,3.5" size="48.0,9.0" fill="#AA222222"/>
+      <text id="el_input_pass" pos="72.5,3.5" size="48.0,9.0" align="left,top" text="" font-size="10.0" color="#FFFFFFFF" editable="true" masked="true"/>
+      <image id="el_icon_connect" pos="125.0,0.0" size="12.0,12.0" align="left,center" src="academy:textures/guis/icons/icon_unconnected.png" tint="#99FFFFFF"/>
+    </image>
+  </template>
+  <image id="main" pos="0.0,0.0" size="176.0,187.0" align="center,center" src="academy:textures/guis/parent/parent_background.png">
+    <image id="icon_logo" pos="10.0,10.0" size="16.0,16.0" align="left,top" src="academy:textures/guis/icons/icon_tonode.png"/>
+    <group id="panel_wireless" pos="0.0,17.4" size="165.0,132.6" align="center,center">
+      <group id="zone_elementlist_clip" pos="2.5,15.4" size="147.5,115.0" align="left,top" clip="true">
+        <list id="zone_elementlist" pos="0.0,0.0" size="147.5,115.0" align="left,top" template="t_element" spacing="0.0"/>
+      </group>
+      <image id="elem_connected" pos="2.0,-10.0" size="150.0,18.0" align="left,top" src="academy:textures/guis/element/element_background300x32.png">
+        <image id="ec_icon_logo" pos="8.0,0.0" size="12.0,12.0" align="left,center" src="academy:textures/guis/icons/icon_matrix.png"/>
+        <text id="ec_text_name" pos="20.0,0.0" size="80.0,8.0" align="left,center" text="Not Connected" font-size="9.0" color="#FFFFFFFF"/>
+        <image id="ec_icon_connect" pos="125.0,0.0" size="12.0,12.0" align="left,center" src="academy:textures/guis/icons/icon_connected.png" tint="#CCFFFFFF"/>
+      </image>
+      <image id="btn_arrowup" pos="0.0,7.0" size="16.0,16.0" align="right,top" src="academy:textures/guis/button/button_arrowupb.png" tint="#CCFFFFFF"/>
+      <image id="btn_arrowdown" pos="0.0,0.0" size="16.0,16.0" align="right,bottom" src="academy:textures/guis/button/button_arrowdownb.png" tint="#CCFFFFFF"/>
+      <text id="text_connected" pos="7.5,-16.6" size="58.0,8.0" align="left,top" text="Connected" font-size="9.0" color="#CCFFFFFF"/>
+      <text id="text_available" pos="7.5,7.4" size="58.0,8.0" align="left,top" text="Available" font-size="9.0" color="#CCFFFFFF"/>
+    </group>
+  </image>
+</Ui>

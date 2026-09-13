@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ported from upstream AcademyCraft PresetEditUI (preset_edit.xml).
+  Adapted for cn.li.mcmod.ui.xml parser.
+  4 preset pages with unique slot IDs per page, horizontal carousel layout.
+-->
+<Ui size="0.0,0.0" align="center,center">
+
+  <!-- Full-screen dark overlay — matching upstream RenderUtils.drawBlackout()
+       (glColor4d(0,0,0,0.7) → ARGB #B3000000). Screen-level only; Selector
+       does not add a second dim (upstream Selector has its own CRL_BACK panel). -->
+  <box id="blackout" pos="0.0,0.0" size="1920.0,1080.0" fill="#B3000000"/>
+
+  <!-- ===== Page helper template: one slot row ===== -->
+  <template name="slot-row">
+    <group pos="0.5,0.0" size="110.0,34.8" align="center,top">
+      <image id="bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+  </template>
+
+  <!-- ===== Preset 0 page ===== -->
+  <group id="preset-0" pos="0.0,0.0" size="116.2,141.5" align="center,center">
+    <image id="preset-0-back" pos="0.0,0.0" size="116.2,141.5"
+           src="academy:textures/guis/preset_settings/back.png"/>
+    <group id="preset-0-3" pos="0.5,105.8" size="110.0,34.8" align="center,top">
+      <image id="preset-0-3-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-0-3-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-0-3-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-0-2" pos="0.5,71.0" size="110.0,34.8" align="center,top">
+      <image id="preset-0-2-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-0-2-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-0-2-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-0-1" pos="0.5,36.2" size="110.0,34.8" align="center,top">
+      <image id="preset-0-1-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-0-1-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-0-1-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-0-0" pos="0.5,1.5" size="110.0,34.8" align="center,top">
+      <image id="preset-0-0-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-0-0-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-0-0-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <text id="preset-0-title" pos="0.5,-15.0" size="80.0,15.0" align="center,top"
+          text="Preset #1" font-size="10.0" color="#FFFFFFFF"/>
+  </group>
+
+  <!-- ===== Preset 1 page ===== -->
+  <group id="preset-1" pos="125.0,0.0" size="116.2,141.5" align="center,center">
+    <image id="preset-1-back" pos="0.0,0.0" size="116.2,141.5"
+           src="academy:textures/guis/preset_settings/back.png"/>
+    <group id="preset-1-3" pos="0.5,105.8" size="110.0,34.8" align="center,top">
+      <image id="preset-1-3-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-1-3-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-1-3-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-1-2" pos="0.5,71.0" size="110.0,34.8" align="center,top">
+      <image id="preset-1-2-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-1-2-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-1-2-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-1-1" pos="0.5,36.2" size="110.0,34.8" align="center,top">
+      <image id="preset-1-1-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-1-1-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-1-1-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-1-0" pos="0.5,1.5" size="110.0,34.8" align="center,top">
+      <image id="preset-1-0-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-1-0-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-1-0-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <text id="preset-1-title" pos="0.5,-15.0" size="80.0,15.0" align="center,top"
+          text="Preset #2" font-size="10.0" color="#FFFFFFFF"/>
+  </group>
+
+  <!-- ===== Preset 2 page ===== -->
+  <group id="preset-2" pos="250.0,0.0" size="116.2,141.5" align="center,center">
+    <image id="preset-2-back" pos="0.0,0.0" size="116.2,141.5"
+           src="academy:textures/guis/preset_settings/back.png"/>
+    <group id="preset-2-3" pos="0.5,105.8" size="110.0,34.8" align="center,top">
+      <image id="preset-2-3-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-2-3-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-2-3-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-2-2" pos="0.5,71.0" size="110.0,34.8" align="center,top">
+      <image id="preset-2-2-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-2-2-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-2-2-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-2-1" pos="0.5,36.2" size="110.0,34.8" align="center,top">
+      <image id="preset-2-1-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-2-1-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-2-1-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-2-0" pos="0.5,1.5" size="110.0,34.8" align="center,top">
+      <image id="preset-2-0-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-2-0-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-2-0-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <text id="preset-2-title" pos="0.5,-15.0" size="80.0,15.0" align="center,top"
+          text="Preset #3" font-size="10.0" color="#FFFFFFFF"/>
+  </group>
+
+  <!-- ===== Preset 3 page ===== -->
+  <group id="preset-3" pos="375.0,0.0" size="116.2,141.5" align="center,center">
+    <image id="preset-3-back" pos="0.0,0.0" size="116.2,141.5"
+           src="academy:textures/guis/preset_settings/back.png"/>
+    <group id="preset-3-3" pos="0.5,105.8" size="110.0,34.8" align="center,top">
+      <image id="preset-3-3-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-3-3-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-3-3-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-3-2" pos="0.5,71.0" size="110.0,34.8" align="center,top">
+      <image id="preset-3-2-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-3-2-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-3-2-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-3-1" pos="0.5,36.2" size="110.0,34.8" align="center,top">
+      <image id="preset-3-1-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-3-1-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-3-1-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <group id="preset-3-0" pos="0.5,1.5" size="110.0,34.8" align="center,top">
+      <image id="preset-3-0-bg" pos="0.0,0.0" size="110.0,34.8"
+             src="academy:textures/guis/preset_settings/selected.png" visible="false"/>
+      <image id="preset-3-0-icon" pos="2.2,3.8" size="26.5,26.5"
+             src=""/>
+      <text id="preset-3-0-text" pos="36.2,10.0" size="62.5,15.0"
+            text="" font-size="10.0" color="#FFFFFFFF"/>
+    </group>
+    <text id="preset-3-title" pos="0.5,-15.0" size="80.0,15.0" align="center,top"
+          text="Preset #4" font-size="10.0" color="#FFFFFFFF"/>
+  </group>
+
+  <!-- Selector popup container (hidden by default, positioned at click) -->
+  <group id="selector" pos="0.0,0.0" size="0.0,0.0" visible="false"/>
+
+  <!-- Screen title (i18n) — upstream: top-left (5,5), LEFT aligned, 12pt -->
+  <text id="screen-title" pos="5.0,5.0" size="200.0,18.0" align="left,top"
+        text="ac.gui.preset_edit.name" font-size="12.0" color="#FFFFFFFF"/>
+</Ui>

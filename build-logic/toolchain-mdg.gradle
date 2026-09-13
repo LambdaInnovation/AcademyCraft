@@ -1,0 +1,146 @@
+// ModDevGradle toolchain: NeoForge on modern (unobfuscated, no-remap)
+// Minecraft versions, e.g. 26.2. Applied from platform-target.gradle via
+// `apply from:` once the shared source-set/dependency/AOT wiring for the
+// target is in place.
+//
+// The net.neoforged.moddev plugin is applied in platform/build.gradle before
+// this script so pluginManagement can resolve the version for the selected
+// target only.
+//
+// `apply from:` evaluates this file as its own Groovy Script instance, so
+// plain `def` locals declared in platform-target.gradle are NOT visible here
+// — only Project-level state (plugins, extensions, tasks, sourceSets, ...)
+// is shared automatically. platform-target.gradle bridges the handful of
+// catalog-derived values this file needs through `project.ext` right before
+// applying it: target, targetId, modId, generatedDatagenResources,
+// loaderResourceRoots, acResources.
+def neoForgeVer = target.dependencies.neoForgeVersion?.toString()
+if (!neoForgeVer) {
+    throw new GradleException("MDG target '${targetId}' must declare dependencies.neoForgeVersion")
+}
+
+// ModDevGradle uses NeoForge's official Jar-in-Jar configuration. Keep the
+// exact versions aligned with the shared runtime classpath and pin each one
+// so the published mod is self-contained and reproducible.
+//
+// MDG reads the source manifest while creating Jar-in-Jar metadata, so
+// normalize each packaged jar into task outputs with a minimal manifest
+// before handing them to MDG.
+//
+// The clojure entry is the `slim` classifier variant, which is not on the
+// runtime classpath, so resolve the packaged set from a dedicated
+// non-transitive configuration instead of runtimeClasspath; each entry is a
+// leaf jar selected by exact file name below.
+def packagedRuntimeConfig = configurations.create("packagedRuntime") {
+    canBeConsumed = false
+    canBeResolved = true
+}
+dependencies {
+    packagedRuntimeLibraries.each { dependencyNotation ->
+        // Non-transitive: the clojure/spec POMs would otherwise drag their
+        // own (older) spec.alpha/core.specs.alpha pins alongside the direct
+        // entries; keep the packaged set exactly the declared three jars.
+        packagedRuntime(dependencyNotation) {
+            transitive = false
+        }
+    }
+}
+
+def preparedJarJarLibraries = packagedRuntimeLibraries.collect { dependencyNotation ->
+    def coordinates = dependencyNotation.toString().split(":")
+    def group = coordinates[0]
+    def name = coordinates[1]
+    def dependencyVersion = coordinates[2]
+    def classifier = coordinates.length > 3 ? coordinates[3] : null
+    tasks.register("prepare${name.replaceAll(/[^A-Za-z0-9]/, '')}JarJar", Jar) {
+        archiveBaseName.set(name)
+        archiveVersion.set(dependencyVersion)
+        if (classifier != null) {
+            archiveClassifier.set(classifier)
+        }
+        // Keep inputs outside MDG's own generated/jarJar output directory;
+        // the jarJar task clears that directory before writing metadata.
+        destinationDirectory.set(layout.buildDirectory.dir("tmp/jarJarInputs"))
+        from {
+            def expectedName = classifier != null
+                ? "${name}-${dependencyVersion}-${classifier}.jar"
+                : "${name}-${dependencyVersion}.jar"
+            def source = packagedRuntimeConfig.files.find { it.name == expectedName }
+            if (source == null) {
+                throw new GradleException("Missing resolved Clojure runtime library ${dependencyNotation}")
+            }
+            zipTree(source)
+        }
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        manifest {
+            attributes(
+                "Manifest-Version": "1.0",
+                "Automatic-Module-Name": "${group}.${name}"
+            )
+        }
+    }
+}
+
+dependencies {
+    preparedJarJarLibraries.each { preparedJar ->
+        jarJar(files(preparedJar))
+    }
+}
+
+tasks.named("jarJar").configure {
+    dependsOn preparedJarJarLibraries
+}
+
+neoForge {
+    version = neoForgeVer
+    mods {
+        "${modId}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+    // Loom puts Minecraft on testCompileClasspath by default; MDG only wires
+    // the main source set unless asked. Platform Clojure unit tests (ported
+    // from neoforge-1.21.1) import net.minecraft.* / NeoForge types at AOT time.
+    addModdingDependenciesTo(sourceSets.test)
+    runs {
+        client {
+            client()
+            ideName = "${target.id} Client"
+            gameDirectory = project.file("run/${target.id}/client")
+        }
+        server {
+            server()
+            ideName = "${target.id} Server"
+            gameDirectory = project.file("run/${target.id}/server")
+            programArgument "--nogui"
+        }
+        data {
+            // 26.x MDG exposes clientData/serverData. Sharing one --output across
+            // both runs lets each HashCache delete the other run's files. Register
+            // all providers on GatherDataEvent.Client and use clientData only.
+            clientData()
+            ideName = "${target.id} Client Data"
+            gameDirectory = project.file("run/${target.id}/client-data")
+            def existingArgs = ["--mod", modId.toString(), "--all",
+                "--output", generatedDatagenResources.get().asFile.absolutePath]
+            loaderResourceRoots.each { root -> existingArgs.addAll(["--existing", root]) }
+            existingArgs.addAll(["--existing", acResources])
+            programArguments.addAll(existingArgs)
+        }
+    }
+}
+
+// MDG resolves the Clojure runtime through the shared implementation deps.
+// It publishes the ordinary jar directly; unlike Loom/ForgeGradle it has no
+// reobfuscation/remapJar release step.
+tasks.named("jar", Jar).configure {
+    archiveBaseName = target.artifact.baseName
+    archiveClassifier = target.artifact.classifier
+}
+
+// Skeleton / early targets may only have a .gitkeep under src/test until
+// Phase 5 lands real tests. Gradle 9 fails the test task when sources exist
+// but no tests are discovered.
+tasks.named("test").configure {
+    failOnNoDiscoveredTests = false
+}

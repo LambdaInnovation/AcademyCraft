@@ -1,0 +1,36 @@
+{:credits
+ {:header ["Presented by Lambda Innovation" "ac.li-dev.cn"]
+  :staff
+  [["Project Direction" ["WeAthFolD"]]
+   ["Game Design" ["Eing" "WeAthFolD"]]
+   ["Programming" ["Paindar" "ColdHikari" "KSkun" "EAirPeter" "WeAthFolD"]]
+   ["Art" ["Nolife_M"]]
+   ["QA" ["xiao6" "BlueFeather"]]
+   ["Website" ["LeLe" "NAT" "yinfb" "KSkun" "Cafe"]]
+   ["Localization" ["mkpoli (Japanese)" "dtraitor (Russian)"]]
+   ["GitHub Contributors" ["3TUSK" "l89669" "MrBenjaminBowman" "berry64"]]]
+  :donators
+  ["anon katon" "Atlas Kleiner" "Aymrick" "Blue Doggo" "Cerzix"
+   "Chris Valen" "Darkveld" "David McGraw" "Dr. Necrox" "Ephikus"
+   "Eve" "Hollow Studios" "Iruuyami" "Mario Alvarez" "Meme Machine"
+   "Michael Gordon" "Mickael Marmé" "Renniuq" "RJ Pluhar"
+   "Rumanshi" "Smolki14" "Sun Tai Long" "ThalesLemosz_"
+   "UD_Mr_Creeper" "ArchieZero" "nullsir" "Brokenseven" "ZEROIC"
+   "spacetime" "Code_31Z" "dougou" "XLingY" "Note_Sorle"
+   "SemiKato" "L1ttleFlyyy" "BoLixiaoqi" "Jun_Flame" "fken"
+   "Yune" "ztmzzz" "Ai_shen" "SunSky" "BeiCuei" "sheng_ri"
+   "Bow_Neko" "xerxer" "RICK"]
+  :donators-info "Thank you to all donators who supported AcademyCraft!"}
+ :donation
+ {:links
+  [{:text "Patreon" :url "https://www.patreon.com/WeAthFolD"}
+   {:text "Support Page" :url "https://ac.li-dev.cn/donate"}]
+  :text
+  ["Thank you for playing AcademyCraft!!"
+   "If you enjoyed the mod, you can support us via:"
+   ""
+   "We will make this mod more intriguing! >3<"
+   ""
+   ""
+   ""
+   "]Lambda Innovation"]}}

@@ -1,75 +1,48 @@
-*.class
-*.bat
-*.setting
-
-libs/
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must ends with two \r.
-Icon
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
-
-# Windows
-# =========================
-
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Gradle
-build/
-.gradle/
-/bin/
-
-# Eclipse
-.project
+# eclipse
+bin
+*.launch
+.settings
+.metadata
 .classpath
-.settings/
+.project
 
-# IDEA
-.idea/
-out/
+# idea
+out
 *.ipr
-*.iml
 *.iws
+*.iml
+.idea
 
-# Runtime Generic
-eclipse/
-logs/
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+logs/*
+logs
+Logs/*
+*.log
+*.Log
+*.Logs
+*.logs
+/build-*.txt
+/compile-*.txt
+/test-out.txt
+
+# Files from Forge MDK
+forge*changelog.txt
+
+importcode/*
+run-data
+run-gametest
+minecraftmod/forge-1.20.1/src/generated
+fabric-1.20.1/src/generated
+platform-src/loader/*/src/generated/
+gradle
+.gradle
+.clj-kondo/.cache
+platform-src/**/.clj-kondo/
+.lsp
+_upstream

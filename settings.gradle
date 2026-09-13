@@ -1,0 +1,55 @@
+pluginManagement {
+    def catalogFile = new File(settings.rootDir, "platform-catalog.json")
+    def catalog = new groovy.json.JsonSlurper().parse(catalogFile)
+    def targetId = (settings.startParameter.projectProperties["platformTarget"] ?: catalog.defaultTarget).toString()
+    def target = catalog.targets[targetId]
+    if (target == null) {
+        throw new GradleException(
+            "Unknown platformTarget '${targetId}'. Known targets: ${catalog.targets.keySet().sort()}")
+    }
+    def profileId = target.buildProfile?.toString()
+    def profile = catalog.buildProfiles[profileId]
+    if (profile == null) {
+        throw new GradleException(
+            "Target '${targetId}' references unknown buildProfile '${profileId}'. Known: ${catalog.buildProfiles.keySet().sort()}")
+    }
+    def toolchain = (profile.toolchain ?: "loom").toString()
+    if (!(toolchain in ["loom", "mdg"])) {
+        throw new GradleException("buildProfile '${profileId}' toolchain must be 'loom' or 'mdg', got '${toolchain}'")
+    }
+    if (toolchain == "loom" && !profile.loomVersion) {
+        throw new GradleException("buildProfile '${profileId}' with toolchain=loom must declare loomVersion")
+    }
+    if (toolchain == "mdg" && !profile.modDevGradleVersion) {
+        throw new GradleException("buildProfile '${profileId}' with toolchain=mdg must declare modDevGradleVersion")
+    }
+    if (!profile.clojurephantVersion) {
+        throw new GradleException("buildProfile '${profileId}' must declare clojurephantVersion")
+    }
+    if (!profile.platformPluginId || !profile.platformPluginVersion) {
+        throw new GradleException("buildProfile '${profileId}' must declare platformPluginId and platformPluginVersion")
+    }
+    repositories {
+        maven { url "https://maven.architectury.dev" }
+        maven { url "https://maven.fabricmc.net" }
+        maven { url "https://maven.minecraftforge.net" }
+        maven { url "https://maven.neoforged.net/releases/" }
+        gradlePluginPortal()
+        mavenCentral()
+        maven {
+            url = "https://maven.blamejared.com"
+            name = "BlameJared Maven"
+        }
+    }
+    plugins {
+        id "dev.clojurephant.clojure" version "${profile.clojurephantVersion}"
+    }
+}
+
+rootProject.name = "clojure-minecraft-mod"
+
+include "api"
+include "mcmod"
+include "ac"
+include "platform"
+include "tools:target-launcher"

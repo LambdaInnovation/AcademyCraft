@@ -1,0 +1,118 @@
+// Fabric Loom toolchain for named-mapping releases (1.21.11+ / 26.x).
+// These releases are distributed with official named mappings, so they must
+// use the plain `jar` pipeline.  Applying the legacy remapJar/shadow input
+// path here would remap already-named classes a second time.
+
+if (target.loader != "fabric") {
+    throw new GradleException("toolchain-fabric-modern is only valid for Fabric targets")
+}
+
+dependencies {
+    // Loom still resolves the official distribution through `minecraft`,
+    // while the non-remap plugin exposes named classes to javac via the
+    // normal implementation classpath.
+    minecraft target.dependencies.minecraft
+    // The non-obfuscated plugin deliberately omits remapping configurations;
+    // loader/API jars are ordinary runtime dependencies in this pipeline.
+    implementation target.dependencies.fabricLoader
+    implementation target.dependencies.fabricApi
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+
+    // Loom's include() embeds the Clojure runtime in the normal jar for
+    // non-remapping builds.  Keep these coordinates in one catalog-derived
+    // list so the platform and Fabric metadata cannot drift apart. The
+    // packaged set embeds the slim clojure variant; the implementation
+    // classpath above keeps the full jar for dev runs.
+    packagedRuntimeLibraries.each { dependencyNotation ->
+        include(dependencyNotation)
+    }
+
+    if (target.dependencies.fabricEnergyApi) {
+        add("compileOnly", target.dependencies.fabricEnergyApi)
+    }
+    if (target.dependencies.fabricEnergyRuntime) {
+        add("runtimeOnly", target.dependencies.fabricEnergyRuntime)
+    }
+    if (target.dependencies.jeiCommonApi) {
+        add("compileOnly", target.dependencies.jeiCommonApi)
+    }
+    if (target.dependencies.jeiFabricApi) {
+        add("compileOnly", target.dependencies.jeiFabricApi)
+    }
+    if (target.dependencies.jeiFabricRuntime) {
+        add("runtimeOnly", target.dependencies.jeiFabricRuntime)
+    }
+}
+
+loom {
+    // Keep the modern Fabric source graph explicit.  Loom's named-mapping
+    // pipeline wires the Minecraft client/server classpaths through the split
+    // source-set model; without it, compileJava can see the merged resource
+    // artifact but not the named net.minecraft classes.
+    splitEnvironmentSourceSets()
+    mods {
+        "${modId}" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+    runs {
+        client {
+            client()
+            configName = "${target.id} Client"
+            runDir = "run/${target.id}/client"
+        }
+        server {
+            server()
+            configName = "${target.id} Server"
+            runDir = "run/${target.id}/server"
+        }
+        datagen {
+            server()
+            configName = "${target.id} DataGen"
+            runDir = "run/${target.id}/data"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${generatedDatagenResources.get().asFile.absolutePath}"
+            vmArg "-Dfabric-api.datagen.modid=${rootProject.findProperty("mod_id")}"
+        }
+    }
+}
+
+// The source tree predates Loom's split source-set convention.  Keep the
+// generated client source set empty until the remaining shared Java contracts
+// are migrated to a true common/client boundary; compiling them in both source
+// sets would create duplicate classes and a main -> client -> main task cycle.
+sourceSets.client.java.setSrcDirs([])
+
+// The existing Java tree still contains shared contracts and client bridges
+// in the main source set. Loom configures the main task with the common jar;
+// append the resolved client classpath at execution time so its client-only
+// classes are visible without making the client task depend back on main.
+tasks.named("compileJava", JavaCompile).configure {
+    doFirst {
+        classpath = classpath.plus(configurations.getByName("clientCompileClasspath") - sourceSets.main.output)
+    }
+}
+
+// Clojure AOT runs against the same merged source tree as the legacy
+// targets. Give it the client named-mapping classpath too; otherwise any
+// namespace that type-hints GuiGraphicsExtractor/Minecraft fails before the
+// target-specific Clojure code is even analyzed.
+tasks.named("compileClojure").configure {
+    classpath.from(configurations.getByName("clientCompileClasspath"))
+}
+
+// Clojurephant runs checkClojure in its own JVM.  It does not inherit the
+// compile task's late classpath mutation, so include the split client artifact
+// explicitly; otherwise checking a valid client namespace fails with
+// ClassNotFoundException before reflection diagnostics can be evaluated.
+tasks.matching { it.name == "checkClojure" }.configureEach {
+    classpath.from(configurations.getByName("clientCompileClasspath"))
+}
+
+// Keep the plain jar as the authoritative artifact.  platform-target.gradle
+// supplies source/resource/AOT inputs and the catalog supplies its name.
+tasks.named("jar", Jar).configure {
+    archiveBaseName = target.artifact.baseName
+    archiveClassifier = target.artifact.classifier
+}

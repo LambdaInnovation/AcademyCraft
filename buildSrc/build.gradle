@@ -1,0 +1,44 @@
+plugins {
+    id 'java-library'
+}
+
+// buildSrc is compiled by both the Loom (Gradle 8 / JDK 21) and MDG
+// (Gradle 9 / JDK 25) profiles. Keep their class outputs isolated: Gradle 8
+// cannot instrument Java 25 bytecode left behind by an earlier MDG build.
+layout.buildDirectory = layout.projectDirectory.dir(
+        "build/${gradle.gradleVersion}-jvm${JavaVersion.current().majorVersion}")
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
+
+def clojurephantJar = configurations.detachedConfiguration(
+        dependencies.create('dev.clojurephant:clojurephant-plugin:0.9.1'))
+clojurephantJar.transitive = false
+
+def stripClojurephantPluginMeta = tasks.register('stripClojurephantPluginMeta', Sync) {
+    from zipTree(clojurephantJar.singleFile)
+    into layout.buildDirectory.dir('clojurephant-for-buildsrc')
+    exclude 'META-INF/gradle-plugins/**'
+}
+
+def packStrippedClojurephantJar = tasks.register('packStrippedClojurephantJar', Jar) {
+    dependsOn stripClojurephantPluginMeta
+    duplicatesStrategy = DuplicatesStrategy.WARN
+    destinationDirectory = layout.buildDirectory.dir('libs')
+    archiveFileName = 'clojurephant-stripped-for-buildsrc.jar'
+    from stripClojurephantPluginMeta.get().destinationDir
+}
+
+dependencies {
+    implementation gradleApi()
+    // Repack stripped classes as a single JAR so they land on javac's compile classpath reliably.
+    implementation files(packStrippedClojurephantJar.get().archiveFile) {
+        builtBy packStrippedClojurephantJar
+    }
+    implementation 'us.bpsm:edn-java:0.7.1'
+    implementation 'org.apache.commons:commons-text:1.11.0'
+}
+
+tasks.named('compileJava').configure { dependsOn packStrippedClojurephantJar }

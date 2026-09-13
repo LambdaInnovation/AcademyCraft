@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "cn.li.fabric1201.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BlockItemMixin",
+    "LivingEntityDamageMixin",
+    "PlayerPersistentDataMixin"
+  ],
+  "client": [
+    "ItemRendererObjCompositeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

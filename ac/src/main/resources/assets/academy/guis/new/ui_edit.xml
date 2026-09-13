@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Root anchors top-left, not centre. Upstream is a CGuiScreen whose origin
+  is the screen corner: #main sits at LEFT,TOP (94,104) and every HUD
+  preview is placed at its real screen coordinate. A zero-size root aligned
+  centre,centre puts the origin at (screenW/2, screenH/2) instead, which
+  slid the window into the middle and threw the previews clean off-screen.
+-->
+<Ui size="0.0,0.0" align="left,top">
+  <template name="t_hud_row">
+    <box pos="0.0,0.0" size="128.0,24.0" align="left,top" fill="#19FFFFFF" hover-tint="5.0">
+      <text id="label" pos="10.0,0.0" size="116.0,24.0" align="left,center" text="" font-size="18.0" color="#FFFFFFFF"/>
+    </box>
+  </template>
+  <image id="main" pos="94.0,104.0" size="144.0,203.0" scale="0.50" align="left,top" src="academy:textures/guis/window_ui_resize.png">
+    <text id="header" pos="0.0,8.0" size="128.0,28.0" align="center,center" text="" font-size="18.0" color="#BBFFFFFF"/>
+    <group id="body" pos="0.0,36.0" size="128.0,160.0" align="center,top">
+      <list id="hud-list" pos="0.0,0.0" size="128.0,160.0" template="t_hud_row" spacing="0.0"/>
+    </group>
+  </image>
+  <box id="editbox" pos="167.0,121.0" size="90.0,16.0" align="left,top" fill="#BB222222" visible="false">
+    <text id="text_x" pos="2.0,3.0" size="10.0,10.0" align="left,top" text="X" font-size="10.0" color="#FFFFFFFF"/>
+    <box id="edit_x_bg" pos="10.0,3.0" size="34.0,10.0" align="left,top" fill="#FF333333"/>
+    <text id="edit_x" pos="10.0,3.0" size="34.0,10.0" align="left,top" text="" font-size="10.0" color="#FFFFFFFF" editable="true"/>
+    <text id="text_y" pos="46.0,3.0" size="10.0,10.0" align="left,top" text="Y" font-size="10.0" color="#FFFFFFFF"/>
+    <box id="edit_y_bg" pos="53.0,3.0" size="34.0,10.0" align="left,top" fill="#FF333333"/>
+    <text id="edit_y" pos="53.0,3.0" size="34.0,10.0" align="left,top" text="" font-size="10.0" color="#FFFFFFFF" editable="true"/>
+  </box>
+  <group id="preview-cpbar" pos="0.0,0.0" size="193.0,29.0" align="left,top">
+    <image pos="0.0,0.0" size="193.0,29.0" align="left,top" src="academy:textures/guis/edit_preview/cpbar.png"/>
+    <box id="preview-cpbar-mark" pos="0.0,0.0" size="193.0,29.0" align="left,top" fill="#00FFFFFF" outline-width="2.0"/>
+  </group>
+  <group id="preview-keyhint" pos="0.0,0.0" size="86.0,50.0" align="left,top">
+    <box pos="0.0,0.0" size="86.0,50.0" align="left,top" fill="#90131D2A"/>
+    <text pos="7.0,5.0" size="72.0,18.0" align="left,top" text="M1  Skill #1" font-size="12.0" color="#FFFFFFFF"/>
+    <text pos="7.0,25.0" size="72.0,18.0" align="left,top" text="M2  Skill #2" font-size="12.0" color="#FFFFFFFF"/>
+    <box id="preview-keyhint-mark" pos="0.0,0.0" size="86.0,50.0" align="left,top" fill="#00FFFFFF" outline-width="2.0"/>
+  </group>
+  <group id="preview-media" pos="0.0,0.0" size="137.0,31.0" align="left,top">
+    <box pos="0.0,0.0" size="137.0,31.0" align="left,top" fill="#A01C2530"/>
+    <text pos="8.0,4.0" size="120.0,14.0" align="left,top" text="Media Player" font-size="12.0" color="#FFFFFFFF"/>
+    <box pos="8.0,22.0" size="118.0,2.0" align="left,top" fill="#FFFFFFFF"/>
+    <box id="preview-media-mark" pos="0.0,0.0" size="137.0,31.0" align="left,top" fill="#00FFFFFF" outline-width="2.0"/>
+  </group>
+  <group id="preview-notification" pos="0.0,0.0" size="129.0,43.0" align="left,top">
+    <image pos="0.0,0.0" size="129.0,43.0" align="left,top" src="academy:textures/guis/notification/back.png"/>
+    <text pos="42.0,8.0" size="80.0,14.0" align="left,top" text="Tutorial Update" font-size="11.0" color="#FFFFFFFF"/>
+    <box id="preview-notification-mark" pos="0.0,0.0" size="129.0,43.0" align="left,top" fill="#00FFFFFF" outline-width="2.0"/>
+  </group>
+</Ui>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Mirrors AcademyCraft assets/academy/guis/loctele_new.xml:
+  root centered at scale 0.24; menu 442×530 @ (20, -179.17) with dark fill
+  (53,53,53,128) + outline (122,146,156,158) lw2; rows 442×80 spacing 2
+  (elem_template / add_template); info panel 335.83×191.94 right-aligned
+  beside the menu — the MessageTab (font 40, lineHeight 42, right-aligned)
+  shown only while a row is hovered and moved to that row's y.
+-->
+<Ui id="root" size="0.0,0.0" align="center,center">
+
+  <!-- Templates must be direct children of <Ui> — collect-templates only
+       scans the root's direct children (same layout as settings.xml). -->
+  <template name="t_row" pos="0.0,0.0" size="442.0,80.0" align="left,top">
+    <!-- Row hover/fade highlight (upstream wrapBack colorRect + the
+         add_template Tint): transparent box painted BEHIND the row content
+         (first child, z 0) so it never wins hit-testing — the per-frame
+         rows-tick animates its :tint to blend*(0.1 idle | 0.4 hovered). -->
+    <box id="hl" pos="0.0,0.0" size="442.0,80.0" align="left,top" fill="#00000000"/>
+    <!-- elem_template: name text + teleport/remove icons -->
+    <group id="elem-row" pos="0.0,0.0" size="442.0,80.0" align="left,top">
+      <text id="name" pos="45.28,16.13" size="377.78,55.56" align="left,center" text="" font-size="43.0" color="#FFC1CFD5"/>
+      <image id="btn-tp" pos="335.0,29.92" size="33.33,33.33" align="left,top" src="academy:textures/guis/icons/icon_location_on.png"/>
+      <image id="btn-del" pos="375.0,29.92" size="33.33,33.33" align="left,top" src="academy:textures/guis/icons/icon_clear.png"/>
+    </group>
+    <!-- add_template: input + confirm check. The placeholder sits BEHIND the
+         editable input (declared first) so the input is the deepest hit —
+         an overlapping placeholder on top would swallow every click and the
+         input could never take focus. -->
+    <group id="add-row" pos="0.0,0.0" size="442.0,80.0" align="left,top">
+      <text id="ph" pos="45.28,19.70" size="280.56,55.56" align="left,center" text="Add..." font-size="43.0" color="#7FA4D4E9"/>
+      <text id="input" pos="45.28,19.70" size="280.56,55.56" align="left,center" text="" font-size="43.0" color="#7FA4D4E9" editable="true"/>
+      <image id="ok" pos="375.83,29.92" size="33.33,33.33" align="left,top" src="academy:textures/guis/check.png"/>
+    </group>
+  </template>
+
+  <group pos="0.0,0.0" size="0.0,0.0" scale="0.24" align="center,center">
+    <box id="menu" pos="20.0,-179.17" size="442.0,530.0" align="left,top" fill="#80353535" outline="#9E7A929C" outline-width="2.0">
+      <group id="list-bg" pos="0.0,18.0" size="442.0,510.0" align="left,top" clip="true">
+        <list id="list-ctr" pos="0.0,0.0" size="442.0,500.0" template="t_row" spacing="2.0"/>
+      </group>
+    </box>
+
+    <!-- Upstream loctele_new.xml: info x=-23.33 alignWidth=RIGHT, width
+         335.83, on the 0-size root -> x + parentW - w = -23.33 - 335.83 =
+         -359.16: the panel's right edge sits 23.33 left of the root origin
+         (the screen center), beside the menu/rows. setMessage moves it to
+         the hovered row's y. -->
+    <box id="info" pos="-359.16,-179.44" size="335.83,191.94" align="left,top" fill="#80353535" outline="#9E7A929C" outline-width="2.0" visible="false">
+      <text id="info-line-0" pos="20.0,20.0" size="295.83,42.0" text="" font-size="40.0" color="#FFC1CFD5" text-align="right"/>
+      <text id="info-line-1" pos="20.0,62.0" size="295.83,42.0" text="" font-size="40.0" color="#FFC1CFD5" text-align="right"/>
+      <text id="info-line-2" pos="20.0,104.0" size="295.83,42.0" text="" font-size="40.0" color="#FFC1CFD5" text-align="right"/>
+      <text id="info-line-3" pos="20.0,146.0" size="295.83,42.0" text="" font-size="40.0" color="#FFC1CFD5" text-align="right"/>
+    </box>
+  </group>
+</Ui>

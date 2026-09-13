@@ -1,0 +1,11 @@
+# Material library for developer_portable.obj — referenced by its `mtllib`
+# line. Without a `usemtl` binding in the OBJ every mesh bakes with a null
+# material and the forge/neoforge OBJ loader emits zero quads.
+# Texture slot #default is filled by model JSON "textures.default".
+# Ka only matters when the model JSON enables emissive_ambient (it does not).
+newmtl MainMaterial
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+map_Kd #default

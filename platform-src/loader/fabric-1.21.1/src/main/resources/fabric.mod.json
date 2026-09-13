@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
+  "contact": {
+    "homepage": "${mod_homepage}",
+    "sources": "${mod_sources}",
+    "issues": "${mod_issue_tracker}"
+  },
+  "license": "${mod_license}",
+  "icon": "${mod_logo_file}",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "cn.li.fabric1211.AcademyCraftFabric"
+    ],
+    "client": [
+      "cn.li.fabric1211.AcademyCraftFabricClient"
+    ],
+    "fabric-datagen": [
+      "cn.li.fabric1211.datagen.DataGeneratorSetup"
+    ]
+  },
+  "mixins": [
+    "${mod_id}.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "=1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "team_reborn_energy": "*",
+    "jei": "*"
+  }
+}
